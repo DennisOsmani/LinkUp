@@ -8,6 +8,9 @@
 
 ## Adrian
 
+- Most handsome developer
+- Likes tiss
+
 <br />
 
 ## Amund
