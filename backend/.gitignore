@@ -1,0 +1,64 @@
+# Bygg output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Byte-compiled / optimized / DLL files
+*.dll
+*.exe
+*.exe.config
+*.exe.manifest
+*.pdb
+
+# NuGet Packages
+*.nupkg
+# Pakke mapper bør ikke sjekkes inn
+packages/
+
+# VS Code folder
+.vscode/
+
+# Bruker-spesifikke filer for Visual Studio
+.vs/
+*.user
+*.suo
+
+# ReSharper / Rider
+.idea/
+
+# Tooling
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# BenchmarkDotNet Artifacts
+BenchmarkDotNet.Artifacts/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# .NET Core
+project.nuget.cache
+project.assets.json
+*.csproj.nuget.dgspec.json
+*.csproj.nuget.g.props
+*.csproj.nuget.g.targets
+*.runtimeconfig.dev.json
+*.nuget.props
+*.nuget.targets
+
+# StyleCop
+StyleCopReport.xml
+
+# Mac files
+.DS_Store
+
+# Node.js
+node_modules/
+
+# Others
+*.swp
+*~
+._*
