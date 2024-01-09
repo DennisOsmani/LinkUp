@@ -1,5 +1,11 @@
 # LinkUp
 
+## Useful links
+
+- [Trello](https://trello.com/w/delta95287504)
+
+<br />
+
 ## About
 
 - This is our bachelors project for our studies, data engineering.
@@ -11,10 +17,11 @@
 
 ## Technologies
 
-**Design and diagrams**
+**Design, Diagrams and Workflow**
 
 - Drawio
 - Figma
+- Trello
 
 **Frontend**
 
