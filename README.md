@@ -3,6 +3,7 @@
 ## Useful links
 
 - [Trello](https://trello.com/w/delta95287504)
+- [Notes for Oblig1](https://docs.google.com/document/d/1YQk1wPlDVjmhu4WZKQaZiGIbFPWI9WD_X3iyM_eGKxc/edit)
 
 <br />
 
