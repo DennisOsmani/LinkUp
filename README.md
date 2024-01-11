@@ -4,6 +4,7 @@
 
 - [Trello](https://trello.com/w/delta95287504)
 - [Disk](https://drive.google.com/drive/folders/1iBA_mNMKXl7CM43WdnzgfXNUsXULz8H9)
+- [DB-design](https://dbdiagram.io/d/659feb62ac844320aeb7d308)
 
 <br />
 
