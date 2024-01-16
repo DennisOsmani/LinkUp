@@ -61,6 +61,8 @@
 - Visibility (public, private, friends)
 - InviteURL
 - FrontImage
+- MinCapacity
+- MaxCapasity
 
 **Location**
 
