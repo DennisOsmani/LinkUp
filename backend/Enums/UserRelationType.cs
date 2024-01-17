@@ -1,5 +1,8 @@
 namespace Enums;
 
+/// <summary>
+/// Enum for Type in UserRelation
+/// </summary>
 public enum UserRelationType
 {
     PENDING_FIRST_SECOND,
