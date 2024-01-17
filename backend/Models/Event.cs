@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using Enums;
 public class Event
 {
-
     [Key]
     public int EventID { get; set; }
     public string CreatorUserID { get; set; }
@@ -17,12 +16,11 @@ public class Event
     public string? MinCapacity { get; set; }
     public string? MaxCapacity { get; set; }
 
-
-public Event(string creatorUserID, string eventName, string eventDescription, 
-    DateTime eventDateTimeStart, DateTime eventDateTimeEnd, string inviteURL)
+    public Event(string creatorUserID, string eventName, string eventDescription, 
+        DateTime eventDateTimeStart, DateTime eventDateTimeEnd, string inviteURL)
 {
     this.CreatorUserID = creatorUserID;
-    this.EventName = eventDescription;
+    this.EventName = eventName;
     this.EventDescription = eventDescription;
     this.EventDateTimeStart = eventDateTimeStart;
     this.EventDateTimeEnd = eventDateTimeEnd;
