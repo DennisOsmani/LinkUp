@@ -6,6 +6,7 @@
 - [Disk](https://drive.google.com/drive/folders/1iBA_mNMKXl7CM43WdnzgfXNUsXULz8H9)
 - [Figma](https://www.figma.com/file/K577g0R4QMQ0e9t37uvn2q/Link-Up?type=design&node-id=0-1&mode=design&t=J3F0r3hY4Ii7a1CK-0)
 - [DB-design](https://dbdiagram.io/d/659feb62ac844320aeb7d308)
+- [Gantt software](https://www.onlinegantt.com/#/gantt)
 
 <br />
 
