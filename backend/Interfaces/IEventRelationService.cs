@@ -25,4 +25,14 @@ public interface IEventRelationService
     /// <param name="role">The Users new Role in the EventRelation</param>
     /// <returns>The updated EventRelation</returns>
     Task<EventRelation> UpdateEventRelationRole([FromQuery] string eventId, [FromQuery] string userId, [FromQuery] string role);
+
+    /// <summary>
+    /// Fetches a Events relations based on the Type of the relation.
+    /// </summary>
+    /// <param name="eventId"></param>
+    /// <param name="type">The Type of the relation</param>
+    /// <returns>A list of EventRelations</returns>
+    Task<List<UserRelation>> GetEventRelations([FromQuery] string eventId, [FromQuery] string type);
+
+    // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
 }

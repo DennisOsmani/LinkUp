@@ -19,6 +19,7 @@
 - Personlighets trade, regnes ut med bailscore og events opprettet og joined
 - Legge til mulighet for admin å kunne legge ut innlegg/oppdateringer angående eventet som ekstra informasjon, med tilhørende bilde hvis ønskelig.
 - Legge til mulighet for ett Event å ha flere bilder, som en carusel?
+- Egen tabell for alt av varslinger tilknyttet en bruker. Når en bruker får venneforerspøseler eller inviutasjoner som blir opprettet/oppdatert i User/EventRelation så blir det samtidig lagret i alerts databasen for persisten lagring slik at en bruker kan se historikken av varslinger.
 
 **User**
 
