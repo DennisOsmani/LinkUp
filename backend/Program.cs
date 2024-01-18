@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Swagger config
@@ -8,7 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 // EF Core DbContext fonfig
-// TODO
+builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
@@ -20,7 +22,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-// app.UseSession();        Not configured!!
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
