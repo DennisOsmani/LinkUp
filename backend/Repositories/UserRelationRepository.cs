@@ -1,6 +1,7 @@
 using Data;
 using Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace Repositories;
@@ -19,16 +20,16 @@ public class UserRelationRepository
 
     public async Task<List<UserRelation>> GetUserRelations(string userId, UserRelationType type)
     {
-        return await _context.UserRelation
+        return await _context.UserRelations
             .Where(ur => ur.UserId == userId && ur.Type == type)
             .ToListAsync();
     }
 
     public async Task<UserRelation> UpdateUserRelationType(string userId, string otherUserId, [FromQuery] UserRelationType type)
     {
-        UserRelation userRelation = await _context.UserRelation
+        UserRelation? userRelation = await _context.UserRelations
             .Where(ur => ur.User_first_id == userId && ur.User_second_id == otherUserId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync<UserRelation>();
 
         if(userRelation == null)
         {
@@ -43,8 +44,8 @@ public class UserRelationRepository
 
     public async Task<UserRelation> CreateUserRelaton(string userId, string otherUserId)
     {
-        User user = _context.User.FindAsync(userId);
-        User otherUser = _context.User.FindAsync(otherUserId);
+        User? user = _context.User.FindAsync(userId);
+        User? otherUser = _context.User.FindAsync(otherUserId);
 
         if(user == null || otherUser == null)
         {
