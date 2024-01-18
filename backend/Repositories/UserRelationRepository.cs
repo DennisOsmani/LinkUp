@@ -21,7 +21,8 @@ public class UserRelationRepository
     public async Task<List<UserRelation>> GetUserRelations(string userId, UserRelationType type)
     {
         return await _context.UserRelations
-            .Where(ur => ur.UserId == userId && ur.Type == type)
+            .Where(ur => ur.User_first_id == userId || ur.User_second_id == userId)
+            .Where(ur => ur.Type == type)
             .ToListAsync();
     }
 
@@ -44,8 +45,8 @@ public class UserRelationRepository
 
     public async Task<UserRelation> CreateUserRelaton(string userId, string otherUserId)
     {
-        User? user = _context.User.FindAsync(userId);
-        User? otherUser = _context.User.FindAsync(otherUserId);
+        User? user = await _context.Users.FindAsync(userId);
+        User? otherUser = await _context.Users.FindAsync(otherUserId);
 
         if(user == null || otherUser == null)
         {
