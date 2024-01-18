@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.X86;
 using Data;
 using Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ public class UserRelationRepository
         return userRelation;
     }
 
-    public async Task<UserRelation?> GetUserRelation(string userId, string otherUserId)
+    public async Task<UserRelation?> GetOneUserRelation(string userId, string otherUserId)
     {
         UserRelation? userRelation = await _context.UserRelations
             .Where(ur => ur.User_first_ID == userId && ur.User_second_ID == otherUserId)
