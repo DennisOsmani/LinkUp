@@ -13,7 +13,7 @@ public interface IUserService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>A list of Users</returns>
-    Task<List<User>> GetUserFriends(string userId);
+    Task<ICollection<User>> GetUserFriends(string userId);
 
     /// <summary>
     /// Fetches a User by a given id.
@@ -27,7 +27,7 @@ public interface IUserService
     /// </summary>
     /// <param name="fullName"></param>
     /// <returns>A list of Users</returns>
-    Task<List<User>> SearchUsers(string fullName);
+    Task<ICollection<User>> SearchUsers(string fullName);
 
     /// <summary>
     /// Updates a User.
@@ -47,5 +47,5 @@ public interface IUserService
     /// </summary>
     /// <param name="eventId"></param>
     /// <returns>A list of Users</returns>
-    Task<List<User>> GetUsersFromEvent(string eventId);   // Maybe just use GetEvent, if the event returns a list of users in its own object.
+    Task<ICollection<User>> GetUsersFromEvent(string eventId);   // Maybe just use GetEvent, if the event returns a list of users in its own object.
 }
