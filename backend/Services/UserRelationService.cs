@@ -2,7 +2,6 @@ using Models;
 using Repositories;
 using Interfaces;
 using Enums;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Services;
 
@@ -19,7 +18,6 @@ public class UserRelationService : IUserRelationService
 
     public async Task<UserRelation?> CreateUserRelationType(string userId, string otherUserId, string type)
     {
-        // Does the users exist?
         User? user = await _userRepo.GetUserByID(userId);
         User? otherUser = await _userRepo.GetUserByID(otherUserId);
 
@@ -28,9 +26,8 @@ public class UserRelationService : IUserRelationService
             return null;
         }
 
-        // Does a userrelation exist? 
-        UserRelation? userRelationOne = await _userRelationRepo.GetUserRelation(userId, otherUserId);
-        UserRelation? userRelationTwo = await _userRelationRepo.GetUserRelation(otherUserId, userId);
+        UserRelation? userRelationOne = await _userRelationRepo.GetOneUserRelation(userId, otherUserId);
+        UserRelation? userRelationTwo = await _userRelationRepo.GetOneUserRelation(otherUserId, userId);
 
         if(userRelationOne != null)
         {
@@ -56,8 +53,8 @@ public class UserRelationService : IUserRelationService
 
     public async Task<UserRelation?> UpdateUserRelationType(string userId, string otherUserId, string type)
     {
-        UserRelation? userRelationOne = await _userRelationRepo.GetUserRelation(userId, otherUserId);
-        UserRelation? userRelationTwo = await _userRelationRepo.GetUserRelation(otherUserId, userId);
+        UserRelation? userRelationOne = await _userRelationRepo.GetOneUserRelation(userId, otherUserId);
+        UserRelation? userRelationTwo = await _userRelationRepo.GetOneUserRelation(otherUserId, userId);
         
         UserRelationType enumType = StringToUserRelationTypeEnum(type);
 
