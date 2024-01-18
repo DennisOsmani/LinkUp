@@ -6,7 +6,7 @@ public class Event
     [Key]
     public int EventID { get; set; }
     public string CreatorUserID { get; set; }
-    public User? Useer { get; set; }
+    public User? User { get; set; }
     public string EventName { get; set; }
     public string EventDescription { get; set; }
     public DateTime EventDateTimeStart { get; set; }
