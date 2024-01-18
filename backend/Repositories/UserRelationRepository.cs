@@ -18,7 +18,15 @@ public class UserRelationRepository
         this._context = context;
     }
 
-    public async Task<List<UserRelation>> GetUserRelations(string userId, UserRelationType type)
+    public async Task<UserRelation> CreateUserRelaton(UserRelation userRelation)
+    {
+        _context.Add(userRelation);
+        await _context.SaveChangesAsync();
+
+        return userRelation;
+    }
+
+    public async Task<ICollection<UserRelation>> GetUserRelations(string userId, UserRelationType type)
     {
         return await _context.UserRelations
             .Where(ur => ur.User_first_ID == userId || ur.User_second_ID == userId)
@@ -26,38 +34,26 @@ public class UserRelationRepository
             .ToListAsync();
     }
 
-    public async Task<UserRelation?> UpdateUserRelationType(string userId, string otherUserId, [FromQuery] UserRelationType type)
+    public async Task<UserRelation?> UpdateUserRelationType(UserRelation userRelation, UserRelationType type)
     {
-        UserRelation? userRelation = await _context.UserRelations
-            .Where(ur => ur.User_first_ID == userId && ur.User_second_ID == otherUserId)
-            .FirstOrDefaultAsync<UserRelation>();
-
-        if(userRelation == null)
-        {
-            return null;
-        }
-
         userRelation.Type = type;
         await _context.SaveChangesAsync();
 
         return userRelation;
     }
 
-    public async Task<UserRelation?> CreateUserRelaton(string userId, string otherUserId)
+    public async Task<UserRelation?> GetUserRelation(string userId, string otherUserId)
     {
-        User? user = await _context.Users.FindAsync(userId);
-        User? otherUser = await _context.Users.FindAsync(otherUserId);
-
-        if(user == null || otherUser == null)
-        {
-            return null;
-        }
-
-        UserRelation userRelation = new UserRelation(userId, otherUserId, UserRelationType.PENDING_FIRST_SECOND);
-
-        _context.Add(userRelation);
-        await _context.SaveChangesAsync();
+        UserRelation? userRelation = await _context.UserRelations
+            .Where(ur => ur.User_first_ID == userId && ur.User_second_ID == otherUserId)
+            .FirstOrDefaultAsync();
 
         return userRelation;
+    }
+
+    public async Task DeleteUserRelation(UserRelation userRelation)
+    {
+        _context.Remove(userRelation);
+        await _context.SaveChangesAsync();
     }
 }
