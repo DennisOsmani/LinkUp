@@ -1,31 +1,38 @@
 using Enums;
+using System.ComponentModel.DataAnnotations;
 namespace Models;
-
-//TODO:
-//fix warnings with nullability and constuctor, add relation tables, see over ENUM configuration, ENUM for relationship status? Key, length etc. add
 
 public class User
 {
-    public string UserId { get; set; }
+    [Key]
+    public string UserID { get; set; }
     public string Username { get; set; }
-    public string Firstname { get; set; }
-    public DateTime DateBorn { get; set; }
-    public string Phone { get; set; }
-    public string RelationshipStatus { get; set; }
-    public string Gender { get; set; }
-    public string Description { get; set; }
+    public string? Firstname { get; set; }
+    public string? Lastname { get; set; }
+    public DateTime? DateBorn { get; set; }
+    public string? Phone { get; set; }
+    public RelationshipStatus? RelationshipStatus { get; set; }
+    public string? Gender { get; set; }
+    public string? Description { get; set; }
     public string Email { get; set; }
-    public string ProfileImage { get; set; }
+    public string? ProfileImage { get; set; }
     public string Password { get; set; }
     public string Salt { get; set; }
-    public int EventsCreated { get; set; }
-    public int EventsJoined { get; set; }
-    public int EventBails { get; set; }
+    public int? EventsCreated { get; set; }
+    public int? EventsJoined { get; set; }
+    public int? EventBails { get; set; }
     public Role Role { get; set; }
+    public ICollection<UserRelation>? FirstUserRelations { get; set; } //SecondUserRelations???
+    public ICollection<EventRelation>? EventRelation { get; set; }
 
-    public User(string UserId)
+    public User(string userId, string username, string email, string password, string salt)
     {
-        this.UserId = UserId;
+        this.UserID = userId;
+        this.Username = username;
+        this.Email = email;
+        this.Password = password;
+        this.Salt = salt;
+        this.Role = Role.USER;  //bruuh
 
     }
 }
