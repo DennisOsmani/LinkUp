@@ -26,7 +26,7 @@ public class UserRelationRepository
             .ToListAsync();
     }
 
-    public async Task<UserRelation> UpdateUserRelationType(string userId, string otherUserId, [FromQuery] UserRelationType type)
+    public async Task<UserRelation?> UpdateUserRelationType(string userId, string otherUserId, [FromQuery] UserRelationType type)
     {
         UserRelation? userRelation = await _context.UserRelations
             .Where(ur => ur.User_first_ID == userId && ur.User_second_ID == otherUserId)
@@ -43,7 +43,7 @@ public class UserRelationRepository
         return userRelation;
     }
 
-    public async Task<UserRelation> CreateUserRelaton(string userId, string otherUserId)
+    public async Task<UserRelation?> CreateUserRelaton(string userId, string otherUserId)
     {
         User? user = await _context.Users.FindAsync(userId);
         User? otherUser = await _context.Users.FindAsync(otherUserId);
