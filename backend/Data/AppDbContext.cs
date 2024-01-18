@@ -18,16 +18,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>().HasKey();
-
-        modelBuilder.Entity<UserRelation>().HasKey();
-
-        modelBuilder.Entity<Event>().HasKey();
-
-        modelBuilder.Entity<EventRelation>().HasKey();
-
-        modelBuilder.Entity<Location>().HasKey();
-
-        // Fortsett her
+        
     }
 }
