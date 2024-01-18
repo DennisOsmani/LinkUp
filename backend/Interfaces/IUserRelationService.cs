@@ -23,7 +23,7 @@ public interface IUserRelationService
     /// <param name="userId"></param>
     /// <param name="type">The Type of the relation</param>
     /// <returns>A list of UserRelations</returns>
-    Task<List<UserRelation>> GetUserRelations(string userId, string type);
+    Task<ICollection<UserRelation>> GetUserRelations(string userId, string type);
 
     // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetUserRelations)
 }
