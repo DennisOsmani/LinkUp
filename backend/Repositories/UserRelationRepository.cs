@@ -27,14 +27,6 @@ public class UserRelationRepository
         return userRelation;
     }
 
-    public async Task<ICollection<UserRelation>> GetUserRelations(string userId, UserRelationType type)
-    {
-        return await _context.UserRelations
-            .Where(ur => ur.User_first_ID == userId || ur.User_second_ID == userId)
-            .Where(ur => ur.Type == type)
-            .ToListAsync();
-    }
-
     public async Task<UserRelation?> UpdateUserRelationType(UserRelation userRelation, UserRelationType type)
     {
         userRelation.Type = type;
@@ -57,4 +49,39 @@ public class UserRelationRepository
         _context.Remove(userRelation);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<ICollection<User?>> GetUserFriends(string userId)
+    {
+        return await _context.UserRelations
+            .Where(
+                ur => (ur.User_first_ID == userId || ur.User_second_ID == userId)
+                && ur.Type == UserRelationType.FRIENDS
+            )
+            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+            .ToListAsync();
+    }
+
+    // The Users this user has blocked!
+    public async Task<ICollection<User?>> GetUserBlocks(string userId)
+    {
+        return await _context.UserRelations
+            .Where(
+                ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.BLOCKED_FIRST_SECOND)
+                || (ur.User_second_ID == userId && ur.Type == UserRelationType.BLOCKED_SECOND_FIRST)
+            )
+            .Select(ur => ur.User_first_ID == userId ? ur.User_first : ur.User_second)
+            .ToListAsync();
+    }
+
+    public async Task<ICollection<User?>> GetUserFriendRequests(string userId)
+    {
+        return await _context.UserRelations
+            .Where(
+                ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.PENDING_SECOND_FIRST)
+                || (ur.User_second_ID == userId && ur.Type == UserRelationType.PENDING_FIRST_SECOND)
+            )
+            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+            .ToListAsync();
+    }
+
 }
