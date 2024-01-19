@@ -65,7 +65,7 @@ public class EventRepository
         return eventToUpdate;
     }
 
-     public async Task<Event?> UpdateEventLocation(string eventId, Location location)
+     public async Task<Event?> UpdateEventLocation(int eventId, Location location)
     {
         Event? eToUpdate = await _context.Events.FindAsync(eventId);
 
@@ -79,7 +79,7 @@ public class EventRepository
 
     }
 
-     public async Task DeleteEvent(string eventId)
+     public async Task DeleteEvent(int eventId)
     {
         Event? deleteEvent = await _context.Events.FindAsync(eventId);
         
