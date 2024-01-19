@@ -3,6 +3,8 @@ using Data;
 using Models;
 using Microsoft.EntityFrameworkCore;
 using Interfaces;
+using System.Text;
+using Enums;
 
 
 /// <summary>
@@ -24,17 +26,18 @@ public class EventRepository
 
     public async Task<ICollection<Event>?> GetEventsInCity(string city)
     {
-        return await _context.Events.Where(l => l.Location.City == city).ToListAsync();
+        return await _context.Events.Where(e => e.Location.City == city).ToListAsync();
     }
 
     public async Task<ICollection<Event>?> GetUserEventsByType(string type) 
     {
-        return await _context.Events.Where(e => e.Visibility == type).ToListAsync();
+        return await _context.Events.Where(e => e.Visibility == StringToVisibilityEnum(type)).ToListAsync();
     }
 
     public async Task<ICollection<Event>> GetUserFriendEvents(string userId) 
     {
-
+        // UserRelation friends = await _context.UserRelations.Where(u => u.Type == UserRelationType.FRIENDS).; 
+        // return await _context.Events.Where(e => e.CreatorUserID == userId && e.Visibility == Visibility.FRIENDS).ToListAsync();
     }
 
     public async Task<Event?> CreateEvent(Event newEvent)
@@ -64,6 +67,15 @@ public class EventRepository
 
      public async Task<Event?> UpdateEventLocation(string eventId, Location location)
     {
+        Event? eToUpdate = await _context.Events.FindAsync(eventId);
+
+        eToUpdate.Location.Address = location.Address;
+        eToUpdate.Location.Postalcode = location.Postalcode;
+        eToUpdate.Location.City = location.City;
+        eToUpdate.Location.Country = location.Country;
+
+        await _context.SaveChangesAsync();
+        return eToUpdate;
 
     }
 
@@ -76,5 +88,25 @@ public class EventRepository
     }
 
     // Lage en switch for ENUM til strings
+    public Visibility StringToVisibilityEnum(string type)
+    {
+        Visibility eventVisibility;
 
+        switch(type)
+        {
+            case "PUBLIC":
+                eventVisibility = Visibility.PUBLIC;
+                break;
+            case "PRIVATE":
+                eventVisibility = Visibility.PRIVATE;
+                break;
+            case "FRIENDS":
+                eventVisibility = Visibility.FRIENDS;
+                break;
+            default:
+                eventVisibility = Visibility.PRIVATE;
+                break;
+        }
+        return eventVisibility;
+    }
 }
