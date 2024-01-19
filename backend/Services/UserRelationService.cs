@@ -16,7 +16,7 @@ public class UserRelationService : IUserRelationService
         this._userRepo = userRepo;
     }
 
-    public async Task<UserRelation?> CreateUserRelationType(string userId, string otherUserId, string type)
+    public async Task<UserRelation?> CreateUserRelation(string userId, string otherUserId, string type)
     {
         User? user = await _userRepo.GetUserByID(userId);
         User? otherUser = await _userRepo.GetUserByID(otherUserId);
@@ -39,7 +39,9 @@ public class UserRelationService : IUserRelationService
             await _userRelationRepo.DeleteUserRelation(userRelationTwo);
         }
 
-        UserRelation createdUserRelation = await _userRelationRepo.CreateUserRelaton(new UserRelation(userId, otherUserId, UserRelationType.PENDING_FIRST_SECOND));
+        UserRelationType userRelationType = StringToUserRelationTypeEnum(type);
+
+        UserRelation createdUserRelation = await _userRelationRepo.CreateUserRelaton(new UserRelation(userId, otherUserId, userRelationType));
 
         return createdUserRelation;
     }
