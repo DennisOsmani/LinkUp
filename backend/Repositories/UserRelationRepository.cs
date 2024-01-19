@@ -69,7 +69,7 @@ public class UserRelationRepository
                 ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.BLOCKED_FIRST_SECOND)
                 || (ur.User_second_ID == userId && ur.Type == UserRelationType.BLOCKED_SECOND_FIRST)
             )
-            .Select(ur => ur.User_first_ID == userId ? ur.User_first : ur.User_second)
+            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
             .ToListAsync();
     }
 
