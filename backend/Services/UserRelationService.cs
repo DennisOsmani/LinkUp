@@ -46,13 +46,6 @@ public class UserRelationService : IUserRelationService
         return createdUserRelation;
     }
 
-    public async Task<ICollection<UserRelation>> GetUserRelations(string userId, string type)
-    {
-        UserRelationType urtype = StringToUserRelationTypeEnum(type);
-
-        return await _userRelationRepo.GetUserRelations(userId, urtype);
-    }
-
     public async Task<UserRelation?> UpdateUserRelationType(string userId, string otherUserId, string type)
     {
         UserRelation? userRelationOne = await _userRelationRepo.GetOneUserRelation(userId, otherUserId);
@@ -94,9 +87,6 @@ public class UserRelationService : IUserRelationService
             case "BLOCKED_SECOND_FIRST":
                 urtype = UserRelationType.BLOCKED_SECOND_FIRST;
                 break;
-            case "BLOCKED_BOTH":
-                urtype = UserRelationType.BLOCKED_BOTH;
-                break;
             default:
                 urtype = UserRelationType.PENDING_FIRST_SECOND;
                 break;
@@ -104,4 +94,5 @@ public class UserRelationService : IUserRelationService
 
         return urtype;
     }
+
 }
