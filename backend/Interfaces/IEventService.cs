@@ -37,7 +37,7 @@ public interface IEventService
     Task<ICollection<Event>?> GetUserEventsByType(string type);
 
     /// <summary>
-    /// Creates a new Event.
+    /// Creates a new Event and sets the userrole as CREATOR.
     /// </summary>
     /// <param name="newEvent">Event Object</param>
     /// <returns>Newly created Event<returns>
@@ -51,11 +51,11 @@ public interface IEventService
     Task<Event?> UpdateEvent(Event updatedEvent);
 
     /// <summary>
-    /// Updates.
+    /// Updates the events location.
     /// </summary>
     /// <param name="updatedEvent">EventObject</param>
     /// <returns>Updated Event</returns>
-    Task<Event?> UpdateEventLocation(int eventId, Location location);
+    Task<Event?> UpdateEventLocation(int eventId, Location newLocation);
 
     /// <summary>
     /// Deletes a Event.
