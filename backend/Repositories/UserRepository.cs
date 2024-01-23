@@ -1,6 +1,4 @@
 using Data;
-using Enums;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -75,9 +73,9 @@ public class UserRepository
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                //log error
+                Console.WriteLine($"Error in DeleteUser: {ex.Message}");
             }
         }
         return userToDelete;
