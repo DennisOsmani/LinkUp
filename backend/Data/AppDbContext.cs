@@ -18,10 +18,14 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+<<<<<<< HEAD
         /* UserRelation */
+=======
+>>>>>>> main
         modelBuilder.Entity<UserRelation>()
             .HasKey(ur => ur.UserRelationId);
 
         
+
     }
 }
