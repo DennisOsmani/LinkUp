@@ -1,4 +1,3 @@
-namespace Services;
 
 using Repositories;
 using Interfaces;
@@ -6,15 +5,12 @@ using Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-public class EventService : IEventService
+namespace Services;
+
+public class EventService(EventRepository eventRepository) : IEventService
 {
 
-    public readonly EventRepository _eventRepo;
-    // eventrealtionRepo also
-
-    public EventService(EventRepository eventRepository) {
-        this._eventRepo = eventRepository;
-    }
+    public readonly EventRepository _eventRepo = eventRepository;
 
     public Task<Event?> CreateEvent(Event newEvent, string creatorUserId)
     {
@@ -31,10 +27,43 @@ public class EventService : IEventService
         }
     }
 
-    public Task<Event?> GetEventByID(string eventId)
+    public async Task<Event?> GetEventByID(int eventId)
+    {
+    event = await _eventRepo.
+        
+        return await _eventRepo.GetEventByID(eventId);
+    }
+
+     public Task<ICollection<Event>?> GetUserFriendEvents(string userId)
     {
         throw new NotImplementedException();
     }
+
+    public Task<ICollection<Event>?> GetEventsInCity(string city)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ICollection<Event>?> GetUserEventsByType(string type)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Event?> UpdateEvent(Event updatedEvent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Event?> UpdateEventLocation(string eventId, Location location)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteEvent(string eventId)
+    {
+        throw new NotImplementedException();
+    }
+
 
     public Task<ICollection<Event>?> GetEventsInCity(string city)
     {
