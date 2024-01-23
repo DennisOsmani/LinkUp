@@ -61,5 +61,5 @@ public interface IEventService
     /// Deletes a Event.
     /// </summary>
     /// <param name="eventId"></param>
-    Task DeleteEvent(string eventId);
+    Task DeleteEvent(int eventId);
 }
