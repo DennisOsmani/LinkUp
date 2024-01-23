@@ -15,15 +15,16 @@ public interface IUserRelationService
     /// <param name="otherUserId">The other User we have a relation to</param>
     /// <param name="type">The Type we want to update the UserRelation to</param>
     /// <returns>The updated UserRelation</returns>
-    Task<UserRelation> UpdateUserRelationType(string userId, string otherUserId, string type);
+    Task<UserRelation?> UpdateUserRelationType(string userId, string otherUserId, string type);
 
     /// <summary>
-    /// Fetches a Users relations based on the Type of the relation.
+    /// Creates a UserRelations Type.
     /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="type">The Type of the relation</param>
-    /// <returns>A list of UserRelations</returns>
-    Task<List<UserRelation>> GetUserRelations(string userId, string type);
+    /// <param name="userId">The User logged in</param>
+    /// <param name="otherUserId">The other User we want to create a relation to</param>
+    /// <param name="type">The Type we want the relation to be</param>
+    /// <returns>The created UserRelation</returns>
+    Task<UserRelation?> CreateUserRelation(string userId, string otherUserId, string type);
 
     // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetUserRelations)
 }
