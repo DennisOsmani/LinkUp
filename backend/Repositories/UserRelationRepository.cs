@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.X86;
 using Data;
 using Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -18,45 +19,69 @@ public class UserRelationRepository
         this._context = context;
     }
 
-    public async Task<List<UserRelation>> GetUserRelations(string userId, UserRelationType type)
+    public async Task<UserRelation> CreateUserRelaton(UserRelation userRelation)
     {
-        return await _context.UserRelations
-            .Where(ur => ur.UserId == userId && ur.Type == type)
-            .ToListAsync();
+        _context.Add(userRelation);
+        await _context.SaveChangesAsync();
+
+        return userRelation;
     }
 
-    public async Task<UserRelation> UpdateUserRelationType(string userId, string otherUserId, [FromQuery] UserRelationType type)
+    public async Task<UserRelation?> UpdateUserRelationType(UserRelation userRelation, UserRelationType type)
     {
-        UserRelation? userRelation = await _context.UserRelations
-            .Where(ur => ur.User_first_id == userId && ur.User_second_id == otherUserId)
-            .FirstOrDefaultAsync<UserRelation>();
-
-        if(userRelation == null)
-        {
-            return null;
-        }
-
         userRelation.Type = type;
         await _context.SaveChangesAsync();
 
         return userRelation;
     }
 
-    public async Task<UserRelation> CreateUserRelaton(string userId, string otherUserId)
+    public async Task<UserRelation?> GetOneUserRelation(string userId, string otherUserId)
     {
-        User? user = _context.User.FindAsync(userId);
-        User? otherUser = _context.User.FindAsync(otherUserId);
-
-        if(user == null || otherUser == null)
-        {
-            return null;
-        }
-
-        UserRelation userRelation = new UserRelation(userId, otherUserId, UserRelationType.PENDING_FIRST_SECOND);
-
-        _context.Add(userRelation);
-        await _context.SaveChangesAsync();
+        UserRelation? userRelation = await _context.UserRelations
+            .Where(ur => ur.User_first_ID == userId && ur.User_second_ID == otherUserId)
+            .FirstOrDefaultAsync();
 
         return userRelation;
     }
+
+    public async Task DeleteUserRelation(UserRelation userRelation)
+    {
+        _context.Remove(userRelation);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<ICollection<User?>> GetUserFriends(string userId)
+    {
+        return await _context.UserRelations
+            .Where(
+                ur => (ur.User_first_ID == userId || ur.User_second_ID == userId)
+                && ur.Type == UserRelationType.FRIENDS
+            )
+            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+            .ToListAsync();
+    }
+
+    // The Users this user has blocked!
+    public async Task<ICollection<User?>> GetUserBlocks(string userId)
+    {
+        return await _context.UserRelations
+            .Where(
+                ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.BLOCKED_FIRST_SECOND)
+                || (ur.User_second_ID == userId && ur.Type == UserRelationType.BLOCKED_SECOND_FIRST)
+            )
+            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+            .ToListAsync();
+    }
+
+    public async Task<ICollection<User?>> GetUserFriendRequests(string userId)
+    {
+        return await _context.UserRelations
+            .Where(
+                ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.PENDING_SECOND_FIRST)
+                || (ur.User_second_ID == userId && ur.Type == UserRelationType.PENDING_FIRST_SECOND)
+            )
+            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+            .ToListAsync();
+    }
+
 }

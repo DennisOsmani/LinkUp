@@ -10,5 +10,4 @@ public enum UserRelationType
     FRIENDS,
     BLOCKED_FIRST_SECOND,
     BLOCKED_SECOND_FIRST,
-    BLOCKED_BOTH,
 }
