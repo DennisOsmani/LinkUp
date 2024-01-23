@@ -8,12 +8,6 @@ namespace Interfaces;
 /// </summary>
 public interface IUserService
 {
-    /// <summary>
-    /// Fetches a list of Users where the UserRelations type is set to Friends.
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <returns>A list of Users</returns>
-    Task<ICollection<User>> GetUserFriends(string userId);
 
     /// <summary>
     /// Fetches a User by a given id.
