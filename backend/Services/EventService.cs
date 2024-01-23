@@ -73,12 +73,14 @@ public class EventService : IEventService
 
     public async Task<Event?> UpdateEvent(Event updatedEvent)
     {
+        // checks if the updated event exists in the database
         Event? eToUpdate = await _eventRepo.GetEventByID(updatedEvent.EventID);
 
         if (eToUpdate == null) {
             return null;
         }
-
+    
+        // Takes the event in the database and updateds its info with the new updated details and returns the new event
        return await _eventRepo.UpdateEvent(updatedEvent, eToUpdate);
     }
 
@@ -88,7 +90,7 @@ public class EventService : IEventService
 
         if (ev == null) {
             return null;
-        }
+        } 
 
         return await _eventRepo.UpdateEventLocation(eventId, newLocation);
     }
