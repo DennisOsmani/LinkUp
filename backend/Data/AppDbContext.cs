@@ -32,7 +32,6 @@ public class AppDbContext : DbContext
             .WithMany(u => u.UserRelations)
             .HasForeignKey(ur => ur.User_second_ID);
 
-        
         /* EventRelation */
         modelBuilder.Entity<EventRelation>()
             .HasKey(er => er.EventRelationID);
@@ -62,8 +61,6 @@ public class AppDbContext : DbContext
 
         /* User */
         modelBuilder.Entity<User>()
-            .HasKey(u => u.UserID);
-
-        
+            .HasKey(u => u.UserID);        
     }
 }
