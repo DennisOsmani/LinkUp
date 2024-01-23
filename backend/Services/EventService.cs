@@ -2,6 +2,7 @@
 using Repositories;
 using Interfaces;
 using Models;
+using Enums;
 
 namespace Services;
 
@@ -9,8 +10,9 @@ public class EventService : IEventService
 {
 
     public readonly EventRepository _eventRepo;
+    public readonly EventRelationService _eventRelService;
 
-    public EventService(EventRepository eventRepository)
+    public EventService(EventRepository eventRepository, EventRelationService eventRelationService)
     {
         _eventRepo = eventRepository;
     }
@@ -20,29 +22,53 @@ public class EventService : IEventService
         return null;
     }
 
-    public Task<ICollection<Event>?> GetEventsInCity(string city)
+    public async Task<ICollection<Event>?> GetEventsInCity(string city)
     {
-        return null;
+
+        ICollection<Event>? events = await _eventRepo.GetEventsInCity(city);
+
+        // reutrn a empty list if no events
+        if (events == null || events.Count.Equals(0)) {
+            return new List<Event>();
+        }
+
+        return events;
     }
 
     public async Task<Event?> GetEventByID(int eventId)
-    {
-        /*event = await _eventRepo.
+    {        
+        Event? ev = await _eventRepo.GetEventByID(eventId);
         
-        return await _eventRepo.GetEventByID(eventId);*/
-        return null; 
+        if (ev == null) {
+            return null;
+        } 
+        
+        return ev;
     }
 
-    public Task<ICollection<Event>?> GetUserEventsByType(string type)
+    public async Task<ICollection<Event>?> GetUserEventsByType(string type)
     {
-        return null;
+        ICollection<Event>? events = await _eventRepo.GetUserEventsByType(type);
+
+        // reutrn a empty list if no events
+        if (events == null || events.Count.Equals(0)) {
+            return new List<Event>();
+        }
+
+        return events;
     }
 
-
-    public Task<Event?> CreateEvent(Event newEvent, string creatorUserId)
+    public async Task<Event?> CreateEvent(Event newEvent, string creatorUserId)
     {
-        // Set user to CREATOR 
-        return null;
+
+        if (newEvent == null) {
+            return null;
+        }
+
+        //Saves the new event and sets the users role in the eventrelation to CREATOR
+        await _eventRelService.UpdateEventRelationRole(newEvent.EventID, creatorUserId, "CREATOR");
+        return await _eventRepo.CreateEvent(newEvent);
+
     }
 
     public async Task<Event?> UpdateEvent(Event updatedEvent)
@@ -56,9 +82,15 @@ public class EventService : IEventService
        return await _eventRepo.UpdateEvent(updatedEvent, eToUpdate);
     }
 
-    public Task<Event?> UpdateEventLocation(int eventId, Location location)
+    public async Task<Event?> UpdateEventLocation(int eventId, Location newLocation)
     {
-        return null;
+        Event? ev = await _eventRepo.GetEventByID(eventId);
+
+        if (ev == null) {
+            return null;
+        }
+
+        return await _eventRepo.UpdateEventLocation(eventId, newLocation);
     }
 
     public async Task DeleteEvent(int eventId)

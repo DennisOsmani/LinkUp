@@ -66,14 +66,14 @@ public class EventRepository
         return eventToUpdate;
     }
 
-     public async Task<Event?> UpdateEventLocation(int eventId, Location location)
+     public async Task<Event?> UpdateEventLocation(int eventId, Location newLocation)
     {
         Event? eToUpdate = await _context.Events.FindAsync(eventId);
 
-        eToUpdate.Location.Address = location.Address;
-        eToUpdate.Location.Postalcode = location.Postalcode;
-        eToUpdate.Location.City = location.City;
-        eToUpdate.Location.Country = location.Country;
+        eToUpdate.Location.Address = newLocation.Address;
+        eToUpdate.Location.Postalcode = newLocation.Postalcode;
+        eToUpdate.Location.City = newLocation.City;
+        eToUpdate.Location.Country = newLocation.Country;
 
         await _context.SaveChangesAsync();
         return eToUpdate;
