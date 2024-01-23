@@ -27,7 +27,7 @@ public interface IEventService
     /// </summary>
     /// <param name="eventId"></param>
     /// <returns>A Event</returns>
-    Task<Event?> GetEventByID(string eventId); // Maybe also fetch a list of users in the event
+    Task<Event?> GetEventByID(int eventId); // Maybe also fetch a list of users in the event
 
     /// <summary>
     /// Fetches a list of Events based on what type the EventRelation is.
@@ -55,7 +55,7 @@ public interface IEventService
     /// </summary>
     /// <param name="updatedEvent">EventObject</param>
     /// <returns>Updated Event</returns>
-    Task<Event?> UpdateEventLocation(string eventId, Location location);
+    Task<Event?> UpdateEventLocation(int eventId, Location location);
 
     /// <summary>
     /// Deletes a Event.

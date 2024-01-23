@@ -37,7 +37,8 @@ public class EventRepository
     public async Task<ICollection<Event>> GetUserFriendEvents(string userId) 
     {
         // UserRelation friends = await _context.UserRelations.Where(u => u.Type == UserRelationType.FRIENDS).; 
-        // return await _context.Events.Where(e => e.CreatorUserID == userId && e.Visibility == Visibility.FRIENDS).ToListAsync();
+        
+        return await _context.Events.Where(e => e.CreatorUserID == userId && e.Visibility == Visibility.FRIENDS).ToListAsync();
     }
 
     public async Task<Event?> CreateEvent(Event newEvent)
