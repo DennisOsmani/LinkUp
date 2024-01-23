@@ -13,14 +13,14 @@ public interface IEventService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
-    Task<List<Event>> GetUserFriendEvents(string userId);
+    Task<ICollection<Event>> GetUserFriendEvents(string userId);
 
     /// <summary>
     /// Fetches a list of Events based on what city you are in.
     /// </summary>
     /// <param name="city"></param>
     /// <returns>A list of Events</returns>
-    Task<List<Event>> GetEvetsInCity(string city);
+    Task<ICollection<Event>> GetEvetsInCity(string city);
 
     /// <summary>
     /// Fetches a Event by a given id.
@@ -34,7 +34,7 @@ public interface IEventService
     /// </summary>
     /// <param name="type">JOINED, DECLINED, PENDING, BAILED</param>
     /// <returns>A list of Events</returns>
-    Task<List<Event>> GetUserEventsByType(string type);
+    Task<ICollection<Event>> GetUserEventsByType(string type);
 
     /// <summary>
     /// Creates a new Event.
