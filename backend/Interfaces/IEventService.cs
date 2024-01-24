@@ -34,7 +34,7 @@ public interface IEventService
     /// </summary>
     /// <param name="type">JOINED, DECLINED, PENDING, BAILED</param>
     /// <returns>A list of Events</returns>
-    Task<ICollection<Event>?> GetUserEventsByType(string type);
+    Task<ICollection<Event>?> GetUserEventsByVisibility(string type);
 
     /// <summary>
     /// Creates a new Event and sets the userrole as CREATOR.
