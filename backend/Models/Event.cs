@@ -5,6 +5,7 @@ public class Event
 {
     [Key]
     public int EventID { get; set; }
+    public ICollection<EventRelation?> EventRelations { get; set; }
     public string CreatorUserID { get; set; }
     public User? User { get; set; }
     public string EventName { get; set; }
