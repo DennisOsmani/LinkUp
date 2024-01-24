@@ -8,33 +8,27 @@ namespace Interfaces;
 /// </summary>
 public interface IUserService
 {
-    /// <summary>
-    /// Fetches a list of Users where the UserRelations type is set to Friends.
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <returns>A list of Users</returns>
-    Task<ICollection<User>> GetUserFriends(string userId);
 
     /// <summary>
     /// Fetches a User by a given id.
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>A User</returns>
-    Task<User> GetUser(string userId);
+    Task<User?> GetUser(string userId);
 
     /// <summary>
     /// Fetches a list of User based on a search string for their names.
     /// </summary>
     /// <param name="fullName"></param>
     /// <returns>A list of Users</returns>
-    Task<ICollection<User>> SearchUsers(string fullName);
+    Task<ICollection<User>> SearchUsers(string searchString);
 
     /// <summary>
     /// Updates a User.
     /// </summary>
     /// <param name="user"></param>
     /// <returns>Updated User</returns>
-    Task<User> UpdateUser(User user);
+    Task<User?> UpdateUser(string userId, User newUser);
 
     /// <summary>
     /// Deletes a User.
@@ -47,5 +41,5 @@ public interface IUserService
     /// </summary>
     /// <param name="eventId"></param>
     /// <returns>A list of Users</returns>
-    Task<ICollection<User>> GetUsersFromEvent(string eventId);   // Maybe just use GetEvent, if the event returns a list of users in its own object.
+    Task<ICollection<User>> GetUsersFromEvent(int eventId);   // Maybe just use GetEvent, if the event returns a list of users in its own object.
 }
