@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Interfaces;
 using System.Text;
 using Enums;
+using Services;
 
 
 /// <summary>
@@ -13,10 +14,15 @@ using Enums;
 public class EventRepository
 {
     public readonly AppDbContext _context;
+    public readonly UserRelationRepository _userRelRepo;
 
-    public EventRepository(AppDbContext context) 
+    public readonly EventRelationService _eventRelService;
+
+    public EventRepository(AppDbContext context, UserRelationRepository userRelationRepository, EventRelationService eventRelationService) 
     {
         this._context = context;
+        this._userRelRepo = userRelationRepository;
+        this._eventRelService = eventRelationService;
     }
 
     public async Task<Event?> GetEventByID(int eventId) 
@@ -34,11 +40,27 @@ public class EventRepository
         return await _context.Events.Where(e => e.Visibility == StringToVisibilityEnum(type)).ToListAsync();
     }
 
-    public async Task<ICollection<Event>> GetUserFriendEvents(string userId) 
+    public async Task<ICollection<Event?>> GetUserFriendEvents(string userId) 
     {
-        // UserRelation friends = await _context.UserRelations.Where(u => u.Type == UserRelationType.FRIENDS).; 
+        // Get a list of all the users friends
+        ICollection<User?> friends = await _userRelRepo.GetUserFriends(userId);
         
-        return await _context.Events.Where(e => e.CreatorUserID == userId && e.Visibility == Visibility.FRIENDS).ToListAsync();
+        if (friends == null || friends.Count.Equals(0)) {
+            return new List<Event>();
+        }
+        
+        // Get a list of evry friends userID
+        List<String> userIds = friends.Select(u => u.UserID).ToList();
+
+        // Get all the events from the creators list where the visibility is FRIENDS
+        
+        return await _context.EventRelations
+            .Where(
+                er => userIds.Contains(er.UserID) 
+                && er.EventRole == EventRole.CREATOR)
+            .Select(er => er.Event)
+            .Where(e => e.Visibility == Visibility.FRIENDS)
+            .ToListAsync(); 
     }
 
     public async Task<Event?> CreateEvent(Event newEvent)
