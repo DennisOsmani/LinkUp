@@ -3,6 +3,7 @@ using Repositories;
 using Interfaces;
 using Models;
 using Enums;
+using System.Collections.ObjectModel;
 
 namespace Services;
 
@@ -11,20 +12,36 @@ public class EventService : IEventService
 
     public readonly EventRepository _eventRepo;
     public readonly EventRelationService _eventRelService;
+    public readonly UserRelationRepository _userRelRepo;
+    public readonly LocationService _locService;
 
-    public EventService(EventRepository eventRepository, EventRelationService eventRelationService)
+    public EventService(EventRepository eventRepository, UserRelationRepository userRelationRepository, 
+                        EventRelationService eventRelationService, LocationService locationService)
     {
         _eventRepo = eventRepository;
+        this._userRelRepo = userRelationRepository;
+        this._locService = locationService;
     }
 
     public async Task<ICollection<Event>?> GetUserFriendEvents(string userId)
     {
-        ICollection<Event>? events = await _eventRepo.GetUserFriendEvents(userId);
+        // Get a list of all the users friends
+        ICollection<User?> friends = await _userRelRepo.GetUserFriends(userId);
 
-        if (events == null || events.Count.Equals(0)) {
-            return new List<Event>();
+        if (friends == null) {
+            // new List<User>();
+            // Exception
         }
 
+        // Get a list of evry friends userID
+        List<String> userIds = friends.Select(u => u.UserID).ToList();
+
+        ICollection<Event>? events = await _eventRepo.GetUserFriendEvents(userIds);
+
+        if (events == null) {
+            return new List<Event>();
+            // Exception
+        }
         return events;
     }
 
@@ -37,24 +54,17 @@ public class EventService : IEventService
         if (events == null || events.Count.Equals(0)) {
             return new List<Event>();
         }
-
         return events;
     }
 
     public async Task<Event?> GetEventByID(int eventId)
     {        
-        Event? ev = await _eventRepo.GetEventByID(eventId);
-        
-        if (ev == null) {
-            return null;
-        } 
-        
-        return ev;
+        return await _eventRepo.GetEventByID(eventId);
     }
 
-    public async Task<ICollection<Event>?> GetUserEventsByType(string type)
+    public async Task<ICollection<Event>?> GetUserEventsByVisibility(string visibility)
     {
-        ICollection<Event>? events = await _eventRepo.GetUserEventsByType(type);
+        ICollection<Event>? events = await _eventRepo.GetUserEventsByVisibility(visibility);
 
         // reutrn a empty list if no events
         if (events == null || events.Count.Equals(0)) {
@@ -98,7 +108,14 @@ public class EventService : IEventService
             return null;
         } 
 
-        return await _eventRepo.UpdateEventLocation(eventId, newLocation);
+        if (ev.Location == null) {
+            // Exception
+        }
+
+        Location updatedLocation = await _locService.UpdateLocation(ev.Location.LocationID, newLocation);
+        ev.Location = updatedLocation;
+
+        return ev;
     }
 
     public async Task DeleteEvent(int eventId)

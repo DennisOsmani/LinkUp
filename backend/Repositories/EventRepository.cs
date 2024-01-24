@@ -6,6 +6,7 @@ using Interfaces;
 using System.Text;
 using Enums;
 using Services;
+using System.Collections.ObjectModel;
 
 
 /// <summary>
@@ -15,7 +16,6 @@ public class EventRepository
 {
     public readonly AppDbContext _context;
     public readonly UserRelationRepository _userRelRepo;
-
     public readonly EventRelationService _eventRelService;
 
     public EventRepository(AppDbContext context, UserRelationRepository userRelationRepository, EventRelationService eventRelationService) 
@@ -32,28 +32,24 @@ public class EventRepository
 
     public async Task<ICollection<Event>?> GetEventsInCity(string city)
     {
-        return await _context.Events.Where(e => e.Location.City == city).ToListAsync();
+        // possible nullreference with the Location
+        return await _context.Events
+            .Where(e => e.Location.City == city 
+                && e.Visibility == Visibility.PUBLIC)
+            .ToListAsync();
     }
 
-    public async Task<ICollection<Event>?> GetUserEventsByType(string type) 
+    public async Task<ICollection<Event>?> GetUserEventsByVisibility(string visibility) 
     {
-        return await _context.Events.Where(e => e.Visibility == StringToVisibilityEnum(type)).ToListAsync();
+        return await _context.Events
+            .Where(e => e.Visibility == StringToVisibilityEnum(visibility))
+            .ToListAsync();
     }
 
-    public async Task<ICollection<Event?>> GetUserFriendEvents(string userId) 
+    public async Task<ICollection<Event?>> GetUserFriendEvents(List<String> userIds) 
     {
-        // Get a list of all the users friends
-        ICollection<User?> friends = await _userRelRepo.GetUserFriends(userId);
-        
-        if (friends == null || friends.Count.Equals(0)) {
-            return new List<Event>();
-        }
-        
-        // Get a list of evry friends userID
-        List<String> userIds = friends.Select(u => u.UserID).ToList();
-
-        // Get all the events from the creators list where the visibility is FRIENDS
-        
+        // Get all the creators from friends Ids-list and select all events where the visibility is FRIENDS
+        // Can reference null
         return await _context.EventRelations
             .Where(
                 er => userIds.Contains(er.UserID) 
@@ -88,20 +84,6 @@ public class EventRepository
         return oldEvent;
     }
 
-     public async Task<Event?> UpdateEventLocation(int eventId, Location newLocation)
-    {
-        Event? eToUpdate = await _context.Events.FindAsync(eventId);
-
-        eToUpdate.Location.Address = newLocation.Address;
-        eToUpdate.Location.Postalcode = newLocation.Postalcode;
-        eToUpdate.Location.City = newLocation.City;
-        eToUpdate.Location.Country = newLocation.Country;
-
-        await _context.SaveChangesAsync();
-        return eToUpdate;
-
-    }
-
      public async Task DeleteEvent(int eventId)
     {
         Event? deleteEvent = await _context.Events.FindAsync(eventId);
@@ -111,11 +93,11 @@ public class EventRepository
     }
 
     // Lage en switch for ENUM til strings
-    public Visibility StringToVisibilityEnum(string type)
+    public Visibility StringToVisibilityEnum(string visibility)
     {
         Visibility eventVisibility;
 
-        switch(type)
+        switch(visibility)
         {
             case "PUBLIC":
                 eventVisibility = Visibility.PUBLIC;
