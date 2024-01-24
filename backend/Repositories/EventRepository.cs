@@ -70,22 +70,22 @@ public class EventRepository
         return newEvent;
     }
 
-     public async Task<Event?> UpdateEvent(Event updatedEvent, Event eventToUpdate)
+     public async Task<Event?> UpdateEvent(Event newEvent, Event oldEvent)
     {
-        eventToUpdate.CreatorUserID = updatedEvent.CreatorUserID;
-        eventToUpdate.EventName = updatedEvent.EventName;
-        eventToUpdate.EventDescription = updatedEvent.EventDescription;
-        eventToUpdate.EventDateTimeStart = updatedEvent.EventDateTimeStart;
-        eventToUpdate.EventDateTimeEnd = updatedEvent.EventDateTimeEnd;
-        eventToUpdate.Visibility = updatedEvent.Visibility;
-        eventToUpdate.InviteURL = updatedEvent.InviteURL;
-        eventToUpdate.FrontImage = updatedEvent.FrontImage;
-        eventToUpdate.MinCapacity = updatedEvent.MinCapacity;
-        eventToUpdate.MaxCapacity = updatedEvent.MaxCapacity;
-        eventToUpdate.Location = updatedEvent.Location;
+        oldEvent.CreatorUserID = newEvent.CreatorUserID;
+        oldEvent.EventName = newEvent.EventName;
+        oldEvent.EventDescription = newEvent.EventDescription;
+        oldEvent.EventDateTimeStart = newEvent.EventDateTimeStart;
+        oldEvent.EventDateTimeEnd = newEvent.EventDateTimeEnd;
+        oldEvent.Visibility = newEvent.Visibility;
+        oldEvent.InviteURL = newEvent.InviteURL;
+        oldEvent.FrontImage = newEvent.FrontImage;
+        oldEvent.MinCapacity = newEvent.MinCapacity;
+        oldEvent.MaxCapacity = newEvent.MaxCapacity;
+        oldEvent.Location = newEvent.Location;
 
         await _context.SaveChangesAsync();
-        return eventToUpdate;
+        return oldEvent;
     }
 
      public async Task<Event?> UpdateEventLocation(int eventId, Location newLocation)
