@@ -18,6 +18,8 @@ public class Event
     public string? MaxCapacity { get; set; }
     public Location? Location { get; set; }
 
+    public Event() {}
+
     public Event(string creatorUserID, string eventName, string eventDescription, 
         DateTime eventDateTimeStart, DateTime eventDateTimeEnd, string inviteURL)
 {

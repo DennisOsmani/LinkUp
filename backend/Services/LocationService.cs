@@ -26,13 +26,13 @@ public class LocationService
         return await _locationRepo.UpdateLocation(oldLocation, newLocation);
     }
 
-    public async Task<Location> CreateLocation(string eventId, Location location)
+    public async Task<Location> CreateLocation(int eventId, Location location)
     {
         Event? eventt = await _eventRepo.FindEventByID(eventId);
 
         if(eventt == null)
         {
-            throw new KeyNotFoundException($"Location with eventId: {eventId}, was not found!");
+            throw new KeyNotFoundException($"Location with locaitonId: {eventId}, was not found!");
         }
 
         return await _locationRepo.CreateLocation(location);
