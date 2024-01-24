@@ -12,6 +12,8 @@ public class Location
     public string City { get; set; }
     public string Country { get; set; }
 
+    public Location() {}
+
     public Location(int eventId, string address, string postalcode, string city, string country) 
     {
         this.EventID = eventId;
