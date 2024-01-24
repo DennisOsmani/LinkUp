@@ -23,6 +23,7 @@ public class UserRelationService : IUserRelationService
 
         if(user == null || otherUser == null)
         {
+            // throw exception
             return null;
         }
 
@@ -62,6 +63,8 @@ public class UserRelationService : IUserRelationService
         {
             return await _userRelationRepo.UpdateUserRelationType(userRelationTwo, enumType);
         }
+
+        // Throw exception
 
         return null;
     }

@@ -8,25 +8,111 @@ namespace Services;
 public class EventRelationService : IEventRelationService
 {
     public readonly EventRelationRepository _erRepo;
+    public readonly EventRepository _eventRepo;
+    public readonly UserRepository _userRepo;
 
-    public EventRelationService(EventRelationRepository erRepo)
+
+    public EventRelationService(EventRelationRepository erRepo, EventRepository eventRepo, UserRepository userRepo)
     {
         _erRepo = erRepo;
+        _eventRepo = eventRepo;
+        _userRepo = userRepo;
     }
 
-    public Task<List<UserRelation>> GetEventRelations(string eventId, string type)
+    public async Task<ICollection<EventRelation>> GetEventRelationsByType(string eventId, string type)
     {
-        throw new NotImplementedException();
+        int eventIdInteger;
+
+        try
+        {
+            eventIdInteger = int.Parse(eventId);
+        }
+        catch(FormatException)
+        {
+            throw new FormatException($"Failed to parse eventId: ${eventId}, to Integer");
+        }
+
+        EventRelation eventRelation = await _eventRepo.GetEventByID(eventId);
+        EventRelationType eventType = StringToEventRelationTypeEnum(type);
+
+        if(eventRelation == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
+        }
+
+        return await _erRepo.GetEventRelationsByType(eventIdInteger, eventType);
     }
 
-    public Task<EventRelation> UpdateEventRelationRole(string eventId, string userId, string role)
+    public async Task<ICollection<EventRelation>> GetEventRelationsByRole(string eventId, string role)
     {
-        throw new NotImplementedException();
+        int eventIdInteger;
+
+        try
+        {
+            eventIdInteger = int.Parse(eventId);
+        }
+        catch(FormatException)
+        {
+            throw new FormatException($"Failed to parse eventId: ${eventId}, to Integer");
+        }
+
+        EventRelation eventRelation = await _eventRepo.GetEventByID(eventId);
+        EventRole eventRole = StringToEventRelationRoleEnum(role);
+
+        if(eventRelation == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
+        }
+
+        return await _erRepo.GetEventRelationsByRole(eventIdInteger, eventRole);
     }
 
-    public Task<EventRelation> UpdateEventRelationType(string eventId, string userId, string type)
+    public async Task<EventRelation> UpdateEventRelationRole(string eventId, string userId, string role)
     {
-        throw new NotImplementedException();
+        int eventIdInteger;
+
+        try
+        {
+            eventIdInteger = int.Parse(eventId);
+        }
+        catch(FormatException)
+        {
+            throw new FormatException($"Failed to parse eventId: ${eventId}, to Integer");
+        }
+
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventIdInteger, userId);
+        EventRole eventRole = StringToEventRelationRoleEnum(role);
+
+        if(eventRelation == null)
+        {
+            throw new KeyNotFoundException($"EventRelation with eventID: {eventId}, and UserID: {userId}, was not found!");
+        }
+
+        return await _erRepo.UpdateEventRelationRole(eventRelation, eventRole);
+    }
+
+    public async Task<EventRelation> UpdateEventRelationType(string eventId, string userId, string type)
+    {
+        int eventIdInteger;
+
+        try
+        {
+            eventIdInteger = int.Parse(eventId);
+        }
+        catch(FormatException)
+        {
+            throw new FormatException($"Failed to parse eventId: ${eventId}, to Integer");
+        }
+
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventIdInteger, userId);
+        EventRelationType eventType = StringToEventRelationTypeEnum(type);
+
+        if(eventRelation == null)
+        {
+            throw new KeyNotFoundException($"EventRelation with eventID: {eventId}, and UserID: {userId}, was not found!");
+        }
+
+        return await _erRepo.UpdateEventRelationType(eventRelation, eventType);
     }
 
     public EventRelationType StringToEventRelationTypeEnum(string type)

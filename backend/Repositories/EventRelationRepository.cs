@@ -1,4 +1,7 @@
 using Data;
+using Models;
+using Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repositories;
 
@@ -11,18 +14,40 @@ public class EventRelationRepository
         _context = context;
     }
 
-    public Task<List<UserRelation>> GetEventRelations(string eventId, EventType)
+    public async Task<ICollection<EventRelation>> GetEventRelationsByType(int eventId, EventRelationType type)
     {
-        throw new NotImplementedException();
+        return await _context.EventRelations
+            .Where(er => er.EventID == eventId && er.EventRelationType == type)
+            .ToListAsync();
     }
 
-    public Task<EventRelation> UpdateEventRelationRole(string eventId, string userId, string role)
+    public async Task<ICollection<EventRelation>> GetEventRelationsByRole(int eventId, EventRole role)
     {
-        throw new NotImplementedException();
+        return await _context.EventRelations
+            .Where(er => er.EventID == eventId && er.EventRole == role)
+            .ToListAsync();
     }
 
-    public Task<EventRelation> UpdateEventRelationType(string eventId, string userId, string type)
+    public async Task<EventRelation> UpdateEventRelationRole(EventRelation eventRelation, EventRole role)
     {
-        throw new NotImplementedException();
+        eventRelation.EventRole = role;
+        await _context.SaveChangesAsync();
+
+        return eventRelation;
+    }
+
+    public async Task<EventRelation> UpdateEventRelationType(EventRelation eventRelation, EventRelationType type)
+    {
+        eventRelation.EventRelationType = type;
+        await _context.SaveChangesAsync();
+
+        return eventRelation;
+    }
+
+    public async Task<EventRelation?> GetEventRelation(int eventId, string userId)
+    {
+        return await _context.EventRelations
+            .Where(er => er.EventID == eventId && er.UserID == userId)
+            .FirstOrDefaultAsync();
     }
 }
