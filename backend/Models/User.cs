@@ -25,6 +25,8 @@ public class User
     public ICollection<UserRelation>? UserRelations { get; set; }
     public ICollection<EventRelation>? EventRelations { get; set; }
 
+    public User() {}
+
     public User(string userId, string firstname, string lastname, string email)
     {
         this.UserID = userId;
