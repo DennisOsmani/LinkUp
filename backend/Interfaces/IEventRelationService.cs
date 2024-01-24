@@ -32,7 +32,17 @@ public interface IEventRelationService
     /// <param name="eventId"></param>
     /// <param name="type">The Type of the relation</param>
     /// <returns>A list of EventRelations</returns>
-    Task<List<UserRelation>> GetEventRelations(string eventId, string type);
+    Task<ICollection<EventRelation>> GetEventRelationsByType(string eventId, string type);
+
+    // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
+
+    /// <summary>
+    /// Fetches a Events relations based on the Role of the relation.
+    /// </summary>
+    /// <param name="eventId"></param>
+    /// <param name="role">The Role of the relation</param>
+    /// <returns>A list of EventRelations</returns>
+    Task<ICollection<EventRelation>> GetEventRelationsByRole(string eventId, string role);
 
     // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
 }
