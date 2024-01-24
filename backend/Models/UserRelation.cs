@@ -13,6 +13,8 @@ public class UserRelation
     public User? User_second { get; set; }
     public UserRelationType Type { get; set; }
 
+    public UserRelation() {}
+
     public UserRelation(string user_first_id, string user_second_id, UserRelationType type)
     {
         this.User_first_ID = user_first_id;

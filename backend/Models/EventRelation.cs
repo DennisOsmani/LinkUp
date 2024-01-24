@@ -14,6 +14,8 @@ public class EventRelation
     public EventRelationType EventRelationType { get; set; }
     public EventRole EventRole { get; set; }
 
+    public EventRelation() {}
+
     public EventRelation(int eventId, string userId, EventRelationType eventRelationType, EventRole eventRole) 
     {
         this.EventID = eventId;
