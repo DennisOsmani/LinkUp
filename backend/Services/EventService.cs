@@ -17,9 +17,15 @@ public class EventService : IEventService
         _eventRepo = eventRepository;
     }
 
-    public Task<ICollection<Event>?> GetUserFriendEvents(string userId)
+    public async Task<ICollection<Event>?> GetUserFriendEvents(string userId)
     {
-        return null;
+        ICollection<Event>? events = await _eventRepo.GetUserFriendEvents(userId);
+
+        if (events == null || events.Count.Equals(0)) {
+            return new List<Event>();
+        }
+
+        return events;
     }
 
     public async Task<ICollection<Event>?> GetEventsInCity(string city)
