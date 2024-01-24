@@ -19,19 +19,8 @@ public class EventRelationService : IEventRelationService
         _userRepo = userRepo;
     }
 
-    public async Task<ICollection<EventRelation>> GetEventRelationsByType(string eventId, string type)
+    public async Task<ICollection<EventRelation>> GetEventRelationsByType(int eventId, string type)
     {
-        int eventIdInteger;
-
-        try
-        {
-            eventIdInteger = int.Parse(eventId);
-        }
-        catch(FormatException)
-        {
-            throw new FormatException($"Failed to parse eventId: ${eventId}, to Integer");
-        }
-
         EventRelation eventRelation = await _eventRepo.GetEventByID(eventId);
         EventRelationType eventType = StringToEventRelationTypeEnum(type);
 
@@ -40,22 +29,11 @@ public class EventRelationService : IEventRelationService
             throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
         }
 
-        return await _erRepo.GetEventRelationsByType(eventIdInteger, eventType);
+        return await _erRepo.GetEventRelationsByType(eventId, eventType);
     }
 
-    public async Task<ICollection<EventRelation>> GetEventRelationsByRole(string eventId, string role)
+    public async Task<ICollection<EventRelation>> GetEventRelationsByRole(int eventId, string role)
     {
-        int eventIdInteger;
-
-        try
-        {
-            eventIdInteger = int.Parse(eventId);
-        }
-        catch(FormatException)
-        {
-            throw new FormatException($"Failed to parse eventId: ${eventId}, to Integer");
-        }
-
         EventRelation eventRelation = await _eventRepo.GetEventByID(eventId);
         EventRole eventRole = StringToEventRelationRoleEnum(role);
 
@@ -64,23 +42,12 @@ public class EventRelationService : IEventRelationService
             throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
         }
 
-        return await _erRepo.GetEventRelationsByRole(eventIdInteger, eventRole);
+        return await _erRepo.GetEventRelationsByRole(eventId, eventRole);
     }
 
-    public async Task<EventRelation> UpdateEventRelationRole(string eventId, string userId, string role)
+    public async Task<EventRelation> UpdateEventRelationRole(int eventId, string userId, string role)
     {
-        int eventIdInteger;
-
-        try
-        {
-            eventIdInteger = int.Parse(eventId);
-        }
-        catch(FormatException)
-        {
-            throw new FormatException($"Failed to parse eventId: ${eventId}, to Integer");
-        }
-
-        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventIdInteger, userId);
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventId, userId);
         EventRole eventRole = StringToEventRelationRoleEnum(role);
 
         if(eventRelation == null)
@@ -91,20 +58,9 @@ public class EventRelationService : IEventRelationService
         return await _erRepo.UpdateEventRelationRole(eventRelation, eventRole);
     }
 
-    public async Task<EventRelation> UpdateEventRelationType(string eventId, string userId, string type)
+    public async Task<EventRelation> UpdateEventRelationType(int eventId, string userId, string type)
     {
-        int eventIdInteger;
-
-        try
-        {
-            eventIdInteger = int.Parse(eventId);
-        }
-        catch(FormatException)
-        {
-            throw new FormatException($"Failed to parse eventId: ${eventId}, to Integer");
-        }
-
-        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventIdInteger, userId);
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventId, userId);
         EventRelationType eventType = StringToEventRelationTypeEnum(type);
 
         if(eventRelation == null)
