@@ -9,89 +9,41 @@ namespace Services;
 public class UserService : IUserService
 {
     public readonly UserRepository _userRepo;
+    public readonly UserRepository _eventRepo;
 
-    public UserService(UserRepository userRepo)
+    public UserService(UserRepository userRepo, EventRepository eventRepo)
     {
         this._userRepo = userRepo;
+        this._eventRepo = eventRepo;
     }
 
     public async Task<User?> GetUser(string userId)
     {
-        try
-        {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
-            }
 
-            return await _userRepo.GetUserByID(userId);
-        }
-        catch (Exception ex)
+        if (string.IsNullOrEmpty(userId))
         {
-            Console.WriteLine($"Error in GetUser: {ex.Message}");
-            throw;
+            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
         }
+
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with ID: {userId} not found in DB");
+        }
+        else
+        {
+            return user;
+        }
+
+
     }
 
-    public async Task DeleteUser(string userId)
+    public async Task<ICollection<User>> SearchUsers(string searchString)
     {
         try
         {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
-            }
-
-            await _userRepo.DeleteUser(userId);
-
-        }
-        catch (DbUpdateConcurrencyException ex)
-        {
-            Console.WriteLine($"Concurrency conflict in DeleteUser: {ex.Message}");
-            throw;
-        }
-    }
-
-    public async Task<User?> UpdateUser(User user)
-    {
-        try
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException("User cannot be null.", nameof(user));
-            }
-            return await _userRepo.UpdateUser(user);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error in UpdateUser: {ex.Message}");
-            return null;
-        }
-    }
-
-    public async Task<ICollection<User>> GetUsersFromEvent(string eventId)
-    {
-        try
-        {
-            if (string.IsNullOrEmpty(eventId) || !int.TryParse(eventId, out int parsedEventId))
-            {
-                throw new ArgumentException("Invalid Event ID.", nameof(eventId));
-            }
-
-            return await _userRepo.GetUsersFromEvent(parsedEventId);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error in GetUsersFromEvent: {ex.Message}");
-            throw;
-        }
-    }
-
-    public async Task<ICollection<User>> SearchUsers(string fullName)
-    {
-        try
-        {
-            return await _userRepo.SearchUsers(fullName);
+            return await _userRepo.SearchUsers(searchString);
         }
         catch (Exception ex)
         {
@@ -101,4 +53,52 @@ public class UserService : IUserService
     }
 
 
+    public async Task<User?> UpdateUser(string userId, User newUser)
+    {
+        if (newUser == null)
+        {
+            throw new ArgumentNullException("New user cannot be null.", nameof(newUser));
+        }
+        try
+        {
+            User? user = await GetUser(userId);
+            return await _userRepo.UpdateUser(user, newUser);
+        }
+        catch (KeyNotFoundException)
+        {
+            throw new KeyNotFoundException($"Error in updating user. User with ID: {userId} not found in DB");
+        }
+    }
+
+
+    public async Task DeleteUser(string userId)
+    {
+        if (string.IsNullOrEmpty(userId))
+        {
+            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+        }
+
+        try
+        {
+            User? user = await GetUser(userId);
+            _userRepo.DeleteUser(user);
+        }
+        catch (KeyNotFoundException)
+        {
+            throw new KeyNotFoundException($"Error in deleting user. User with ID: {userId} not found in DB");
+        }
+
+    }
+
+    //probably needs an update, need eventrepo/service access first
+    public async Task<ICollection<User>> GetUsersFromEvent(int eventId)
+    {
+
+        Event ? event = await _eventRepo.getEventByID(eventId);
+        if(event == null)
+        {
+        throw new KeyNotFoundException($"GetUsersFromEvent: Event with ID: {eventId} not found in DB");
+    }
+        return await _userRepo.GetUsersFromEvent(eventId);
+    }
 }
