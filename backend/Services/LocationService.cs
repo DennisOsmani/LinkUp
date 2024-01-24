@@ -14,20 +14,9 @@ public class LocationService
         _eventRepo = eventRepo;
     }
 
-    public async Task<Location> UpdateLocation(string locationId, Location newLocation)
+    public async Task<Location> UpdateLocation(int locationId, Location newLocation)
     {
-        int locationIdInteger;
-
-        try
-        {
-            locationIdInteger = int.Parse(locationId);
-        }
-        catch(FormatException)
-        {
-            throw new FormatException($"Failed to parse locationId: ${locationId}, to Integer");
-        }
-
-        Location? oldLocation = await _locationRepo.GetLocationByID(locationIdInteger);
+        Location? oldLocation = await _locationRepo.GetLocationByID(locationId);
 
         if(oldLocation == null)
         {
@@ -49,20 +38,9 @@ public class LocationService
         return await _locationRepo.CreateLocation(location);
     }
 
-    public async Task DeleteLocation(string locationId)
+    public async Task DeleteLocation(int locationId)
     {
-        int locationIdInteger;
-
-        try
-        {
-            locationIdInteger = int.Parse(locationId);
-        }
-        catch(FormatException)
-        {
-            throw new FormatException($"Failed to parse locationId: ${locationId}, to Integer");
-        }
-
-        Location? location = await _locationRepo.GetLocationByID(locationIdInteger);
+        Location? location = await _locationRepo.GetLocationByID(locationId);
 
         if(location == null)
         {
