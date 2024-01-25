@@ -12,8 +12,8 @@ public class UserRelationService : IUserRelationService
 
     public UserRelationService(UserRelationRepository userRelationRepo, UserRepository userRepo)
     {
-        this._userRelationRepo = userRelationRepo;
-        this._userRepo = userRepo;
+        _userRelationRepo = userRelationRepo;
+        _userRepo = userRepo;
     }
 
     public async Task<UserRelation?> CreateUserRelation(string userId, string otherUserId, string type)
@@ -21,10 +21,14 @@ public class UserRelationService : IUserRelationService
         User? user = await _userRepo.GetUserByID(userId);
         User? otherUser = await _userRepo.GetUserByID(otherUserId);
 
-        if(user == null || otherUser == null)
+        if(user == null)
         {
-            // throw exception
-            return null;
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserRelationService)");
+        }
+
+        if(otherUser == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {otherUserId}, does not exist! (UserRelationService)");
         }
 
         UserRelation? userRelationOne = await _userRelationRepo.GetOneUserRelation(userId, otherUserId);
@@ -64,9 +68,7 @@ public class UserRelationService : IUserRelationService
             return await _userRelationRepo.UpdateUserRelationType(userRelationTwo, enumType);
         }
 
-        // Throw exception
-
-        return null;
+        throw new KeyNotFoundException($"UserRelation with userIDs: {userId} and {otherUserId}, does not exist! (UserRelationService)");
     }
 
     public UserRelationType StringToUserRelationTypeEnum(string type)
@@ -97,5 +99,4 @@ public class UserRelationService : IUserRelationService
 
         return urtype;
     }
-
 }

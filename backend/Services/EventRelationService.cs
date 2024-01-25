@@ -19,27 +19,27 @@ public class EventRelationService : IEventRelationService
         _userRepo = userRepo;
     }
 
-    public async Task<ICollection<EventRelation>> GetEventRelationsByType(int eventId, string type)
+    public async Task<ICollection<EventRelation>> GetEventRelationsByParticipation(int eventId, string participation)
     {
-        EventRelation eventRelation = await _eventRepo.GetEventByID(eventId);
-        EventRelationType eventType = StringToEventRelationTypeEnum(type);
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+        EventRelationParticipation eventType = StringToEventRelationParticipationEnum(participation);
 
-        if(eventRelation == null)
+        if(eventt == null)
         {
-            throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
+            throw new KeyNotFoundException($"Event with ID: {eventId}, was not found! (EventRelationService)");
         }
-
-        return await _erRepo.GetEventRelationsByType(eventId, eventType);
+        
+        return await _erRepo.GetEventRelationsByParticipation(eventId, eventType);
     }
 
     public async Task<ICollection<EventRelation>> GetEventRelationsByRole(int eventId, string role)
     {
-        EventRelation eventRelation = await _eventRepo.GetEventByID(eventId);
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
         EventRole eventRole = StringToEventRelationRoleEnum(role);
 
-        if(eventRelation == null)
+        if(eventt == null)
         {
-            throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
+            throw new KeyNotFoundException($"Event with ID: {eventId}, was not found! (EventRelationService)");
         }
 
         return await _erRepo.GetEventRelationsByRole(eventId, eventRole);
@@ -52,71 +52,94 @@ public class EventRelationService : IEventRelationService
 
         if(eventRelation == null)
         {
-            throw new KeyNotFoundException($"EventRelation with eventID: {eventId}, and UserID: {userId}, was not found!");
+            throw new KeyNotFoundException($"EventRelation with eventID: {eventId}, and UserID: {userId}, was not found! (EventRelationService)");
         }
 
         return await _erRepo.UpdateEventRelationRole(eventRelation, eventRole);
     }
 
-    public async Task<EventRelation> UpdateEventRelationType(int eventId, string userId, string type)
+    public async Task<EventRelation> UpdateEventRelationParticipation(int eventId, string userId, string participation)
     {
         EventRelation? eventRelation = await _erRepo.GetEventRelation(eventId, userId);
-        EventRelationType eventType = StringToEventRelationTypeEnum(type);
+        EventRelationParticipation eventParticipation = StringToEventRelationParticipationEnum(participation);
 
         if(eventRelation == null)
         {
-            throw new KeyNotFoundException($"EventRelation with eventID: {eventId}, and UserID: {userId}, was not found!");
+            throw new KeyNotFoundException($"EventRelation with eventID: {eventId}, and UserID: {userId}, was not found! (EventRelationService)");
         }
 
-        return await _erRepo.UpdateEventRelationType(eventRelation, eventType);
+        return await _erRepo.UpdateEventRelationParticipation(eventRelation, eventParticipation);
     }
 
-    public EventRelationType StringToEventRelationTypeEnum(string type)
+    public async Task<EventRelation> CreateEventRelation(int eventId, string userId, string participation, string role)
     {
-        EventRelationType erType;
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+        User? user = await _userRepo.GetUserByID(userId);
+        EventRelationParticipation participationEnum = StringToEventRelationParticipationEnum(participation);
+        EventRole roleEnum = StringToEventRelationRoleEnum(role);
         
-        switch(type)
+        if(eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, does not exist! (EventRelationService)");
+        }   
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException($"User with ID: {userId}, does not exist! (EventRelationService)");
+        }
+
+        EventRelation eventRelation = new EventRelation(eventId, eventt, userId, participationEnum, roleEnum);
+
+        await _erRepo.CreateEventRelation(eventRelation);
+        return eventRelation;
+    }
+
+    public EventRelationParticipation StringToEventRelationParticipationEnum(string participation)
+    {
+        EventRelationParticipation erType;
+        
+        switch(participation)
         {
             case "JOINED":
-                erType = EventRelationType.JOINED;
+                erType = EventRelationParticipation.JOINED;
                 break;
             case "DECLINED":
-                erType = EventRelationType.DECLINED;
+                erType = EventRelationParticipation.DECLINED;
                 break;
             case "PENDING":
-                erType = EventRelationType.PENDING;
+                erType = EventRelationParticipation.PENDING;
                 break;
             case "BAILED":
-                erType = EventRelationType.BAILED;
+                erType = EventRelationParticipation.BAILED;
                 break;
             default:
-                erType = EventRelationType.PENDING;
+                erType = EventRelationParticipation.PENDING;
                 break;
         }
 
         return erType;
     }
 
-    public EventRole StringToEventRelationRoleEnum(string type)
+    public EventRole StringToEventRelationRoleEnum(string role)
     {
-        EventRole erType;
+        EventRole erRole;
         
-        switch(type)
+        switch(role)
         {
             case "CREATOR":
-                erType = EventRole.CREATOR;
+                erRole = EventRole.CREATOR;
                 break;
             case "HOST":
-                erType = EventRole.HOST;
+                erRole = EventRole.HOST;
                 break;
             case "PARTICIPANT":
-                erType = EventRole.PARTICIPANT;
+                erRole = EventRole.PARTICIPANT;
                 break;
             default:
-                erType = EventRole.PARTICIPANT;
+                erRole = EventRole.PARTICIPANT;
                 break;
         }
 
-        return erType;
+        return erRole;
     }
 }

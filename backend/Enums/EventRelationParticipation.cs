@@ -3,7 +3,7 @@ namespace Enums;
 /// <summary>
 /// Enum for Type in EventRelation
 /// </summary>
-public enum EventRelationType
+public enum EventRelationParticipation
 {
     JOINED,
     DECLINED,

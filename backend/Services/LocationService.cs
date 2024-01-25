@@ -20,7 +20,7 @@ public class LocationService
 
         if(oldLocation == null)
         {
-            throw new KeyNotFoundException($"Location with locationId: {locationId}, was not found!");
+            throw new KeyNotFoundException($"Location with locationId: {locationId}, was not found! (LocationService)");
         }
 
         return await _locationRepo.UpdateLocation(oldLocation, newLocation);
@@ -28,11 +28,11 @@ public class LocationService
 
     public async Task<Location> CreateLocation(int eventId, Location location)
     {
-        Event? eventt = await _eventRepo.FindEventByID(eventId);
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
 
         if(eventt == null)
         {
-            throw new KeyNotFoundException($"Location with locaitonId: {eventId}, was not found!");
+            throw new KeyNotFoundException($"Event with locaitonId: {eventId}, was not found! (LocationService)");
         }
 
         return await _locationRepo.CreateLocation(location);
@@ -44,7 +44,7 @@ public class LocationService
 
         if(location == null)
         {
-            throw new KeyNotFoundException($"Location with locationId: {locationId}, was not found!");
+            throw new KeyNotFoundException($"Location with locationId: {locationId}, was not found! (LocationService)");
         }
 
         await _locationRepo.DeleteLocation(location);

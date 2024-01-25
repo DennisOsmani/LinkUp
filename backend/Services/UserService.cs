@@ -1,20 +1,18 @@
 using Models;
 using Repositories;
 using Interfaces;
-using Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace Services;
 
 public class UserService : IUserService
 {
     public readonly UserRepository _userRepo;
-    public readonly UserRepository _eventRepo;
+    public readonly EventRepository _eventRepo;
 
     public UserService(UserRepository userRepo, EventRepository eventRepo)
     {
-        this._userRepo = userRepo;
-        this._eventRepo = eventRepo;
+        _userRepo = userRepo;
+        _eventRepo = eventRepo;
     }
 
     public async Task<User?> GetUser(string userId)
@@ -22,83 +20,70 @@ public class UserService : IUserService
 
         if (string.IsNullOrEmpty(userId))
         {
-            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+            throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
 
         User? user = await _userRepo.GetUserByID(userId);
 
         if (user == null)
         {
-            throw new KeyNotFoundException($"User with ID: {userId} not found in DB");
-        }
-        else
-        {
-            return user;
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
         }
 
-
+        return user;
     }
 
-    public async Task<ICollection<User>> SearchUsers(string searchString)
+    public async Task CreateUser(User user)
     {
+        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        //  DENNE MÅ FINNE OG OPRETTE EN UserID (ev bruke UUID), og sjekke om username finnes eller ikke
+        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
         try
         {
-            return await _userRepo.SearchUsers(searchString);
+            await _userRepo.CreateUser(user);
         }
-        catch (Exception ex)
+        catch(InvalidOperationException)
         {
-            Console.WriteLine($"Error in SearchUsers: {ex.Message}");
-            throw;
+            
         }
     }
-
 
     public async Task<User?> UpdateUser(string userId, User newUser)
     {
         if (newUser == null)
         {
-            throw new ArgumentNullException("New user cannot be null.", nameof(newUser));
+            throw new ArgumentNullException("New user cannot be null. "+ nameof(newUser)+ " (UserService)");
         }
-        try
-        {
-            User? user = await GetUser(userId);
-            return await _userRepo.UpdateUser(user, newUser);
-        }
-        catch (KeyNotFoundException)
-        {
-            throw new KeyNotFoundException($"Error in updating user. User with ID: {userId} not found in DB");
-        }
+ 
+        User? user = await GetUser(userId);
+        return await _userRepo.UpdateUser(user, newUser);
     }
-
 
     public async Task DeleteUser(string userId)
     {
         if (string.IsNullOrEmpty(userId))
         {
-            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+            throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
 
-        try
-        {
-            User? user = await GetUser(userId);
-            _userRepo.DeleteUser(user);
-        }
-        catch (KeyNotFoundException)
-        {
-            throw new KeyNotFoundException($"Error in deleting user. User with ID: {userId} not found in DB");
-        }
+        User? user = await GetUser(userId);
+        await _userRepo.DeleteUser(user);
+    }
 
+    public async Task<ICollection<User>> SearchUsers(string searchString)
+    {
+        return await _userRepo.SearchUsers(searchString);
     }
 
     //probably needs an update, need eventrepo/service access first
     public async Task<ICollection<User>> GetUsersFromEvent(int eventId)
     {
+        Event ? eventt = await _eventRepo.GetEventByID(eventId);
 
-        Event ? event = await _eventRepo.getEventByID(eventId);
-        if(event == null)
+        if(eventt == null)
         {
-        throw new KeyNotFoundException($"GetUsersFromEvent: Event with ID: {eventId} not found in DB");
-    }
+            throw new KeyNotFoundException($"Event with EventID: {eventId}, does not exist! (UserService)");
+        }
         return await _userRepo.GetUsersFromEvent(eventId);
     }
 }

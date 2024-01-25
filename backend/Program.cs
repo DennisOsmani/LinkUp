@@ -1,4 +1,6 @@
+using Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,13 @@ builder.Services.AddSwaggerGen();
 
 // Controller config
 builder.Services.AddControllers();
+
+// Service config
+builder.Services.AddScoped<IEventRelationService, EventRelationService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IUserRelationService, UserRelationService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<LocationService>();
 
 // EF Core DbContext fonfig
 builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

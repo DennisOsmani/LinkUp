@@ -1,9 +1,11 @@
 using Data;
-using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace Repositories;
 
+/// <summary>
+/// Repository for handling Location updates and manipulation to Locations table.
+/// </summary>
 public class LocationRepository
 {
     public readonly AppDbContext _context;
@@ -15,32 +17,59 @@ public class LocationRepository
 
     public async Task<Location> UpdateLocation(Location oldLocation, Location newLocation)
     {
-        oldLocation.EventID = newLocation.EventID;
-        oldLocation.Address = newLocation.Address;
-        oldLocation.Postalcode = newLocation.Postalcode;
-        oldLocation.City = newLocation.City;
-        oldLocation.Country = newLocation.Country;
+        try
+        {
+            oldLocation.Address = newLocation.Address;
+            oldLocation.Postalcode = newLocation.Postalcode;
+            oldLocation.City = newLocation.City;
+            oldLocation.Country = newLocation.Country;
 
-        await _context.SaveChangesAsync();
-        return oldLocation;
+            await _context.SaveChangesAsync();
+            return oldLocation;
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (LocationRepo)");
+        }
     }
 
     public async Task<Location> CreateLocation(Location location)
     {
-        _context.Add(location);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Add(location);
+            await _context.SaveChangesAsync();
 
-        return location;
+            return location;
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (LocationRepo)");
+        }
     }
 
     public async Task DeleteLocation(Location location)
     {
-        _context.Remove(location);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Remove(location);
+            await _context.SaveChangesAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (LocationRepo)");
+        }
     }    
 
     public async Task<Location?> GetLocationByID(int locationId)
     {
-        return await _context.Locations.FindAsync(locationId);
+        try
+        {   
+            return await _context.Locations.FindAsync(locationId);
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (LocationRepo)");
+        }
     }
 }
