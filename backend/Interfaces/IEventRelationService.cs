@@ -9,13 +9,13 @@ namespace Interfaces;
 public interface IEventRelationService
 {
     /// <summary>
-    /// Updates a EventRealtions Type.
+    /// Updates a EventRealtions Participation.
     /// </summary>
     /// <param name="eventId">The event we want to update our relation to</param>
     /// <param name="userId">The User we want to update the EventRelation for</param>
-    /// <param name="type">The Type we want to update the EventRelation to</param>
+    /// <param name="participation">The Participation we want to update the EventRelation to</param>
     /// <returns>The updated EventRelation</returns>
-    Task<EventRelation> UpdateEventRelationType(string eventId, string userId, string type);
+    Task<EventRelation> UpdateEventRelationParticipation(int eventId, string userId, string participation);
 
     /// <summary>
     /// Updates a EventRelations Role.
@@ -24,15 +24,15 @@ public interface IEventRelationService
     /// <param name="userId">The User we want to update the EventRelation for</param>
     /// <param name="role">The Users new Role in the EventRelation</param>
     /// <returns>The updated EventRelation</returns>
-    Task<EventRelation> UpdateEventRelationRole(string eventId, string userId, string role);
+    Task<EventRelation> UpdateEventRelationRole(int eventId, string userId, string role);
 
     /// <summary>
     /// Fetches a Events relations based on the Type of the relation.
     /// </summary>
     /// <param name="eventId"></param>
-    /// <param name="type">The Type of the relation</param>
+    /// <param name="participation">The Participation of the relation</param>
     /// <returns>A list of EventRelations</returns>
-    Task<ICollection<EventRelation>> GetEventRelationsByType(string eventId, string type);
+    Task<ICollection<EventRelation>> GetEventRelationsByParticipation(int eventId, string participation);
 
     // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
 
@@ -42,7 +42,7 @@ public interface IEventRelationService
     /// <param name="eventId"></param>
     /// <param name="role">The Role of the relation</param>
     /// <returns>A list of EventRelations</returns>
-    Task<ICollection<EventRelation>> GetEventRelationsByRole(string eventId, string role);
+    Task<ICollection<EventRelation>> GetEventRelationsByRole(int eventId, string role);
 
     // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
 }

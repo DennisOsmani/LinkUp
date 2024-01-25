@@ -1,13 +1,10 @@
-namespace Repositories;
 using Data;
 using Models;
 using Microsoft.EntityFrameworkCore;
-using Interfaces;
-using System.Text;
 using Enums;
 using Services;
-using System.Collections.ObjectModel;
 
+namespace Repositories;
 
 /// <summary>
 /// Repository for handling Event updates and manipulation to Event table.
@@ -20,79 +17,134 @@ public class EventRepository
 
     public EventRepository(AppDbContext context, UserRelationRepository userRelationRepository, EventRelationService eventRelationService) 
     {
-        this._context = context;
-        this._userRelRepo = userRelationRepository;
-        this._eventRelService = eventRelationService;
+        _context = context;
+        _userRelRepo = userRelationRepository;
+        _eventRelService = eventRelationService;
     }
 
+    /// <summary>
+    /// Fetches a Event based on the eventId.
+    /// </summary>
+    /// <param name="eventId">Id for the event</param>
+    /// <returns>The Event with the given id.</returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public async Task<Event?> GetEventByID(int eventId) 
     {
-        return await _context.Events.FindAsync(eventId);
+        try
+        {
+            return await _context.Events.FindAsync(eventId);
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
     }
 
-    public async Task<ICollection<Event>?> GetEventsInCity(string city)
+    public async Task<ICollection<Event>> GetEventsInCity(string city)
     {
-        // possible nullreference with the Location
-        return await _context.Events
-            .Where(e => e.Location.City == city 
-                && e.Visibility == Visibility.PUBLIC)
-            .ToListAsync();
+        try
+        {
+            return await _context.Events
+                .Where(e => e.Location.City == city && e.Visibility == Visibility.PUBLIC)
+                .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
     }
 
-    public async Task<ICollection<Event>?> GetUserEventsByVisibility(string visibility) 
+    /// <summary>
+    /// Fetches a list of Events that a friend of this user has created with the visibility set too friends
+    /// </summary>
+    /// <param name="userIds">A list of userIds, that consists of this users friends</param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">If Linq query is faulty.</exception>
+    public async Task<ICollection<Event>> GetUserFriendEvents(List<String> userIds) 
     {
-        return await _context.Events
+        try
+        {
+            return await _context.EventRelations
+                .Where(
+                    er => userIds.Contains(er.UserID) 
+                    && er.EventRole == EventRole.CREATOR
+                )
+                .Select(er => er.Event)
+                .Where(e => e.Visibility == Visibility.FRIENDS)
+                .ToListAsync();    
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
+    }
+
+    // ????????????? DeFugg ?????????????
+    public async Task<ICollection<Event>> GetUserEventsByVisibility(string visibility) 
+    {
+        try
+        {
+            return await _context.Events
             .Where(e => e.Visibility == StringToVisibilityEnum(visibility))
             .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
     }
 
-    public async Task<ICollection<Event?>> GetUserFriendEvents(List<String> userIds) 
+    public async Task CreateEvent(Event newEvent)
     {
-        // Get all the creators from friends Ids-list and select all events where the visibility is FRIENDS
-        // Can reference null
-        return await _context.EventRelations
-            .Where(
-                er => userIds.Contains(er.UserID) 
-                && er.EventRole == EventRole.CREATOR)
-            .Select(er => er.Event)
-            .Where(e => e.Visibility == Visibility.FRIENDS)
-            .ToListAsync(); 
+        try
+        {
+            _context.Events.Add(newEvent);
+            await _context.SaveChangesAsync();
+        }   
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
     }
 
-    public async Task<Event?> CreateEvent(Event newEvent)
+    public async Task<Event> UpdateEvent(Event newEvent, Event oldEvent)
     {
-        _context.Events.Add(newEvent);
-        await _context.SaveChangesAsync();
-        return newEvent;
-    }
+        try
+        {
+            oldEvent.CreatorUserID = newEvent.CreatorUserID;
+            oldEvent.EventName = newEvent.EventName;
+            oldEvent.EventDescription = newEvent.EventDescription;
+            oldEvent.EventDateTimeStart = newEvent.EventDateTimeStart;
+            oldEvent.EventDateTimeEnd = newEvent.EventDateTimeEnd;
+            oldEvent.Visibility = newEvent.Visibility;
+            oldEvent.InviteURL = newEvent.InviteURL;
+            oldEvent.FrontImage = newEvent.FrontImage;
+            oldEvent.MinCapacity = newEvent.MinCapacity;
+            oldEvent.MaxCapacity = newEvent.MaxCapacity;
+            oldEvent.Location = newEvent.Location;
 
-     public async Task<Event?> UpdateEvent(Event newEvent, Event oldEvent)
+            await _context.SaveChangesAsync();
+            return oldEvent;
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
+    }    
+
+    public async Task DeleteEvent(Event eventToDelete)
     {
-        oldEvent.CreatorUserID = newEvent.CreatorUserID;
-        oldEvent.EventName = newEvent.EventName;
-        oldEvent.EventDescription = newEvent.EventDescription;
-        oldEvent.EventDateTimeStart = newEvent.EventDateTimeStart;
-        oldEvent.EventDateTimeEnd = newEvent.EventDateTimeEnd;
-        oldEvent.Visibility = newEvent.Visibility;
-        oldEvent.InviteURL = newEvent.InviteURL;
-        oldEvent.FrontImage = newEvent.FrontImage;
-        oldEvent.MinCapacity = newEvent.MinCapacity;
-        oldEvent.MaxCapacity = newEvent.MaxCapacity;
-        oldEvent.Location = newEvent.Location;
-
-        await _context.SaveChangesAsync();
-        return oldEvent;
+        try
+        {            
+            _context.Events.Remove(eventToDelete);
+            await _context.SaveChangesAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
     }
 
-     public async Task DeleteEvent(int eventId)
-    {
-        Event? deleteEvent = await _context.Events.FindAsync(eventId);
-        
-        _context.Events.Remove(deleteEvent);
-        await _context.SaveChangesAsync();
-    }
-
-    // Lage en switch for ENUM til strings
     public Visibility StringToVisibilityEnum(string visibility)
     {
         Visibility eventVisibility;
@@ -112,6 +164,7 @@ public class EventRepository
                 eventVisibility = Visibility.PRIVATE;
                 break;
         }
+        
         return eventVisibility;
     }
 }

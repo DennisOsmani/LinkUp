@@ -1,7 +1,5 @@
-using System.Runtime.Intrinsics.X86;
 using Data;
 using Enums;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -16,72 +14,120 @@ public class UserRelationRepository
 
     public UserRelationRepository(AppDbContext context)
     {
-        this._context = context;
+        _context = context;
     }
 
     public async Task<UserRelation> CreateUserRelaton(UserRelation userRelation)
     {
-        _context.Add(userRelation);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Add(userRelation);
+            await _context.SaveChangesAsync();
 
-        return userRelation;
+            return userRelation;
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
     }
 
     public async Task<UserRelation?> UpdateUserRelationType(UserRelation userRelation, UserRelationType type)
     {
-        userRelation.Type = type;
-        await _context.SaveChangesAsync();
+        try
+        {
+            userRelation.Type = type;
+            await _context.SaveChangesAsync();
 
-        return userRelation;
+            return userRelation;
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
     }
 
     public async Task<UserRelation?> GetOneUserRelation(string userId, string otherUserId)
     {
-        UserRelation? userRelation = await _context.UserRelations
-            .Where(ur => ur.User_first_ID == userId && ur.User_second_ID == otherUserId)
-            .FirstOrDefaultAsync();
+        try
+        {
+            UserRelation? userRelation = await _context.UserRelations
+                .Where(ur => ur.User_first_ID == userId && ur.User_second_ID == otherUserId)
+                .FirstOrDefaultAsync();
 
-        return userRelation;
+            return userRelation;
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
     }
 
     public async Task DeleteUserRelation(UserRelation userRelation)
     {
-        _context.Remove(userRelation);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Remove(userRelation);
+            await _context.SaveChangesAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
     }
 
     public async Task<ICollection<User?>> GetUserFriends(string userId)
     {
-        return await _context.UserRelations
-            .Where(
-                ur => (ur.User_first_ID == userId || ur.User_second_ID == userId)
-                && ur.Type == UserRelationType.FRIENDS
-            )
-            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
-            .ToListAsync();
+        try
+        {
+            return await _context.UserRelations
+                .Where(
+                    ur => (ur.User_first_ID == userId || ur.User_second_ID == userId)
+                    && ur.Type == UserRelationType.FRIENDS
+                )
+                .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+                .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
     }
 
     // The Users this user has blocked!
     public async Task<ICollection<User?>> GetUserBlocks(string userId)
     {
-        return await _context.UserRelations
-            .Where(
-                ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.BLOCKED_FIRST_SECOND)
-                || (ur.User_second_ID == userId && ur.Type == UserRelationType.BLOCKED_SECOND_FIRST)
-            )
-            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
-            .ToListAsync();
+        try
+        {
+            return await _context.UserRelations
+                .Where(
+                    ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.BLOCKED_FIRST_SECOND)
+                    || (ur.User_second_ID == userId && ur.Type == UserRelationType.BLOCKED_SECOND_FIRST)
+                )
+                .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+                .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
     }
 
     public async Task<ICollection<User?>> GetUserFriendRequests(string userId)
     {
-        return await _context.UserRelations
-            .Where(
-                ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.PENDING_SECOND_FIRST)
-                || (ur.User_second_ID == userId && ur.Type == UserRelationType.PENDING_FIRST_SECOND)
-            )
-            .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
-            .ToListAsync();
+        try
+        {
+            return await _context.UserRelations
+                .Where(
+                    ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.PENDING_SECOND_FIRST)
+                    || (ur.User_second_ID == userId && ur.Type == UserRelationType.PENDING_FIRST_SECOND)
+                )
+                .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+                .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
     }
-
 }

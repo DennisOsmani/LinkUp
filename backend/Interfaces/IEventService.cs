@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Models;
 
 /// <summary>
@@ -20,7 +19,14 @@ public interface IEventService
     /// </summary>
     /// <param name="city"></param>
     /// <returns>A list of Events</returns>
-    Task<ICollection<Event>?> GetEventsInCity(string city);
+    Task<ICollection<Event>> GetEventsInCity(string city);
+
+    /// <summary>
+    /// Fetches a list of Events based on what type the EventRelation is.
+    /// </summary>
+    /// <param name="visibility">JOINED, DECLINED, PENDING, BAILED</param>
+    /// <returns>A list of Events</returns>
+    Task<ICollection<Event>> GetUserEventsByVisibility(string visibility);
 
     /// <summary>
     /// Fetches a Event by a given id.
@@ -28,13 +34,6 @@ public interface IEventService
     /// <param name="eventId"></param>
     /// <returns>A Event</returns>
     Task<Event?> GetEventByID(int eventId); // Maybe also fetch a list of users in the event
-
-    /// <summary>
-    /// Fetches a list of Events based on what type the EventRelation is.
-    /// </summary>
-    /// <param name="type">JOINED, DECLINED, PENDING, BAILED</param>
-    /// <returns>A list of Events</returns>
-    Task<ICollection<Event>?> GetUserEventsByVisibility(string type);
 
     /// <summary>
     /// Creates a new Event and sets the userrole as CREATOR.
@@ -48,14 +47,7 @@ public interface IEventService
     /// </summary>
     /// <param name="updatedEvent">Event Object</param>
     /// <returns>Updated Event<returns> 
-    Task<Event?> UpdateEvent(Event updatedEvent);
-
-    /// <summary>
-    /// Updates the events location.
-    /// </summary>
-    /// <param name="updatedEvent">EventObject</param>
-    /// <returns>Updated Event</returns>
-    Task<Event?> UpdateEventLocation(int eventId, Location newLocation);
+    Task<Event> UpdateEvent(int eventId, Event updatedEvent);
 
     /// <summary>
     /// Deletes a Event.
