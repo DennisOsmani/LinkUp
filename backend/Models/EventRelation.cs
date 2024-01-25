@@ -1,7 +1,6 @@
 namespace Models;
 
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Tracing;
 using Enums;
 
 public class EventRelation

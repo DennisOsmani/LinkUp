@@ -1,6 +1,8 @@
-namespace Models;
 using System.ComponentModel.DataAnnotations;
 using Enums;
+
+namespace Models;
+
 public class Event
 {
     [Key]
