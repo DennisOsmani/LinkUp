@@ -106,11 +106,17 @@ public class UserRepository
             return await _context.Users
                 .Where(u => u.EventRelations != null && u.EventRelations.Any(er => er.EventID == eventId))
                 .ToListAsync();
+
+            /*
+            return await _context.EventRelations
+                .Where(ev => ev.User != null && ev.EventID == eventId)
+                .Select(ev => ev.User)
+                .ToListAsync();
+            */
         }
         catch(InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
         }
     }
-
 }
