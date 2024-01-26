@@ -2,6 +2,7 @@
 
 - dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL (Driver for Postgresql)
 - dotnet add package Microsoft.EntityFrameworkCore.Design (DB greier els?)
+- dotnet add package Swashbuckle.AspNetCore (Måtte ha denne, vet ikke hvorfor)
 
 ## NuGet
 

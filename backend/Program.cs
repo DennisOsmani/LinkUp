@@ -2,12 +2,19 @@ using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Repositories;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Swagger config
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Controller and Service config
+builder.Services.AddControllers().AddJsonOptions(options =>         
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;     // Ignores relation cycles!!! Important!
+});
 
 // Controller config
 builder.Services.AddControllers();
