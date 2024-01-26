@@ -32,7 +32,7 @@ public class UserRelationRepository
         }
     }
 
-    public async Task<UserRelation?> UpdateUserRelationType(UserRelation userRelation, UserRelationType type)
+    public async Task<UserRelation> UpdateUserRelationType(UserRelation userRelation, UserRelationType type)
     {
         try
         {
@@ -40,6 +40,19 @@ public class UserRelationRepository
             await _context.SaveChangesAsync();
 
             return userRelation;
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
+    }
+
+    public async Task DeleteUserRelation(UserRelation userRelation)
+    {
+        try
+        {
+            _context.Remove(userRelation);
+            await _context.SaveChangesAsync();
         }
         catch(InvalidOperationException)
         {
@@ -56,19 +69,6 @@ public class UserRelationRepository
                 .FirstOrDefaultAsync();
 
             return userRelation;
-        }
-        catch(InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
-        }
-    }
-
-    public async Task DeleteUserRelation(UserRelation userRelation)
-    {
-        try
-        {
-            _context.Remove(userRelation);
-            await _context.SaveChangesAsync();
         }
         catch(InvalidOperationException)
         {

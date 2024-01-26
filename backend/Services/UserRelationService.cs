@@ -16,7 +16,7 @@ public class UserRelationService : IUserRelationService
         _userRepo = userRepo;
     }
 
-    public async Task<UserRelation?> CreateUserRelation(string userId, string otherUserId, string type)
+    public async Task<UserRelation> CreateUserRelation(string userId, string otherUserId, string type)
     {
         User? user = await _userRepo.GetUserByID(userId);
         User? otherUser = await _userRepo.GetUserByID(otherUserId);
@@ -51,7 +51,7 @@ public class UserRelationService : IUserRelationService
         return createdUserRelation;
     }
 
-    public async Task<UserRelation?> UpdateUserRelationType(string userId, string otherUserId, string type)
+    public async Task<UserRelation> UpdateUserRelationType(string userId, string otherUserId, string type)
     {
         UserRelation? userRelationOne = await _userRelationRepo.GetOneUserRelation(userId, otherUserId);
         UserRelation? userRelationTwo = await _userRelationRepo.GetOneUserRelation(otherUserId, userId);
@@ -69,6 +69,27 @@ public class UserRelationService : IUserRelationService
         }
 
         throw new KeyNotFoundException($"UserRelation with userIDs: {userId} and {otherUserId}, does not exist! (UserRelationService)");
+    }
+
+    public async Task DeleteUserRelation(string userId, string otherUserId)
+    {
+        UserRelation? userRelationOne = await _userRelationRepo.GetOneUserRelation(userId, otherUserId);
+        UserRelation? userRelationTwo = await _userRelationRepo.GetOneUserRelation(otherUserId, userId);
+        
+        if(userRelationOne == null && userRelationTwo == null)
+        {
+            throw new KeyNotFoundException($"UserRelation with IDS: {userId} and {otherUserId}, does not exist! (UserRelationService)");
+        }
+
+        if(userRelationOne != null)
+        {
+            await _userRelationRepo.DeleteUserRelation(userRelationOne);
+        }
+
+        if(userRelationTwo != null)
+        {
+            await _userRelationRepo.DeleteUserRelation(userRelationTwo);
+        }
     }
 
     public UserRelationType StringToUserRelationTypeEnum(string type)
