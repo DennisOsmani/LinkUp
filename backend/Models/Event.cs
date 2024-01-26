@@ -18,13 +18,14 @@ public class Event
     public string? FrontImage { get; set; }
     public string? MinCapacity { get; set; }
     public string? MaxCapacity { get; set; }
+    public int LocationID { get; set; }
     public Location Location { get; set; }
     public ICollection<EventRelation>? EventRelations { get; set; }
 
     public Event() {}
 
     public Event(string creatorUserID, string eventName, string eventDescription, 
-        DateTime eventDateTimeStart, DateTime eventDateTimeEnd, Visibility visibility, string inviteURL, Location location)
+        DateTime eventDateTimeStart, DateTime eventDateTimeEnd, Visibility visibility, string inviteURL,int locationID, Location location)
     {
         CreatorUserID = creatorUserID;
         EventName = eventName;
@@ -33,6 +34,7 @@ public class Event
         EventDateTimeEnd = eventDateTimeEnd;
         Visibility = visibility;
         InviteURL = inviteURL;
+        LocationID = locationID;
         Location = location;
     }
 }   
