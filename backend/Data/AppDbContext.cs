@@ -24,13 +24,16 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<UserRelation>()
             .HasOne(ur => ur.User_first)
-            .WithMany(u => u.UserRelations)
-            .HasForeignKey(ur => ur.User_first_ID);
+            .WithMany(u => u.UserRelationsAsFirst)
+            .HasForeignKey(ur => ur.User_first_ID)
+            .OnDelete(DeleteBehavior.Cascade);
+
 
         modelBuilder.Entity<UserRelation>()
             .HasOne(ur => ur.User_second)
-            .WithMany(u => u.UserRelations)
-            .HasForeignKey(ur => ur.User_second_ID);
+            .WithMany(u => u.UserRelationsAsSecond)
+            .HasForeignKey(ur => ur.User_second_ID)
+            .OnDelete(DeleteBehavior.Cascade);
 
         /* EventRelation */
         modelBuilder.Entity<EventRelation>()
@@ -39,7 +42,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<EventRelation>()
             .HasOne(ev => ev.Event)
             .WithMany(e => e.EventRelations)
-            .HasForeignKey(er => er.EventID);
+            .HasForeignKey(er => er.EventID)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<EventRelation>()
             .HasOne(er => er.User)
@@ -53,7 +57,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Location>()
             .HasOne(l => l.Event)
             .WithOne(e => e.Location)
-            .HasForeignKey<Location>("EventID");
+            .HasForeignKey<Location>("EventID")
+            .OnDelete(DeleteBehavior.Cascade);
 
         /* Event */
         modelBuilder.Entity<Event>()
