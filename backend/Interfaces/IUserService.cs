@@ -15,6 +15,14 @@ public interface IUserService
     /// <returns>A User</returns>
     Task<User?> GetUser(string userId);
 
+
+    /// <summary>
+    /// Creates a new user and saves it in the database
+    /// </summary>
+    /// <param name="user"></param>
+    Task CreateUser(User user);
+
+
     /// <summary>
     /// Fetches a list of User based on a search string for their names.
     /// </summary>
