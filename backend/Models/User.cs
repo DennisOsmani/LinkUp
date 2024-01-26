@@ -23,7 +23,8 @@ public class User
     public int? EventsJoined { get; set; }
     public int? EventBails { get; set; }
     public Role Role { get; set; }
-    public ICollection<UserRelation>? UserRelations { get; set; }
+    public ICollection<UserRelation>? UserRelationsAsFirst { get; set; }
+    public ICollection<UserRelation>? UserRelationsAsSecond { get; set; }
     public ICollection<EventRelation>? EventRelations { get; set; }
 
     public User() {}

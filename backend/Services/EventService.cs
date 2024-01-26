@@ -3,6 +3,7 @@ using Repositories;
 using Interfaces;
 using Models;
 using System.Collections.ObjectModel;
+using Enums;
 
 namespace Services;
 
@@ -11,15 +12,15 @@ public class EventService : IEventService
 
     public readonly EventRepository _eventRepo;
     public readonly UserRelationRepository _userRelRepo;
-    public readonly EventRelationService _eventRelService;
-    public readonly LocationService _locService;
+    public readonly EventRelationRepository _eventRelRepo;
+    public readonly UserRepository _userRepo;
 
-    public EventService(EventRepository eventRepository, UserRelationRepository userRelationRepository, EventRelationService eventRelationService, LocationService locationService)
+    public EventService(EventRepository eventRepository, UserRelationRepository userRelationRepository, EventRelationRepository eventRelRepo, UserRepository userRepo)
     {
         _eventRepo = eventRepository;
         _userRelRepo = userRelationRepository;
-        _eventRelService = eventRelationService;
-        _locService = locationService;
+        _eventRelRepo = eventRelRepo;
+        _userRepo = userRepo;
     }
 
     public async Task<Event?> GetEventByID(int eventId)
@@ -52,6 +53,7 @@ public class EventService : IEventService
         return await _eventRepo.GetUserEventsByVisibility(visibility);
     }
 
+    // Refaktoreres ? </3
     public async Task<Event?> CreateEvent(Event newEvent, string creatorUserId)
     {
 
@@ -61,7 +63,23 @@ public class EventService : IEventService
         }
 
         await _eventRepo.CreateEvent(newEvent);
-        await _eventRelService.CreateEventRelation(newEvent.EventID, creatorUserId, "JOINED", "CREATOR");
+
+        Event? eventt = await _eventRepo.GetEventByID(newEvent.EventID);
+        User? user = await _userRepo.GetUserByID(creatorUserId);
+        
+        if(eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {newEvent.EventID}, does not exist! (EventService)");
+        }   
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException($"User with ID: {creatorUserId}, does not exist! (EventService)");
+        }
+
+        EventRelation eventRelation = new EventRelation(newEvent.EventID, eventt, creatorUserId, EventRelationParticipation.JOINED, EventRole.CREATOR);
+
+        await _eventRelRepo.CreateEventRelation(eventRelation);
 
         return newEvent;
     }
