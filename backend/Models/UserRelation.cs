@@ -17,8 +17,8 @@ public class UserRelation
 
     public UserRelation(string user_first_id, string user_second_id, UserRelationType type)
     {
-        this.User_first_ID = user_first_id;
-        this.User_second_ID = user_second_id;
-        this.Type = type;
+        User_first_ID = user_first_id;
+        User_second_ID = user_second_id;
+        Type = type;
     }
 }

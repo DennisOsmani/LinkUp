@@ -31,11 +31,10 @@ public class User
 
     public User(string userId, string firstname, string lastname, string email)
     {
-        this.UserID = userId;
-        this.Firstname = firstname;
-        this.Lastname = lastname;
-        this.Email = email;
-        this.Role = Role.USER;  //bruuh
-
+        UserID = userId;
+        Firstname = firstname;
+        Lastname = lastname;
+        Email = email;
+        Role = Role.USER;  //bruuh
     }
 }
