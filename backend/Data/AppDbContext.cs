@@ -28,7 +28,6 @@ public class AppDbContext : DbContext
             .HasForeignKey(ur => ur.User_first_ID)
             .OnDelete(DeleteBehavior.Cascade);
 
-
         modelBuilder.Entity<UserRelation>()
             .HasOne(ur => ur.User_second)
             .WithMany(u => u.UserRelationsAsSecond)
