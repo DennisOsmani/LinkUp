@@ -5,11 +5,11 @@ namespace Data;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<User> Users;
-    public DbSet<UserRelation> UserRelations;
-    public DbSet<Event> Events;
-    public DbSet<EventRelation> EventRelations;
-    public DbSet<Location> Locations;
+    public DbSet<User> Users { get; set; }
+    public DbSet<UserRelation> UserRelations { get; set; }
+    public DbSet<Event> Events { get; set; }
+    public DbSet<EventRelation> EventRelations { get; set; }
+    public DbSet<Location> Locations { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

@@ -2,7 +2,6 @@ using Data;
 using Models;
 using Microsoft.EntityFrameworkCore;
 using Enums;
-using Services;
 
 namespace Repositories;
 
@@ -12,14 +11,10 @@ namespace Repositories;
 public class EventRepository
 {
     public readonly AppDbContext _context;
-    public readonly UserRelationRepository _userRelRepo;
-    public readonly EventRelationService _eventRelService;
 
-    public EventRepository(AppDbContext context, UserRelationRepository userRelationRepository, EventRelationService eventRelationService) 
+    public EventRepository(AppDbContext context) 
     {
         _context = context;
-        _userRelRepo = userRelationRepository;
-        _eventRelService = eventRelationService;
     }
 
     /// <summary>
