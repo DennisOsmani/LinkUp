@@ -53,15 +53,14 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Location>()
             .HasKey(l => l.LocationID);
 
-        modelBuilder.Entity<Location>()
-            .HasOne(l => l.Event)
-            .WithOne(e => e.Location)
-            .HasForeignKey<Location>("EventID")
-            .OnDelete(DeleteBehavior.Cascade);
-
         /* Event */
         modelBuilder.Entity<Event>()
             .HasKey(e => e.EventID);
+
+        modelBuilder.Entity<Event>()
+            .HasOne(e => e.Location)
+            .WithOne()
+            .HasForeignKey<Event>(e => e.LocationID);
 
         /* User */
         modelBuilder.Entity<User>()
