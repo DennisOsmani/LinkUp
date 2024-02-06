@@ -88,7 +88,9 @@ public class UserRepository
         {
             int maxresults = 40;
             IQueryable<User> query = _context.Users;
-            query = query.Where(u => (u.Firstname + " " + u.Lastname).Contains(searchString));
+
+            string upperCaseSearchString = searchString.ToUpper();
+            query = query.Where(u => (u.Firstname + " " + u.Lastname).ToUpper().Contains(upperCaseSearchString));
             query = query.Take(maxresults);
 
             return await query.ToListAsync();
