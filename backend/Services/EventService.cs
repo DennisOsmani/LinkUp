@@ -2,8 +2,11 @@
 using Repositories;
 using Interfaces;
 using Models;
+<<<<<<< HEAD
 using System.Collections.ObjectModel;
 using Enums;
+=======
+>>>>>>> dc13937385c7b77bbf7e764598f1d2ed2a44a5a0
 
 namespace Services;
 
@@ -11,6 +14,7 @@ public class EventService : IEventService
 {
 
     public readonly EventRepository _eventRepo;
+<<<<<<< HEAD
     public readonly UserRelationRepository _userRelRepo;
     public readonly EventRelationRepository _eventRelRepo;
     public readonly UserRepository _userRepo;
@@ -99,11 +103,64 @@ public class EventService : IEventService
         }
     
        return await _eventRepo.UpdateEvent(oldEvent, toUpdate);
+=======
+
+    public EventService(EventRepository eventRepository)
+    {
+        _eventRepo = eventRepository;
+    }
+
+    public Task<ICollection<Event>?> GetUserFriendEvents(string userId)
+    {
+        return null;
+    }
+
+    public Task<ICollection<Event>?> GetEventsInCity(string city)
+    {
+        return null;
+    }
+
+    public async Task<Event?> GetEventByID(int eventId)
+    {
+        /*event = await _eventRepo.
+        
+        return await _eventRepo.GetEventByID(eventId);*/
+        return null; 
+    }
+
+    public Task<ICollection<Event>?> GetUserEventsByType(string type)
+    {
+        return null;
+    }
+
+
+    public Task<Event?> CreateEvent(Event newEvent, string creatorUserId)
+    {
+        // Set user to CREATOR 
+        return null;
+    }
+
+    public async Task<Event?> UpdateEvent(Event updatedEvent)
+    {
+        Event? eToUpdate = await _eventRepo.GetEventByID(updatedEvent.EventID);
+
+        if (eToUpdate == null) {
+            return null;
+        }
+
+       return await _eventRepo.UpdateEvent(updatedEvent, eToUpdate);
+    }
+
+    public Task<Event?> UpdateEventLocation(int eventId, Location location)
+    {
+        return null;
+>>>>>>> dc13937385c7b77bbf7e764598f1d2ed2a44a5a0
     }
 
     public async Task DeleteEvent(int eventId)
     {   
         Event? eventToDelete = await _eventRepo.GetEventByID(eventId);
+<<<<<<< HEAD
         
         if(eventToDelete == null)
         {
@@ -111,5 +168,12 @@ public class EventService : IEventService
         }
 
         await _eventRepo.DeleteEvent(eventToDelete);
+=======
+
+        if (eventToDelete != null) {
+            await _eventRepo.DeleteEvent(eventToDelete.EventID);
+            Console.WriteLine("Deleted Event with id: " + eventId);
+        }
+>>>>>>> dc13937385c7b77bbf7e764598f1d2ed2a44a5a0
     }
 }
