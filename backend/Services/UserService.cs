@@ -42,9 +42,9 @@ public class UserService : IUserService
         {
             await _userRepo.CreateUser(user);
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
-            
+
         }
     }
 
@@ -52,9 +52,9 @@ public class UserService : IUserService
     {
         if (newUser == null)
         {
-            throw new ArgumentNullException("New user cannot be null. "+ nameof(newUser)+ " (UserService)");
+            throw new ArgumentNullException("New user cannot be null. " + nameof(newUser) + " (UserService)");
         }
- 
+
         User? user = await GetUser(userId);
         return await _userRepo.UpdateUser(user, newUser);
     }
@@ -78,9 +78,9 @@ public class UserService : IUserService
     //probably needs an update, need eventrepo/service access first
     public async Task<ICollection<User>> GetUsersFromEvent(int eventId)
     {
-        Event ? eventt = await _eventRepo.GetEventByID(eventId);
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
 
-        if(eventt == null)
+        if (eventt == null)
         {
             throw new KeyNotFoundException($"Event with EventID: {eventId}, does not exist! (UserService)");
         }
