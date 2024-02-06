@@ -7,19 +7,13 @@ namespace Interfaces;
 /// </summary>
 public interface IEventRelationService
 {
-    /*
-        GetEventRelationsByParticipation og GetEventRelationsByRole
-            - Begge må endres til å returnere Users ?
-            - Trenger ikke relasjoner i frontend ?
-    */
-
     /// <summary>
     /// Fetches a Events relations based on the Type of the relation.
     /// </summary>
     /// <param name="eventId"></param>
     /// <param name="participation">The Participation of the relation</param>
     /// <returns>A list of EventRelations</returns>
-    Task<ICollection<EventRelation>> GetEventRelationsByParticipation(int eventId, string participation);
+    Task<ICollection<User?>> GetUsersFromEventByParticipation(int eventId, string participation);
 
     // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
 
@@ -29,7 +23,7 @@ public interface IEventRelationService
     /// <param name="eventId"></param>
     /// <param name="role">The Role of the relation</param>
     /// <returns>A list of EventRelations</returns>
-    Task<ICollection<EventRelation>> GetEventRelationsByRole(int eventId, string role);
+    Task<ICollection<User?>> GetUsersFromEventByRole(int eventId, string role);
 
     // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
 
