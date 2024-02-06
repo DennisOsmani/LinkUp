@@ -8,31 +8,31 @@ INSERT INTO "Users" ("UserID", "Username", "Firstname", "Lastname", "DateBorn", 
 
 INSERT INTO "UserRelations" ("User_first_ID", "User_second_ID", "Type") VALUES
 ('U1ABC', 'U2DEF', 2),
-('U2DEF', 'U3GHI', 2),
-('U3GHI', 'U4JKL', 2),
+('U1ABC', 'U3GHI', 2),
+('U1ABC', 'U4JKL', 2),
 ('U4JKL', 'U5MNO', 1),
 ('U5MNO', 'U1ABC', 4);
 
 
 INSERT INTO "Events" ("CreatorUserID", "EventName", "EventDescription", "EventDateTimeStart", "EventDateTimeEnd", "Visibility", "InviteURL", "FrontImage", "MinCapacity", "MaxCapacity", "LocationID") VALUES
-('U1ABC', 'Event 1', 'Description for Event 1', '2024-02-15 18:00:00', '2024-02-15 21:00:00', 0, 'http://invite1.com', 'image1.jpg', '10', '50', 1),
-('U2DEF', 'Event 2', 'Description for Event 2', '2024-03-20 09:00:00', '2024-03-20 12:00:00', 1, 'http://invite2.com', 'image2.jpg', '5', '20', 2),
-('U3GHI', 'Event 3', 'Description for Event 3', '2024-04-10 14:00:00', '2024-04-10 17:00:00', 0, 'http://invite3.com', 'image3.jpg', '15', '60', 3),
-('U4JKL', 'Event 4', 'Description for Event 4', '2024-05-05 20:00:00', '2024-05-06 00:00:00', 1, 'http://invite4.com', 'image4.jpg', '20', '100', 4),
+('U1ABC', 'Event 1', 'Description for Event 1', '2024-02-15 18:00:00', '2024-02-15 21:00:00', 1, 'http://invite1.com', 'image1.jpg', '10', '50', 1),
+('U2DEF', 'Event 2', 'Description for Event 2', '2024-03-20 09:00:00', '2024-03-20 12:00:00', 2, 'http://invite2.com', 'image2.jpg', '5', '20', 2),
+('U3GHI', 'Event 3', 'Description for Event 3', '2024-04-10 14:00:00', '2024-04-10 17:00:00', 2, 'http://invite3.com', 'image3.jpg', '15', '60', 3),
+('U4JKL', 'Event 4', 'Description for Event 4', '2024-05-05 20:00:00', '2024-05-06 00:00:00', 2, 'http://invite4.com', 'image4.jpg', '20', '100', 4),
 ('U5MNO', 'Event 5', 'Description for Event 5', '2024-06-15 10:00:00', '2024-06-15 13:00:00', 2, 'http://invite5.com', 'image5.jpg', '30', '150', 5);
 
 
 INSERT INTO "EventRelations" ("EventID", "UserID", "EventRelationParticipation", "EventRole") VALUES
 (1, 'U1ABC', 0, 0),
-(2, 'U2DEF', 0, 2),
-(3, 'U3GHI', 1, 2),
-(4, 'U4JKL', 2, 2),
+(2, 'U2DEF', 0, 0),
+(3, 'U3GHI', 1, 0),
+(4, 'U4JKL', 2, 0),
 (5, 'U5MNO', 0, 2);
 
 
 INSERT INTO "Locations" ("EventID", "Address", "Postalcode", "City", "Country") VALUES
-(26, '123 Event St', '12345', 'City1', 'Country1'),
-(27, '456 Festival Ave', '23456', 'City2', 'Country2'),
-(28, '789 Conference Blvd', '34567', 'City3', 'Country3'),
-(29, '101 Party Rd', '45678', 'City4', 'Country4'),
-(30, '202 Mordiroad', '56789', 'City4', 'Country4');
+(1, '123 Event St', '12345', 'City1', 'Country1'),
+(2, '456 Festival Ave', '23456', 'City2', 'Country2'),
+(3, '789 Conference Blvd', '34567', 'City3', 'Country3'),
+(4, '101 Party Rd', '45678', 'City4', 'Country4'),
+(5, '202 Mordiroad', '56789', 'City4', 'Country4');
