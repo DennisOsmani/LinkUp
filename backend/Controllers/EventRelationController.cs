@@ -6,5 +6,16 @@ namespace Controllers;
 [Route("api/eventrelation")]
 public class EventRelationController
 {
-    
+    []
+    public async Task<IActionResult<>>
+    {
+        try
+        {
+        
+        }
+        catch ()
+        {    
+            
+        }
+    }
 }
