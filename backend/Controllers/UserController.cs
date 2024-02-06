@@ -16,8 +16,8 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet("get")]
-    public async Task<ActionResult<User>> GetUser([FromBody] string userId)
+    [HttpGet("getuser")]
+    public async Task<ActionResult<User>> GetUser([FromQuery] string userId)
     {
         try
         {
@@ -131,7 +131,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("event/{eventId}")]
-    public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent([FromBody] int eventId)
+    public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)
     {
         try
         {
