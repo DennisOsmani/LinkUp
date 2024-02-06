@@ -35,4 +35,4 @@ INSERT INTO "Locations" ("EventID", "Address", "Postalcode", "City", "Country") 
 (27, '456 Festival Ave', '23456', 'City2', 'Country2'),
 (28, '789 Conference Blvd', '34567', 'City3', 'Country3'),
 (29, '101 Party Rd', '45678', 'City4', 'Country4'),
-(30, '202 Gathering Pl', '56789', 'City5', 'Country5');
+(30, '202 Mordiroad', '56789', 'City4', 'Country4');

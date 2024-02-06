@@ -7,6 +7,12 @@ namespace Interfaces;
 /// </summary>
 public interface IEventRelationService
 {
+    /*
+        GetEventRelationsByParticipation og GetEventRelationsByRole
+            - Begge må endres til å returnere Users ?
+            - Trenger ikke relasjoner i frontend ?
+    */
+
     /// <summary>
     /// Fetches a Events relations based on the Type of the relation.
     /// </summary>
