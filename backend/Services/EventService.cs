@@ -39,7 +39,9 @@ public class EventService : IEventService
 
         if (friends.Count.Equals(0))
         {
+            Console.WriteLine("Mrodi er tung: " + friends.Count + " User ID = " + userId);
             return new Collection<Event>();
+           
         }
 
         List<string> userIds = friends
@@ -71,7 +73,7 @@ public class EventService : IEventService
         {
             throw new KeyNotFoundException($"Event with ID: {newEvent.EventID}, does not exist! (EventService)");
         }   
-
+        
         if(user == null)
         {
             throw new KeyNotFoundException($"User with ID: {creatorUserId}, does not exist! (EventService)");

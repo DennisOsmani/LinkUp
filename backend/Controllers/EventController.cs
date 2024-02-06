@@ -1,7 +1,7 @@
+using System.Data;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Services;
 
 namespace Controllers;
 
@@ -16,16 +16,49 @@ public class EventController : ControllerBase
         _eventService = eventService;
     }
 
-    [HttpPost ("newevent")]
-    public async Task<ActionResult> CreateEvent(Event newEvent, string creatorUserId)
+
+    [HttpPost("create")]
+    public async Task<ActionResult> CreateEvent([FromBody] Event newEvent, string creatorUserId)
     {
-        throw new NotImplementedException();
+        try 
+        {
+            var eventt = await _eventService.CreateEvent(newEvent, creatorUserId);
+            return Ok(eventt);
+        } 
+        catch(InvalidOperationException e) 
+        {
+            return BadRequest(e.Message);
+        }
+        catch(KeyNotFoundException e) 
+        {
+            return NotFound(e.Message);
+        }
+        catch(Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 
     [HttpDelete]
     public async Task<ActionResult> DeleteEvent(int eventId)
     {
-        throw new NotImplementedException();
+        try 
+        {
+          await _eventService.DeleteEvent(eventId);
+          return NoContent();
+        } 
+        catch(InvalidOperationException e) 
+        {
+            return BadRequest(e.Message);
+        }
+        catch(KeyNotFoundException e) 
+        {
+            return NotFound(e.Message);
+        }
+        catch(Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 
     [HttpGet("{eventId}")]
@@ -68,10 +101,22 @@ public class EventController : ControllerBase
         }
     }
 
-    [HttpGet("eventvisibility")]
+    [HttpGet("visibility/{visibility}")]
     public async Task<ActionResult> GetUserEventsByVisibility(string visibility)
     {
-        throw new NotImplementedException();
+         try 
+        {
+            var events = await _eventService.GetUserEventsByVisibility(visibility);
+            return Ok(events);
+        } 
+        catch(InvalidOperationException e) 
+        {
+            return BadRequest(e.Message);
+        }
+        catch(Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 
     [HttpGet("eventfriends/{userId}")]
