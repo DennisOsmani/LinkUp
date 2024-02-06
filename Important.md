@@ -5,6 +5,7 @@
 <br />
 
 ## Adrian
+ - remove/change CreateLocation in LocationController, model has changed and the method is probably not needed
 
 <br />
 
