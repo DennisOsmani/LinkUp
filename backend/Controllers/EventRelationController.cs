@@ -3,6 +3,7 @@ using Models;
 using Services;
 using Interfaces;
 using System.Security;
+using DTOs;
 
 namespace Controllers;
 
@@ -17,6 +18,7 @@ public class EventRelationController : ControllerBase
         _erService = erService;
     }
 
+    // NOT WORKING!
     [HttpGet("role")]
     public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByRole(int eventId, string role)
     {
@@ -41,6 +43,7 @@ public class EventRelationController : ControllerBase
         }
     }
 
+    // NOT WORKING!
     [HttpGet("participation")]
     public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByParticipation(int eventId, string participation)
     {
@@ -66,11 +69,11 @@ public class EventRelationController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<ActionResult<EventRelation>> CreateEventRelation(EventRelation eventRelation)
+    public async Task<ActionResult<EventRelation>> CreateEventRelation(EventRelationDTO dto)
     {
         try
         {
-            EventRelation eventRelationResponse = await _erService.CreateEventRelation(eventRelation);
+            EventRelation eventRelationResponse = await _erService.CreateEventRelation(new EventRelation(dto.EventID, dto.UserID, dto.EventRelationParticipation, dto.EventRole));
             return Ok(eventRelationResponse);
         }
         catch(InvalidOperationException e)
