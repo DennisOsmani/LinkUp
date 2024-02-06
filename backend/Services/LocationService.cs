@@ -14,11 +14,21 @@ public class LocationService
         _eventRepo = eventRepo;
     }
 
+    public async Task<Location> GetLocation(int locationId)
+    {
+        Location? location = await _locationRepo.GetLocationByID(locationId);
+        if (location == null)
+        {
+            throw new KeyNotFoundException($"Location with locationId: {locationId}, was not found! (LocationService)");
+        }
+        return location;
+    }
+
     public async Task<Location> UpdateLocation(int locationId, Location newLocation)
     {
         Location? oldLocation = await _locationRepo.GetLocationByID(locationId);
 
-        if(oldLocation == null)
+        if (oldLocation == null)
         {
             throw new KeyNotFoundException($"Location with locationId: {locationId}, was not found! (LocationService)");
         }
@@ -30,7 +40,7 @@ public class LocationService
     {
         Event? eventt = await _eventRepo.GetEventByID(eventId);
 
-        if(eventt == null)
+        if (eventt == null)
         {
             throw new KeyNotFoundException($"Event with locaitonId: {eventId}, was not found! (LocationService)");
         }
@@ -42,11 +52,11 @@ public class LocationService
     {
         Location? location = await _locationRepo.GetLocationByID(locationId);
 
-        if(location == null)
+        if (location == null)
         {
             throw new KeyNotFoundException($"Location with locationId: {locationId}, was not found! (LocationService)");
         }
 
         await _locationRepo.DeleteLocation(location);
-    }    
+    }
 }
