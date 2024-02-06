@@ -23,16 +23,16 @@ INSERT INTO "Events" ("CreatorUserID", "EventName", "EventDescription", "EventDa
 
 
 INSERT INTO "EventRelations" ("EventID", "UserID", "EventRelationParticipation", "EventRole") VALUES
-(1, 'U1ABC', 0, 0),
-(2, 'U2DEF', 0, 2),
-(3, 'U3GHI', 1, 2),
-(4, 'U4JKL', 2, 2),
-(5, 'U5MNO', 0, 2);
+(16, 'U1ABC', 0, 0),
+(17, 'U2DEF', 0, 2),
+(18, 'U3GHI', 1, 2),
+(19, 'U4JKL', 2, 2),
+(20, 'U5MNO', 0, 2);
 
 
 INSERT INTO "Locations" ("EventID", "Address", "Postalcode", "City", "Country") VALUES
-(26, '123 Event St', '12345', 'City1', 'Country1'),
-(27, '456 Festival Ave', '23456', 'City2', 'Country2'),
-(28, '789 Conference Blvd', '34567', 'City3', 'Country3'),
-(29, '101 Party Rd', '45678', 'City4', 'Country4'),
-(30, '202 Gathering Pl', '56789', 'City5', 'Country5');
+(16, '123 Event St', '12345', 'City1', 'Country1'),
+(17, '456 Festival Ave', '23456', 'City2', 'Country2'),
+(18, '789 Conference Blvd', '34567', 'City3', 'Country3'),
+(19, '101 Party Rd', '45678', 'City4', 'Country4'),
+(20, '202 Gathering Pl', '56789', 'City5', 'Country5');
