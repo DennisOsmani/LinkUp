@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
+using Interfaces;
 using System.Security;
 
 namespace Controllers;
@@ -9,21 +10,21 @@ namespace Controllers;
 [Route("api/eventrelation")]
 public class EventRelationController : ControllerBase
 {
-    public readonly EventRelationService _erService;
+    public readonly IEventRelationService _erService;
 
-    public EventRelationController(EventRelationService erService)
+    public EventRelationController(IEventRelationService erService)
     {
         _erService = erService;
     }
 
     [HttpGet("role")]
-    public async Task<ActionResult<ICollection<EventRelation>>> GetEventRelationByRole(int eventId, string role)
+    public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByRole(int eventId, string role)
     {
         string escapedRole = SecurityElement.Escape(role);
 
         try
         {
-            ICollection<EventRelation> eventRelations = await _erService.GetEventRelationsByRole(eventId, escapedRole);
+            ICollection<User?> eventRelations = await _erService.GetUsersFromEventByRole(eventId, escapedRole);
             return Ok(eventRelations);
         }
         catch(InvalidOperationException e)
@@ -41,13 +42,13 @@ public class EventRelationController : ControllerBase
     }
 
     [HttpGet("participation")]
-    public async Task<ActionResult<ICollection<EventRelation>>> GetEventRelationByParticipation(int eventId, string participation)
+    public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByParticipation(int eventId, string participation)
     {
         string escapedParticipation = SecurityElement.Escape(participation);
 
         try
         {
-            ICollection<EventRelation> eventRelations = await _erService.GetEventRelationsByParticipation(eventId, escapedParticipation);
+            ICollection<User?> eventRelations = await _erService.GetUsersFromEventByParticipation(eventId, escapedParticipation);
             return Ok(eventRelations);
         }
         catch(InvalidOperationException e)
