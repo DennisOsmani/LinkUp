@@ -17,11 +17,12 @@ public class EventRelationRepository
         _context = context;
     }
 
-    public async Task<ICollection<EventRelation>> GetEventRelationsByParticipation(int eventId, EventRelationParticipation participation)
+    public async Task<ICollection<User?>> GetUsersFromEventByParticipation(int eventId, EventRelationParticipation participation)
     {
         try{
             return await _context.EventRelations
                 .Where(er => er.EventID == eventId && er.EventRelationParticipation == participation)
+                .Select(er => er.User)
                 .ToListAsync();
         }
         catch(InvalidOperationException)
@@ -30,11 +31,12 @@ public class EventRelationRepository
         }
     }
 
-    public async Task<ICollection<EventRelation>> GetEventRelationsByRole(int eventId, EventRole role)
+    public async Task<ICollection<User?>> GetUsersFromEventByRole(int eventId, EventRole role)
     {
         try{
             return await _context.EventRelations
                 .Where(er => er.EventID == eventId && er.EventRole == role)
+                .Select(er => er.User)
                 .ToListAsync();
         }
         catch(InvalidOperationException)
