@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
+using Interfaces;
 using System.Security;
 
 namespace Controllers;
@@ -9,9 +10,9 @@ namespace Controllers;
 [Route("api/eventrelation")]
 public class EventRelationController : ControllerBase
 {
-    public readonly EventRelationService _erService;
+    public readonly IEventRelationService _erService;
 
-    public EventRelationController(EventRelationService erService)
+    public EventRelationController(IEventRelationService erService)
     {
         _erService = erService;
     }
