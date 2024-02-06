@@ -7,11 +7,27 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initcreate : Migration
+    public partial class initCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    LocationID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    Postalcode = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: false),
+                    Country = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.LocationID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -61,6 +77,12 @@ namespace backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.EventID);
+                    table.ForeignKey(
+                        name: "FK_Events_Locations_LocationID",
+                        column: x => x.LocationID,
+                        principalTable: "Locations",
+                        principalColumn: "LocationID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Events_Users_UserID",
                         column: x => x.UserID,
@@ -123,29 +145,6 @@ namespace backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Locations",
-                columns: table => new
-                {
-                    LocationID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    EventID = table.Column<int>(type: "integer", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: true),
-                    Postalcode = table.Column<string>(type: "text", nullable: true),
-                    City = table.Column<string>(type: "text", nullable: false),
-                    Country = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Locations", x => x.LocationID);
-                    table.ForeignKey(
-                        name: "FK_Locations_Events_EventID",
-                        column: x => x.EventID,
-                        principalTable: "Events",
-                        principalColumn: "EventID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_EventRelations_EventID",
                 table: "EventRelations",
@@ -157,15 +156,15 @@ namespace backend.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Events_LocationID",
+                table: "Events",
+                column: "LocationID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Events_UserID",
                 table: "Events",
                 column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Locations_EventID",
-                table: "Locations",
-                column: "EventID",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRelations_User_first_ID",
@@ -185,13 +184,13 @@ namespace backend.Migrations
                 name: "EventRelations");
 
             migrationBuilder.DropTable(
-                name: "Locations");
-
-            migrationBuilder.DropTable(
                 name: "UserRelations");
 
             migrationBuilder.DropTable(
                 name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Users");
