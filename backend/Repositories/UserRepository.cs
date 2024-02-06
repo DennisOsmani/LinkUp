@@ -22,20 +22,20 @@ public class UserRepository
         {
             return await _context.Users.FindAsync(userId);
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
         }
     }
 
-        public async Task CreateUser(User user)
+    public async Task CreateUser(User user)
     {
         try
         {
             _context.Add(user);
             await _context.SaveChangesAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
         }
@@ -43,27 +43,27 @@ public class UserRepository
 
     public async Task<User?> UpdateUser(User oldUser, User newUser)
     {
-        var entry = _context.Entry(oldUser);
+        _context.Users.Attach(oldUser);
 
         try
         {
             foreach (var property in oldUser.GetType().GetProperties())
             {
                 var propertyName = property.Name;
-                var newValue = entry.Property(propertyName).IsModified ? entry.Property(propertyName).CurrentValue : null;
-                var userValue = typeof(User).GetProperty(propertyName)?.GetValue(newUser);
-
-                if (userValue != null)
+                var newValue = typeof(User).GetProperty(propertyName)?.GetValue(newUser);
+                if (newValue != null && !Equals(property.GetValue(oldUser), newValue))
                 {
-                    entry.Property(propertyName).CurrentValue = userValue;
+                    property.SetValue(oldUser, newValue);
                 }
-
+            }
+            if (_context.ChangeTracker.HasChanges())
+            {
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return oldUser;
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
         }
@@ -76,7 +76,7 @@ public class UserRepository
             _context.Remove(user);
             await _context.SaveChangesAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
         }
@@ -88,12 +88,14 @@ public class UserRepository
         {
             int maxresults = 40;
             IQueryable<User> query = _context.Users;
-            query = query.Where(u => (u.Firstname + " " + u.Lastname).Contains(searchString));
+
+            string upperCaseSearchString = searchString.ToUpper();
+            query = query.Where(u => (u.Firstname + " " + u.Lastname).ToUpper().Contains(upperCaseSearchString));
             query = query.Take(maxresults);
 
             return await query.ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
         }
@@ -114,7 +116,7 @@ public class UserRepository
                 .ToListAsync();
             */
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
         }
