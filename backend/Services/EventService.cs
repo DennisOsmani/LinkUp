@@ -77,7 +77,7 @@ public class EventService : IEventService
             throw new KeyNotFoundException($"User with ID: {creatorUserId}, does not exist! (EventService)");
         }
 
-        EventRelation eventRelation = new EventRelation(newEvent.EventID, eventt, creatorUserId, EventRelationParticipation.JOINED, EventRole.CREATOR);
+        EventRelation eventRelation = new EventRelation(newEvent.EventID, creatorUserId, EventRelationParticipation.JOINED, EventRole.CREATOR);
 
         await _eventRelRepo.CreateEventRelation(eventRelation);
 
