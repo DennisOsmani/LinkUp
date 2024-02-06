@@ -71,24 +71,20 @@ public class EventRelationService : IEventRelationService
         return await _erRepo.UpdateEventRelationParticipation(eventRelation, eventParticipation);
     }
 
-    public async Task<EventRelation> CreateEventRelation(int eventId, string userId, string participation, string role)
+    public async Task<EventRelation> CreateEventRelation(EventRelation eventRelation)
     {
-        Event? eventt = await _eventRepo.GetEventByID(eventId);
-        User? user = await _userRepo.GetUserByID(userId);
-        EventRelationParticipation participationEnum = StringToEventRelationParticipationEnum(participation);
-        EventRole roleEnum = StringToEventRelationRoleEnum(role);
+        Event? eventt = await _eventRepo.GetEventByID(eventRelation.EventID);
+        User? user = await _userRepo.GetUserByID(eventRelation.UserID);
         
         if(eventt == null)
         {
-            throw new KeyNotFoundException($"Event with ID: {eventId}, does not exist! (EventRelationService)");
+            throw new KeyNotFoundException($"Event with ID: {eventRelation.EventID}, does not exist! (EventRelationService)");
         }   
 
         if(user == null)
         {
-            throw new KeyNotFoundException($"User with ID: {userId}, does not exist! (EventRelationService)");
+            throw new KeyNotFoundException($"User with ID: {eventRelation.UserID}, does not exist! (EventRelationService)");
         }
-
-        EventRelation eventRelation = new EventRelation(eventId, eventt, userId, participationEnum, roleEnum);
 
         await _erRepo.CreateEventRelation(eventRelation);
         return eventRelation;

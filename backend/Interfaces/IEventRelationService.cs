@@ -8,24 +8,6 @@ namespace Interfaces;
 public interface IEventRelationService
 {
     /// <summary>
-    /// Updates a EventRealtions Participation.
-    /// </summary>
-    /// <param name="eventId">The event we want to update our relation to</param>
-    /// <param name="userId">The User we want to update the EventRelation for</param>
-    /// <param name="participation">The Participation we want to update the EventRelation to</param>
-    /// <returns>The updated EventRelation</returns>
-    Task<EventRelation> UpdateEventRelationParticipation(int eventId, string userId, string participation);
-
-    /// <summary>
-    /// Updates a EventRelations Role.
-    /// </summary>
-    /// <param name="eventId">The event we want to update our relation to</param>
-    /// <param name="userId">The User we want to update the EventRelation for</param>
-    /// <param name="role">The Users new Role in the EventRelation</param>
-    /// <returns>The updated EventRelation</returns>
-    Task<EventRelation> UpdateEventRelationRole(int eventId, string userId, string role);
-
-    /// <summary>
     /// Fetches a Events relations based on the Type of the relation.
     /// </summary>
     /// <param name="eventId"></param>
@@ -44,4 +26,29 @@ public interface IEventRelationService
     Task<ICollection<EventRelation>> GetEventRelationsByRole(int eventId, string role);
 
     // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
+
+    /// <summary>
+    /// Takes in a eventRelation object and tries to store it in the database.
+    /// </summary>
+    /// <param name="eventRelation">To be created</param>
+    /// <returns>The created eventrelation</returns>
+    Task<EventRelation> CreateEventRelation(EventRelation eventRelation);
+
+    /// <summary>
+    /// Updates a EventRealtions Participation.
+    /// </summary>
+    /// <param name="eventId">The event we want to update our relation to</param>
+    /// <param name="userId">The User we want to update the EventRelation for</param>
+    /// <param name="participation">The Participation we want to update the EventRelation to</param>
+    /// <returns>The updated EventRelation</returns>
+    Task<EventRelation> UpdateEventRelationParticipation(int eventId, string userId, string participation);
+
+    /// <summary>
+    /// Updates a EventRelations Role.
+    /// </summary>
+    /// <param name="eventId">The event we want to update our relation to</param>
+    /// <param name="userId">The User we want to update the EventRelation for</param>
+    /// <param name="role">The Users new Role in the EventRelation</param>
+    /// <returns>The updated EventRelation</returns>
+    Task<EventRelation> UpdateEventRelationRole(int eventId, string userId, string role);
 }
