@@ -64,6 +64,28 @@ public class EventRelationController : ControllerBase
         }
     }
 
+    [HttpPost("create")]
+    public async Task<ActionResult<EventRelation>> CreateEventRelation(EventRelation eventRelation)
+    {
+        try
+        {
+            EventRelation eventRelationResponse = await _erService.CreateEventRelation(eventRelation);
+            return Ok(eventRelationResponse);
+        }
+        catch(InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch(KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch(Exception e)
+        {   
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpPut("role")]
     public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(int eventId, string userId, string role)
     {   
