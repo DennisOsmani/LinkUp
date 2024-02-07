@@ -7,6 +7,7 @@ namespace Interfaces;
 /// </summary>
 public interface IUserService
 {
+    Task<User?> FindByEmailAsync(string email);
 
     /// <summary>
     /// Fetches a User by a given id.

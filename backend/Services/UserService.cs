@@ -1,6 +1,7 @@
 using Models;
 using Repositories;
 using Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services;
 
@@ -13,6 +14,11 @@ public class UserService : IUserService
     {
         _userRepo = userRepo;
         _eventRepo = eventRepo;
+    }
+
+    public async Task<User?> FindByEmailAsync(string email)
+    {
+        return await _userRepo._context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<User?> GetUser(string userId)
