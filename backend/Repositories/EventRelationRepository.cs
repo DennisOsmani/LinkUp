@@ -33,6 +33,8 @@ public class EventRelationRepository
 
     public async Task<ICollection<User?>> GetUsersFromEventByRole(int eventId, EventRole role)
     {
+        Console.WriteLine("ROLE : " + role);
+        
         try{
             return await _context.EventRelations
                 .Where(er => er.EventID == eventId && er.EventRole == role)
