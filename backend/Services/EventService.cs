@@ -82,9 +82,9 @@ public class EventService : IEventService
         return newEvent;
     }
 
-    public async Task<Event> UpdateEvent(int eventId, Event updatedEvent)
+    public async Task<Event> UpdateEvent(Event updatedEvent)
     {
-        Event? oldEvent = await _eventRepo.GetEventByID(eventId);
+        Event? oldEvent = await _eventRepo.GetEventByID(updatedEvent.EventID);
 
         if (updatedEvent == null)
         {
@@ -93,10 +93,10 @@ public class EventService : IEventService
 
         if (oldEvent == null)
         {
-            throw new KeyNotFoundException($"Event with eventID: {eventId}, does not exist! (EventService)");
+            throw new KeyNotFoundException($"Event with eventID: {updatedEvent.EventID}, does not exist! (EventService)");
         }
     
-       return await _eventRepo.UpdateEvent(oldEvent, updatedEvent);
+       return await _eventRepo.UpdateEvent(updatedEvent, oldEvent);
     }
 
     public async Task DeleteEvent(int eventId)
