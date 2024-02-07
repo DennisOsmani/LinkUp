@@ -106,7 +106,6 @@ public class EventRepository
     {
         try
         {
-            oldEvent.CreatorUserID = newEvent.CreatorUserID;
             oldEvent.EventName = newEvent.EventName;
             oldEvent.EventDescription = newEvent.EventDescription;
             oldEvent.EventDateTimeStart = newEvent.EventDateTimeStart;
