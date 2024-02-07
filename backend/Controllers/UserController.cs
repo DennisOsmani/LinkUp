@@ -1,4 +1,5 @@
 using System.Security;
+using System.Security.Claims;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -17,11 +18,25 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("getuser")]
-    public async Task<ActionResult<User>> GetUser([FromQuery] string userId)
+    public async Task<ActionResult<User>> GetUser()
     {
+        // Retrieve userId from the claims
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        
+        Console.WriteLine("Claims received:");
+        foreach (var claim in User.Claims)
+        {
+            Console.WriteLine($"{claim.Type}: {claim.Value}");
+        }
+
+        if(userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+        
         try
         {
-            string escapedUserId = SecurityElement.Escape(userId);
+            string escapedUserId = SecurityElement.Escape(userIdClaim);
             User? user = await _userService.GetUser(escapedUserId);
             return Ok(user);
         }
