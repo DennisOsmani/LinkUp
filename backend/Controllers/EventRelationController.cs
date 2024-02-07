@@ -18,7 +18,6 @@ public class EventRelationController : ControllerBase
         _erService = erService;
     }
 
-    // NOT WORKING!
     [HttpGet("role")]
     public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByRole(int eventId, string role)
     {
@@ -43,7 +42,6 @@ public class EventRelationController : ControllerBase
         }
     }
 
-    // NOT WORKING!
     [HttpGet("participation")]
     public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByParticipation(int eventId, string participation)
     {
