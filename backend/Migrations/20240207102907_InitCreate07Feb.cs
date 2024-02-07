@@ -61,8 +61,6 @@ namespace backend.Migrations
                 {
                     EventID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreatorUserID = table.Column<string>(type: "text", nullable: false),
-                    UserID = table.Column<string>(type: "text", nullable: true),
                     EventName = table.Column<string>(type: "text", nullable: false),
                     EventDescription = table.Column<string>(type: "text", nullable: false),
                     EventDateTimeStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -83,11 +81,6 @@ namespace backend.Migrations
                         principalTable: "Locations",
                         principalColumn: "LocationID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Events_Users_UserID",
-                        column: x => x.UserID,
-                        principalTable: "Users",
-                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -162,11 +155,6 @@ namespace backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_UserID",
-                table: "Events",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserRelations_User_first_ID",
                 table: "UserRelations",
                 column: "User_first_ID");
@@ -190,10 +178,10 @@ namespace backend.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "Locations");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Locations");
         }
     }
 }
