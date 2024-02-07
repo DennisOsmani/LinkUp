@@ -72,6 +72,9 @@ namespace backend.Migrations
 
                     b.HasKey("EventID");
 
+                    b.HasIndex("LocationID")
+                        .IsUnique();
+
                     b.HasIndex("UserID");
 
                     b.ToTable("Events");
@@ -126,16 +129,10 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("EventID")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Postalcode")
                         .HasColumnType("text");
 
                     b.HasKey("LocationID");
-
-                    b.HasIndex("EventID")
-                        .IsUnique();
 
                     b.ToTable("Locations");
                 });
@@ -231,9 +228,17 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Models.Event", b =>
                 {
+                    b.HasOne("Models.Location", "Location")
+                        .WithOne()
+                        .HasForeignKey("Models.Event", "LocationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID");
+
+                    b.Navigation("Location");
 
                     b.Navigation("User");
                 });
@@ -255,17 +260,6 @@ namespace backend.Migrations
                     b.Navigation("Event");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Models.Location", b =>
-                {
-                    b.HasOne("Models.Event", "Event")
-                        .WithOne("Location")
-                        .HasForeignKey("Models.Location", "EventID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("Models.UserRelation", b =>
@@ -290,9 +284,6 @@ namespace backend.Migrations
             modelBuilder.Entity("Models.Event", b =>
                 {
                     b.Navigation("EventRelations");
-
-                    b.Navigation("Location")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.User", b =>
