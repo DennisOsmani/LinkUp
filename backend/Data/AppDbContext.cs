@@ -60,7 +60,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Event>()
             .HasOne(e => e.Location)
             .WithOne()
-            .HasForeignKey<Event>(e => e.LocationID);
+            .HasForeignKey<Event>(e => e.LocationID)
+            .OnDelete(DeleteBehavior.Cascade);
 
         /* User */
         modelBuilder.Entity<User>()
