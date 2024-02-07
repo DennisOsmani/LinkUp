@@ -7,12 +7,14 @@ namespace Interfaces;
 
 public interface IEventService
 {
+
     /// <summary>
-    /// Fetches a list of Events where the user has the UserRelation Friends to the creator and visibility set to friends.
+    /// Fetches a Event by a given id.
+    /// Maybe also fetch a list of users in the event
     /// </summary>
-    /// <param name="userId"></param>
-    /// <returns>A list of Events</returns>
-    Task<ICollection<Event>?> GetUserFriendEvents(string userId);
+    /// <param name="eventId"></param>
+    /// <returns>A Event</returns>
+    Task<Event?> GetEventByID(int eventId);
 
     /// <summary>
     /// Fetches a list of Events based on what city you are in.
@@ -22,18 +24,18 @@ public interface IEventService
     Task<ICollection<Event>> GetEventsInCity(string city);
 
     /// <summary>
+    /// Fetches a list of Events where the user has the UserRelation Friends to the creator and visibility set to friends.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>A list of Events</returns>
+    Task<ICollection<Event>?> GetUserFriendEvents(string userId);
+
+    /// <summary>
     /// Fetches a list of Events based on what type the EventRelation is.
     /// </summary>
     /// <param name="visibility">JOINED, DECLINED, PENDING, BAILED</param>
     /// <returns>A list of Events</returns>
     Task<ICollection<Event>> GetUserEventsByVisibility(string visibility);
-
-    /// <summary>
-    /// Fetches a Event by a given id.
-    /// </summary>
-    /// <param name="eventId"></param>
-    /// <returns>A Event</returns>
-    Task<Event?> GetEventByID(int eventId); // Maybe also fetch a list of users in the event
 
     /// <summary>
     /// Creates a new Event and sets the userrole as CREATOR.

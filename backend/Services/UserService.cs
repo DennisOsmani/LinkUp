@@ -48,15 +48,15 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<User?> UpdateUser(string userId, User newUser)
+    public async Task<User?> UpdateUser(string userId, User updatedUser)
     {
-        if (newUser == null)
+        if (updatedUser == null)
         {
-            throw new ArgumentNullException("New user cannot be null. " + nameof(newUser) + " (UserService)");
+            throw new ArgumentNullException("New user cannot be null. " + nameof(updatedUser) + " (UserService)");
         }
 
         User? user = await GetUser(userId);
-        return await _userRepo.UpdateUser(user, newUser);
+        return await _userRepo.UpdateUser(user, updatedUser);
     }
 
     public async Task DeleteUser(string userId)
