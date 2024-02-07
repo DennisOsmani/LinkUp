@@ -29,13 +29,13 @@ VALUES
 
 
 INSERT INTO "Events"
-    ("CreatorUserID", "EventName", "EventDescription", "EventDateTimeStart", "EventDateTimeEnd", "Visibility", "InviteURL", "FrontImage", "MinCapacity", "MaxCapacity", "LocationID")
+    ("EventName", "EventDescription", "EventDateTimeStart", "EventDateTimeEnd", "Visibility", "InviteURL", "FrontImage", "MinCapacity", "MaxCapacity", "LocationID")
 VALUES
-    ('U1ABC', 'Event 1', 'Description for Event 1', '2024-02-15 18:00:00', '2024-02-15 21:00:00', 1, 'http://invite1.com', 'image1.jpg', '10', '50', 6),
-    ('U2DEF', 'Event 2', 'Description for Event 2', '2024-03-20 09:00:00', '2024-03-20 12:00:00', 2, 'http://invite2.com', 'image2.jpg', '5', '20', 7),
-    ('U3GHI', 'Event 3', 'Description for Event 3', '2024-04-10 14:00:00', '2024-04-10 17:00:00', 2, 'http://invite3.com', 'image3.jpg', '15', '60', 8),
-    ('U4JKL', 'Event 4', 'Description for Event 4', '2024-05-05 20:00:00', '2024-05-06 00:00:00', 2, 'http://invite4.com', 'image4.jpg', '20', '100', 9),
-    ('U5MNO', 'Event 5', 'Description for Event 5', '2024-06-15 10:00:00', '2024-06-15 13:00:00', 0, 'http://invite5.com', 'image5.jpg', '30', '150', 10);
+    ('Event 1', 'Description for Event 1', '2024-02-15 18:00:00', '2024-02-15 21:00:00', 1, 'http://invite1.com', 'image1.jpg', '10', '50', 1),
+    ('Event 2', 'Description for Event 2', '2024-03-20 09:00:00', '2024-03-20 12:00:00', 2, 'http://invite2.com', 'image2.jpg', '5', '20', 2),
+    ('Event 3', 'Description for Event 3', '2024-04-10 14:00:00', '2024-04-10 17:00:00', 2, 'http://invite3.com', 'image3.jpg', '15', '60', 3),
+    ('Event 4', 'Description for Event 4', '2024-05-05 20:00:00', '2024-05-06 00:00:00', 2, 'http://invite4.com', 'image4.jpg', '20', '100', 4),
+    ('Event 5', 'Description for Event 5', '2024-06-15 10:00:00', '2024-06-15 13:00:00', 0, 'http://invite5.com', 'image5.jpg', '30', '150', 5);
 
 
 INSERT INTO "EventRelations"

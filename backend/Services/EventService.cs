@@ -9,7 +9,6 @@ namespace Services;
 
 public class EventService : IEventService
 {
-
     public readonly EventRepository _eventRepo;
     public readonly UserRelationRepository _userRelRepo;
     public readonly EventRelationRepository _eventRelRepo;
