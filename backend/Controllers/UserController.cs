@@ -36,8 +36,7 @@ public class UserController : ControllerBase
         
         try
         {
-            string escapedUserId = SecurityElement.Escape(userIdClaim);
-            User? user = await _userService.GetUser(escapedUserId);
+            User? user = await _userService.GetUser(userIdClaim);
             return Ok(user);
         }
         catch (InvalidOperationException ex)
