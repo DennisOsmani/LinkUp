@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "Pappa´s API", Version = "v69" });
+    c.SwaggerDoc("v1", new() { Title = "Pappa´s API", Version = "v1" });
 
     // Define the OAuth2.0 scheme that's in use (i.e., Implicit Flow)
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -92,8 +92,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthentication();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -105,10 +103,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
-app.UseAuthentication(); // Add this line for Auth
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

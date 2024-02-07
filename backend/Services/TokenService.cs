@@ -28,7 +28,9 @@ public class TokenService
                 // Add more claims as needed
             }),
             Expires = DateTime.UtcNow.AddDays(7),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            Issuer = _configuration["Jwt:Issuer"], // Add this line
+            Audience = _configuration["Jwt:Audience"] 
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
