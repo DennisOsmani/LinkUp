@@ -49,7 +49,8 @@ public class EventRelationRepository
 
     public async Task<EventRelation> UpdateEventRelationRole(EventRelation eventRelation, EventRole role)
     {
-        try{
+        try
+        {
             eventRelation.EventRole = role;
             await _context.SaveChangesAsync();
 
@@ -96,6 +97,21 @@ public class EventRelationRepository
         {
             _context.Add(newEventRelation);
             await _context.SaveChangesAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
+        }
+    }
+
+    public async Task<ICollection<string>> GetExistingUserIds(ICollection<string> userIds)
+    {   
+        try
+        {
+            return await _context.Users
+                .Where(u => userIds.Contains(u.UserID))
+                .Select(u => u.UserID)
+                .ToListAsync();
         }
         catch(InvalidOperationException)
         {

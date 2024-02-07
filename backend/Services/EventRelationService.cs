@@ -90,6 +90,31 @@ public class EventRelationService : IEventRelationService
         return eventRelation;
     }
 
+    public async Task InviteUsersForEvent(ICollection<string> userIds, int eventId)
+    {
+        
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+        
+        if(eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, does not exist! (EventRelationService)");
+        }   
+
+        userIds = await _erRepo.GetExistingUserIds(userIds);
+
+        if(userIds.Count() == 0)
+        {
+            throw new KeyNotFoundException($"No existing users for userIds Collection! (EventRelationService)");
+        }
+
+        foreach(string id in userIds)
+        {
+            EventRelation eventRelation = new EventRelation(eventId, id, EventRelationParticipation.PENDING, EventRole.PARTICIPANT);
+
+            await _erRepo.CreateEventRelation(eventRelation);
+        }
+    }
+
     public EventRelationParticipation StringToEventRelationParticipationEnum(string participation)
     {
         EventRelationParticipation erType;
