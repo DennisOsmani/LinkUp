@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240207101041_InitCreate07Feb")]
+    [Migration("20240207102907_InitCreate07Feb")]
     partial class InitCreate07Feb
     {
         /// <inheritdoc />
@@ -32,10 +32,6 @@ namespace backend.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EventID"));
-
-                    b.Property<string>("CreatorUserID")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("EventDateTimeEnd")
                         .HasColumnType("timestamp with time zone");
@@ -67,9 +63,6 @@ namespace backend.Migrations
                     b.Property<string>("MinCapacity")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserID")
-                        .HasColumnType("text");
-
                     b.Property<int>("Visibility")
                         .HasColumnType("integer");
 
@@ -77,8 +70,6 @@ namespace backend.Migrations
 
                     b.HasIndex("LocationID")
                         .IsUnique();
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Events");
                 });
@@ -237,13 +228,7 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID");
-
                     b.Navigation("Location");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.EventRelation", b =>

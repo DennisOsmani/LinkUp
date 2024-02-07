@@ -73,8 +73,7 @@ public class EventService : IEventService
         }
 
         EventRelation eventRelation = new EventRelation(newEvent.EventID, creatorUserId, EventRelationParticipation.JOINED, EventRole.CREATOR);
-        
-        await _eventRepo.CreateEvent(newEvent);  
+        eventRelation.Event = newEvent; 
 
         await _eventRelRepo.CreateEventRelation(eventRelation);
 

@@ -30,10 +30,6 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EventID"));
 
-                    b.Property<string>("CreatorUserID")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("EventDateTimeEnd")
                         .HasColumnType("timestamp with time zone");
 
@@ -64,9 +60,6 @@ namespace backend.Migrations
                     b.Property<string>("MinCapacity")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserID")
-                        .HasColumnType("text");
-
                     b.Property<int>("Visibility")
                         .HasColumnType("integer");
 
@@ -74,8 +67,6 @@ namespace backend.Migrations
 
                     b.HasIndex("LocationID")
                         .IsUnique();
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Events");
                 });
@@ -234,13 +225,7 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID");
-
                     b.Navigation("Location");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.EventRelation", b =>
