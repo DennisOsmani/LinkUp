@@ -38,11 +38,11 @@ public interface IEventService
     Task<ICollection<Event>> GetUserEventsByVisibility(string visibility);
 
     /// <summary>
-    /// Creates a new Event and sets the userrole as CREATOR.
+    /// Creates a new Event and new eventRelation and sets the userrole as CREATOR.
     /// </summary>
     /// <param name="newEvent">Event Object</param>
     /// <returns>Newly created Event<returns>
-    Task<Event?> CreateEvent(Event newEvent, string creatorUserId);
+    Task<Event?> CreateEvent(Event newEvent);
 
     /// <summary>
     /// Updates a Event.
