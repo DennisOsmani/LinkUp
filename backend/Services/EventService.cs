@@ -27,6 +27,10 @@ public class EventService : IEventService
     {        
         return await _eventRepo.GetEventByID(eventId);
     }
+    
+    // GetMyEvents()
+
+    // 
 
     public async Task<ICollection<Event>> GetEventsInCity(string city)
     {
@@ -39,7 +43,7 @@ public class EventService : IEventService
 
         if (friends.Count.Equals(0))
         {
-            return new Collection<Event>();
+            return new Collection<Event>();  
         }
 
         List<string> userIds = friends
@@ -61,16 +65,8 @@ public class EventService : IEventService
         {
             throw new ArgumentNullException($"Cannot create empty event! (EventService)");
         }
-
-        await _eventRepo.CreateEvent(newEvent);
-
-        Event? eventt = await _eventRepo.GetEventByID(newEvent.EventID);
-        User? user = await _userRepo.GetUserByID(creatorUserId);
         
-        if(eventt == null)
-        {
-            throw new KeyNotFoundException($"Event with ID: {newEvent.EventID}, does not exist! (EventService)");
-        }   
+        User? user = await _userRepo.GetUserByID(creatorUserId);
 
         if(user == null)
         {
@@ -78,27 +74,29 @@ public class EventService : IEventService
         }
 
         EventRelation eventRelation = new EventRelation(newEvent.EventID, creatorUserId, EventRelationParticipation.JOINED, EventRole.CREATOR);
+        
+        await _eventRepo.CreateEvent(newEvent);  
 
         await _eventRelRepo.CreateEventRelation(eventRelation);
 
         return newEvent;
     }
 
-    public async Task<Event> UpdateEvent(int eventId, Event toUpdate)
+    public async Task<Event> UpdateEvent(Event updatedEvent)
     {
-        Event? oldEvent = await _eventRepo.GetEventByID(eventId);
+        Event? oldEvent = await _eventRepo.GetEventByID(updatedEvent.EventID);
 
-        if (toUpdate == null)
+        if (updatedEvent == null)
         {
             throw new ArgumentNullException($"Cannot create empty event! (EventService)");
         }
 
         if (oldEvent == null)
         {
-            throw new KeyNotFoundException($"Event with eventID: {eventId}, does not exist! (EventService)");
+            throw new KeyNotFoundException($"Event with eventID: {updatedEvent.EventID}, does not exist! (EventService)");
         }
     
-       return await _eventRepo.UpdateEvent(oldEvent, toUpdate);
+       return await _eventRepo.UpdateEvent(updatedEvent, oldEvent);
     }
 
     public async Task DeleteEvent(int eventId)
