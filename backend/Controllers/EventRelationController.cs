@@ -66,6 +66,7 @@ public class EventRelationController : ControllerBase
         }
     }
 
+    /*
     [HttpPost("create")]
     public async Task<ActionResult<EventRelation>> CreateEventRelation(EventRelationDTO dto)
     {
@@ -87,6 +88,7 @@ public class EventRelationController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    */
 
     [HttpPut("role")]
     public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(int eventId, string userId, string role)
