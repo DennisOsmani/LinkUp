@@ -58,7 +58,7 @@ public class EventService : IEventService
     }
 
     // Refaktoreres ? </3
-    public async Task<Event?> CreateEvent(Event newEvent)
+    public async Task<Event?> CreateEvent(Event newEvent, string creatorUserId)
     {
 
         if (newEvent == null)
@@ -66,14 +66,14 @@ public class EventService : IEventService
             throw new ArgumentNullException($"Cannot create empty event! (EventService)");
         }
         
-        User? user = await _userRepo.GetUserByID(newEvent.User.UserID);
+        User? user = await _userRepo.GetUserByID(creatorUserId);
 
         if(user == null)
         {
-            throw new KeyNotFoundException($"User with ID: {newEvent.User.UserID}, does not exist! (EventService)");
+            throw new KeyNotFoundException($"User with ID: {creatorUserId}, does not exist! (EventService)");
         }
 
-        EventRelation eventRelation = new EventRelation(newEvent.EventID, newEvent.User.UserID, EventRelationParticipation.JOINED, EventRole.CREATOR);
+        EventRelation eventRelation = new EventRelation(newEvent.EventID, creatorUserId, EventRelationParticipation.JOINED, EventRole.CREATOR);
         
         await _eventRepo.CreateEvent(newEvent);  
 
