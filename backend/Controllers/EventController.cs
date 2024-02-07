@@ -18,7 +18,7 @@ public class EventController : ControllerBase
 
 
     [HttpPost("create")]
-    public async Task<ActionResult> CreateEvent([FromBody] Event newEvent, string creatorUserId)
+    public async Task<ActionResult> CreateEvent([FromBody] Event newEvent, [FromQuery] string creatorUserId)
     {
         try 
         {
