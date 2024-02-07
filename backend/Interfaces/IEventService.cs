@@ -49,7 +49,7 @@ public interface IEventService
     /// </summary>
     /// <param name="updatedEvent">Event Object</param>
     /// <returns>Updated Event<returns> 
-    Task<Event> UpdateEvent(int eventId, Event updatedEvent);
+    Task<Event> UpdateEvent(Event updatedEvent);
 
     /// <summary>
     /// Deletes a Event.

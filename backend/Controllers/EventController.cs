@@ -142,8 +142,24 @@ public class EventController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<ActionResult> UpdateEvent(int eventId, Event updatedEvent)
+    public async Task<ActionResult> UpdateEvent([FromBody] Event updatedEvent)
     {
-        throw new NotImplementedException();
+        try 
+        {
+            Event evt = await _eventService.UpdateEvent(updatedEvent);
+            return Ok(evt);
+        } 
+        catch(InvalidOperationException e) 
+        {
+            return BadRequest(e.Message);
+        }
+        catch(KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch(Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 }
