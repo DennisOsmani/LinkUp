@@ -7,7 +7,6 @@ public class Event
 {
     [Key]
     public int EventID { get; set; }
-    public string CreatorUserID { get; set; }
     public User? User { get; set; }
     public string EventName { get; set; }
     public string EventDescription { get; set; }
@@ -24,10 +23,9 @@ public class Event
 
     public Event() {}
 
-    public Event(string creatorUserID, string eventName, string eventDescription, 
-        DateTime eventDateTimeStart, DateTime eventDateTimeEnd, Visibility visibility, string inviteURL,int locationID, Location location)
+    public Event(string eventName, string eventDescription, 
+        DateTime eventDateTimeStart, DateTime eventDateTimeEnd, Visibility visibility, string inviteURL, int locationID, Location location)
     {
-        CreatorUserID = creatorUserID;
         EventName = eventName;
         EventDescription = eventDescription;
         EventDateTimeStart = eventDateTimeStart;
