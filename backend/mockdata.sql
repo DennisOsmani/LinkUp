@@ -1,11 +1,18 @@
+drop table "UserRelations" cascade;
+drop table "EventRelations" cascade;
+drop table "Events" cascade;
+drop table "Users" cascade;
+drop table "Locations" cascade;
+
+
 INSERT INTO "Users"
-    ("UserID", "Username", "Firstname", "Lastname", "DateBorn", "Phone", "RelationshipStatus", "Gender", "Description", "Email", "ProfileImage", "Password", "Salt", "EventsCreated", "EventsJoined", "EventBails", "Role")
+    ("UserID", "Firstname", "Lastname", "DateBorn", "Phone", "RelationshipStatus", "Gender", "Description", "Email", "ProfileImage", "Password", "Salt", "EventsCreated", "EventsJoined", "EventBails", "Role")
 VALUES
-    ('U1ABC', 'user1', 'John', 'Doe', '1990-01-01', '1234567890', 2, 'M', 'Description 1', 'john.doe@example.com', 'image1.jpg', 'password1', 'salt1', 5, 10, 2, 2),
-    ('U2DEF', 'user2', 'Jane', 'Smith', '1985-05-05', '0987654321', 3, 'F', 'Description 2', 'jane.smith@example.com', 'image2.jpg', 'password2', 'salt2', 3, 8, 1, 2),
-    ('U3GHI', 'user3', 'Alice', 'Johnson', '1992-02-02', '1122334455', 0, 'F', 'Description 3', 'alice.johnson@example.com', 'image3.jpg', 'password3', 'salt3', 7, 5, 3, 2),
-    ('U4JKL', 'user4', 'Bob', 'Williams', '1988-08-08', '5566778899', 3, 'M', 'Description 4', 'bob.williams@example.com', 'image4.jpg', 'password4', 'salt4', 2, 15, 0, 2),
-    ('U5MNO', 'user5', 'Charlie', 'Brown', '1995-12-12', '2233445566', 1, 'M', 'Description 5', 'charlie.brown@example.com', 'image5.jpg', 'password5', 'salt5', 4, 7, 4, 2);
+    ('U1ABC', 'John', 'Doe', '1990-01-01', '1234567890', 2, 'M', 'Description 1', 'john.doe@example.com', 'image1.jpg', 'password1', 'salt1', 5, 10, 2, 2),
+    ('U2DEF', 'Jane', 'Smith', '1985-05-05', '0987654321', 3, 'F', 'Description 2', 'jane.smith@example.com', 'image2.jpg', 'password2', 'salt2', 3, 8, 1, 2),
+    ('U3GHI', 'Alice', 'Johnson', '1992-02-02', '1122334455', 0, 'F', 'Description 3', 'alice.johnson@example.com', 'image3.jpg', 'password3', 'salt3', 7, 5, 3, 2),
+    ('U4JKL', 'Bob', 'Williams', '1988-08-08', '5566778899', 3, 'M', 'Description 4', 'bob.williams@example.com', 'image4.jpg', 'password4', 'salt4', 2, 15, 0, 2),
+    ('U5MNO', 'Charlie', 'Brown', '1995-12-12', '2233445566', 1, 'M', 'Description 5', 'charlie.brown@example.com', 'image5.jpg', 'password5', 'salt5', 4, 7, 4, 2);
 
 
 INSERT INTO "UserRelations"
@@ -47,10 +54,3 @@ VALUES
     (4, 'U4JKL', 2, 2),
     (5, 'U5MNO', 0, 2);
 
-
-
-drop table "UserRelations" cascade;
-drop table "EventRelations" cascade;
-drop table "Events" cascade;
-drop table "Users" cascade;
-drop table "Locations" cascade;

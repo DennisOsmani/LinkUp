@@ -36,6 +36,8 @@ public class UserService : IUserService
             throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
         }
 
+        user.Password = "Ikke faen mann";
+        user.Salt = "Mordi er tjukk";
         return user;
     }
 
@@ -79,7 +81,7 @@ public class UserService : IUserService
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
-
+        
         User? user = await GetUser(userId);
         await _userRepo.DeleteUser(user);
     }

@@ -19,15 +19,17 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("getuser")]
-    public async Task<ActionResult<User>> GetUser()
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult<User>> GetUser([FromQuery] string? userId)
     {
-        // Retrieve userId from the claims
+        userId = SecurityElement.Escape(userId);
+
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        
-        Console.WriteLine("Claims received:");
-        foreach (var claim in User.Claims)
+
+        if(!String.IsNullOrEmpty(userId))
         {
-            Console.WriteLine($"{claim.Type}: {claim.Value}");
+            User? user = await _userService.GetUser(userId);
+            return Ok(user);
         }
 
         if(userIdClaim == null)
@@ -58,6 +60,7 @@ public class UserController : ControllerBase
         }
     }
 
+    /* !!!!!!!!!DENNE TRENGER VI IKKE I PROD!!!!!!!!! */
     [HttpPost]
     public async Task<ActionResult> CreateUser([FromBody] User user)
     {
