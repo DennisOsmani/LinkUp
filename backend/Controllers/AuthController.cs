@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Auth;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
 
 namespace Controllers;
 
@@ -25,12 +26,17 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationRequest request)
     {
+        var salt = GenerateSalt();
+        var saltedPassword = request.Password + salt;
+
         var user = new User
         {
             Firstname = request.Firstname,
             Lastname = request.Lastname,
             Email = request.Email,
-            Password = _passwordHasher.HashPassword(null, request.Password),    // Null is because the user is not created yet, normally this is where the user object is.
+            Password = _passwordHasher.HashPassword(null, saltedPassword),    // Null is because the user is not created yet, normally this is where the user object is.
+            Salt = salt,
+            Role = Enums.Role.USER
         };
 
         await _userService.CreateUser(user);
@@ -42,22 +48,33 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        User? user = await _userService.FindByEmailAsync(request.Email);
+        User? user = await _userService.FindByEmailAsync(request.Email);        
+
         if (user == null)
         {
-            return Unauthorized("Invalid credentials");
+            return Unauthorized("Invalid credentials 1");
         }
 
-        var result = _passwordHasher.VerifyHashedPassword(user, user.Password, request.Password);
+        var saltedPassword = request.Password + user.Salt;
+        
+        var result = _passwordHasher.VerifyHashedPassword(user, user.Password,saltedPassword);
+
         if (result != PasswordVerificationResult.Success)
         {
-            return Unauthorized("Invalid credentials");
+            return Unauthorized("Invalid credentials 2");
         }
 
         // Generate token
         var token = _tokenService.CreateToken(user);
 
         // Return the token
-        return Ok(new AuthResponse { UserId = user.UserID, Token = token });
+        return Ok(new AuthResponse { Token = token });
+    }
+
+    private string GenerateSalt()
+    {
+        var buffer = new byte[16];
+        RandomNumberGenerator.Fill(buffer);
+        return Convert.ToBase64String(buffer);
     }
 }

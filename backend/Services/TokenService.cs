@@ -24,10 +24,10 @@ public class TokenService
             Subject = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserID),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
                 // Add more claims as needed
             }),
-            Expires = DateTime.UtcNow.AddDays(7),   // Må endres
+            Expires = DateTime.UtcNow.AddMinutes(1),   // Må endres
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Issuer = _configuration["Jwt:Issuer"], // Add this line
             Audience = _configuration["Jwt:Audience"] 
