@@ -1,6 +1,7 @@
 using System.Security;
 using System.Security.Claims;
 using Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 

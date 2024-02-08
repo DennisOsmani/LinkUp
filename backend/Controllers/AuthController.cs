@@ -27,8 +27,6 @@ public class AuthController : ControllerBase
     {
         var user = new User
         {
-            UserID = request.UserID,
-            Username = request.Username,
             Firstname = request.Firstname,
             Lastname = request.Lastname,
             Email = request.Email,
@@ -38,7 +36,7 @@ public class AuthController : ControllerBase
         await _userService.CreateUser(user);
         var token = _tokenService.CreateToken(user);
 
-        return Ok(new AuthResponse { Username = user.Username, Token = token });
+        return Ok(new AuthResponse { Token = token });
     }
 
     [HttpPost("login")]
@@ -60,6 +58,6 @@ public class AuthController : ControllerBase
         var token = _tokenService.CreateToken(user);
 
         // Return the token
-        return Ok(new AuthResponse { UserId = user.UserID, Username = user.Username, Token = token });
+        return Ok(new AuthResponse { UserId = user.UserID, Token = token });
     }
 }
