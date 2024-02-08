@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240207102907_InitCreate07Feb")]
-    partial class InitCreate07Feb
+    [Migration("20240208151346_InitCreate08Feb")]
+    partial class InitCreate08Feb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,9 +182,6 @@ namespace backend.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Salt")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
                         .HasColumnType("text");
 
                     b.HasKey("UserID");

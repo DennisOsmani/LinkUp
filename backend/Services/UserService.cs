@@ -1,6 +1,7 @@
 using Models;
 using Repositories;
 using Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services;
 
@@ -13,6 +14,11 @@ public class UserService : IUserService
     {
         _userRepo = userRepo;
         _eventRepo = eventRepo;
+    }
+
+    public async Task<User?> FindByEmailAsync(string email)
+    {
+        return await _userRepo._context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<User?> GetUser(string userId)
@@ -30,14 +36,24 @@ public class UserService : IUserService
             throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
         }
 
+        user.Password = "Ikke faen mann";
+        user.Salt = "Mordi er tjukk";
         return user;
     }
 
     public async Task CreateUser(User user)
     {
-        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-        //  DENNE MÅ FINNE OG OPRETTE EN UserID (ev bruke UUID), og sjekke om username finnes eller ikke
-        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        string id = Guid.NewGuid().ToString();
+        User? doesUserExist = await _userRepo.GetUserByID(id);
+        
+        while(doesUserExist != null)
+        {
+            id = Guid.NewGuid().ToString();
+            doesUserExist = await _userRepo.GetUserByID(id);
+        }
+
+        user.UserID = id;
+
         try
         {
             await _userRepo.CreateUser(user);
@@ -65,7 +81,7 @@ public class UserService : IUserService
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
-
+        
         User? user = await GetUser(userId);
         await _userRepo.DeleteUser(user);
     }

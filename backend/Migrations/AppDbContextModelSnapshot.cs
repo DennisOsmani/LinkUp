@@ -181,9 +181,6 @@ namespace backend.Migrations
                     b.Property<string>("Salt")
                         .HasColumnType("text");
 
-                    b.Property<string>("Username")
-                        .HasColumnType("text");
-
                     b.HasKey("UserID");
 
                     b.ToTable("Users");
