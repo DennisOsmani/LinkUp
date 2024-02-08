@@ -27,7 +27,7 @@ public class TokenService
                 new Claim(ClaimTypes.Name, user.Username),
                 // Add more claims as needed
             }),
-            Expires = DateTime.UtcNow.AddDays(7),
+            Expires = DateTime.UtcNow.AddDays(7),   // Må endres
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Issuer = _configuration["Jwt:Issuer"], // Add this line
             Audience = _configuration["Jwt:Audience"] 

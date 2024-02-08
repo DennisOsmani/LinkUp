@@ -41,9 +41,17 @@ public class UserService : IUserService
 
     public async Task CreateUser(User user)
     {
-        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-        //  DENNE MÅ FINNE OG OPRETTE EN UserID (ev bruke UUID), og sjekke om username finnes eller ikke
-        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        string id = Guid.NewGuid().ToString();
+        User? doesUserExist = await _userRepo.GetUserByID(id);
+        
+        while(doesUserExist != null)
+        {
+            id = Guid.NewGuid().ToString();
+            doesUserExist = await _userRepo.GetUserByID(id);
+        }
+
+        user.UserID = id;
+
         try
         {
             await _userRepo.CreateUser(user);
