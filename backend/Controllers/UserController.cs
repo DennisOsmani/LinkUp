@@ -1,5 +1,7 @@
 using System.Security;
+using System.Security.Claims;
 using Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -17,12 +19,27 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("getuser")]
-    public async Task<ActionResult<User>> GetUser([FromQuery] string userId)
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult<User>> GetUser([FromQuery] string? userId)
     {
+        userId = SecurityElement.Escape(userId);
+
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if(!String.IsNullOrEmpty(userId))
+        {
+            User? user = await _userService.GetUser(userId);
+            return Ok(user);
+        }
+
+        if(userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+        
         try
         {
-            string escapedUserId = SecurityElement.Escape(userId);
-            User? user = await _userService.GetUser(escapedUserId);
+            User? user = await _userService.GetUser(userIdClaim);
             return Ok(user);
         }
         catch (InvalidOperationException ex)
@@ -43,6 +60,7 @@ public class UserController : ControllerBase
         }
     }
 
+    /* !!!!!!!!!DENNE TRENGER VI IKKE I PROD!!!!!!!!! */
     [HttpPost]
     public async Task<ActionResult> CreateUser([FromBody] User user)
     {
