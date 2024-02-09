@@ -138,11 +138,32 @@ public class EventRelationService : IEventRelationService
             joined = false;
         }
         
-        if (eventRelation.EventRelationParticipation != EventRelationParticipation.JOINED) {
+        if (eventRelation?.EventRelationParticipation != EventRelationParticipation.JOINED) {
             joined = false;
         }
 
         return joined;
+    }
+
+    public async Task<bool> CanUserUpdateRoleInEvent(int eventId, string userId, EventRole role)
+    {
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+        User? user = await _userRepo.GetUserByID(userId);
+        bool yes = true;
+
+        if(eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, does not exist! (EventRelationService)");
+        }   
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException($"User with ID: {userId}, does not exist! (EventRelationService)");
+        }
+
+
+
+        return yes;
     }
 
     public EventRelationParticipation StringToEventRelationParticipationEnum(string participation)
