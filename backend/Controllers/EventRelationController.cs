@@ -6,6 +6,7 @@ using System.Security;
 using DTOs;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Repositories;
 
 namespace Controllers;
 
@@ -14,17 +15,19 @@ namespace Controllers;
 public class EventRelationController : ControllerBase
 {
     public readonly IEventRelationService _erService;
-    public readonly UserService _userService;
+    public readonly IUserService _userService;
+    public readonly EventRelationRepository _erRepo;
 
-    public EventRelationController(IEventRelationService erService, UserService userService)
+    public EventRelationController(IEventRelationService erService, IUserService userService, EventRelationRepository eventRelationRepository)
     {
         _erService = erService;
         _userService = userService;
+        _erRepo = eventRelationRepository;
     }
 
-    [HttpGet("event/{eventId}")]
+    [HttpGet("usersfrom/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)
+    public async Task<ActionResult<ICollection<User>>> GetUserFromEvent(int eventId)
     {
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -44,7 +47,7 @@ public class EventRelationController : ControllerBase
             } 
             else
             {
-                return Unauthorized("No access to get all users in Event!");
+                return Unauthorized($"No access to get all users in Event with ID: {eventId}!");
             } 
         }
         catch (InvalidOperationException ex)
@@ -99,7 +102,7 @@ public class EventRelationController : ControllerBase
     {
         string escapedParticipation = SecurityElement.Escape(participation);
 
-         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if(userIdClaim == null)
         {
@@ -175,15 +178,30 @@ public class EventRelationController : ControllerBase
     }
 
     [HttpPut("participation")]
-    public async Task<ActionResult<EventRelation>> UpdateEventRelationParticipation(int eventId, string userId, string participation)
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult<EventRelation>> UpdateEventRelationParticipation(int eventId, string participation)
     {
-        string escapedUserId = SecurityElement.Escape(userId);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if(userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
+        string escapedUserId = SecurityElement.Escape(userIdClaim);
         string escapedParticipation = SecurityElement.Escape(participation);
+
+
+        EventRelation? evRel = await _erRepo.GetEventRelation(eventId, escapedUserId);
+
+        if (evRel == null) {
+            return Unauthorized("No acsess!");
+        }
 
         try
         {
             EventRelation eventRelation = await _erService.UpdateEventRelationParticipation(eventId, escapedUserId, escapedParticipation);
-            return Ok();
+            return Ok(eventRelation);
         }
         catch(InvalidOperationException e)
         {
