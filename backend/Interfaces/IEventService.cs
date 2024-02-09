@@ -56,4 +56,28 @@ public interface IEventService
     /// </summary>
     /// <param name="eventId"></param>
     Task DeleteEvent(int eventId);
+
+    /// <summary>
+    /// Checks if the logged in user should have acces to GetEvent method in EventController
+    /// </summary>
+    /// <param name="eventId">Id of the relevant event</param>
+    /// <param name="userId">Id of the relevant user</param>
+    /// <returns>True if access should be given, false else<returns> 
+    Task<bool> CanUserViewEvent(int eventId, string userId);
+
+    /// <summary>
+    /// Checks if the logged in user should have acces to UpdateEvent method in EventController
+    /// </summary>
+    /// <param name="eventId">Id of the relevant event</param>
+    /// <param name="userId">Id of the relevant user</param>
+    /// <returns>True if permisson should be granted, false else<returns> 
+    Task<bool> CanUserUpdateEvent(int eventId, string userId);
+
+    /// <summary>
+    /// Checks if the logged in user should have acces to DeleteEvent method in EventController
+    /// </summary>
+    /// <param name="eventId">Id of the relevant event</param>
+    /// <param name="userId">Id of the relevant user</param>
+    /// <returns>True if permisson should be granted, false else<returns> 
+    Task<bool> CanUserDeleteEvent(int eventId, string userId);
 }
