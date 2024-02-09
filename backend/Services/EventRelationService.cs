@@ -42,8 +42,16 @@ public class EventRelationService : IEventRelationService
             throw new KeyNotFoundException($"Event with ID: {eventId}, was not found! (EventRelationService)");
         }
 
+        ICollection<User?> usersJoined = await _erRepo.GetUsersFromEventByParticipation(eventt.EventID, EventRelationParticipation.JOINED);
+
+        if (usersJoined == null || usersJoined.Count.Equals(0)) 
+        {
+            throw new Exception($"No eventrelation where users have joined event with ID : {eventId} (EventRelationService)");
+        }
+
         return await _erRepo.GetUsersFromEventByRole(eventId, eventRole);
     }
+    
 
     public async Task<EventRelation> UpdateEventRelationRole(int eventId, string userId, string role)
     {
@@ -113,6 +121,36 @@ public class EventRelationService : IEventRelationService
 
             await _erRepo.CreateEventRelation(eventRelation);
         }
+    }
+
+    public async Task<bool> HaveUserJoinedEvent(int eventId, string userId) 
+    {
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+        User? user = await _userRepo.GetUserByID(userId);
+        bool joined = true;
+
+        if(eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, does not exist! (EventRelationService)");
+        }   
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException($"User with ID: {userId}, does not exist! (EventRelationService)");
+        }
+
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventt.EventID, user.UserID);
+
+        if (eventRelation == null) {
+             throw new Exception($"No EventRelation between user with ID: {userId} and Event with ID: {eventId} (EventRelationService)");
+        }
+        
+        if (eventRelation.EventRelationParticipation != EventRelationParticipation.JOINED) {
+            joined = false;
+            throw new Exception($"User with ID: {userId} has not Joined the event! (EventRelationService)");
+        }
+
+        return joined;
     }
 
     public EventRelationParticipation StringToEventRelationParticipationEnum(string participation)
