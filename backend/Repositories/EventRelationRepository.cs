@@ -2,6 +2,7 @@ using Data;
 using Models;
 using Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Repositories;
 
@@ -16,7 +17,7 @@ public class EventRelationRepository
     {
         _context = context;
     }
-
+    
     public async Task<ICollection<User?>> GetUsersFromEventByParticipation(int eventId, EventRelationParticipation participation)
     {
         try{

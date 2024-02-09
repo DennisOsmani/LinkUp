@@ -50,7 +50,11 @@ public interface IEventRelationService
     /// <returns>The created eventrelation</returns>
     Task<EventRelation> CreateEventRelation(EventRelation eventRelation);
 
-
-
-
+    /// <summary>
+    /// Checks that the user trying to get all users in a event have joined that event
+    /// </summary>
+    /// <param name="eventId,">The event</param>
+    /// <param name="userId,">User to check</param>
+    /// <returns>True if joined</returns>
+    Task<bool> HaveUserJoinedEvent(int eventId, string userId);
 }
