@@ -2,6 +2,7 @@ using Models;
 using Repositories;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Exceptions;
 
 namespace Services;
 
@@ -52,16 +53,14 @@ public class UserService : IUserService
             doesUserExist = await _userRepo.GetUserByID(id);
         }
 
+        bool emailExists = await _userRepo.DoesEmailExist(user.Email);
+        if(emailExists) {
+            throw new EmailAlreadyExistException(user.Email);
+        }
+
         user.UserID = id;
 
-        try
-        {
-            await _userRepo.CreateUser(user);
-        }
-        catch (InvalidOperationException)
-        {
-
-        }
+        await _userRepo.CreateUser(user);
     }
 
     public async Task<User?> UpdateUser(string userId, User updatedUser)

@@ -16,6 +16,19 @@ public class UserRepository
         _context = context;
     }
 
+    public async Task<bool> DoesEmailExist(string email)
+    {
+        try
+        {
+            return await _context.Users
+                .AnyAsync(u => u.Email == email);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
+        }
+    }
+
     public async Task<User?> GetUserByID(string userId)
     {
         try
@@ -28,12 +41,13 @@ public class UserRepository
         }
     }
 
-    public async Task CreateUser(User user)
+    public async Task<string?> CreateUser(User user)
     {
         try
         {
             _context.Add(user);
             await _context.SaveChangesAsync();
+            return user.Email;
         }
         catch (InvalidOperationException)
         {
