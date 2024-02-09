@@ -42,13 +42,6 @@ public class EventRelationService : IEventRelationService
             throw new KeyNotFoundException($"Event with ID: {eventId}, was not found! (EventRelationService)");
         }
 
-        ICollection<User?> usersJoined = await _erRepo.GetUsersFromEventByParticipation(eventt.EventID, EventRelationParticipation.JOINED);
-
-        if (usersJoined == null || usersJoined.Count.Equals(0)) 
-        {
-            throw new Exception($"No eventrelation where users have joined event with ID : {eventId} (EventRelationService)");
-        }
-
         return await _erRepo.GetUsersFromEventByRole(eventId, eventRole);
     }
     
@@ -142,12 +135,11 @@ public class EventRelationService : IEventRelationService
         EventRelation? eventRelation = await _erRepo.GetEventRelation(eventt.EventID, user.UserID);
 
         if (eventRelation == null) {
-             throw new Exception($"No EventRelation between user with ID: {userId} and Event with ID: {eventId} (EventRelationService)");
+            joined = false;
         }
         
         if (eventRelation.EventRelationParticipation != EventRelationParticipation.JOINED) {
             joined = false;
-            throw new Exception($"User with ID: {userId} has not Joined the event! (EventRelationService)");
         }
 
         return joined;
