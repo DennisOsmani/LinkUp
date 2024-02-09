@@ -23,7 +23,7 @@ public class EventRelationController : ControllerBase
     }
 
     [HttpGet("event/{eventId}")]
-    [Authorize(Roles = "USER, ADMIN, SUPERADMIN")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)
     {
 
@@ -63,7 +63,7 @@ public class EventRelationController : ControllerBase
 
 
     [HttpGet("role")]
-    [Authorize(Roles = "USER, ADMIN")]
+    [Authorize(Roles = "USER,ADMIN")]
     public async Task<ActionResult<ICollection<User?>>> GetUsersFromEventByRole(int eventId, string role)
     {
         string escapedRole = SecurityElement.Escape(role);
