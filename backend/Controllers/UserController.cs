@@ -179,26 +179,4 @@ public class UserController : ControllerBase
             return StatusCode(500, ex.Message);
         }
     }
-
-    [HttpGet("{eventId}")]
-    public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)
-    {
-        try
-        {
-            var users = await _userService.GetUsersFromEvent(eventId);
-            return Ok(users);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-    }
 }
