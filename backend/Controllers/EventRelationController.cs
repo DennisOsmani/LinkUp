@@ -19,6 +19,7 @@ public class EventRelationController : ControllerBase
     }
 
     [HttpGet("role")]
+    [Authorize(Roles = "USER, ADMIN")]
     public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByRole(int eventId, string role)
     {
         string escapedRole = SecurityElement.Escape(role);
