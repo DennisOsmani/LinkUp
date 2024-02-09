@@ -133,7 +133,7 @@ public class UserController : ControllerBase
                 return Ok($"User {userId} was deleted successfully!");
             }
 
-            if(userRoleClaim == Role.SUPERADMIN.ToString() || userRoleClaim == Role.ADMIN.ToString())
+            if(userRoleClaim == Role.SUPERADMIN.ToString())
             {
                 string escapedUserId = SecurityElement.Escape(userId);
                 await _userService.DeleteUser(escapedUserId);
