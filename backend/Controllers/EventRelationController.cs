@@ -23,6 +23,7 @@ public class EventRelationController : ControllerBase
     }
 
     [HttpGet("event/{eventId}")]
+    [Authorize(Roles = "USER, ADMIN, SUPERADMIN")]
     public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)
     {
 
@@ -33,13 +34,18 @@ public class EventRelationController : ControllerBase
             return Unauthorized("No user ID claim present in token.");
         }
 
+        bool userJoined = await _erService.HaveUserJoinedEvent(eventId, userIdClaim);
         try
         {
-            if (_erService.HaveUserJoinedEvent(eventId, userIdClaim)) 
+            if (userJoined) 
             {
-            var users = await _userService.GetUsersFromEvent(eventId);
-            return Ok(users);
-            }
+                var users = await _userService.GetUsersFromEvent(eventId);
+                return Ok(users);
+            } 
+            else
+            {
+                return Unauthorized("No access to get all users in Event!");
+            } 
         }
         catch (InvalidOperationException ex)
         {
