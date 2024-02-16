@@ -31,8 +31,8 @@ public class UserRelationController : ControllerBase
             return Unauthorized("No user ID claim present in token.");
         }
 
-        string otherUserId = SecurityElement.Escape(dto.OtherUserId);
-        string type = SecurityElement.Escape(dto.Type.ToString());
+        string? otherUserId = SecurityElement.Escape(dto.OtherUserId);
+        string? type = SecurityElement.Escape(dto.Type.ToString());
 
         try
         {
@@ -60,12 +60,11 @@ public class UserRelationController : ControllerBase
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         // flag
-        if(userIdClaim == null || (userIdClaim != dto.UserID && userIdClaim != dto.OtherUserId))
+        if(userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");
         }
 
-        string userId = SecurityElement.Escape(dto.UserID);
         string otherUserId = SecurityElement.Escape(dto.OtherUserId);
         string type = SecurityElement.Escape(dto.Type.ToString());
 
