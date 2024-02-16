@@ -4,6 +4,8 @@ using Models;
 using Interfaces;
 using Data;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Controllers;
 
@@ -19,15 +21,22 @@ public class UserRelationController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<UserRelation>> CreateUserRelation([FromBody] UserRelationDTO dto)
     {
-        string userId = SecurityElement.Escape(dto.UserID);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if(userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
         string otherUserId = SecurityElement.Escape(dto.OtherUserId);
         string type = SecurityElement.Escape(dto.Type.ToString());
 
         try
         {
-            var result = await _urService.CreateUserRelation(userId, otherUserId, type);
+            var result = await _urService.CreateUserRelation(userIdClaim, otherUserId, type);
             return Ok(result);
         }
         catch(InvalidOperationException e)
@@ -45,15 +54,24 @@ public class UserRelationController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<UserRelation>> UpdateUserRelationType([FromBody] UserRelationDTO dto)
     {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        // flag
+        if(userIdClaim == null || (userIdClaim != dto.UserID && userIdClaim != dto.OtherUserId))
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
         string userId = SecurityElement.Escape(dto.UserID);
         string otherUserId = SecurityElement.Escape(dto.OtherUserId);
         string type = SecurityElement.Escape(dto.Type.ToString());
 
         try
         {
-            var result = await  _urService.UpdateUserRelationType(userId, otherUserId, type);
+            var result = await  _urService.UpdateUserRelationType(userIdClaim, otherUserId, type);
             return Ok(result);
         }
         catch(InvalidOperationException e)
@@ -71,11 +89,19 @@ public class UserRelationController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<ActionResult> DeleteUserRelation(string userId, string otherUserId)
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult> DeleteUserRelation(string otherUserId)
     {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if(userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
         try
         {
-            await _urService.DeleteUserRelation(userId, otherUserId);
+            await _urService.DeleteUserRelation(userIdClaim, otherUserId);
             return Ok();
         }
         catch(InvalidOperationException e)
