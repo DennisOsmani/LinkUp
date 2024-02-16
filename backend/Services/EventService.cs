@@ -51,6 +51,7 @@ public class EventService : IEventService
         return await _eventRepo.GetUserFriendEvents(userIds);
     }
 
+    //Is this the De Fugg ?????? What is this
     public async Task<ICollection<Event>> GetUserEventsByVisibility(string visibility)
     {
         return await _eventRepo.GetUserEventsByVisibility(visibility);
