@@ -30,8 +30,7 @@ public class EventController : ControllerBase
 
         try
         {
-            if (await _eventService.CanUserViewEvent(eventId, userIdClaims)
-                || userRoleClaims == Role.SUPERADMIN.ToString())
+            if (userRoleClaims == Role.SUPERADMIN.ToString() || await _eventService.CanUserViewEvent(eventId, userIdClaims))
             {
                 var eventt = await _eventService.GetEventByID(eventId);
                 return Ok(eventt);
