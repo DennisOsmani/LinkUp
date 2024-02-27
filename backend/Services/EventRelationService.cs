@@ -145,11 +145,11 @@ public class EventRelationService : IEventRelationService
         return joined;
     }
 
-    public async Task<bool> CanUserUpdateRoleInEvent(int eventId, string userId, EventRole role)
+    public async Task<bool> CanUserUpdateRoleInEvent(int eventId, string userId)
     {
         Event? eventt = await _eventRepo.GetEventByID(eventId);
         User? user = await _userRepo.GetUserByID(userId);
-        bool yes = true;
+        bool canUpdate = true;
 
         if(eventt == null)
         {
@@ -161,9 +161,19 @@ public class EventRelationService : IEventRelationService
             throw new KeyNotFoundException($"User with ID: {userId}, does not exist! (EventRelationService)");
         }
 
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventt.EventID, user.UserID);
 
+        if(eventRelation == null) 
+        {
+            canUpdate = false;
+        }
 
-        return yes;
+        if (eventRelation?.EventRole != EventRole.CREATOR)
+        {
+            canUpdate = false;
+        }
+
+        return canUpdate;
     }
 
     public EventRelationParticipation StringToEventRelationParticipationEnum(string participation)

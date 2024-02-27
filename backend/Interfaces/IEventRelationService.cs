@@ -60,11 +60,10 @@ public interface IEventRelationService
     Task<bool> HaveUserJoinedEvent(int eventId, string userId);
 
     /// <summary>
-    /// Checks that the user trying to update a role is
+    /// Checks that the user trying to update a role is CREATOR or HOST
     /// </summary>
     /// <param name="eventId,">The event</param>
     /// <param name="userId,">User to check if have access</param>
-    /// <param name="role,">Cheks that users role is CREATOR</param>
     /// <returns>True if joined</returns>
-    Task<bool> CanUserUpdateRoleInEvent(int eventId, string userId, EventRole role);
+    Task<bool> CanUserUpdateRoleInEvent(int eventId, string userId);
 }

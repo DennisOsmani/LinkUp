@@ -27,7 +27,7 @@ public class EventRelationController : ControllerBase
 
     [HttpGet("usersfrom/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult<ICollection<User>>> GetUserFromEvent(int eventId)
+    public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)
     {
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -64,7 +64,7 @@ public class EventRelationController : ControllerBase
         }
     }
 
-
+ // SKAL IKKE HA --> BRUKER ØVERSTE!!
     [HttpGet("role")]
     [Authorize(Roles = "USER,ADMIN")]
     public async Task<ActionResult<ICollection<User?>>> GetUsersFromEventByRole(int eventId, string role)
@@ -97,6 +97,8 @@ public class EventRelationController : ControllerBase
         }
     }
 
+
+// SKAL IKKE HA --> BRUKER ØVERSTE!!
     [HttpGet("participation")]
     public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByParticipation(int eventId, string participation)
     {
@@ -153,15 +155,34 @@ public class EventRelationController : ControllerBase
     */
 
     [HttpPut("role")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(int eventId, string userId, string role)
     {   
+
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if(userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
         string escapedUserId = SecurityElement.Escape(userId);
         string escapedRole = SecurityElement.Escape(role);
 
+        bool canUpdate = await _erService.CanUserUpdateRoleInEvent(eventId, userIdClaim);
+        bool userJoined = await _erService.HaveUserJoinedEvent(eventId, escapedUserId);
+
         try
         {
+            if(canUpdate && userJoined)
+            {
             EventRelation eventRelation = await _erService.UpdateEventRelationRole(eventId, escapedUserId, escapedRole);
             return Ok(eventRelation);
+            }
+            else
+            {
+                return Unauthorized($"No access to update the role of user or the user with ID: {escapedUserId} have not joined Event with ID: {eventId}!");
+            }
         }
         catch(InvalidOperationException e)
         {
