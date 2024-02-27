@@ -9,24 +9,6 @@ namespace Interfaces;
 public interface IEventRelationService
 {
     /// <summary>
-    /// Fetches a Events relations based on the Type of the relation.
-    /// HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
-    /// </summary>
-    /// <param name="eventId"></param>
-    /// <param name="participation">The Participation of the relation</param>
-    /// <returns>A list of EventRelations</returns>
-    Task<ICollection<User?>> GetUsersFromEventByParticipation(int eventId, string participation);
-
-    /// <summary>
-    /// Fetches a Events relations based on the Role of the relation.
-    /// HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetEventRelations)
-    /// </summary>
-    /// <param name="eventId"></param>
-    /// <param name="role">The Role of the relation</param>
-    /// <returns>A list of EventRelations</returns>
-    Task<ICollection<User?>> GetUsersFromEventByRole(int eventId, string role);
-
-    /// <summary>
     /// Updates a EventRelations Role.
     /// </summary>
     /// <param name="eventId">The event we want to update our relation to</param>

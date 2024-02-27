@@ -121,8 +121,20 @@ public class EventService : IEventService
 
     public async Task<bool> CanUserViewEvent(int eventId, string userId)
     {
-        Event? eventt = await _eventRepo.GetEventByID(eventId);
         EventRelation? eventRel = await _eventRelRepo.GetEventRelation(eventId, userId);
+
+
+        if(eventRel == null || (eventRel != null && eventRel.EventRelationParticipation != EventRelationParticipation.JOINED))
+        {
+            return false;
+        }
+
+        return true;
+        /*
+        DENNE VIL VISE EVENT TILGANG BASERT PÅ INVITASJONER OSV....
+
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+
         var creatorList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.CREATOR);
         User? creator = creatorList.FirstOrDefault();
         User? user = await _userRepo.GetUserByID(userId);
@@ -141,12 +153,13 @@ public class EventService : IEventService
         {
             return true;
         }
-        if (eventt.Visibility == Visibility.PRIVATE && eventRel != null)
+        if (eventt.Visibility == Visibility.PRIVATE)
         {
             return true;
         }
 
         return false;
+        */
     }
 
     public async Task<bool> CanUserUpdateEvent(int eventId, string userId)
