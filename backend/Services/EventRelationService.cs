@@ -19,33 +19,6 @@ public class EventRelationService : IEventRelationService
         _userRepo = userRepo;
     }
 
-    public async Task<ICollection<User?>> GetUsersFromEventByParticipation(int eventId, string participation)
-    {
-        Event? eventt = await _eventRepo.GetEventByID(eventId);
-        EventRelationParticipation eventType = StringToEventRelationParticipationEnum(participation);
-
-        if(eventt == null)
-        {
-            throw new KeyNotFoundException($"Event with ID: {eventId}, was not found! (EventRelationService)");
-        }
-        
-        return await _erRepo.GetUsersFromEventByParticipation(eventId, eventType);
-    }
-
-    public async Task<ICollection<User?>> GetUsersFromEventByRole(int eventId, string role)
-    {
-        Event? eventt = await _eventRepo.GetEventByID(eventId);
-        EventRole eventRole = StringToEventRelationRoleEnum(role);
-
-        if(eventt == null)
-        {
-            throw new KeyNotFoundException($"Event with ID: {eventId}, was not found! (EventRelationService)");
-        }
-
-        return await _erRepo.GetUsersFromEventByRole(eventId, eventRole);
-    }
-    
-
     public async Task<EventRelation> UpdateEventRelationRole(int eventId, string userId, string role)
     {
         EventRelation? eventRelation = await _erRepo.GetEventRelation(eventId, userId);

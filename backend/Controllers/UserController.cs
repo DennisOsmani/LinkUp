@@ -9,7 +9,7 @@ using Enums;
 namespace Controllers;
 
 [ApiController]
-[Route("api/users")]
+[Route("api/user")]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -19,7 +19,7 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet("getuser")]
+    [HttpGet]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<User>> GetUser([FromQuery] string? userId)
     {
@@ -63,26 +63,7 @@ public class UserController : ControllerBase
         }
     }
 
-    /* !!!!!!!!!DENNE TRENGER VI IKKE I PROD!!!!!!!!! */
-    [HttpPost]
-    public async Task<ActionResult> CreateUser([FromBody] User user)
-    {
-        try
-        {
-            await _userService.CreateUser(user);
-            return CreatedAtAction(nameof(GetUser), new { userId = user.UserID }, user);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-    }
-
-    [HttpPut("user/update")]
+    [HttpPut("update")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<User>> UpdateUser([FromBody] User user)
     {
@@ -133,7 +114,7 @@ public class UserController : ControllerBase
                 return Ok($"User {userId} was deleted successfully!");
             }
 
-            if(userRoleClaim == Role.SUPERADMIN.ToString())
+            if(userRoleClaim == Role.SUPERADMIN.ToString() || userRoleClaim == Role.ADMIN.ToString())
             {
                 string escapedUserId = SecurityElement.Escape(userId);
                 await _userService.DeleteUser(escapedUserId);

@@ -70,7 +70,7 @@ public class EventController : ControllerBase
         }
     }
 
-    [HttpGet("eventfriends/{userId}")]
+    [HttpGet("friends")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> GetUserFriendEvents()
     {
@@ -162,10 +162,8 @@ public class EventController : ControllerBase
 
     [HttpPost("create")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> CreateEvent([FromBody] Event newEvent, [FromQuery] string creatorUserId)
+    public async Task<ActionResult> CreateEvent([FromBody] Event newEvent)
     {
-        creatorUserId = SecurityElement.Escape(creatorUserId);
-
         var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if (userIdClaims == null)
@@ -175,7 +173,7 @@ public class EventController : ControllerBase
 
         try
         {
-            var eventt = await _eventService.CreateEvent(newEvent, creatorUserId);
+            var eventt = await _eventService.CreateEvent(newEvent, userIdClaims);
             return Ok(eventt);
         }
         catch (InvalidOperationException e)

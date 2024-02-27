@@ -65,8 +65,8 @@ public class UserRelationController : ControllerBase
             return Unauthorized("No user ID claim present in token.");
         }
 
-        string otherUserId = SecurityElement.Escape(dto.OtherUserId);
-        string type = SecurityElement.Escape(dto.Type.ToString());
+        string? otherUserId = SecurityElement.Escape(dto.OtherUserId);
+        string? type = SecurityElement.Escape(dto.Type.ToString());
 
         try
         {

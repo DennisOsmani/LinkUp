@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Services;
 using Interfaces;
 using System.Security;
-using DTOs;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Repositories;
@@ -25,7 +23,7 @@ public class EventRelationController : ControllerBase
         _erRepo = eventRelationRepository;
     }
 
-    [HttpGet("usersfrom/{eventId}")]
+    [HttpGet("users/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)
     {
@@ -61,72 +59,6 @@ public class EventRelationController : ControllerBase
         catch (Exception ex)
         {
             return StatusCode(500, ex.Message);
-        }
-    }
-
- // SKAL IKKE HA --> BRUKER ØVERSTE!!
-    [HttpGet("role")]
-    [Authorize(Roles = "USER,ADMIN")]
-    public async Task<ActionResult<ICollection<User?>>> GetUsersFromEventByRole(int eventId, string role)
-    {
-        string escapedRole = SecurityElement.Escape(role);
-
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-        if(userIdClaim == null)
-        {
-            return Unauthorized("No user ID claim present in token.");
-        }
-
-        try
-        {
-            ICollection<User?> users = await _erService.GetUsersFromEventByRole(eventId, escapedRole);
-            return Ok(users);
-        }
-        catch(InvalidOperationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch(KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        catch(Exception e)
-        {   
-            return StatusCode(500, e.Message);
-        }
-    }
-
-
-// SKAL IKKE HA --> BRUKER ØVERSTE!!
-    [HttpGet("participation")]
-    public async Task<ActionResult<ICollection<EventRelation>>> GetUsersFromEventByParticipation(int eventId, string participation)
-    {
-        string escapedParticipation = SecurityElement.Escape(participation);
-
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-        if(userIdClaim == null)
-        {
-            return Unauthorized("No user ID claim present in token.");
-        }
-
-        try
-        {
-            ICollection<User?> eventRelations = await _erService.GetUsersFromEventByParticipation(eventId, escapedParticipation);
-            return Ok(eventRelations);
-        }
-        catch(InvalidOperationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch(KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        catch(Exception e)
-        {   
-            return StatusCode(500, e.Message);
         }
     }
 
