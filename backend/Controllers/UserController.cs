@@ -4,6 +4,7 @@ using Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Enums;
 
 namespace Controllers;
 
@@ -26,12 +27,6 @@ public class UserController : ControllerBase
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if(!String.IsNullOrEmpty(userId))
-        {
-            User? user = await _userService.GetUser(userId);
-            return Ok(user);
-        }
-
         if(userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");
@@ -39,7 +34,15 @@ public class UserController : ControllerBase
         
         try
         {
-            User? user = await _userService.GetUser(userIdClaim);
+            User? user;
+
+            if(!String.IsNullOrEmpty(userId))
+            {
+                user = await _userService.GetUser(userId);
+                return Ok(user);
+            }
+
+            user = await _userService.GetUser(userIdClaim);
             return Ok(user);
         }
         catch (InvalidOperationException ex)
@@ -80,12 +83,20 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("user/update")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<User>> UpdateUser([FromBody] User user)
     {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if(userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
         try
         {
             string escapedUserId = SecurityElement.Escape(user.UserID);
-            User? updatedUser = await _userService.UpdateUser(escapedUserId, user);
+            User? updatedUser = await _userService.UpdateUser(userIdClaim, user);
             return Ok(updatedUser);
         }
         catch (InvalidOperationException ex)
@@ -102,14 +113,34 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpDelete("user/delete")]
-    public async Task<ActionResult> DeleteUser([FromBody] string userId)
+    [HttpDelete("delete")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult> DeleteUser([FromQuery] string? userId)
     {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+        if(userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
         try
         {
-            string escapedUserId = SecurityElement.Escape(userId);
-            await _userService.DeleteUser(escapedUserId);
-            return NoContent();
+            if(String.IsNullOrEmpty(userId))
+            {
+                await _userService.DeleteUser(userIdClaim);
+                return Ok($"User {userId} was deleted successfully!");
+            }
+
+            if(userRoleClaim == Role.SUPERADMIN.ToString())
+            {
+                string escapedUserId = SecurityElement.Escape(userId);
+                await _userService.DeleteUser(escapedUserId);
+                return NoContent();
+            }
+
+            return Unauthorized($"User {userIdClaim} does not have permission for this operation.");
         }
         catch (InvalidOperationException ex)
         {
@@ -126,34 +157,13 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("search")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<ICollection<User>>> SearchUsers([FromQuery] string searchString)
     {
         try
         {
             string escapedSearchString = SecurityElement.Escape(searchString);
             var users = await _userService.SearchUsers(escapedSearchString);
-            return Ok(users);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-    }
-
-    [HttpGet("event/{eventId}")]
-    public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)
-    {
-        try
-        {
-            var users = await _userService.GetUsersFromEvent(eventId);
             return Ok(users);
         }
         catch (InvalidOperationException ex)
