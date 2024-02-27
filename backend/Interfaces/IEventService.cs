@@ -18,6 +18,7 @@ public interface IEventService
 
     /// <summary>
     /// Fetches a list of Events based on what city you are in.
+    /// USED FOR ONE OF THE FEED TABS
     /// </summary>
     /// <param name="city"></param>
     /// <returns>A list of Events</returns>
@@ -25,17 +26,27 @@ public interface IEventService
 
     /// <summary>
     /// Fetches a list of Events where the user has the UserRelation Friends to the creator and visibility set to friends.
+    /// USED FOR ONE OF THE FEED TABS
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
     Task<ICollection<Event>?> GetUserFriendEvents(string userId);
 
     /// <summary>
-    /// Fetches a list of Events based on what type the EventRelation is.
+    /// Fetches a list of Events that the user is invited to, aka status pending
+    /// USED FOR ONE OF THE FEED TABS
     /// </summary>
-    /// <param name="visibility">JOINED, DECLINED, PENDING, BAILED</param>
+    /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
-    Task<ICollection<Event>> GetUserEventsByVisibility(string visibility);
+    Task<ICollection<Event>> GetUserEventInvites(string userId);
+
+    /// <summary>
+    /// Fetches a list of the Events the user has joined, aka status accepted
+    /// USED FOR ONE OF THE FEED TABS
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>A list of Events</returns>
+    Task<ICollection<Event>> GetUserJoinedEvents(string userId);
 
     /// <summary>
     /// Creates a new Event and sets the userrole as CREATOR.
