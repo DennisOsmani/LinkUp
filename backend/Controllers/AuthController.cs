@@ -5,6 +5,7 @@ using Models;
 using Auth;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
+using Exceptions;
 
 namespace Controllers;
 
@@ -26,23 +27,46 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationRequest request)
     {
-        var salt = GenerateSalt();
-        var saltedPassword = request.Password + salt;
-
-        var user = new User
+        try
         {
-            Firstname = request.Firstname,
-            Lastname = request.Lastname,
-            Email = request.Email,
-            Password = _passwordHasher.HashPassword(null, saltedPassword),    // Null is because the user is not created yet, normally this is where the user object is.
-            Salt = salt,
-            Role = Enums.Role.USER
-        };
+            var salt = GenerateSalt();
+            var saltedPassword = request.Password + salt;
+
+            var user = new User
+            {
+                Firstname = request.Firstname,
+                Lastname = request.Lastname,
+                Email = request.Email,
+                Password = _passwordHasher.HashPassword(null, saltedPassword),    // Null is because the user is not created yet, normally this is where the user object is.
+                Salt = salt,
+                Role = Enums.Role.SUPERADMIN
+            };
 
         await _userService.CreateUser(user);
         var token = _tokenService.CreateToken(user);
 
         return Ok(new AuthResponse { Token = token });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch(EmailAlreadyExistException ex)
+        {
+            return StatusCode(409, ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
     }
 
     [HttpPost("login")]
