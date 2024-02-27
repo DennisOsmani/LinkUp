@@ -12,7 +12,7 @@ public class EventRepository
 {
     public readonly AppDbContext _context;
 
-    public EventRepository(AppDbContext context) 
+    public EventRepository(AppDbContext context)
     {
         _context = context;
     }
@@ -23,13 +23,13 @@ public class EventRepository
     /// <param name="eventId">Id for the event</param>
     /// <returns>The Event with the given id.</returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public async Task<Event?> GetEventByID(int eventId) 
+    public async Task<Event?> GetEventByID(int eventId)
     {
         try
         {
             return await _context.Events.FindAsync(eventId);
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
         }
@@ -43,7 +43,7 @@ public class EventRepository
                 .Where(e => e.Location.City == city && e.Visibility == Visibility.PUBLIC)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
         }
@@ -55,35 +55,58 @@ public class EventRepository
     /// <param name="userIds">A list of userIds, that consists of this users friends</param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">If Linq query is faulty.</exception>
-    public async Task<ICollection<Event>> GetUserFriendEvents(List<String> userIds) 
+    public async Task<ICollection<Event?>> GetUserFriendEvents(List<String> userIds)
     {
         try
         {
             return await _context.EventRelations
                 .Where(
-                    er => userIds.Contains(er.UserID) 
+                    er => userIds.Contains(er.UserID)
                     && er.EventRole == EventRole.CREATOR
                 )
                 .Select(er => er.Event)
                 .Where(e => e.Visibility == Visibility.FRIENDS)
-                .ToListAsync();    
+                .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
         }
     }
 
-    // ????????????? DeFugg ?????????????
-    public async Task<ICollection<Event>> GetUserEventsByVisibility(string visibility) 
+    public async Task<ICollection<Event?>> GetUserEventInvites(string userId)
     {
         try
         {
-            return await _context.Events
-            .Where(e => e.Visibility == StringToVisibilityEnum(visibility))
-            .ToListAsync();
+            return await _context.EventRelations
+                .Where(
+                    er => er.UserID.Equals(userId)
+                    && er.EventRelationParticipation == EventRelationParticipation.PENDING
+                )
+                .Select(er => er.Event)
+                .ToListAsync();
         }
-        catch(InvalidOperationException)
+
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
+    }
+
+    public async Task<ICollection<Event?>> GetUserJoinedEvents(string userId)
+    {
+        try
+        {
+            return await _context.EventRelations
+                .Where(
+                    er => er.UserID.Equals(userId)
+                    && er.EventRelationParticipation == EventRelationParticipation.JOINED
+                )
+                .Select(er => er.Event)
+                .ToListAsync();
+        }
+
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
         }
@@ -95,8 +118,8 @@ public class EventRepository
         {
             _context.Events.Add(newEvent);
             await _context.SaveChangesAsync();
-        }   
-        catch(InvalidOperationException)
+        }
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
         }
@@ -120,20 +143,20 @@ public class EventRepository
             await _context.SaveChangesAsync();
             return oldEvent;
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
         }
-    }    
+    }
 
     public async Task DeleteEvent(Event eventToDelete)
     {
         try
-        {            
+        {
             _context.Events.Remove(eventToDelete);
             await _context.SaveChangesAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
         }
@@ -143,7 +166,7 @@ public class EventRepository
     {
         Visibility eventVisibility;
 
-        switch(visibility)
+        switch (visibility)
         {
             case "PUBLIC":
                 eventVisibility = Visibility.PUBLIC;
@@ -158,7 +181,7 @@ public class EventRepository
                 eventVisibility = Visibility.PRIVATE;
                 break;
         }
-        
+
         return eventVisibility;
     }
 }
