@@ -4,6 +4,7 @@ using Interfaces;
 using Models;
 using System.Collections.ObjectModel;
 using Enums;
+using System.Net.Http.Headers;
 
 namespace Services;
 
@@ -24,12 +25,16 @@ public class EventService : IEventService
 
     public async Task<Event?> GetEventByID(int eventId)
     {
-        return await _eventRepo.GetEventByID(eventId);
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+
+        if (eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with EventID: {eventId}, does not exist! (EventService)");
+        }
+
+        return eventt;
     }
 
-    // GetMyEvents()
-
-    // 
 
     public async Task<ICollection<Event>> GetEventsInCity(string city)
     {
@@ -51,10 +56,14 @@ public class EventService : IEventService
         return await _eventRepo.GetUserFriendEvents(userIds);
     }
 
-    //Is this the De Fugg ?????? What is this
-    public async Task<ICollection<Event>> GetUserEventsByVisibility(string visibility)
+    public async Task<ICollection<Event?>> GetUserEventInvites(string userId)
     {
-        return await _eventRepo.GetUserEventsByVisibility(visibility);
+        return await _eventRepo.GetUserEventInvites(userId);
+    }
+
+    public async Task<ICollection<Event?>> GetUserJoinedEvents(string userId)
+    {
+        return await _eventRepo.GetUserJoinedEvents(userId);
     }
 
     // Refaktoreres ? </3

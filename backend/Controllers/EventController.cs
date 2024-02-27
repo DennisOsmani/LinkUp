@@ -1,11 +1,9 @@
-using System.Data;
 using System.Security;
 using System.Security.Claims;
 using Enums;
 using Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using Models;
 
 namespace Controllers;
@@ -75,10 +73,8 @@ public class EventController : ControllerBase
 
     [HttpGet("eventfriends/{userId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> GetUserFriendEvents(string userId)
+    public async Task<ActionResult> GetUserFriendEvents()
     {
-        userId = SecurityElement.Escape(userId);
-
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if (userIdClaim == null)
@@ -88,7 +84,7 @@ public class EventController : ControllerBase
 
         try
         {
-            var friendEvents = await _eventService.GetUserFriendEvents(userId);
+            var friendEvents = await _eventService.GetUserFriendEvents(userIdClaim);
             return Ok(friendEvents);
         }
         catch (InvalidOperationException e)
@@ -105,9 +101,9 @@ public class EventController : ControllerBase
         }
     }
 
-    [HttpGet("visibility/{visibility}")]
+    [HttpGet("invites")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> GetUserEventsByVisibility(string visibility)
+    public async Task<ActionResult> GetUserEventInvites()
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -118,12 +114,46 @@ public class EventController : ControllerBase
 
         try
         {
-            var events = await _eventService.GetUserEventsByVisibility(visibility);
-            return Ok(events);
+            var eventInvites = await _eventService.GetUserEventInvites(userIdClaim);
+            return Ok(eventInvites);
         }
         catch (InvalidOperationException e)
         {
             return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpGet("joined")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult> GetUserJoinedEvents()
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in JWT");
+        }
+
+        try
+        {
+            var joinedEvents = await _eventService.GetUserJoinedEvents(userIdClaim);
+            return Ok(joinedEvents);
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception e)
         {
