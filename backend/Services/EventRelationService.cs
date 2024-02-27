@@ -44,6 +44,7 @@ public class EventRelationService : IEventRelationService
 
         return await _erRepo.GetUsersFromEventByRole(eventId, eventRole);
     }
+    
 
     public async Task<EventRelation> UpdateEventRelationRole(int eventId, string userId, string role)
     {
@@ -113,6 +114,66 @@ public class EventRelationService : IEventRelationService
 
             await _erRepo.CreateEventRelation(eventRelation);
         }
+    }
+
+    public async Task<bool> HaveUserJoinedEvent(int eventId, string userId) 
+    {
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+        User? user = await _userRepo.GetUserByID(userId);
+        bool joined = true;
+
+        if(eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, does not exist! (EventRelationService)");
+        }   
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException($"User with ID: {userId}, does not exist! (EventRelationService)");
+        }
+
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventt.EventID, user.UserID);
+
+        if (eventRelation == null) {
+            joined = false;
+        }
+        
+        if (eventRelation?.EventRelationParticipation != EventRelationParticipation.JOINED) {
+            joined = false;
+        }
+
+        return joined;
+    }
+
+    public async Task<bool> CanUserUpdateRoleInEvent(int eventId, string userId)
+    {
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+        User? user = await _userRepo.GetUserByID(userId);
+        bool canUpdate = true;
+
+        if(eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, does not exist! (EventRelationService)");
+        }   
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException($"User with ID: {userId}, does not exist! (EventRelationService)");
+        }
+
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventt.EventID, user.UserID);
+
+        if(eventRelation == null) 
+        {
+            canUpdate = false;
+        }
+
+        if (eventRelation?.EventRole != EventRole.CREATOR)
+        {
+            canUpdate = false;
+        }
+
+        return canUpdate;
     }
 
     public EventRelationParticipation StringToEventRelationParticipationEnum(string participation)
