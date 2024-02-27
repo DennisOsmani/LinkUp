@@ -1,3 +1,4 @@
+using Enums;
 using Models;
 
 namespace Interfaces;
@@ -50,7 +51,19 @@ public interface IEventRelationService
     /// <returns>The created eventrelation</returns>
     Task<EventRelation> CreateEventRelation(EventRelation eventRelation);
 
+    /// <summary>
+    /// Checks that the user trying to get all users in a event have joined that event
+    /// </summary>
+    /// <param name="eventId,">The event</param>
+    /// <param name="userId,">User to check have joined</param>
+    /// <returns>True if joined</returns>
+    Task<bool> HaveUserJoinedEvent(int eventId, string userId);
 
-
-
+    /// <summary>
+    /// Checks that the user trying to update a role is CREATOR or HOST
+    /// </summary>
+    /// <param name="eventId,">The event</param>
+    /// <param name="userId,">User to check if have access</param>
+    /// <returns>True if joined</returns>
+    Task<bool> CanUserUpdateRoleInEvent(int eventId, string userId);
 }
