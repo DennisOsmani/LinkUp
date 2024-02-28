@@ -154,7 +154,7 @@ public class EventRepository
     {
         try
         {
-            _context.Events.Remove(eventToDelete);
+            _context.Remove(eventToDelete);
             await _context.SaveChangesAsync();
         }
         catch (InvalidOperationException)
