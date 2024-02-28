@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240228154031_Create")]
+    [Migration("20240228171309_Create")]
     partial class Create
     {
         /// <inheritdoc />
@@ -222,7 +222,7 @@ namespace backend.Migrations
                     b.HasOne("Models.Location", "Location")
                         .WithOne()
                         .HasForeignKey("Models.Event", "LocationID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Location");

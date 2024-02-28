@@ -219,7 +219,7 @@ namespace backend.Migrations
                     b.HasOne("Models.Location", "Location")
                         .WithOne()
                         .HasForeignKey("Models.Event", "LocationID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Location");
