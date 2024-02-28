@@ -78,8 +78,7 @@ namespace backend.Migrations
                         name: "FK_Events_Locations_LocationID",
                         column: x => x.LocationID,
                         principalTable: "Locations",
-                        principalColumn: "LocationID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "LocationID");
                 });
 
             migrationBuilder.CreateTable(
