@@ -11,10 +11,12 @@ namespace Repositories;
 public class EventRepository
 {
     public readonly AppDbContext _context;
+    public readonly LocationRepository _locationRepo;
 
-    public EventRepository(AppDbContext context)
+    public EventRepository(AppDbContext context, LocationRepository locationRepo)
     {
         _context = context;
+        _locationRepo = locationRepo;
     }
 
     /// <summary>
@@ -138,7 +140,6 @@ public class EventRepository
             oldEvent.FrontImage = newEvent.FrontImage;
             oldEvent.MinCapacity = newEvent.MinCapacity;
             oldEvent.MaxCapacity = newEvent.MaxCapacity;
-            oldEvent.Location = newEvent.Location;
 
             await _context.SaveChangesAsync();
             return oldEvent;
@@ -153,7 +154,7 @@ public class EventRepository
     {
         try
         {
-            _context.Events.Remove(eventToDelete);
+            _context.Remove(eventToDelete);
             await _context.SaveChangesAsync();
         }
         catch (InvalidOperationException)
