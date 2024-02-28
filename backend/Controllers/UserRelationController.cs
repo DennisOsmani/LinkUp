@@ -91,6 +91,7 @@ public class UserRelationController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> DeleteUserRelation(string otherUserId)
     {
+        otherUserId = SecurityElement.Escape(otherUserId);
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if(userIdClaim == null)

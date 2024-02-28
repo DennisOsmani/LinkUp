@@ -12,14 +12,12 @@ namespace Controllers;
 [Route("api/event")]
 public class EventController : ControllerBase
 {
-
     public readonly IEventService _eventService;
 
     public EventController(IEventService eventService)
     {
         _eventService = eventService;
     }
-
 
     [HttpGet("{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
@@ -55,6 +53,7 @@ public class EventController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult> GetEventsInCity(string city)
     {
+        city = SecurityElement.Escape(city);
         try
         {
             var events = await _eventService.GetEventsInCity(city);
