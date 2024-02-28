@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Enums;
 
 namespace Models;
@@ -17,6 +18,8 @@ public class Event
     public string? MinCapacity { get; set; }
     public string? MaxCapacity { get; set; }
     public int LocationID { get; set; }
+
+    [ForeignKey("LocationID")]
     public Location Location { get; set; }
     public ICollection<EventRelation>? EventRelations { get; set; }
 
