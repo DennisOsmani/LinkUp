@@ -5,7 +5,11 @@ using System.Security;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Repositories;
+<<<<<<< HEAD
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+=======
 using Enums;
+>>>>>>> 04973192c76d686b5fa3fbf298109185b4c4add0
 
 namespace Controllers;
 
@@ -150,7 +154,6 @@ public class EventRelationController : ControllerBase
         string escapedUserId = SecurityElement.Escape(userIdClaim);
         string escapedParticipation = SecurityElement.Escape(participation);
 
-
         EventRelation? evRel = await _erRepo.GetEventRelation(eventId, escapedUserId);
 
         if (evRel == null) {
@@ -162,6 +165,40 @@ public class EventRelationController : ControllerBase
             EventRelation eventRelation = await _erService.UpdateEventRelationParticipation(eventId, escapedUserId, escapedParticipation);
             return Ok(eventRelation);
         }
+        catch(InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch(KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch(Exception e)
+        {   
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult> DeleteUserFromEvent([FromQuery] int eventId,[FromQuery] string userId)
+    {
+        // Bruker skal ikke kunne slette seg selv fra eventet
+        // Bare Host / creator skal kunne slette folk! 
+        userId = SecurityElement.Escape(userId);
+        var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        bool isUserHostOrCreator = await _erService.IsUserHostOrCreator(eventId, userId);
+        if(!isUserHostOrCreator || userIdClaims == null)
+        {
+            return Unauthorized("User does not have permission");
+        }
+
+        try
+        {
+            await _erService.DeleteUserFromEvent(eventId, userId);
+            return NoContent();
+        }   
         catch(InvalidOperationException e)
         {
             return BadRequest(e.Message);
