@@ -11,10 +11,12 @@ namespace Repositories;
 public class EventRepository
 {
     public readonly AppDbContext _context;
+    public readonly LocationRepository _locationRepo;
 
-    public EventRepository(AppDbContext context)
+    public EventRepository(AppDbContext context, LocationRepository locationRepo)
     {
         _context = context;
+        _locationRepo = locationRepo;
     }
 
     /// <summary>
@@ -138,7 +140,12 @@ public class EventRepository
             oldEvent.FrontImage = newEvent.FrontImage;
             oldEvent.MinCapacity = newEvent.MinCapacity;
             oldEvent.MaxCapacity = newEvent.MaxCapacity;
-            oldEvent.Location = newEvent.Location;
+
+            // var oldLocationId = oldEvent.LocationID;
+            // oldEvent.Location = newEvent.Location;
+            //oldEvent.Location.LocationID = oldLocationId;
+
+            oldEvent.Location = await _locationRepo.UpdateLocation(oldEvent.Location, newEvent.Location);
 
             await _context.SaveChangesAsync();
             return oldEvent;
