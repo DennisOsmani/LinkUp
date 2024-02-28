@@ -29,6 +29,10 @@ public class EventRelationService : IEventRelationService
             throw new KeyNotFoundException($"EventRelation with eventID: {eventId}, and UserID: {userId}, was not found! (EventRelationService)");
         }
 
+        if (eventRole == EventRole.CREATOR) {
+            throw new Exception($"Cannot set users eventrole to CREATOR (EventRelationService)");
+        }
+
         return await _erRepo.UpdateEventRelationRole(eventRelation, eventRole);
     }
 
