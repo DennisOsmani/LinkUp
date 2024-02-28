@@ -5,6 +5,7 @@ using System.Security;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Repositories;
+using Enums;
 
 namespace Controllers;
 
@@ -29,6 +30,7 @@ public class EventRelationController : ControllerBase
     {
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userRoleClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
         if(userIdClaim == null)
         {
@@ -38,7 +40,7 @@ public class EventRelationController : ControllerBase
         bool userJoined = await _erService.HaveUserJoinedEvent(eventId, userIdClaim);
         try
         {
-            if (userJoined) 
+            if (userRoleClaims == Role.ADMIN.ToString() || userJoined) 
             {
                 var users = await _userService.GetUsersFromEvent(eventId);
                 return Ok(users);
@@ -87,13 +89,14 @@ public class EventRelationController : ControllerBase
     */
 
     [HttpPut("role")]
-    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    [Authorize(Roles = "USER,ADMIN")]
     public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(int eventId, string userId, string role)
     {   
         userId = SecurityElement.Escape(userId);
         role = SecurityElement.Escape(role);
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userRoleClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
         if(userIdClaim == null)
         {
@@ -108,10 +111,10 @@ public class EventRelationController : ControllerBase
 
         try
         {
-            if(canUpdate && userJoined)
+            if(userRoleClaims == Role.ADMIN.ToString() || (canUpdate && userJoined))
             {
-            EventRelation eventRelation = await _erService.UpdateEventRelationRole(eventId, escapedUserId, escapedRole);
-            return Ok(eventRelation);
+                EventRelation eventRelation = await _erService.UpdateEventRelationRole(eventId, escapedUserId, escapedRole);
+                return Ok(eventRelation);
             }
             else
             {
