@@ -48,4 +48,19 @@ public interface IEventRelationService
     /// <param name="userId,">User to check if have access</param>
     /// <returns>True if joined</returns>
     Task<bool> CanUserUpdateRoleInEvent(int eventId, string userId);
+
+    /// <summary>
+    /// Deletes a user from a given event. Only event Creators or Hosts can perform this action.
+    /// </summary>
+    /// <param name="eventId">The event we want to delete a user from</param>
+    /// <param name="userId">The user we want to delete</param>
+    Task DeleteUserFromEvent(int eventId, string userId);
+
+    /// <summary>
+    /// Chekcs if a user is Host or Creator for a given event.
+    /// </summary>
+    /// <param name="eventId"></param>
+    /// <param name="userId"></param>
+    /// <returns>True if conditions met, else false</returns>
+    Task<bool> IsUserHostOrCreator(int eventId, string userId);
 }

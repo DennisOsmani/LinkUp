@@ -148,7 +148,6 @@ public class EventRelationController : ControllerBase
         string escapedUserId = SecurityElement.Escape(userIdClaim);
         string escapedParticipation = SecurityElement.Escape(participation);
 
-
         EventRelation? evRel = await _erRepo.GetEventRelation(eventId, escapedUserId);
 
         if (evRel == null) {
@@ -176,11 +175,23 @@ public class EventRelationController : ControllerBase
 
     [HttpDelete]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> DeleteUserFromEvent(string userId)
+    public async Task<ActionResult> DeleteUserFromEvent(int eventId, string userId)
     {
+        // Bruker skal ikke kunne slette seg selv fra eventet
+        // Bare Host / creator skal kunne slette folk! 
+        userId = SecurityElement.Escape(userId);
+        var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        bool isUserHostOrCreator = await _erService.IsUserHostOrCreator(eventId, userId);
+        if(!isUserHostOrCreator || userIdClaims == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
         try
         {
-
+            await _erService.DeleteUserFromEvent(eventId, userId);
+            return NoContent();
         }   
         catch(InvalidOperationException e)
         {
