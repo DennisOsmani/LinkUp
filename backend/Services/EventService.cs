@@ -5,6 +5,7 @@ using Models;
 using System.Collections.ObjectModel;
 using Enums;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace Services;
 
@@ -84,8 +85,10 @@ public class EventService : IEventService
 
         EventRelation eventRelation = new EventRelation(newEvent.EventID, creatorUserId, EventRelationParticipation.JOINED, EventRole.CREATOR);
         eventRelation.Event = newEvent;
-
         await _eventRelRepo.CreateEventRelation(eventRelation);
+
+        user.EventsCreated++;
+        await _userRepo.UpdateUser(creatorUserId, user);
 
         return newEvent;
     }
@@ -124,7 +127,7 @@ public class EventService : IEventService
         EventRelation? eventRel = await _eventRelRepo.GetEventRelation(eventId, userId);
 
 
-        if(eventRel == null || (eventRel != null && eventRel.EventRelationParticipation != EventRelationParticipation.JOINED))
+        if (eventRel == null || (eventRel != null && eventRel.EventRelationParticipation != EventRelationParticipation.JOINED))
         {
             return false;
         }
