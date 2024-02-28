@@ -19,31 +19,41 @@ public class UserRelationRepository
 
     public async Task<UserRelation> CreateUserRelaton(UserRelation userRelation)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            _context.Add(userRelation);
-            await _context.SaveChangesAsync();
-
-            return userRelation;
-        }
-        catch(InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+            try
+            {
+                _context.Add(userRelation);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return userRelation;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 
     public async Task<UserRelation> UpdateUserRelationType(UserRelation userRelation, UserRelationType type)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            userRelation.Type = type;
-            await _context.SaveChangesAsync();
+            try
+            {
+                userRelation.Type = type;
+                _context.UserRelations.Update(userRelation);
+                await _context.SaveChangesAsync();
 
-            return userRelation;
-        }
-        catch(InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+                await transaction.CommitAsync();
+                return userRelation;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 
