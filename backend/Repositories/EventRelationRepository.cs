@@ -92,6 +92,20 @@ public class EventRelationRepository
         }
     }
 
+     public async Task<ICollection<EventRelation>> GetAllEventRelations(int eventId)
+    {
+        try
+        {
+            return await _context.EventRelations
+                .Where(er => er.EventID == eventId)
+                .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
+        }
+    }
+
     public async Task CreateEventRelation(EventRelation newEventRelation)
     {   
         try
