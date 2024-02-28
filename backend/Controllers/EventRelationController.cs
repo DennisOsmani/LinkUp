@@ -185,7 +185,7 @@ public class EventRelationController : ControllerBase
         bool isUserHostOrCreator = await _erService.IsUserHostOrCreator(eventId, userId);
         if(!isUserHostOrCreator || userIdClaims == null)
         {
-            return Unauthorized("No user ID claim present in token.");
+            return Unauthorized("User does not have permission");
         }
 
         try
