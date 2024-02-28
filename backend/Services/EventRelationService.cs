@@ -198,7 +198,7 @@ public class EventRelationService : IEventRelationService
         return erRole;
     }
 
-    public async Task DeleteUserFromEvent(int eventId, string userId)
+    public async Task RemoveUserFromEvent(int eventId, string userId)
     {
         var eventRelation = await _erRepo.GetEventRelation(eventId, userId);
 

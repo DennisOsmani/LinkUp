@@ -175,7 +175,7 @@ public class EventRelationController : ControllerBase
 
     [HttpDelete]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> DeleteUserFromEvent(int eventId, string userId)
+    public async Task<ActionResult> DeleteUserFromEvent([FromQuery] int eventId,[FromQuery] string userId)
     {
         // Bruker skal ikke kunne slette seg selv fra eventet
         // Bare Host / creator skal kunne slette folk! 
