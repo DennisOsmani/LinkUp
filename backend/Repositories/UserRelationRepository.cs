@@ -94,6 +94,20 @@ public class UserRelationRepository
         }
     }
 
+     public async Task<ICollection<UserRelation>> GetAllUsersRelations(string userId)
+    {
+        try
+        {
+            return await _context.UserRelations
+                .Where(ur => ur.User_first_ID == userId || ur.User_second_ID == userId)
+                .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
+    }
+
     // The Users this user has blocked!
     public async Task<ICollection<User?>> GetUserBlocks(string userId)
     {
