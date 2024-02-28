@@ -50,31 +50,43 @@ public class EventRelationRepository
 
     public async Task<EventRelation> UpdateEventRelationRole(EventRelation eventRelation, EventRole role)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            eventRelation.EventRole = role;
-            await _context.SaveChangesAsync();
+            try
+            {
+                eventRelation.EventRole = role;
+                _context.EventRelations.Update(eventRelation);
+                await _context.SaveChangesAsync();
 
-            return eventRelation;
-        }
-        catch(InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
+                await transaction.CommitAsync();
+                return eventRelation;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
+            }
         }
     }
 
     public async Task<EventRelation> UpdateEventRelationParticipation(EventRelation eventRelation, EventRelationParticipation participation)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            eventRelation.EventRelationParticipation = participation;
-            await _context.SaveChangesAsync();
+            try
+            {
+                eventRelation.EventRelationParticipation = participation;
+                _context.EventRelations.Update(eventRelation);
+                await _context.SaveChangesAsync();
 
-            return eventRelation;
-        }
-        catch(InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
+                await transaction.CommitAsync();
+                return eventRelation;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
+            }
         }
     }
 
@@ -93,15 +105,21 @@ public class EventRelationRepository
     }
 
     public async Task CreateEventRelation(EventRelation newEventRelation)
-    {   
-        try
+    {
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            _context.Add(newEventRelation);
-            await _context.SaveChangesAsync();
-        }
-        catch(InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
+            try
+            {
+                _context.Add(newEventRelation);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 
