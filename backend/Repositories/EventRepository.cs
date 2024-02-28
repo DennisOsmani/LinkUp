@@ -141,12 +141,6 @@ public class EventRepository
             oldEvent.MinCapacity = newEvent.MinCapacity;
             oldEvent.MaxCapacity = newEvent.MaxCapacity;
 
-            // var oldLocationId = oldEvent.LocationID;
-            // oldEvent.Location = newEvent.Location;
-            //oldEvent.Location.LocationID = oldLocationId;
-
-            oldEvent.Location = await _locationRepo.UpdateLocation(oldEvent.Location, newEvent.Location);
-
             await _context.SaveChangesAsync();
             return oldEvent;
         }
