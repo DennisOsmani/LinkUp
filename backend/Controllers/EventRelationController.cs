@@ -90,6 +90,8 @@ public class EventRelationController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(int eventId, string userId, string role)
     {   
+        userId = SecurityElement.Escape(userId);
+        role = SecurityElement.Escape(role);
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -134,6 +136,7 @@ public class EventRelationController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<EventRelation>> UpdateEventRelationParticipation(int eventId, string participation)
     {
+        participation = SecurityElement.Escape(participation);
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if(userIdClaim == null)

@@ -6,6 +6,7 @@ using Auth;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using Exceptions;
+using System.Security;
 
 namespace Controllers;
 
@@ -27,6 +28,10 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationRequest request)
     {
+        // DENNE MÅ TESTES, KAN MULIGENS ØDELEGGE PASSORD MED TEGN??
+        request.Email = SecurityElement.Escape(request.Email);
+        request.Password= SecurityElement.Escape(request.Password);
+
         try
         {
             var salt = GenerateSalt();
@@ -72,6 +77,9 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
+        request.Email = SecurityElement.Escape(request.Email);
+        request.Password= SecurityElement.Escape(request.Password);
+
         User? user = await _userService.FindByEmailAsync(request.Email);        
 
         if (user == null)

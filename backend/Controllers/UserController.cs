@@ -23,7 +23,10 @@ public class UserController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<User>> GetUser([FromQuery] string? userId)
     {
-        userId = SecurityElement.Escape(userId);
+        if(!string.IsNullOrEmpty(userId))
+        {
+            userId = SecurityElement.Escape(userId);
+        }
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -98,6 +101,11 @@ public class UserController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> DeleteUser([FromQuery] string? userId)
     {
+        if(!string.IsNullOrEmpty(userId))
+        {
+            userId = SecurityElement.Escape(userId);
+        }
+
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
