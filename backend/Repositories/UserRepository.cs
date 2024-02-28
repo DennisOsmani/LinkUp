@@ -65,7 +65,7 @@ public class UserRepository
             {
                 var propertyName = property.Name;
                 var newValue = typeof(User).GetProperty(propertyName)?.GetValue(newUser);
-                if (newValue != null && !Equals(property.GetValue(oldUser), newValue))
+                if (newValue != null && !Equals(property.GetValue(oldUser), newValue) && !propertyName.Equals("Role"))
                 {
                     property.SetValue(oldUser, newValue);
                 }
