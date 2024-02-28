@@ -119,4 +119,26 @@ public class EventRelationRepository
             throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
         }
     }
+
+    public async Task<bool> IsUserHostOrCreator(int eventId, string userId)
+    {
+        try
+        {
+            return await _context.EventRelations
+                .AnyAsync(
+                    er => er.EventID == eventId && er.UserID == userId && (er.EventRole == EventRole.CREATOR || er.EventRole == EventRole.HOST)
+                );
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
+        }
+    }
+
+    public async Task DeleteUserFromEvent(EventRelation eventRelation)
+    {
+        _context.Remove(eventRelation);
+        await _context.SaveChangesAsync();
+
+    }
 }
