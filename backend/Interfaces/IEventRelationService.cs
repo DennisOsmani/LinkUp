@@ -31,7 +31,7 @@ public interface IEventRelationService
     /// </summary>
     /// <param name="eventRelation">To be created</param>
     /// <returns>The created eventrelation</returns>
-    Task<EventRelation> CreateEventRelation(EventRelation eventRelation);
+    Task<EventRelation> JoinOpenEvent(EventRelation eventRelation);
 
     /// <summary>
     /// Checks that the user trying to get all users in a event have joined that event

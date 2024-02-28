@@ -55,8 +55,9 @@ public class UserRepository
         }
     }
 
-    public async Task<User?> UpdateUser(User oldUser, User newUser)
+    public async Task<User?> UpdateUser(string oldUserId, User newUser)
     {
+        User? oldUser = await GetUserByID(oldUserId);
         _context.Users.Attach(oldUser);
 
         try
