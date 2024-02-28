@@ -5,6 +5,7 @@ using System.Security;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Repositories;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Controllers;
 
@@ -159,6 +160,28 @@ public class EventRelationController : ControllerBase
             EventRelation eventRelation = await _erService.UpdateEventRelationParticipation(eventId, escapedUserId, escapedParticipation);
             return Ok(eventRelation);
         }
+        catch(InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch(KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch(Exception e)
+        {   
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult> DeleteUserFromEvent(string userId)
+    {
+        try
+        {
+
+        }   
         catch(InvalidOperationException e)
         {
             return BadRequest(e.Message);
