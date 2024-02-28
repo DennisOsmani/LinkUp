@@ -197,4 +197,34 @@ public class EventRelationService : IEventRelationService
 
         return erRole;
     }
+
+    public async Task DeleteUserFromEvent(int eventId, string userId)
+    {
+        var eventRelation = await _erRepo.GetEventRelation(eventId, userId);
+
+        if(eventRelation == null)
+        {
+            throw new KeyNotFoundException($"EventRelation with EventId {eventId}, and UserID {userId}, does not exist!");
+        }
+
+        await _erRepo.DeleteUserFromEvent(eventRelation);
+    }
+
+    public async Task<bool> IsUserHostOrCreator(int eventId, string userId)
+    {
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if(eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId}, does not exist! (EventRelationService)");
+        }   
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException($"User with ID: {userId}, does not exist! (EventRelationService)");
+        }
+
+        return await _erRepo.IsUserHostOrCreator(eventId, userId);
+    }
 }
