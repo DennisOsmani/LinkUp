@@ -24,13 +24,13 @@ public class LocationService
         return location;
     }
 
-    public async Task<Location> UpdateLocation(int locationId, Location newLocation)
+    public async Task<Location> UpdateLocation(Location newLocation)
     {
-        Location? oldLocation = await _locationRepo.GetLocationByID(locationId);
+        Location? oldLocation = await _locationRepo.GetLocationByID(newLocation.LocationID);
 
         if (oldLocation == null)
         {
-            throw new KeyNotFoundException($"Location with locationId: {locationId}, was not found! (LocationService)");
+            throw new KeyNotFoundException($"Location with locationId: {newLocation.LocationID}, was not found! (LocationService)");
         }
 
         return await _locationRepo.UpdateLocation(oldLocation, newLocation);

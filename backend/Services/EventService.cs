@@ -15,13 +15,15 @@ public class EventService : IEventService
     public readonly UserRelationRepository _userRelRepo;
     public readonly EventRelationRepository _eventRelRepo;
     public readonly UserRepository _userRepo;
+        public readonly LocationService _locationService;
 
-    public EventService(EventRepository eventRepository, UserRelationRepository userRelationRepository, EventRelationRepository eventRelRepo, UserRepository userRepo)
+    public EventService(EventRepository eventRepository, UserRelationRepository userRelationRepository, EventRelationRepository eventRelRepo, UserRepository userRepo, LocationService  locationService)
     {
         _eventRepo = eventRepository;
         _userRelRepo = userRelationRepository;
         _eventRelRepo = eventRelRepo;
         _userRepo = userRepo;
+       _locationService = locationService;
     }
 
     public async Task<Event?> GetEventByID(int eventId)
@@ -119,7 +121,10 @@ public class EventService : IEventService
             throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
         }
 
+        var locationId = eventToDelete.LocationID;
+
         await _eventRepo.DeleteEvent(eventToDelete);
+        await _locationService.DeleteLocation(locationId);
     }
 
     public async Task<bool> CanUserViewEvent(int eventId, string userId)
