@@ -54,7 +54,7 @@ public interface IEventRelationService
     /// </summary>
     /// <param name="eventId">The event we want to delete a user from</param>
     /// <param name="userId">The user we want to delete</param>
-    Task DeleteUserFromEvent(int eventId, string userId);
+    Task RemoveUserFromEvent(int eventId, string userId);
 
     /// <summary>
     /// Chekcs if a user is Host or Creator for a given event.
