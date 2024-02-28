@@ -118,10 +118,10 @@ public class EventService : IEventService
             throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
         }
 
-        await _locationService.DeleteLocation(eventToDelete.LocationID);
+        var locationId = eventToDelete.LocationID;
 
-        eventToDelete.Location = null;
         await _eventRepo.DeleteEvent(eventToDelete);
+        await _locationService.DeleteLocation(locationId);
     }
 
     public async Task<bool> CanUserViewEvent(int eventId, string userId)
