@@ -46,15 +46,16 @@ public class UserService : IUserService
     {
         string id = Guid.NewGuid().ToString();
         User? doesUserExist = await _userRepo.GetUserByID(id);
-        
-        while(doesUserExist != null)
+
+        while (doesUserExist != null)
         {
             id = Guid.NewGuid().ToString();
             doesUserExist = await _userRepo.GetUserByID(id);
         }
 
         bool emailExists = await _userRepo.DoesEmailExist(user.Email);
-        if(emailExists) {
+        if (emailExists)
+        {
             throw new EmailAlreadyExistException(user.Email);
         }
 
@@ -70,8 +71,7 @@ public class UserService : IUserService
             throw new ArgumentNullException("New user cannot be null. " + nameof(updatedUser) + " (UserService)");
         }
 
-        User? user = await GetUser(userId);
-        return await _userRepo.UpdateUser(user, updatedUser);
+        return await _userRepo.UpdateUser(userId, updatedUser);
     }
 
     public async Task DeleteUser(string userId)
@@ -80,7 +80,7 @@ public class UserService : IUserService
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
-        
+
         User? user = await GetUser(userId);
         await _userRepo.DeleteUser(user);
     }
