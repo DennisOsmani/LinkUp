@@ -5,11 +5,7 @@ using System.Security;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Repositories;
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-=======
-using Enums;
->>>>>>> 04973192c76d686b5fa3fbf298109185b4c4add0
 
 namespace Controllers;
 
@@ -34,7 +30,6 @@ public class EventRelationController : ControllerBase
     {
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        var userRoleClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
         if(userIdClaim == null)
         {
@@ -44,7 +39,7 @@ public class EventRelationController : ControllerBase
         bool userJoined = await _erService.HaveUserJoinedEvent(eventId, userIdClaim);
         try
         {
-            if (userRoleClaims == Role.ADMIN.ToString() || userJoined) 
+            if (userJoined) 
             {
                 var users = await _userService.GetUsersFromEvent(eventId);
                 return Ok(users);
@@ -93,14 +88,13 @@ public class EventRelationController : ControllerBase
     */
 
     [HttpPut("role")]
-    [Authorize(Roles = "USER,ADMIN")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(int eventId, string userId, string role)
     {   
         userId = SecurityElement.Escape(userId);
         role = SecurityElement.Escape(role);
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        var userRoleClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
         if(userIdClaim == null)
         {
@@ -115,10 +109,10 @@ public class EventRelationController : ControllerBase
 
         try
         {
-            if(userRoleClaims == Role.ADMIN.ToString() || (canUpdate && userJoined))
+            if(canUpdate && userJoined)
             {
-                EventRelation eventRelation = await _erService.UpdateEventRelationRole(eventId, escapedUserId, escapedRole);
-                return Ok(eventRelation);
+            EventRelation eventRelation = await _erService.UpdateEventRelationRole(eventId, escapedUserId, escapedRole);
+            return Ok(eventRelation);
             }
             else
             {
@@ -181,22 +175,25 @@ public class EventRelationController : ControllerBase
 
     [HttpDelete]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> DeleteUserFromEvent([FromQuery] int eventId,[FromQuery] string userId)
+    public async Task<ActionResult> RemoveUserFromEvent([FromQuery] int eventId,[FromQuery] string userId)
     {
-        // Bruker skal ikke kunne slette seg selv fra eventet
-        // Bare Host / creator skal kunne slette folk! 
         userId = SecurityElement.Escape(userId);
         var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        bool isUserHostOrCreator = await _erService.IsUserHostOrCreator(eventId, userId);
-        if(!isUserHostOrCreator || userIdClaims == null)
+        if(userIdClaims == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
+        bool isUserHostOrCreator = await _erService.IsUserHostOrCreator(eventId, userIdClaims);
+        if(!isUserHostOrCreator)
         {
             return Unauthorized("User does not have permission");
         }
 
         try
         {
-            await _erService.DeleteUserFromEvent(eventId, userId);
+            await _erService.RemoveUserFromEvent(eventId, userId);
             return NoContent();
         }   
         catch(InvalidOperationException e)
