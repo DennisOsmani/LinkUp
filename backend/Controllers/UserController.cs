@@ -23,23 +23,23 @@ public class UserController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<User>> GetUser([FromQuery] string? userId)
     {
-        if(!string.IsNullOrEmpty(userId))
+        if (!string.IsNullOrEmpty(userId))
         {
             userId = SecurityElement.Escape(userId);
         }
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if(userIdClaim == null)
+        if (userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");
         }
-        
+
         try
         {
             User? user;
 
-            if(!String.IsNullOrEmpty(userId))
+            if (!String.IsNullOrEmpty(userId))
             {
                 user = await _userService.GetUser(userId);
                 return Ok(user);
@@ -71,8 +71,15 @@ public class UserController : ControllerBase
     public async Task<ActionResult<User>> UpdateUser([FromBody] User user)
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-        if(userIdClaim == null)
+        if (userRoleClaim != Role.SUPERADMIN.ToString())
+        {
+            user.Password = null;
+            user.Salt = null;
+        }
+
+        if (userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");
         }
@@ -101,7 +108,7 @@ public class UserController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> DeleteUser([FromQuery] string? userId)
     {
-        if(!string.IsNullOrEmpty(userId))
+        if (!string.IsNullOrEmpty(userId))
         {
             userId = SecurityElement.Escape(userId);
         }
@@ -109,20 +116,20 @@ public class UserController : ControllerBase
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-        if(userIdClaim == null)
+        if (userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");
         }
 
         try
         {
-            if(String.IsNullOrEmpty(userId))
+            if (String.IsNullOrEmpty(userId))
             {
                 await _userService.DeleteUser(userIdClaim);
                 return Ok($"User {userId} was deleted successfully!");
             }
 
-            if(userRoleClaim == Role.SUPERADMIN.ToString() || userRoleClaim == Role.ADMIN.ToString())
+            if (userRoleClaim == Role.SUPERADMIN.ToString() || userRoleClaim == Role.ADMIN.ToString())
             {
                 string escapedUserId = SecurityElement.Escape(userId);
                 await _userService.DeleteUser(escapedUserId);
