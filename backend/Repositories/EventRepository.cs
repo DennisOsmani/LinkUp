@@ -116,37 +116,50 @@ public class EventRepository
 
     public async Task CreateEvent(Event newEvent)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            _context.Events.Add(newEvent);
-            await _context.SaveChangesAsync();
-        }
-        catch (InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+            try
+            {
+                _context.Events.Add(newEvent);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 
     public async Task<Event> UpdateEvent(Event newEvent, Event oldEvent)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            oldEvent.EventName = newEvent.EventName;
-            oldEvent.EventDescription = newEvent.EventDescription;
-            oldEvent.EventDateTimeStart = newEvent.EventDateTimeStart;
-            oldEvent.EventDateTimeEnd = newEvent.EventDateTimeEnd;
-            oldEvent.Visibility = newEvent.Visibility;
-            oldEvent.InviteURL = newEvent.InviteURL;
-            oldEvent.FrontImage = newEvent.FrontImage;
-            oldEvent.MinCapacity = newEvent.MinCapacity;
-            oldEvent.MaxCapacity = newEvent.MaxCapacity;
+            try
+            {
+                oldEvent.EventName = newEvent.EventName;
+                oldEvent.EventDescription = newEvent.EventDescription;
+                oldEvent.EventDateTimeStart = newEvent.EventDateTimeStart;
+                oldEvent.EventDateTimeEnd = newEvent.EventDateTimeEnd;
+                oldEvent.Visibility = newEvent.Visibility;
+                oldEvent.InviteURL = newEvent.InviteURL;
+                oldEvent.FrontImage = newEvent.FrontImage;
+                oldEvent.MinCapacity = newEvent.MinCapacity;
+                oldEvent.MaxCapacity = newEvent.MaxCapacity;
 
-            await _context.SaveChangesAsync();
-            return oldEvent;
-        }
-        catch (InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+                _context.Events.Update(oldEvent);
+                await _context.SaveChangesAsync();
+                
+                await transaction.CommitAsync();
+                return oldEvent;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 

@@ -43,15 +43,21 @@ public class UserRepository
 
     public async Task<string?> CreateUser(User user)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return user.Email;
-        }
-        catch (InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
+            try
+            {
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return user.Email;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 
@@ -60,40 +66,51 @@ public class UserRepository
         User? oldUser = await GetUserByID(oldUserId);
         _context.Users.Attach(oldUser);
 
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            foreach (var property in oldUser.GetType().GetProperties())
+            try
             {
-                var propertyName = property.Name;
-                var newValue = typeof(User).GetProperty(propertyName)?.GetValue(newUser);
-                if (newValue != null && !Equals(property.GetValue(oldUser), newValue) && !propertyName.Equals("Role"))
+                foreach (var property in oldUser.GetType().GetProperties())
                 {
-                    property.SetValue(oldUser, newValue);
+                    var propertyName = property.Name;
+                    var newValue = typeof(User).GetProperty(propertyName)?.GetValue(newUser);
+                    if (newValue != null && !Equals(property.GetValue(oldUser), newValue) && !propertyName.Equals("Role"))
+                    {
+                        property.SetValue(oldUser, newValue);
+                    }
                 }
-            }
-            if (_context.ChangeTracker.HasChanges())
-            {
-                await _context.SaveChangesAsync();
-            }
 
-            return oldUser;
-        }
-        catch (InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
+                if (_context.ChangeTracker.HasChanges())
+                {
+                    await _context.SaveChangesAsync();
+                }
+
+                await transaction.CommitAsync();
+                return oldUser;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 
     public async Task DeleteUser(User user)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            _context.Remove(user);
-            await _context.SaveChangesAsync();
-        }
-        catch (InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (UserRepo)");
+            try
+            {
+                _context.Remove(user);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 

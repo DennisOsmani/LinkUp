@@ -17,34 +17,46 @@ public class LocationRepository
 
     public async Task<Location> UpdateLocation(Location oldLocation, Location newLocation)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            oldLocation.Address = newLocation.Address;
-            oldLocation.Postalcode = newLocation.Postalcode;
-            oldLocation.City = newLocation.City;
-            oldLocation.Country = newLocation.Country;
+            try
+            {
+                oldLocation.Address = newLocation.Address;
+                oldLocation.Postalcode = newLocation.Postalcode;
+                oldLocation.City = newLocation.City;
+                oldLocation.Country = newLocation.Country;
 
-            await _context.SaveChangesAsync();
-            return oldLocation;
-        }
-        catch(InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (LocationRepo)");
+                _context.Locations.Update(oldLocation);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return oldLocation;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 
     public async Task<Location> CreateLocation(Location location)
     {
-        try
+        using(var transaction = await _context.Database.BeginTransactionAsync())
         {
-            _context.Add(location);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Add(location);
+                await _context.SaveChangesAsync();
 
-            return location;
-        }
-        catch(InvalidOperationException)
-        {
-            throw new InvalidOperationException($"Error with Linq query. (LocationRepo)");
+                await transaction.CommitAsync();
+                return location;
+            }
+            catch(Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+            }
         }
     }
 
