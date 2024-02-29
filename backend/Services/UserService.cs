@@ -88,9 +88,7 @@ public class UserService : IUserService
         
         User? user = await GetUser(userId);
 
-        ICollection<Event?> eventsJoined = await _eventRepo.GetUserJoinedEvents(userId);
-
-        ICollection<Event?> eventsCreated = eventsJoined.Where(e => e.EventRelations.Any(er => er.EventRole == EventRole.CREATOR)).ToList();
+        ICollection<Event?> eventsCreated = await _eventRepo.GetCreatedEvents(userId);
 
         foreach (var eventt in eventsCreated)
         {
