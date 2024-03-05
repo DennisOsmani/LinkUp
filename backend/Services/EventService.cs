@@ -15,7 +15,7 @@ public class EventService : IEventService
     public readonly UserRelationRepository _userRelRepo;
     public readonly EventRelationRepository _eventRelRepo;
     public readonly UserRepository _userRepo;
-        public readonly LocationService _locationService;
+    public readonly LocationService _locationService;
 
     public EventService(EventRepository eventRepository, UserRelationRepository userRelationRepository, EventRelationRepository eventRelRepo, UserRepository userRepo, LocationService  locationService)
     {
