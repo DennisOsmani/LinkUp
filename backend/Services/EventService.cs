@@ -120,6 +120,12 @@ public class EventService : IEventService
         {
             throw new KeyNotFoundException($"Event with ID: {eventId}, was not found!");
         }
+        ICollection<EventRelation> eventRelations = await _eventRelRepo.GetAllEventRelations(eventId);
+
+        foreach (var evRel in eventRelations)
+        {
+            await _eventRelRepo.DeleteUserFromEvent(evRel);
+        }
 
         var locationId = eventToDelete.LocationID;
 
