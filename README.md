@@ -8,6 +8,7 @@
 - [DB-design](https://dbdiagram.io/d/659feb62ac844320aeb7d308)
 - [Gantt software](https://www.onlinegantt.com/#/gantt)
 
+
 <br />
 
 ## About
