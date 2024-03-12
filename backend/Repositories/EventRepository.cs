@@ -114,6 +114,25 @@ public class EventRepository
         }
     }
 
+    public async Task<ICollection<Event?>> GetCreatedEvents(string userId)
+    {
+        try
+        {
+            return await _context.EventRelations
+                .Where(
+                    er => er.UserID.Equals(userId)
+                    && er.EventRole == EventRole.CREATOR
+                )
+                .Select(er => er.Event)
+                .ToListAsync();
+        }
+
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
+    }
+
     public async Task CreateEvent(Event newEvent)
     {
         using(var transaction = await _context.Database.BeginTransactionAsync())

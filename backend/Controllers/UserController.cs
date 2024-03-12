@@ -123,10 +123,11 @@ public class UserController : ControllerBase
 
         try
         {
+            Console.WriteLine("User " + userId);
             if (String.IsNullOrEmpty(userId))
             {
                 await _userService.DeleteUser(userIdClaim);
-                return Ok($"User {userId} was deleted successfully!");
+                return Ok($"User {userIdClaim} was deleted successfully!");
             }
 
             if (userRoleClaim == Role.SUPERADMIN.ToString() || userRoleClaim == Role.ADMIN.ToString())

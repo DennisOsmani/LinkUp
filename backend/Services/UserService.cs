@@ -3,6 +3,7 @@ using Repositories;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Exceptions;
+using Enums;
 
 namespace Services;
 
@@ -10,11 +11,15 @@ public class UserService : IUserService
 {
     public readonly UserRepository _userRepo;
     public readonly EventRepository _eventRepo;
+    public readonly EventRelationRepository _eventRelRepo;
+    public readonly UserRelationRepository _userRelRepo;
 
-    public UserService(UserRepository userRepo, EventRepository eventRepo)
+    public UserService(UserRepository userRepo, EventRepository eventRepo, EventRelationRepository eventRelRepo, UserRelationRepository userRelRepo)
     {
         _userRepo = userRepo;
         _eventRepo = eventRepo;
+        _eventRelRepo = eventRelRepo;
+        _userRelRepo = userRelRepo;
     }
 
     public async Task<User?> FindByEmailAsync(string email)
@@ -80,8 +85,23 @@ public class UserService : IUserService
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
-
+        
         User? user = await GetUser(userId);
+
+        ICollection<Event?> eventsCreated = await _eventRepo.GetCreatedEvents(userId);
+
+        foreach (var eventt in eventsCreated)
+        {
+            await _eventRepo.DeleteEvent(eventt);
+        }
+
+        ICollection<UserRelation> userRelations = await _userRelRepo.GetAllUsersRelations(userId);
+
+        foreach (var ur in userRelations)
+        {
+            await _userRelRepo.DeleteUserRelation(ur);
+        }
+
         await _userRepo.DeleteUser(user);
     }
 
