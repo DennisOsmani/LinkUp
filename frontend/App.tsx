@@ -1,25 +1,20 @@
-import { TabBackground } from './components/TabBackground/TabBackground';
-import * as Font from 'expo-font';
-import { useEffect } from 'react';
-import TabOne from './components/TabBackground/Components/TabOne';
-import TabTwo from './components/TabBackground/Components/TabTwo';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
-  useEffect(() => {
-    loadFonts();
-  }, []);
-
-  const loadFonts = async () => {
-    await Font.loadAsync({
-      BalooBold: require('./assets/fonts/Baloo2-Bold.ttf'),
-      BalooRegular: require('./assets/fonts/Baloo2-Regular.ttf'),
-    });
-  };
-
   return (
-    <TabBackground firstTab='Public' secondTab='Friends'>
-      <TabOne />
-      <TabTwo />
-    </TabBackground>
+    <View style={styles.container}>
+      <Text>Open up App.tsx to start working on your app!</Text>
+      <StatusBar style='auto' />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
