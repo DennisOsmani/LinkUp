@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 export default function TabTwo() {
   return (
     <View style={styles.container}>
-      <Text>Tab One</Text>
+      <Text>Tab Two</Text>
     </View>
   );
 }

@@ -1,9 +1,5 @@
 import { StyleSheet } from 'react-native';
-import {
-  moderateScale,
-  horizontalScale,
-  verticalScale,
-} from '../../styles/genericDimensions';
+import { moderateScale, verticalScale } from '../../styles/genericDimensions';
 
 export const styles = StyleSheet.create({
   backgroundCard: {
@@ -15,7 +11,6 @@ export const styles = StyleSheet.create({
 
   foregroundCard: {
     backgroundColor: 'white',
-    justifyContent: 'center',
     height: '85%',
     width: '100%',
     borderTopEndRadius: moderateScale(25),
@@ -27,35 +22,23 @@ export const styles = StyleSheet.create({
     height: verticalScale(80),
     justifyContent: 'center',
     alignItems: 'center',
-    gap: verticalScale(45),
+    gap: verticalScale(35),
     paddingBottom: verticalScale(20),
   },
 
   tabContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: verticalScale(45),
+    height: verticalScale(43),
   },
 
-  tabLeftUnderline: {
+  tabUnderline: {
     height: verticalScale(5),
-    width: verticalScale(110),
+    width: verticalScale(123),
     borderRadius: moderateScale(100),
   },
 
-  tabRightUnderline: {
-    height: verticalScale(5),
-    width: verticalScale(110),
-    borderRadius: moderateScale(100),
-  },
-
-  tabLeftText: {
-    fontFamily: 'BalooBold',
-    fontSize: moderateScale(35),
-    color: 'white',
-  },
-
-  tabRightText: {
+  tabText: {
     fontFamily: 'BalooBold',
     fontSize: moderateScale(35),
     color: 'white',
