@@ -36,6 +36,7 @@ export default StyleSheet.create({
   text: {
     color: colors.background,
     fontSize: 20,
+    fontWeight: "bold",
   },
   linkContainer: {
     flexDirection: "row",
