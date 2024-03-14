@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Image, Pressable, Text, View } from "react-native";
-import { styles } from "./EventCardPublicStyles";
+import { Image, Pressable, Text, View } from "react-native";
+import { styles } from "./EventCardInviteStyles";
 import { Feather } from "@expo/vector-icons";
 
-interface EventCardPublicProps {
+interface EventCardInviteProps {
   numberOfPeople: string;
   dateTime: Date;
   title: string;
@@ -14,7 +14,7 @@ interface EventCardPublicProps {
   onJoinPress: () => void;
 }
 
-const EventCardPublic = ({
+const EventCardInvite = ({
   numberOfPeople,
   dateTime,
   title,
@@ -23,7 +23,7 @@ const EventCardPublic = ({
   address,
   imageSource,
   onJoinPress
-}: EventCardPublicProps) => {
+}: EventCardInviteProps) => {
   const handleButtonClick = () => {
     onJoinPress();
   };
@@ -43,15 +43,24 @@ const EventCardPublic = ({
             <Text style={styles.title}>{title}</Text>
             <View style={styles.iconTextWrapper}>
               <Feather name="user" style={styles.text} />
-              <Text style={styles.text}>{hostName}</Text>
+              <Text style={styles.hostText}>{hostName}</Text>
             </View>
+
             <Text style={styles.text}>{bio}</Text>
           </View>
           <View style={styles.lowerLeftSide}>
             <Text style={styles.addressText}>{address}</Text>
-            <Pressable style={styles.button} onPress={handleButtonClick}>
-              <Text style={styles.buttonText}>Bli med</Text>
-            </Pressable>
+            <View style={styles.buttonsContainer}>
+              <Pressable style={styles.button} onPress={handleButtonClick}>
+                <Text style={styles.buttonText}>Godta</Text>
+              </Pressable>
+              <Pressable
+                style={styles.invertedButton}
+                onPress={handleButtonClick}
+              >
+                <Text style={styles.invertedButtonText}>Avslå</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
         <View style={styles.rightSide}>
@@ -70,4 +79,4 @@ const EventCardPublic = ({
   );
 };
 
-export default EventCardPublic;
+export default EventCardInvite;
