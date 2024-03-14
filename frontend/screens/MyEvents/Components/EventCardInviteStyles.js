@@ -39,6 +39,9 @@ export const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold"
   },
+  hostText: {
+    fontSize: 16
+  },
   text: {
     fontSize: 16
   },
@@ -50,18 +53,40 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: "gray"
   },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    gap: 12
+  },
   button: {
     display: "flex",
     justifyContent: "center",
-    borderRadius: 12,
+    borderRadius: 10,
     backgroundColor: "#474AEE",
-    height: 40,
-    width: 150
+    height: 32,
+    width: 90
   },
   buttonText: {
     color: "#FFFFFF",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: "bold",
+    fontFamily: ""
+  },
+  invertedButton: {
+    display: "flex",
+    justifyContent: "center",
+    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    borderWidth: 2,
+    borderColor: "#474AEE",
+    height: 32,
+    width: 90
+  },
+  invertedButtonText: {
+    color: "#474AEE",
+    textAlign: "center",
+    fontSize: 16,
     fontWeight: "bold",
     fontFamily: ""
   },
@@ -74,9 +99,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     resizeMode: "cover",
     borderRadius: 16
-  },
-  /////////////////////
-  smallButton: {
-    borderRadius: 10
   }
+  /////////////////////
 });
