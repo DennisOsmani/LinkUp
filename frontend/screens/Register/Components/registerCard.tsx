@@ -14,7 +14,7 @@ interface RegisterInfo {
 
 interface RegisterCardProps {
   registerInfo: RegisterInfo[];
-  onPressButton: () => void; //To main page
+  onPressButton: () => void; //To feed page
   onLinkPress: () => void; // To login page
 }
 
