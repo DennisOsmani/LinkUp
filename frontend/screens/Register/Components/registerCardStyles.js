@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 import { colors } from "../../../styles/colors";
 
 export default StyleSheet.create({
@@ -21,7 +22,7 @@ export default StyleSheet.create({
     borderRadius: 15,
     marginBottom: 30,
     width: 300,
-    textAlign: "left",
+    paddingLeft: 12,
   },
   button: {
     backgroundColor: colors.primary,
