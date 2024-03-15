@@ -22,6 +22,19 @@ export function UserCard({ userCardInfo, onPressButon }: UserCardProps) {
           source={require("../../assets/cbum.jpg")}
           style={styles.image}
         ></Image>
+        <View style={styles.detailsContainer}>
+          <View style={styles.iconContainer}>
+            <Feather name="user" style={styles.icon}></Feather>
+            <Text style={styles.textName}>{userCardInfo.firstname}</Text>
+            <Text style={styles.textName}>{userCardInfo.lastname}</Text>
+          </View>
+          <Text style={styles.textAge}>{userCardInfo.age}</Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Pressable style={styles.button} onPress={onPressButon}>
+            <Text style={styles.buttonText}>Legg til venn</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );
