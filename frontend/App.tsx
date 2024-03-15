@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 import { TokenProvider } from './providers/TokenProvider';
 import { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
+import TabNavigator from './navigation/TabNavigator';
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
@@ -30,9 +31,7 @@ export default function App() {
 
   return (
     <TokenProvider>
-      <View>
-        <Text>App.tsx</Text>
-      </View>
+      <TabNavigator />
     </TokenProvider>
   );
 }
