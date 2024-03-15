@@ -4,36 +4,39 @@ import {
   TextInput,
   Pressable,
   TouchableOpacity,
-} from "react-native";
-import styles from "./LoginCardStyles";
-
-interface LoginInfo {
-  inputName: string;
-  placeholder: string;
-}
+} from 'react-native';
+import styles from './LoginCardStyles';
+import { Dispatch } from 'react';
 
 interface LoginCardProps {
-  loginInfo: LoginInfo[];
-  onPressButton: () => void; // To feed page
-  onLinkPress: () => void; // To register page
+  onPressButton: () => void;
+  onLinkPress: () => void;
+  email: string;
+  setEmail: Dispatch<React.SetStateAction<string>>;
+  password: string;
+  setPassword: Dispatch<React.SetStateAction<string>>;
 }
 
 export function LoginCard({
-  loginInfo,
   onPressButton,
   onLinkPress,
+  setEmail,
+  setPassword,
 }: LoginCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.inputContainer}>
-        {loginInfo.map((info) => (
-          <TextInput
-            key={info.inputName}
-            style={styles.input}
-            placeholder={info.placeholder}
-            secureTextEntry={info.inputName === "password"}
-          />
-        ))}
+        <TextInput
+          style={styles.input}
+          placeholder={'Email'}
+          onChangeText={(input) => setEmail(input)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder={'Password'}
+          secureTextEntry={true}
+          onChangeText={(input) => input}
+        />
       </View>
       <View style={styles.inputContainer}>
         <Pressable style={styles.button} onPress={onPressButton}>

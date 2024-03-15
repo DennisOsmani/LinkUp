@@ -1,12 +1,13 @@
 import { Text, View } from "react-native";
-import { TokenProvider } from "./providers/TokenProvider";
+import { TokenProvider, useTokenProvider } from "./providers/TokenProvider";
 import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import TabNavigator from "./navigation/TabNavigator";
-import Splash from "./screens/Splash/Splash";
+import Auth from "./screens/Auth/Auth";
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
+  const { token } = useTokenProvider();
 
   useEffect(() => {
     loadFonts();
@@ -28,8 +29,10 @@ export default function App() {
         <Text style={{ fontFamily: "BalooBold" }}>Splash</Text>
       </View>
     );
+  }
 
-    return <Splash />;
+  if (token === "" || token === undefined) {
+    return <Auth />;
   }
 
   return (
