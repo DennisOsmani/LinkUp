@@ -2,6 +2,6 @@ export type NavigationTypeList = {
   Feed: undefined;
   Events: undefined;
   Create: undefined;
-  Friends: undefined;
+  People: undefined;
   Profile: undefined;
 };
