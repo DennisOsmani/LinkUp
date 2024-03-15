@@ -11,6 +11,17 @@ enum State {
   REGISTER,
 }
 
+/*
+ * TODO
+ * error handling for failed login, show user a message!
+ * error handling for register, show user a message!
+ * implement handleRegister
+ * implement toggling to register
+ *
+ * test that you have to login to use the app
+ * check that the token is stored correct and can be used for later by printing it from provider!
+ */
+
 export default function Auth() {
   const [view, setView] = useState<State>(State.LOGIN);
   const [email, setEmail] = useState<string>('');
