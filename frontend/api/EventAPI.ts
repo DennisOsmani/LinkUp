@@ -1,10 +1,10 @@
-const BASE_URL: string = '';
+const BASE_URL: string = 'http://localhost:5173/api';
 
 // getEventById ...
 
 const getEventsInCity = async (city: string) => {
   try {
-    const response = await fetch(`${BASE_URL}/city${city}`, {
+    const response = await fetch(`${BASE_URL}/event/city/${city}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

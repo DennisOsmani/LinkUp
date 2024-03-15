@@ -1,4 +1,8 @@
 import { StyleSheet } from "react-native";
+import {
+  moderateScale,
+  verticalScale
+} from "../../../styles/genericDimensions";
 
 export const styles = StyleSheet.create({
   wrapper: {

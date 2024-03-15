@@ -1,4 +1,8 @@
 import { StyleSheet } from "react-native";
+import {
+  moderateScale,
+  verticalScale
+} from "../../../styles/genericDimensions";
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -6,8 +10,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     padding: moderateScale(25),
     borderTopEndRadius: moderateScale(25),
-    borderTopStartRadius: moderateScale(25),
-    backgroundColor: "#f1f2f6",
-    gap: 20
+    borderTopStartRadius: moderateScale(25)
   }
 });

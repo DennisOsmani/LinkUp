@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 10,
-    height: 200,
+    height: 180,
     display: "flex"
   },
   leftSide: {
