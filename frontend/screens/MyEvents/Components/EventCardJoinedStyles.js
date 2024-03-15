@@ -1,4 +1,4 @@
-import { StyleSheet, ImageStyle } from "react-native";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   card: {
@@ -54,12 +54,14 @@ export const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     borderRadius: 12,
-    backgroundColor: "#474AEE",
+    borderWidth: 2,
+    borderColor: "#474AEE",
+    backgroundColor: "#FFFFFF",
     height: 40,
     width: 150
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: "#474AEE",
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
