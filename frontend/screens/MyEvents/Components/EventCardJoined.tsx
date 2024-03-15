@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Image, Pressable, Text, View } from "react-native";
-import { styles } from "./EventCardPublicStyles";
+import { Image, Pressable, Text, View } from "react-native";
+import { styles } from "./EventCardJoinedStyles";
 import { Feather } from "@expo/vector-icons";
 
-interface EventCardPublicProps {
+interface EventCardJoinedProps {
   numberOfPeople: string;
   dateTime: Date;
   title: string;
@@ -12,9 +12,10 @@ interface EventCardPublicProps {
   address: string;
   imageSource: any;
   onJoinPress: () => void;
+  eventRole: string;
 }
 
-const EventCardPublic = ({
+const EventCardJoined = ({
   numberOfPeople,
   dateTime,
   title,
@@ -22,12 +23,9 @@ const EventCardPublic = ({
   bio,
   address,
   imageSource,
-  onJoinPress
-}: EventCardPublicProps) => {
-  const handleButtonClick = () => {
-    onJoinPress();
-  };
-
+  onJoinPress,
+  eventRole
+}: EventCardJoinedProps) => {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -49,8 +47,12 @@ const EventCardPublic = ({
           </View>
           <View style={styles.lowerLeftSide}>
             <Text style={styles.addressText}>{address}</Text>
-            <Pressable style={styles.button} onPress={handleButtonClick}>
-              <Text style={styles.buttonText}>Bli med</Text>
+            <Pressable style={styles.button} onPress={onJoinPress}>
+              {eventRole === "CREATOR" || eventRole === "HOST" ? (
+                <Text style={styles.buttonText}>Rediger</Text>
+              ) : (
+                <Text style={styles.buttonText}>Forlat Event</Text>
+              )}
             </Pressable>
           </View>
         </View>
@@ -70,4 +72,4 @@ const EventCardPublic = ({
   );
 };
 
-export default EventCardPublic;
+export default EventCardJoined;
