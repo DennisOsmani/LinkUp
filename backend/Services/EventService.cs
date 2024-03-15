@@ -17,13 +17,13 @@ public class EventService : IEventService
     public readonly UserRepository _userRepo;
     public readonly LocationService _locationService;
 
-    public EventService(EventRepository eventRepository, UserRelationRepository userRelationRepository, EventRelationRepository eventRelRepo, UserRepository userRepo, LocationService  locationService)
+    public EventService(EventRepository eventRepository, UserRelationRepository userRelationRepository, EventRelationRepository eventRelRepo, UserRepository userRepo, LocationService locationService)
     {
         _eventRepo = eventRepository;
         _userRelRepo = userRelationRepository;
         _eventRelRepo = eventRelRepo;
         _userRepo = userRepo;
-       _locationService = locationService;
+        _locationService = locationService;
     }
 
     public async Task<Event?> GetEventByID(int eventId)
@@ -39,9 +39,26 @@ public class EventService : IEventService
     }
 
 
-    public async Task<ICollection<Event>> GetEventsInCity(string city)
+    public async Task<ICollection<Event>> GetEventsInCity(string city, string userId)
     {
-        return await _eventRepo.GetEventsInCity(city);
+        return await _eventRepo.GetEventsInCity(city, userId);
+
+        /*ALTERNATIVE TO THE INSANE QUERY IN REPO
+        var events = await _eventRepo.GetEventsInCity(city);
+
+        ICollection<Event> filteredEvents = new List<Event>();
+
+        foreach (var ev in events)
+        {
+            var relation = await _eventRelRepo.GetEventRelation(ev.EventID, userId);
+            if (relation == null)
+            {
+                filteredEvents.Add(ev);
+            }
+        }
+        return filteredEvents;
+        */
+
     }
 
     public async Task<ICollection<Event>?> GetUserFriendEvents(string userId)

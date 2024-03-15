@@ -54,9 +54,15 @@ public class EventController : ControllerBase
     public async Task<ActionResult> GetEventsInCity(string city)
     {
         city = SecurityElement.Escape(city);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in JWT");
+        }
         try
         {
-            var events = await _eventService.GetEventsInCity(city);
+            var events = await _eventService.GetEventsInCity(city, userIdClaim);
             return Ok(events);
         }
         catch (InvalidOperationException e)
