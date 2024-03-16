@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { registerUser } from "../../api/AuthAPI";
 import { loginUser } from "../../api/AuthAPI";
 import { useState } from "react";
@@ -15,9 +15,6 @@ enum State {
 
 /*
  * TODO
- * error handling for failed login, show user a message!
- * error handling for register, show user a message!
- *
  * test that you have to login to use the app
  * check that the token is stored correct and can be used for later by printing it from provider!
  */
@@ -29,7 +26,7 @@ export default function Auth() {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
 
-  const { token, setToken } = useTokenProvider();
+  const { setToken } = useTokenProvider();
 
   const handleLogin = async () => {
     try {
@@ -43,8 +40,10 @@ export default function Auth() {
       console.log("TOKEN RESPONSE (LOGIN) " + response);
       setToken(response);
     } catch (error) {
-      // Handle this error!
-      console.error(error);
+      Alert.alert(
+        "Ugyldig Login",
+        "Mail addressen eller passord er feil, eller finnes ikke!"
+      );
     }
   };
 
@@ -64,7 +63,10 @@ export default function Auth() {
       setToken(response);
     } catch (error) {
       // Handle this error!
-      console.error(error);
+      Alert.alert(
+        "Ugyldig Registrering",
+        "Mail addressen eller passord er feil, eller finnes ikke!"
+      );
     }
   };
 
