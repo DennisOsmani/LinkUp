@@ -4,12 +4,12 @@ import {
   TextInput,
   Pressable,
   TouchableOpacity,
-} from 'react-native';
-import styles from './LoginCardStyles';
-import { Dispatch } from 'react';
+} from "react-native";
+import styles from "./LoginCardStyles";
+import { Dispatch } from "react";
 
 interface LoginCardProps {
-  onPressButton: () => void;
+  onPressButton: () => Promise<void>;
   onLinkPress: () => void;
   email: string;
   setEmail: Dispatch<React.SetStateAction<string>>;
@@ -17,7 +17,7 @@ interface LoginCardProps {
   setPassword: Dispatch<React.SetStateAction<string>>;
 }
 
-export function LoginCard({
+export default function LoginCard({
   onPressButton,
   onLinkPress,
   setEmail,
@@ -28,14 +28,14 @@ export function LoginCard({
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder={'Email'}
+          placeholder={"Email"}
           onChangeText={(input) => setEmail(input)}
         />
         <TextInput
           style={styles.input}
-          placeholder={'Password'}
+          placeholder={"Password"}
           secureTextEntry={true}
-          onChangeText={(input) => input}
+          onChangeText={(input) => setPassword(input)}
         />
       </View>
       <View style={styles.inputContainer}>
