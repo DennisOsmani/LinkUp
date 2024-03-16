@@ -1,10 +1,11 @@
-import { View, Text } from 'react-native';
-import { registerUser } from '../../api/AuthAPI';
-import { loginUser } from '../../api/AuthAPI';
-import { useState } from 'react';
-import { styles } from './AuthStyles';
-import { LoginCard } from './Components/Login/LoginCard';
-import { IRegistrationRequest, ILoginRequest } from '../../api/AuthAPI';
+import { View, Text } from "react-native";
+import { registerUser } from "../../api/AuthAPI";
+import { loginUser } from "../../api/AuthAPI";
+import { useState } from "react";
+import { styles } from "./AuthStyles";
+import { IRegistrationRequest, ILoginRequest } from "../../api/AuthAPI";
+import LoginCard from "./components/Login/LoginCard";
+import RegisterCard from "./components/Register/RegisterCard";
 
 enum State {
   LOGIN,
@@ -24,10 +25,10 @@ enum State {
 
 export default function Auth() {
   const [view, setView] = useState<State>(State.LOGIN);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [firstname, setFirstname] = useState<string>('');
-  const [lastname, setLastname] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [firstname, setFirstname] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
 
   const handleLogin = async () => {
     try {
@@ -43,7 +44,7 @@ export default function Auth() {
     }
   };
 
-  const handleReqister = async () => {
+  const handleRegister = async () => {
     try {
       const request: IRegistrationRequest = {
         firstname: firstname,
@@ -69,7 +70,23 @@ export default function Auth() {
         <LoginCard
           onPressButton={handleLogin}
           onLinkPress={toggleState}
+          email={email}
           setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+        />
+      )}
+      {view === State.REGISTER && (
+        <RegisterCard
+          onPressButton={handleRegister}
+          onLinkPress={toggleState}
+          firstname={firstname}
+          setFirstname={setFirstname}
+          lastname={lastname}
+          setLastname={setLastname}
+          email={email}
+          setEmail={setEmail}
+          password={password}
           setPassword={setPassword}
         />
       )}
