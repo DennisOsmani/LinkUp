@@ -48,4 +48,14 @@ export default StyleSheet.create({
   link: {
     color: "blue",
   },
+  wrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    gap: moderateScale(20),
+  },
+  compHeader: {
+    textAlign: "center",
+    fontFamily: "BalooBold",
+    fontSize: moderateScale(35),
+  },
 });
