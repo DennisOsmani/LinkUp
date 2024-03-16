@@ -32,6 +32,7 @@ export default function App() {
   }
 
   if (token === "" || token === undefined) {
+    // TOOD - Check for token validation instead, valid time and some kind of username?
     return <Auth />;
   }
 

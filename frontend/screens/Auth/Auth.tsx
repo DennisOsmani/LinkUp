@@ -6,6 +6,7 @@ import { styles } from "./AuthStyles";
 import { IRegistrationRequest, ILoginRequest } from "../../api/AuthAPI";
 import LoginCard from "./components/Login/LoginCard";
 import RegisterCard from "./components/Register/RegisterCard";
+import { useTokenProvider } from "../../providers/TokenProvider";
 
 enum State {
   LOGIN,
@@ -16,8 +17,6 @@ enum State {
  * TODO
  * error handling for failed login, show user a message!
  * error handling for register, show user a message!
- * implement handleRegister
- * implement toggling to register
  *
  * test that you have to login to use the app
  * check that the token is stored correct and can be used for later by printing it from provider!
@@ -30,6 +29,8 @@ export default function Auth() {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
 
+  const { token, setToken } = useTokenProvider();
+
   const handleLogin = async () => {
     try {
       const request: ILoginRequest = {
@@ -37,7 +38,10 @@ export default function Auth() {
         password: password,
       };
 
-      await loginUser(request);
+      const response = await loginUser(request);
+      // For debugging
+      console.log("TOKEN RESPONSE (LOGIN) " + response);
+      setToken(response);
     } catch (error) {
       // Handle this error!
       console.error(error);
@@ -54,6 +58,10 @@ export default function Auth() {
       };
 
       await registerUser(request);
+      const response = await loginUser(request);
+      // For debugging
+      console.log("TOKEN RESPONSE (REGISTER) " + response);
+      setToken(response);
     } catch (error) {
       // Handle this error!
       console.error(error);

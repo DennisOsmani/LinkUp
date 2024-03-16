@@ -1,5 +1,6 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../../../styles/colors';
+import { StyleSheet } from "react-native";
+import { colors } from "../../../../styles/colors";
+import { moderateScale } from "../../../../styles/genericDimensions";
 
 export default StyleSheet.create({
   card: {
@@ -12,9 +13,9 @@ export default StyleSheet.create({
   inputContainer: {
     borderColor: colors.red,
     borderWidth: 0,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   input: {
     backgroundColor: colors.foreground,
@@ -27,8 +28,8 @@ export default StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: 200,
     height: 40,
     marginBottom: 20,
@@ -36,16 +37,26 @@ export default StyleSheet.create({
   text: {
     color: colors.background,
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   linkContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   question: {
     color: colors.grey,
     marginRight: 5,
   },
   link: {
-    color: 'blue',
+    color: "blue",
+  },
+  wrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    gap: moderateScale(20),
+  },
+  compHeader: {
+    textAlign: "center",
+    fontFamily: "BalooBold",
+    fontSize: moderateScale(35),
   },
 });
