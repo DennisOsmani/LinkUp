@@ -5,9 +5,53 @@ import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { SearchUsers } from "../../../api/UserAPI";
 
+export interface User {
+  userID: string;
+  firstname: string;
+  lastname: string;
+  dateBorn: string;
+  phone?: string;
+  RelationshipStatus?: number;
+  gender?: string;
+  description?: string;
+  email?: string;
+  profileImage?: string;
+  password?: string;
+  salt?: string;
+  eventsCreated?: number;
+  eventsJoined?: number;
+  role?: number;
+  userRelationsAsFirst?: [];
+  userRelationsAsSecond?: [];
+  eventRelations?: [];
+}
+
+// IF STRING IS EMPTY MAKE IT SHOW ALL USERS (BACKEND)
+
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState<User[] | undefined>([]);
+
+  const calculateAge = (dateBorn: string) => {
+    // Parse the dateBorn string into a JavaScript Date object
+    const birthDate = new Date(dateBorn);
+
+    // Get the current date
+    const today = new Date();
+
+    // Calculate the difference in years
+    let age = today.getFullYear() - birthDate.getFullYear();
+
+    // Check if the birthday hasn't occurred yet this year
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const dayDiff = today.getDate() - birthDate.getDate();
+
+    // If the birthday hasn't occurred yet this year, decrement the age
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
+    }
+    return age;
+  };
 
   const clearSearchText = () => {
     setSearchText("");
@@ -16,12 +60,8 @@ export default function SearchPeople() {
 
   const handleSearch = async () => {
     try {
-      if (searchText.trim() !== "") {
-        const results = await SearchUsers(searchText);
-        setSearchResult(results);
-      } else {
-        setSearchResult([]);
-      }
+      const results: User[] | undefined = await SearchUsers(searchText);
+      setSearchResult(results);
     } catch (error) {
       console.error("Error while searching users: " + error);
     }
@@ -47,25 +87,19 @@ export default function SearchPeople() {
           ></TextInput>
           <Feather style={styles.icon} name="x" onPress={clearSearchText} />
         </View>
-        <UserCard
-          userCardInfo={{
-            firstname: "mordi",
-            lastname: "fardin",
-            age: "27 år",
-          }}
-          onPressButon={() => {}}
-        ></UserCard>
-        {searchResult ? (
-          searchResult.map((user, index: number) => (
+
+        {searchResult &&
+          searchResult.map((user: User, index: number) => (
             <UserCard
               key={index}
-              userCardInfo={user}
+              userCardInfo={{
+                firstname: user.firstname,
+                lastname: user.lastname,
+                age: calculateAge(user.dateBorn),
+              }}
               onPressButon={() => {}}
             ></UserCard>
-          ))
-        ) : (
-          <Text>Mordi</Text>
-        )}
+          ))}
       </View>
     </ScrollView>
   );
