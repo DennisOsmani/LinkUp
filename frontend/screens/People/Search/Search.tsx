@@ -26,6 +26,8 @@ export interface User {
   eventRelations?: [];
 }
 
+// When register, add date of birth
+
 // IF STRING IS EMPTY MAKE IT SHOW ALL USERS (BACKEND)
 
 export default function SearchPeople() {
