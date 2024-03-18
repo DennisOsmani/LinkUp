@@ -1,5 +1,5 @@
-import { View, Text, Alert } from "react-native";
-import { registerUser } from "../../api/AuthAPI";
+import { View, Alert } from "react-native";
+import { IToken, registerUser } from "../../api/AuthAPI";
 import { loginUser } from "../../api/AuthAPI";
 import { useState } from "react";
 import { styles } from "./AuthStyles";
@@ -13,11 +13,7 @@ enum State {
   REGISTER,
 }
 
-/*
- * TODO
- * test that you have to login to use the app
- * check that the token is stored correct and can be used for later by printing it from provider!
- */
+const { token, setToken } = useTokenProvider();
 
 export default function Auth() {
   const [view, setView] = useState<State>(State.LOGIN);
@@ -26,19 +22,18 @@ export default function Auth() {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
 
-  const { setToken } = useTokenProvider();
-
   const handleLogin = async () => {
+    console.log("PREV TOKEN " + token);
+
     try {
       const request: ILoginRequest = {
         email: email,
         password: password,
       };
 
-      const response = await loginUser(request);
-      // For debugging
-      console.log("TOKEN RESPONSE (LOGIN) " + response);
-      setToken(response);
+      const response: IToken | undefined = await loginUser(request);
+      setToken(response.token);
+      console.log("Login token : " + response.token);
     } catch (error) {
       Alert.alert(
         "Ugyldig Login",
@@ -56,13 +51,9 @@ export default function Auth() {
         password: password,
       };
 
-      await registerUser(request);
-      const response = await loginUser(request);
-      // For debugging
-      console.log("TOKEN RESPONSE (REGISTER) " + response);
-      setToken(response);
+      const response: IToken | undefined = await registerUser(request);
+      setToken(response.token);
     } catch (error) {
-      // Handle this error!
       Alert.alert(
         "Ugyldig Registrering",
         "Mail addressen eller passord er feil, eller finnes ikke!"
