@@ -1,16 +1,20 @@
 import { StyleSheet } from "react-native";
-import { moderateScale } from "../../styles/genericDimensions";
+import { moderateScale, verticalScale } from "../../styles/genericDimensions";
 
 export const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#5A5DF0",
+    height: "100%",
+    width: "100%",
+    paddingBottom: verticalScale(70),
   },
 
   text: {
     fontFamily: "BalooBold",
-    fontSize: moderateScale(50),
+    fontSize: moderateScale(60),
     textAlign: "center",
+    color: "white",
   },
 });
