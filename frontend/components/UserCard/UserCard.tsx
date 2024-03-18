@@ -6,7 +6,8 @@ import { Feather } from "@expo/vector-icons";
 interface UserCardInfo {
   firstname: string;
   lastname: string;
-  age: string;
+  age: number;
+  // image: string; SENERE, LEGGE INN MOCK DATA
 }
 
 interface UserCardProps {
@@ -28,12 +29,14 @@ export function UserCard({ userCardInfo, onPressButon }: UserCardProps) {
             <Text style={styles.textName}>{userCardInfo.firstname}</Text>
             <Text style={styles.textName}>{userCardInfo.lastname}</Text>
           </View>
-          <Text style={styles.textAge}>{userCardInfo.age}</Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Pressable style={styles.button} onPress={onPressButon}>
-            <Text style={styles.buttonText}>Legg til venn</Text>
-          </Pressable>
+          <Text style={styles.textAge}>
+            {userCardInfo.age} <Text style={styles.textAge}>år</Text>
+          </Text>
+          <View style={styles.buttonContainer}>
+            <Pressable style={styles.button} onPress={onPressButon}>
+              <Text style={styles.buttonText}>Legg til venn</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>

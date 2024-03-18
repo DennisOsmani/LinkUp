@@ -15,15 +15,17 @@ export default StyleSheet.create({
   },
   imageContainer: {
     flexDirection: "row",
+    alignItems: "center",
   },
   image: {
-    width: 60,
-    height: 60,
+    width: 65,
+    height: 65,
     borderRadius: 100,
     marginLeft: 10,
   },
   detailsContainer: {
     flexDirection: "column",
+    width: "80%",
   },
   iconContainer: {
     flexDirection: "row",
@@ -46,6 +48,7 @@ export default StyleSheet.create({
   buttonContainer: {
     marginRight: 10,
     justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   button: {
     borderRadius: 10,
