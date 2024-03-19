@@ -9,6 +9,14 @@ import { useTokenProvider } from "../../../providers/TokenProvider";
 
 // IF STRING IS EMPTY MAKE IT SHOW ALL USERS (BACKEND)
 
+// TODO
+// - Legg til venn knappen med Userraltion API (search)
+// - Filtrere usercards alfabetisk (search & friends)
+// - Profilbilde
+// - Style likt og style med functions
+// - Linke hvert kort til profil (search & friends)
+// - Ikke få opp seg selv når man søker (search)
+
 export default function FriendsPeople() {
   const [searchText, setSearchText] = useState("");
   const [friendResult, setFriendResult] = useState<IUser[] | undefined>([]);
