@@ -46,9 +46,9 @@ const getEventsInCity = async (city: string, token: string) => {
 };
 
 // LEGG INN TOKEN HER!
-export const getUserFriendEvents = async (eventId: number, token: string) => {
+export const getUserFriendEvents = async (token: string) => {
   try {
-    const response = await fetch(`${THIS_URL}/${eventId}`, {
+    const response = await fetch(`${THIS_URL}/friends`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export const getUserFriendEvents = async (eventId: number, token: string) => {
 // LEGG INN TOKEN HER!
 export const getUserEventInvites = async (token: string) => {
   try {
-    const response = await fetch(`${THIS_URL}/city/{city}`, {
+    const response = await fetch(`${THIS_URL}/invites`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export const getUserEventInvites = async (token: string) => {
 // LEGG INN TOKEN HER!
 export const getUserJoinedEvents = async (token: string) => {
   try {
-    const response = await fetch(`${THIS_URL}/friends`, {
+    const response = await fetch(`${THIS_URL}/joined`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -111,11 +111,12 @@ export const getUserJoinedEvents = async (token: string) => {
 // LEGG INN TOKEN HER!
 export const createEvent = async (event: Event, token: string) => {
   try {
-    const response = await fetch(`${THIS_URL}/friends`, {
+    const response = await fetch(`${THIS_URL}/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(event),
     });
 
     if (!response.ok) {
@@ -131,18 +132,20 @@ export const createEvent = async (event: Event, token: string) => {
 // LEGG INN TOKEN HER!
 export const updateEvent = async (event: Event, token: string) => {
   try {
-    const response = await fetch(`${THIS_URL}/friends`, {
+    const response = await fetch(`${THIS_URL}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(event),
     });
 
     if (!response.ok) {
       throw new Error("Error in response: " + response.status);
     }
 
-    return response.status;
+    const data: IEvent = await response.json();
+    return data;
   } catch (error) {
     console.error("Error while fetching getEventsInCity: " + error);
   }

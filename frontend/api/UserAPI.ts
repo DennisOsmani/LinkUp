@@ -59,7 +59,7 @@ export async function getUser(userId?: string, token: string) {
 // ADD TOKEN HERE
 export async function updateUser(user: IUser, token: string) {
   try {
-    const response = await fetch(`${THIS_URL}/update}`, {
+    const response = await fetch(`${THIS_URL}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
