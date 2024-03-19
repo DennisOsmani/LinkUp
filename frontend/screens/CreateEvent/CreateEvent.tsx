@@ -1,9 +1,101 @@
-import { View, Text } from 'react-native';
+import { View, Image, Text, Pressable, TextInput } from "react-native";
+import { styles } from "./CreateEventStyles";
+import { Feather } from "@expo/vector-icons";
+import { useState } from "react";
+
+enum EventVisibility {
+  PUBLIC,
+  PRIVATE,
+  FREIENDS,
+}
 
 export default function CreateEvent() {
+  const [eventImage, setEventImage] = useState<string>("");
+  const [eventName, setEventName] = useState<string>("");
+  const [startDatetime, setStartDatetime] = useState<string>("");
+  const [endDatetime, setEndDatetime] = useState<string>("");
+  const [eventVisability, setEventVisability] = useState<EventVisibility>(
+    EventVisibility.PUBLIC
+  );
+  const [eventDetails, setEventDetails] = useState<string>("");
+
+  /*
+   * TODO
+   * legge til max/min capacity
+   *
+   * EventVisability trenger dropdown
+   * Datetimepicker
+   * Upload image func
+   * Input validering
+   * Required fields
+   */
+
+  const handleUploadImage = () => {
+    // TODO
+    console.log("Image uploaded!");
+  };
+
+  const handleLocation = () => {
+    // TODO
+    console.log("Location modal");
+  };
+
+  const handleInvite = () => {
+    // TODO
+    console.log("Invite modal");
+  };
+
+  const handleCreate = () => {
+    // TODO
+    console.log("Creating event");
+  };
+
   return (
-    <View>
-      <Text>CreateEvent</Text>
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Pressable onPress={handleUploadImage} style={styles.uploadContainer}>
+          <Feather name="upload" size={20} color="white" />
+          <Text style={styles.uploadText}>Last opp</Text>
+        </Pressable>
+        <Image style={styles.imageContainer} source={require("./bg.jpeg")} />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <TextInput
+          onChangeText={(input) => setEventName(input)}
+          placeholder="Navn på Event"
+          style={styles.inputBox}
+        />
+        <TextInput
+          onChangeText={(input) => setStartDatetime(input)}
+          placeholder="Startdato og -tidspunkt"
+          style={styles.inputBox}
+        />
+        <TextInput
+          onChangeText={(input) => setEndDatetime(input)}
+          placeholder="Sluttdato og -tidspunkt"
+          style={styles.inputBox}
+        />
+        <TextInput placeholder="Hvem kan se Eventet?" style={styles.inputBox} />
+        <TextInput
+          onChangeText={(input) => setEventDetails(input)}
+          multiline
+          placeholder="Hva er detaljene?"
+          style={styles.inputBoxMultiline}
+        />
+
+        <View style={styles.smallButtonContainer}>
+          <Pressable onPress={handleLocation} style={styles.smallButton}>
+            <Text style={styles.buttonText}>Sted</Text>
+          </Pressable>
+          <Pressable onPress={handleInvite} style={styles.smallButton}>
+            <Text style={styles.buttonText}>Inviter</Text>
+          </Pressable>
+        </View>
+        <Pressable onPress={handleCreate} style={styles.bigButtonStyles}>
+          <Text style={styles.bigButtonText}>Opprett Event</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
