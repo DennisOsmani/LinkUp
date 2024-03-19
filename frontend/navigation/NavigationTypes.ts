@@ -3,5 +3,6 @@ export type NavigationTypeList = {
   Events: undefined;
   Create: undefined;
   People: undefined;
+  Friends: undefined;
   Profile: undefined;
 };

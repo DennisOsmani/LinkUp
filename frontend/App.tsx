@@ -3,6 +3,7 @@ import { TokenProvider } from "./providers/TokenProvider";
 import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import TabNavigator from "./navigation/TabNavigator";
+import Splash from "./screens/Splash/Splash";
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
@@ -27,6 +28,8 @@ export default function App() {
         <Text style={{ fontFamily: "BalooBold" }}>Splash</Text>
       </View>
     );
+
+    return <Splash />;
   }
 
   return (
