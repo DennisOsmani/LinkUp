@@ -3,8 +3,7 @@ import { USER_PATH, URL_BASE } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${USER_PATH}`;
 
-// ADD TOKEN HERE
-export async function SearchUsers(searchString: string) {
+export async function SearchUsers(searchString: string, token: string) {
   try {
     const response = await fetch(
       `${THIS_URL}/user/search/?searchString=${searchString}`,
@@ -12,6 +11,7 @@ export async function SearchUsers(searchString: string) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -27,8 +27,7 @@ export async function SearchUsers(searchString: string) {
   }
 }
 
-// ADD TOKEN HERE
-export async function getUser(userId?: string, token: string) {
+export async function getUser(token: string, userId?: string) {
   try {
     let urlPath;
 
@@ -42,6 +41,7 @@ export async function getUser(userId?: string, token: string) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -56,13 +56,13 @@ export async function getUser(userId?: string, token: string) {
   }
 }
 
-// ADD TOKEN HERE
 export async function updateUser(user: IUser, token: string) {
   try {
     const response = await fetch(`${THIS_URL}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(user),
     });
@@ -78,21 +78,21 @@ export async function updateUser(user: IUser, token: string) {
   }
 }
 
-// ADD TOKEN HERE
-export async function deleteUser(userId?: string, token: string) {
+export async function deleteUser(token: string, userId?: string) {
   try {
     let urlPath;
 
     if (userId) {
-      urlPath = `${THIS_URL}/?userId=${userId}`;
+      urlPath = `${THIS_URL}/delete/?userId=${userId}`;
     } else {
-      urlPath = `${THIS_URL}`;
+      urlPath = `${THIS_URL}/delete`;
     }
 
     const response = await fetch(urlPath, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
