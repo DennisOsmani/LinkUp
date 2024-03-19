@@ -1,7 +1,7 @@
 import { View, Alert } from "react-native";
 import { IToken, registerUser } from "../../api/AuthAPI";
 import { loginUser } from "../../api/AuthAPI";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styles } from "./AuthStyles";
 import { IRegistrationRequest, ILoginRequest } from "../../api/AuthAPI";
 import LoginCard from "./components/Login/LoginCard";
@@ -13,18 +13,21 @@ enum State {
   REGISTER,
 }
 
-const { token, setToken } = useTokenProvider();
+interface AuthProps {
+  trigger: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export default function Auth() {
+export default function Auth({ trigger, setTrigger }: AuthProps) {
   const [view, setView] = useState<State>(State.LOGIN);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
 
-  const handleLogin = async () => {
-    console.log("PREV TOKEN " + token);
+  const { token, setToken } = useTokenProvider();
 
+  const handleLogin = async () => {
     try {
       const request: ILoginRequest = {
         email: email,
@@ -33,7 +36,6 @@ export default function Auth() {
 
       const response: IToken | undefined = await loginUser(request);
       setToken(response.token);
-      console.log("Login token : " + response.token);
     } catch (error) {
       Alert.alert(
         "Ugyldig Login",
@@ -53,6 +55,7 @@ export default function Auth() {
 
       const response: IToken | undefined = await registerUser(request);
       setToken(response.token);
+      setTrigger(!trigger);
     } catch (error) {
       Alert.alert(
         "Ugyldig Registrering",
