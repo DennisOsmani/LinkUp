@@ -1,5 +1,4 @@
-const BASE_URL =
-  "https://4863-2001-4647-7170-0-2617-1924-9243-d6c6.ngrok-free.app/api/auth";
+const BASE_URL: string = "http://localhost:5173/api/auth";
 
 export interface IToken {
   token: string;
