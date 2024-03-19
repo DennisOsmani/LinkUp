@@ -1,15 +1,10 @@
+import {
+  IRegistrationRequest,
+  ILoginRequest,
+  IToken,
+} from "../interfaces/ModelInterfaces";
+
 const BASE_URL: string = "http://localhost:5173/api/auth";
-
-export interface IToken {
-  token: string;
-}
-
-export interface IRegistrationRequest {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-}
 
 export const registerUser = async (request: IRegistrationRequest) => {
   try {
@@ -31,11 +26,6 @@ export const registerUser = async (request: IRegistrationRequest) => {
     throw new Error("Error while registering a user " + error);
   }
 };
-
-export interface ILoginRequest {
-  email: string;
-  password: string;
-}
 
 export const loginUser = async (request: ILoginRequest) => {
   try {
