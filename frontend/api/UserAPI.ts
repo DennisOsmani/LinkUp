@@ -17,13 +17,13 @@ export async function SearchUsers(searchString: string, token: string) {
     );
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in SearchUsers response: " + response.status);
     }
 
     const data: IUser[] = await response.json();
     return data;
   } catch (error) {
-    console.log(error);
+    throw new Error("Error while fetching in SearchUsers  " + error);
   }
 }
 
@@ -46,13 +46,13 @@ export async function getUser(token: string, userId?: string) {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in getUser response: " + response.status);
     }
 
     const data: IUser = await response.json();
     return data;
   } catch (error) {
-    console.log(error);
+    throw new Error("Error while fetching in getUser " + error);
   }
 }
 
@@ -68,13 +68,13 @@ export async function updateUser(user: IUser, token: string) {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in updateUser response: " + response.status);
     }
 
     const data: IUser = await response.json();
     return data;
   } catch (error) {
-    console.log(error);
+    throw new Error("Error while fetching in updateUser " + error);
   }
 }
 
@@ -97,11 +97,11 @@ export async function deleteUser(token: string, userId?: string) {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in deleteUser response: " + response.status);
     }
 
     return response.status;
   } catch (error) {
-    console.log(error);
+    throw new Error("Error while fetching in deleteUser " + error);
   }
 }
