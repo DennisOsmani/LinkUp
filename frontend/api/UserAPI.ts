@@ -1,4 +1,4 @@
-import { User } from "../screens/People/Search/Search";
+import { User } from "../interfaces/ModelInterfaces";
 
 const BASE_URL: string = "http://localhost:5173/api";
 
