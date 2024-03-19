@@ -53,7 +53,7 @@ export default function SearchPeople() {
   };
 
   const handleKeyPress = (nativeEvent: any) => {
-    if (nativeEvent.key === "Enter" || "retur") {
+    if (nativeEvent.key === "Enter") {
       handleSearch();
     }
   };

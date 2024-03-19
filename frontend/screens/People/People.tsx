@@ -6,7 +6,7 @@ import FriendsPeople from "./Friends/Friends";
 export default function People() {
   return (
     <View>
-      <TabBackground firstTab="Søk" secondTab="Venner">
+      <TabBackground firstTab="Utforsk" secondTab="Venner">
         <SearchPeople />
         <FriendsPeople />
       </TabBackground>
