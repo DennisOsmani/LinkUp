@@ -4,27 +4,7 @@ import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { SearchUsers } from "../../../api/UserAPI";
-
-export interface User {
-  userID: string;
-  firstname: string;
-  lastname: string;
-  dateBorn: string;
-  phone?: string;
-  RelationshipStatus?: number;
-  gender?: string;
-  description?: string;
-  email?: string;
-  profileImage?: string;
-  password?: string;
-  salt?: string;
-  eventsCreated?: number;
-  eventsJoined?: number;
-  role?: number;
-  userRelationsAsFirst?: [];
-  userRelationsAsSecond?: [];
-  eventRelations?: [];
-}
+import { User } from "../../../interfaces/ModelInterfaces";
 
 // When register, add date of birth
 
