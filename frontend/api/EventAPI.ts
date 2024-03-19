@@ -1,21 +1,12 @@
-const BASE_URL: string = "http://localhost/api/event";
+import { IEvent } from "../interfaces/ModelInterfaces";
+import { URL_BASE, EVENT_PATH } from "./UrlPaths";
 
-/**
-api/event/{eventId} (GET) 
-api/event/city/{city} (GET)
-api/event/friends (GET)
-api/event/invites (GET)
-api/event/joined (GET)
-api/event/create (POST)
-api/event/ (PUT)
-api/event/ (DELETE)
-*/
+const THIS_URL: string = `${URL_BASE}${EVENT_PATH}`;
 
-// getEventById
-
-const getEventsInCity = async (city: string) => {
+// LEGG INN TOKEN HER!
+const getEventById = async (eventId: number, token: string) => {
   try {
-    const response = await fetch(`${BASE_URL}/city${city}`, {
+    const response = await fetch(`${THIS_URL}/${eventId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -26,15 +17,17 @@ const getEventsInCity = async (city: string) => {
       throw new Error("Error in response: " + response.status);
     }
 
-    return await response.json();
+    const data: Event = await response.json();
+    return data;
   } catch (error) {
     console.error("Error while fetching getEventsInCity: " + error);
   }
 };
 
-const getUserFriendEvents = async (eventId: number) => {
+// LEGG INN TOKEN HER!
+const getEventsInCity = async (city: string, token: string) => {
   try {
-    const response = await fetch(`${BASE_URL}/${eventId}`, {
+    const response = await fetch(`${THIS_URL}/city${city}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -45,18 +38,132 @@ const getUserFriendEvents = async (eventId: number) => {
       throw new Error("Error in response: " + response.status);
     }
 
-    return await response.json();
+    const data: Event[] = await response.json();
+    return data;
   } catch (error) {
     console.error("Error while fetching getEventsInCity: " + error);
   }
 };
 
-// Get user eventInvites
+// LEGG INN TOKEN HER!
+export const getUserFriendEvents = async (eventId: number, token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/${eventId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-// Get user joined events
+    if (!response.ok) {
+      throw new Error("Error in response: " + response.status);
+    }
 
-// Create Event
+    const data: IEvent[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching getEventsInCity: " + error);
+  }
+};
 
-// EUpdateEvent
+// LEGG INN TOKEN HER!
+export const getUserEventInvites = async (token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/city/{city}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-// Delete event
+    if (!response.ok) {
+      throw new Error("Error in response: " + response.status);
+    }
+
+    const data: IEvent[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching getEventsInCity: " + error);
+  }
+};
+
+// LEGG INN TOKEN HER!
+export const getUserJoinedEvents = async (token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/friends`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in response: " + response.status);
+    }
+
+    const data: IEvent[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching getEventsInCity: " + error);
+  }
+};
+
+// LEGG INN TOKEN HER!
+export const createEvent = async (event: Event, token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/friends`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in response: " + response.status);
+    }
+
+    return response.status;
+  } catch (error) {
+    console.error("Error while fetching getEventsInCity: " + error);
+  }
+};
+
+// LEGG INN TOKEN HER!
+export const updateEvent = async (event: Event, token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/friends`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in response: " + response.status);
+    }
+
+    return response.status;
+  } catch (error) {
+    console.error("Error while fetching getEventsInCity: " + error);
+  }
+};
+
+// LEGG INN TOKEN HER!
+export const deleteEvent = async (eventId: number, token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/${eventId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in response: " + response.status);
+    }
+
+    return response.status;
+  } catch (error) {
+    console.error("Error while fetching getEventsInCity: " + error);
+  }
+};
