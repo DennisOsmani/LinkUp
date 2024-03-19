@@ -42,7 +42,10 @@ export default function SearchPeople() {
 
   const handleSearch = async () => {
     try {
-      const results: IUser[] | undefined = await SearchUsers(searchText);
+      const results: IUser[] | undefined = await SearchUsers(
+        searchText,
+        "Token"
+      );
       setSearchResult(results);
     } catch (error) {
       console.error("Error while searching users: " + error);
