@@ -1,15 +1,17 @@
 import { URL_BASE, USERRELATION_PATH } from "./UrlPaths";
+import { IUserRelation, IUserRelationDTO } from "../interfaces/ModelInterfaces";
 
 const THIS_URL: string = `${URL_BASE}${USERRELATION_PATH}`;
 
-const createUserRelation = async (token: string) => {
+const createUserRelation = async (token: string, dto: IUserRelationDTO) => {
   try {
-    const response = await fetch(`${THIS_URL}/`, {
-      method: "XXXXXXXXXXX",
+    const response = await fetch(`${THIS_URL}`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(dto),
     });
 
     if (!response.ok) {
@@ -18,21 +20,22 @@ const createUserRelation = async (token: string) => {
       );
     }
 
-    const data: XXXXXXXXXX = await response.json();
+    const data: IUserRelation = await response.json();
     return data;
   } catch (error) {
     console.error("Error while fetching createUserRelation " + error);
   }
 };
 
-const updateUserRelationType = async (token: string) => {
+const updateUserRelationType = async (token: string, dto: IUserRelationDTO) => {
   try {
-    const response = await fetch(`${THIS_URL}/`, {
-      method: "XXXXXXXXXXX",
+    const response = await fetch(`${THIS_URL}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(dto),
     });
 
     if (!response.ok) {
@@ -41,17 +44,17 @@ const updateUserRelationType = async (token: string) => {
       );
     }
 
-    const data: XXXXXXXXXX = await response.json();
+    const data: IUserRelation = await response.json();
     return data;
   } catch (error) {
     console.error("Error while fetching updateUserRelationType " + error);
   }
 };
 
-const deleteUserRelation = async (token: string) => {
+const deleteUserRelation = async (token: string, otherUserId: string) => {
   try {
-    const response = await fetch(`${THIS_URL}/`, {
-      method: "XXXXXXXXXXX",
+    const response = await fetch(`${THIS_URL}/${otherUserId}`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -64,8 +67,7 @@ const deleteUserRelation = async (token: string) => {
       );
     }
 
-    const data: XXXXXXXXXX = await response.json();
-    return data;
+    return response.status;
   } catch (error) {
     console.error("Error while fetching deleteUserRelation " + error);
   }
