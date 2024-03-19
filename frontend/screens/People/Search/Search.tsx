@@ -4,7 +4,7 @@ import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { SearchUsers } from "../../../api/UserAPI";
-import { User } from "../../../interfaces/ModelInterfaces";
+import { IUser } from "../../../interfaces/ModelInterfaces";
 
 // When register, add date of birth
 
@@ -12,7 +12,7 @@ import { User } from "../../../interfaces/ModelInterfaces";
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
-  const [searchResult, setSearchResult] = useState<User[] | undefined>([]);
+  const [searchResult, setSearchResult] = useState<IUser[] | undefined>([]);
 
   const calculateAge = (dateBorn: string) => {
     // Parse the dateBorn string into a JavaScript Date object
@@ -42,7 +42,7 @@ export default function SearchPeople() {
 
   const handleSearch = async () => {
     try {
-      const results: User[] | undefined = await SearchUsers(searchText);
+      const results: IUser[] | undefined = await SearchUsers(searchText);
       setSearchResult(results);
     } catch (error) {
       console.error("Error while searching users: " + error);
@@ -71,7 +71,7 @@ export default function SearchPeople() {
         </View>
 
         {searchResult &&
-          searchResult.map((user: User, index: number) => (
+          searchResult.map((user: IUser, index: number) => (
             <UserCardSearch
               key={index}
               userCardInfo={{
