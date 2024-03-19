@@ -30,6 +30,7 @@ export default function CreateEvent() {
    * Upload image func
    * Input validering
    * Required fields
+   * Alerts / user feedback
    */
 
   const handleUploadImage = () => {
