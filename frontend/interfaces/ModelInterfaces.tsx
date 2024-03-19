@@ -1,4 +1,19 @@
 // LAGE ENUMS OGSÅ SIDEN DE BLIR SENDT SOM INT???
+export interface IToken {
+  token: string;
+}
+
+export interface ILoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface IRegistrationRequest {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+}
 
 export interface IUser {
   userID: string;
