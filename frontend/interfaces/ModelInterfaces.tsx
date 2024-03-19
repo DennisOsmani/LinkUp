@@ -1,6 +1,6 @@
 // LAGE ENUMS OGSÅ SIDEN DE BLIR SENDT SOM INT???
 
-export interface User {
+export interface IUser {
   userID: string;
   firstname: string;
   lastname: string;
@@ -21,7 +21,7 @@ export interface User {
   eventRelations?: [];
 }
 
-export interface Event {
+export interface IEvent {
   eventID: number;
   eventName: string;
   eventDescription: string;
@@ -33,11 +33,11 @@ export interface Event {
   minCapacity?: string;
   maxCapacity?: string;
   locationID: number;
-  location: Location;
+  location: ILocation;
   eventRelations?: [];
 }
 
-export interface Location {
+export interface ILocation {
   locationID: number;
   address?: string;
   postalcode?: string;
@@ -45,21 +45,21 @@ export interface Location {
   country: string;
 }
 
-export interface UserRelation {
+export interface IUserRelation {
   userRelationID: number;
   user_first_ID: string;
-  user_fisrt?: User;
+  user_fisrt?: IUser;
   user_second_ID: string;
-  user_second?: User;
+  user_second?: IUser;
   userRelationType: number;
 }
 
-export interface eventRelations {
+export interface IEventRelations {
   eventRelationID: number;
   eventID: number;
-  event?: Event;
+  event?: IEvent;
   userID: string;
-  user: User;
+  user: IUser;
   eventRelationParticipation: number;
   eventRole: number;
 }
