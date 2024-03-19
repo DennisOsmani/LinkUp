@@ -26,7 +26,7 @@ public class UserRelationController : ControllerBase
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if(userIdClaim == null)
+        if (userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");
         }
@@ -39,16 +39,16 @@ public class UserRelationController : ControllerBase
             var result = await _urService.CreateUserRelation(userIdClaim, otherUserId, type);
             return Ok(result);
         }
-        catch(InvalidOperationException e)
+        catch (InvalidOperationException e)
         {
             return BadRequest(e.Message);
         }
-        catch(KeyNotFoundException e)
+        catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
         }
-        catch(Exception e)
-        {   
+        catch (Exception e)
+        {
             return StatusCode(500, e.Message);
         }
     }
@@ -60,7 +60,7 @@ public class UserRelationController : ControllerBase
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         // flag
-        if(userIdClaim == null)
+        if (userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");
         }
@@ -70,31 +70,31 @@ public class UserRelationController : ControllerBase
 
         try
         {
-            var result = await  _urService.UpdateUserRelationType(userIdClaim, otherUserId, type);
+            var result = await _urService.UpdateUserRelationType(userIdClaim, otherUserId, type);
             return Ok(result);
         }
-        catch(InvalidOperationException e)
+        catch (InvalidOperationException e)
         {
             return BadRequest(e.Message);
         }
-        catch(KeyNotFoundException e)
+        catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
         }
-        catch(Exception e)
-        {   
+        catch (Exception e)
+        {
             return StatusCode(500, e.Message);
         }
     }
 
-    [HttpDelete]
+    [HttpDelete("{otherUserId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> DeleteUserRelation(string otherUserId)
     {
         otherUserId = SecurityElement.Escape(otherUserId);
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if(userIdClaim == null)
+        if (userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");
         }
@@ -104,16 +104,16 @@ public class UserRelationController : ControllerBase
             await _urService.DeleteUserRelation(userIdClaim, otherUserId);
             return Ok();
         }
-        catch(InvalidOperationException e)
+        catch (InvalidOperationException e)
         {
             return BadRequest(e.Message);
         }
-        catch(KeyNotFoundException e)
+        catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
         }
-        catch(Exception e)
-        {   
+        catch (Exception e)
+        {
             return StatusCode(500, e.Message);
         }
     }
