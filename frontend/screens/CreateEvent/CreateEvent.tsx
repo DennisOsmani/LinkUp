@@ -10,7 +10,9 @@ enum EventVisibility {
 }
 
 export default function CreateEvent() {
-  const [eventImage, setEventImage] = useState<string>("");
+  const [eventImage, setEventImage] = useState<string>(
+    "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
+  );
   const [eventName, setEventName] = useState<string>("");
   const [startDatetime, setStartDatetime] = useState<string>("");
   const [endDatetime, setEndDatetime] = useState<string>("");
@@ -57,7 +59,7 @@ export default function CreateEvent() {
           <Feather name="upload" size={20} color="white" />
           <Text style={styles.uploadText}>Last opp</Text>
         </Pressable>
-        <Image style={styles.imageContainer} source={require("./bg.jpeg")} />
+        <Image style={styles.imageContainer} source={{ uri: eventImage }} />
       </View>
 
       <View style={styles.inputContainer}>
