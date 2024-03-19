@@ -3,14 +3,14 @@ import { styles } from "./EventCardFeedStyles";
 import { Feather } from "@expo/vector-icons";
 
 interface EventCardFeedProps {
-  numberOfPeople: string;
-  dateTime: Date;
+  numberOfPeople: string | undefined;
+  dateTime: string;
   title: string;
   hostName: string;
   bio: string;
   address: string;
   imageSource: any;
-  onJoinPress: () => void;
+  onJoinPress: (eventId: number) => void;
 }
 
 const EventCardFeed = ({
@@ -21,7 +21,7 @@ const EventCardFeed = ({
   bio,
   address,
   imageSource,
-  onJoinPress
+  onJoinPress,
 }: EventCardFeedProps) => {
   return (
     <View style={styles.card}>
@@ -44,7 +44,7 @@ const EventCardFeed = ({
           </View>
           <View style={styles.lowerLeftSide}>
             <Text style={styles.addressText}>{address}</Text>
-            <Pressable style={styles.button} onPress={onJoinPress}>
+            <Pressable style={styles.button} onPress={() => onJoinPress}>
               <Text style={styles.buttonText}>Bli med</Text>
             </Pressable>
           </View>
@@ -56,7 +56,7 @@ const EventCardFeed = ({
               height: "100%",
               width: "100%",
               resizeMode: "cover",
-              borderRadius: 16
+              borderRadius: 16,
             }}
           />
         </View>

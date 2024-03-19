@@ -65,7 +65,7 @@ public class EventRelationController : ControllerBase
     }
 
 
-    [HttpPost("create")]
+    [HttpPost("join")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<EventRelation>> JoinOpenEvent(int eventId)
     {
