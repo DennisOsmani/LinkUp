@@ -1,3 +1,4 @@
+import { Text, View } from "react-native";
 import { TokenProvider } from "./providers/TokenProvider";
 import { useState, useEffect } from "react";
 import * as Font from "expo-font";
@@ -21,6 +22,13 @@ export default function App() {
   };
 
   if (!fontsLoaded) {
+    // Load splash screen!
+    return (
+      <View>
+        <Text style={{ fontFamily: "BalooBold" }}>Splash</Text>
+      </View>
+    );
+
     return <Splash />;
   }
 
