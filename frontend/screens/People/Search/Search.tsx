@@ -5,6 +5,7 @@ import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { SearchUsers } from "../../../api/UserAPI";
 import { IUser } from "../../../interfaces/ModelInterfaces";
+import { useTokenProvider } from "../../../providers/TokenProvider";
 
 // When register, add date of birth
 
@@ -16,6 +17,7 @@ export default function SearchPeople() {
 
   const calculateAge = (dateBorn: string) => {
     // Parse the dateBorn string into a JavaScript Date object
+
     const birthDate = new Date(dateBorn);
 
     // Get the current date
@@ -40,14 +42,14 @@ export default function SearchPeople() {
     setSearchResult([]);
   };
 
+  const { token, setToken } = useTokenProvider();
+
   const handleSearch = async () => {
     try {
-      const results: IUser[] | undefined = await SearchUsers(
-        searchText,
-        "Token"
-      );
+      const results: IUser[] | undefined = await SearchUsers(searchText, token);
       setSearchResult(results);
     } catch (error) {
+      setToken("");
       console.error("Error while searching users: " + error);
     }
   };
@@ -74,17 +76,18 @@ export default function SearchPeople() {
         </View>
 
         {searchResult &&
-          searchResult.map((user: IUser, index: number) => (
-            <UserCardSearch
-              key={index}
-              userCardInfo={{
-                firstname: user.firstname,
-                lastname: user.lastname,
-                age: calculateAge(user.dateBorn),
-              }}
-              onPressButon={() => {}}
-            ></UserCardSearch>
-          ))}
+          searchResult //.filter(user => user.userID !== loggedInUserID)
+            .map((user: IUser, index: number) => (
+              <UserCardSearch
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                }}
+                onPressButon={() => {}}
+              ></UserCardSearch>
+            ))}
       </View>
     </ScrollView>
   );

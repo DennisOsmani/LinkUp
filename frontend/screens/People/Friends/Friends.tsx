@@ -1,17 +1,17 @@
 import { TextInput, View, ScrollView, Text } from "react-native";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IUser } from "../../../interfaces/ModelInterfaces";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
-
-// When register, add date of birth
+import { GetUserFriends } from "../../../api/UserAPI";
+import { useTokenProvider } from "../../../providers/TokenProvider";
 
 // IF STRING IS EMPTY MAKE IT SHOW ALL USERS (BACKEND)
 
 export default function FriendsPeople() {
   const [searchText, setSearchText] = useState("");
-  const [searchResult, setSearchResult] = useState<IUser[] | undefined>([]);
+  const [friendResult, setFriendResult] = useState<IUser[] | undefined>([]);
 
   const calculateAge = (dateBorn: string) => {
     // Parse the dateBorn string into a JavaScript Date object
@@ -36,23 +36,57 @@ export default function FriendsPeople() {
 
   const clearSearchText = () => {
     setSearchText("");
-    // setSearchResult([]);
+    fetchAllFriends();
   };
 
-  // const handleSearch = async () => {
-  //   try {
-  //     const results: IUser[] | undefined = await SearchUsers(searchText);
-  //     setSearchResult(results);
-  //   } catch (error) {
-  //     console.error("Error while searching users: " + error);
-  //   }
-  // };
+  const { token, setToken } = useTokenProvider();
 
-  // const handleKeyPress = (nativeEvent: any) => {
-  //   if (nativeEvent.key === "Enter" || "retur") {
-  //     handleSearch();
-  //   }
-  // };
+  useEffect(() => {
+    // Fetch all friends when the component mounts
+    fetchAllFriends();
+  }, []);
+
+  const fetchAllFriends = async () => {
+    try {
+      const results: IUser[] | undefined = await GetUserFriends(token);
+      const filteredResults = searchText
+        ? results?.filter(
+            (user) =>
+              user.firstname.charAt(0).toLowerCase() ===
+              searchText.toLowerCase()
+          )
+        : results;
+      setFriendResult(filteredResults);
+    } catch (error) {
+      console.error("Error while fetching all friends: " + error);
+    }
+  };
+
+  const handleSearchTextChange = (text: string) => {
+    setSearchText(text);
+    // If the search text is empty, fetch all friends
+    if (!text.trim()) {
+      fetchAllFriends();
+    }
+  };
+
+  const handleKeyPress = (nativeEvent: any) => {
+    if (nativeEvent.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      const results: IUser[] | undefined = await GetUserFriends(
+        searchText,
+        token
+      );
+      setFriendResult(results);
+    } catch (error) {
+      console.error("Error while finding users friends: " + error);
+    }
+  };
 
   return (
     <ScrollView>
@@ -62,32 +96,32 @@ export default function FriendsPeople() {
             style={styles.searchBar}
             placeholder="Søk"
             value={searchText}
-            onChangeText={setSearchText}
-            // onSubmitEditing={handleSearch}
-            // onKeyPress={handleKeyPress}
+            onChangeText={handleSearchTextChange}
+            onSubmitEditing={handleSearch}
+            onKeyPress={handleKeyPress}
           ></TextInput>
           <Feather style={styles.icon} name="x" onPress={clearSearchText} />
         </View>
 
-        <UserCardFriends
-          userCardInfo={{
-            firstname: "Chris",
-            lastname: "Bumstead",
-            age: 20,
-          }}
-        ></UserCardFriends>
-
-        {/* {searchResult &&
-          searchResult.map((user: IUser, index: number) => (
-            <UserCardFriends
-              key={index}
-              userCardInfo={{
-                firstname: user.firstname,
-                lastname: user.lastname,
-                age: calculateAge(user.dateBorn),
-              }}
-            ></UserCardFriends>
-          ))} */}
+        {friendResult &&
+          friendResult
+            .filter(
+              (friend) =>
+                friend.firstname
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase()) ||
+                friend.lastname.toLowerCase().includes(searchText.toLowerCase())
+            )
+            .map((user: IUser, index: number) => (
+              <UserCardFriends
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                }}
+              ></UserCardFriends>
+            ))}
       </View>
     </ScrollView>
   );
