@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
   },
 
   text: {
-    fontFamily: "BalooBold",
     fontSize: moderateScale(60),
     textAlign: "center",
     color: "white",

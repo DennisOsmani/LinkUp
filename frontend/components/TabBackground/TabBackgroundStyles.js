@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
 
   tabUnderline: {
     height: verticalScale(5),
-    width: verticalScale(123),
+    width: "105%",
     borderRadius: moderateScale(100),
   },
 
