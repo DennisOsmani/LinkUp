@@ -63,3 +63,17 @@ export interface IEventRelations {
   eventRelationParticipation: number;
   eventRole: number;
 }
+
+export enum UserRelationType {
+  PENDING_FIRST_SECOND,
+  PENDING_SECOND_FIRST,
+  FRIENDS,
+  BLOCKED_FIRST_SECOND,
+  BLOCKED_SECOND_FIRST,
+}
+
+export interface IUserRelationDTO {
+  userId: string;
+  otherUserId: string;
+  type: UserRelationType;
+}
