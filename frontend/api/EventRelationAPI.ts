@@ -13,12 +13,96 @@ const x = async (token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in x response: " + response.status);
     }
 
     const data: XXXXXXXXXX = await response.json();
     return data;
   } catch (error) {
-    console.error("Error while fetching getEventsInCity: " + error);
+    console.error("Error while fetching x " + error);
+  }
+};
+
+const x = async (token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/`, {
+      method: "XXXXXXXXXXX",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in x response: " + response.status);
+    }
+
+    const data: XXXXXXXXXX = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching x " + error);
+  }
+};
+
+const x = async (token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/`, {
+      method: "XXXXXXXXXXX",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in x response: " + response.status);
+    }
+
+    const data: XXXXXXXXXX = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching x " + error);
+  }
+};
+
+const x = async (token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/`, {
+      method: "XXXXXXXXXXX",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in x response: " + response.status);
+    }
+
+    const data: XXXXXXXXXX = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching x " + error);
+  }
+};
+
+const x = async (token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/`, {
+      method: "XXXXXXXXXXX",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in x response: " + response.status);
+    }
+
+    const data: XXXXXXXXXX = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching x " + error);
   }
 };
