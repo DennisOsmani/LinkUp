@@ -6,7 +6,7 @@ const THIS_URL: string = `${URL_BASE}${USER_PATH}`;
 export async function SearchUsers(searchString: string, token: string) {
   try {
     const response = await fetch(
-      `${THIS_URL}/user/search/?searchString=${searchString}`,
+      `${THIS_URL}/search/?searchString=${searchString}`,
       {
         method: "GET",
         headers: {
@@ -53,6 +53,27 @@ export async function getUser(token: string, userId?: string) {
     return data;
   } catch (error) {
     throw new Error("Error while fetching in getUser " + error);
+  }
+}
+
+export async function GetUserFriends(token: string, userId?: string) {
+  try {
+    const response = await fetch(`${THIS_URL}/friends`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in getUserFriends response: " + response.status);
+    }
+
+    const data: IUser[] = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error("Error while fetching in getUserFriends " + error);
   }
 }
 
