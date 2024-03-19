@@ -1,6 +1,8 @@
-import { View, Image, Text, Pressable } from "react-native";
+import { View, Image, Text } from "react-native";
 import styles from "./UserCardStyles";
 import { Feather } from "@expo/vector-icons";
+
+// Legge inn Pressable --> sendes til Other Profile
 
 // For search in People Screen
 interface UserCardInfo {
@@ -12,10 +14,9 @@ interface UserCardInfo {
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
-  onPressButon: () => void;
 }
 
-export function UserCard({ userCardInfo, onPressButon }: UserCardProps) {
+export function UserCardFriends({ userCardInfo }: UserCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
@@ -32,11 +33,6 @@ export function UserCard({ userCardInfo, onPressButon }: UserCardProps) {
           <Text style={styles.textAge}>
             {userCardInfo.age} <Text style={styles.textAge}>år</Text>
           </Text>
-          <View style={styles.buttonContainer}>
-            <Pressable style={styles.button} onPress={onPressButon}>
-              <Text style={styles.buttonText}>Legg til venn</Text>
-            </Pressable>
-          </View>
         </View>
       </View>
     </View>

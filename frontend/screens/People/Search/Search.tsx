@@ -1,5 +1,5 @@
 import { TextInput, View, ScrollView, Text } from "react-native";
-import { UserCard } from "../../../components/UserCard/UserCard";
+import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -72,7 +72,7 @@ export default function SearchPeople() {
 
         {searchResult &&
           searchResult.map((user: User, index: number) => (
-            <UserCard
+            <UserCardSearch
               key={index}
               userCardInfo={{
                 firstname: user.firstname,
@@ -80,7 +80,7 @@ export default function SearchPeople() {
                 age: calculateAge(user.dateBorn),
               }}
               onPressButon={() => {}}
-            ></UserCard>
+            ></UserCardSearch>
           ))}
       </View>
     </ScrollView>
