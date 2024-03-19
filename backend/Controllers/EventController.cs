@@ -49,6 +49,7 @@ public class EventController : ControllerBase
         }
     }
 
+    // ENDRE TILBAKE!! - TODO
     [HttpGet("city/{city}")]
     [AllowAnonymous]
     public async Task<ActionResult> GetEventsInCity(string city)
@@ -197,7 +198,7 @@ public class EventController : ControllerBase
 
     [HttpPut]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> UpdateEvent([FromBody] Event updatedEvent)
+    public async Task<ActionResult<Event>> UpdateEvent([FromBody] Event updatedEvent)
     {
         var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         var userRoleClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
@@ -233,7 +234,7 @@ public class EventController : ControllerBase
         }
     }
 
-    [HttpDelete]
+    [HttpDelete("{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> DeleteEvent(int eventId)
     {
