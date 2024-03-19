@@ -2,7 +2,7 @@ import { URL_BASE, EVENTRELATION_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENTRELATION_PATH}`;
 
-
+/*
 const x = async (token: string) => {
   try {
     const response = await fetch(`${THIS_URL}/`, {
@@ -23,7 +23,7 @@ const x = async (token: string) => {
     console.error("Error while fetching x " + error);
   }
 };
-
+*/
 
 export const joinOpenEvent = async (token: string, eventId: number) => {
   try {
@@ -45,7 +45,7 @@ export const joinOpenEvent = async (token: string, eventId: number) => {
   }
 };
 
-
+/*
 const x = async (token: string) => {
   try {
     const response = await fetch(`${THIS_URL}/`, {
@@ -108,3 +108,4 @@ const x = async (token: string) => {
     console.error("Error while fetching x " + error);
   }
 };
+*/
