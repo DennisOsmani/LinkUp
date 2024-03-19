@@ -61,6 +61,18 @@ public class EventService : IEventService
 
     }
 
+    public async Task<User> GetHostForEvent(int eventId)
+    {
+
+        User? user = await _eventRepo.GetHostForEvent(eventId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"Could not find host for event with ID: {eventId} (EventService)");
+        }
+        return user;
+
+    }
     public async Task<ICollection<Event>?> GetUserFriendEvents(string userId)
     {
         ICollection<User?> friends = await _userRelRepo.GetUserFriends(userId);

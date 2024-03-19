@@ -21,8 +21,16 @@ public interface IEventService
     /// USED FOR ONE OF THE FEED TABS
     /// </summary>
     /// <param name="city"></param>
+    /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
     Task<ICollection<Event>> GetEventsInCity(string city, string userId);
+
+    /// <summary>
+    /// Fetches the user that has projectRole CREATOR
+    /// </summary>
+    /// <param name="eventId"></param>
+    /// <returns>A User object</returns>
+    Task<User> GetHostForEvent(int eventId);
 
     /// <summary>
     /// Fetches a list of Events where the user has the UserRelation Friends to the creator and visibility set to friends.

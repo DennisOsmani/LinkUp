@@ -49,7 +49,6 @@ public class EventController : ControllerBase
         }
     }
 
-    // ENDRE TILBAKE!! - TODO
     [HttpGet("city/{city}")]
     [AllowAnonymous]
     public async Task<ActionResult> GetEventsInCity(string city)
@@ -75,6 +74,30 @@ public class EventController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpGet("host")]
+    [AllowAnonymous]
+    public async Task<ActionResult> GetHostForEvent(int eventId)
+    {
+        try
+        {
+            var user = await _eventService.GetHostForEvent(eventId);
+            return Ok(user);
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
 
     [HttpGet("friends")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]

@@ -1,82 +1,84 @@
 import { StyleSheet } from "react-native";
+import { moderateScale, verticalScale } from "react-native-size-matters";
 
 export const styles = StyleSheet.create({
   card: {
     backgroundColor: "#ffffff",
-    borderRadius: 16,
-    padding: 16,
-    gap: 10,
-    width: "100%"
+    borderRadius: moderateScale(16),
+    padding: moderateScale(16),
+    marginVertical: verticalScale(10),
+    width: "100%",
   },
   iconTextWrapper: {
     flexDirection: "row",
-    gap: 4
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: verticalScale(4),
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    marginBottom: verticalScale(10),
   },
   headerText: {
-    fontSize: 14,
-    color: "gray"
+    fontSize: moderateScale(14),
+    fontFamily: "BalooRegular",
+    color: "gray",
   },
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 10,
-    height: 180,
-    display: "flex"
+    alignItems: "center",
+    marginBottom: verticalScale(10),
   },
   leftSide: {
-    flex: "2",
+    flex: 2,
     flexDirection: "column",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    marginRight: moderateScale(10),
   },
   upperLeftSide: {
-    gap: 6
+    marginVertical: verticalScale(6),
   },
   title: {
-    fontSize: 22,
-    fontWeight: "bold"
+    fontSize: moderateScale(22),
+    fontWeight: "bold",
+    fontFamily: "BalooBold",
   },
   text: {
-    fontSize: 16
+    fontSize: moderateScale(16),
+    fontFamily: "BalooRegular",
   },
   lowerLeftSide: {
-    gap: 8
+    marginVertical: verticalScale(8),
   },
   addressText: {
-    marginLeft: 3,
-    fontSize: 14,
-    color: "gray"
+    marginLeft: moderateScale(3),
+    fontSize: moderateScale(14),
+    fontFamily: "BalooRegular",
+    color: "gray",
   },
   button: {
-    display: "flex",
     justifyContent: "center",
-    borderRadius: 12,
+    alignItems: "center",
+    borderRadius: moderateScale(12),
     backgroundColor: "#474AEE",
-    height: 40,
-    width: 150
+    height: verticalScale(40),
+    width: moderateScale(150),
   },
   buttonText: {
     color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 18,
+    fontSize: moderateScale(18),
     fontWeight: "bold",
-    fontFamily: ""
+    fontFamily: "BalooRBold",
   },
   rightSide: {
-    flex: 1
+    flex: 1,
   },
-  ///THIS DOES NOT WORK
   image: {
-    height: "100%",
+    height: verticalScale(120),
     width: "100%",
     resizeMode: "cover",
-    borderRadius: 16
+    borderRadius: moderateScale(16),
   },
-  /////////////////////
-  smallButton: {
-    borderRadius: 10
-  }
 });

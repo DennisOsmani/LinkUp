@@ -44,6 +44,7 @@ public class EventRepository
             return await _context.Events
                 .Where(e => e.Location.City == city && e.Visibility == Visibility.PUBLIC)
                 .Where(e => !_context.EventRelations.Any(er => er.EventID == e.EventID && er.UserID == userId))
+                .Include(e => e.Location)
                 .ToListAsync();
         }
         catch (InvalidOperationException)
@@ -196,6 +197,24 @@ public class EventRepository
         }
     }
 
+    public async Task<User?> GetHostForEvent(int eventId)
+    {
+        try
+        {
+            return await _context.Events
+                .Where(e => e.EventID == eventId)
+                .SelectMany(e => e.EventRelations)
+                .Where(er => er.EventRole == 0)
+                .Select(er => er.User)
+                .FirstOrDefaultAsync();
+
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
+    }
+
     public Visibility StringToVisibilityEnum(string visibility)
     {
         Visibility eventVisibility;
@@ -218,4 +237,5 @@ public class EventRepository
 
         return eventVisibility;
     }
+
 }

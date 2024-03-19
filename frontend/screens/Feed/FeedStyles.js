@@ -8,6 +8,6 @@ export const styles = StyleSheet.create({
     borderTopEndRadius: moderateScale(25),
     borderTopStartRadius: moderateScale(25),
     backgroundColor: "#f1f2f6",
-    gap: 20
-  }
+    gap: 20,
+  },
 });
