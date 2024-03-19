@@ -14,13 +14,13 @@ const getEventById = async (eventId: number, token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in getEventById response: " + response.status);
     }
 
     const data: Event = await response.json();
     return data;
   } catch (error) {
-    console.error("Error while fetching getEventsInCity: " + error);
+    console.error("Error while fetching getEventById " + error);
   }
 };
 
@@ -35,7 +35,7 @@ const getEventsInCity = async (city: string, token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in getEventsInCity response: " + response.status);
     }
 
     const data: Event[] = await response.json();
@@ -56,13 +56,15 @@ export const getUserFriendEvents = async (token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error(
+        "Error in getUserFriendEvents response: " + response.status
+      );
     }
 
     const data: IEvent[] = await response.json();
     return data;
   } catch (error) {
-    console.error("Error while fetching getEventsInCity: " + error);
+    console.error("Error while fetching getUserFriendEvents " + error);
   }
 };
 
@@ -77,13 +79,15 @@ export const getUserEventInvites = async (token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error(
+        "Error in getUserEventInvites response: " + response.status
+      );
     }
 
     const data: IEvent[] = await response.json();
     return data;
   } catch (error) {
-    console.error("Error while fetching getEventsInCity: " + error);
+    console.error("Error while fetching getUserEventInvites " + error);
   }
 };
 
@@ -98,13 +102,15 @@ export const getUserJoinedEvents = async (token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error(
+        "Error in getUserJoinedEvents response: " + response.status
+      );
     }
 
     const data: IEvent[] = await response.json();
     return data;
   } catch (error) {
-    console.error("Error while fetching getEventsInCity: " + error);
+    console.error("Error while fetching getUserJoinedEvents " + error);
   }
 };
 
@@ -120,12 +126,12 @@ export const createEvent = async (event: Event, token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in createEvent response " + response.status);
     }
 
     return response.status;
   } catch (error) {
-    console.error("Error while fetching getEventsInCity: " + error);
+    console.error("Error while fetching createEvent " + error);
   }
 };
 
@@ -141,13 +147,13 @@ export const updateEvent = async (event: Event, token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in updateEvent response: " + response.status);
     }
 
     const data: IEvent = await response.json();
     return data;
   } catch (error) {
-    console.error("Error while fetching getEventsInCity: " + error);
+    console.error("Error while fetching updateEvent " + error);
   }
 };
 
@@ -162,11 +168,11 @@ export const deleteEvent = async (eventId: number, token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in response: " + response.status);
+      throw new Error("Error in deleteEvent response: " + response.status);
     }
 
     return response.status;
   } catch (error) {
-    console.error("Error while fetching getEventsInCity: " + error);
+    console.error("Error while fetching deleteEvent " + error);
   }
 };
