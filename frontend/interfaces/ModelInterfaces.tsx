@@ -63,7 +63,3 @@ export interface eventRelations {
   eventRelationParticipation: number;
   eventRole: number;
 }
-
-export interface LogIn {}
-
-export interface Register {}
