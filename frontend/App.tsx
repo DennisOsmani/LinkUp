@@ -1,3 +1,7 @@
+import { TokenProvider } from "./providers/TokenProvider";
+import LoginWallRouter from "./screens/LoginWallRouter/LoginWallRouter";
+
+export default function App() {
 import { Text, View } from "react-native";
 import { TokenProvider } from "./providers/TokenProvider";
 import { useState, useEffect } from "react";
@@ -22,19 +26,12 @@ export default function App() {
   };
 
   if (!fontsLoaded) {
-    // Load splash screen!
-    return (
-      <View>
-        <Text style={{ fontFamily: "BalooBold" }}>Splash</Text>
-      </View>
-    );
-
     return <Splash />;
   }
 
   return (
     <TokenProvider>
-      <TabNavigator />
+      <LoginWallRouter />
     </TokenProvider>
   );
 }
