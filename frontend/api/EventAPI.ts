@@ -1,4 +1,4 @@
-import { IEvent } from "../interfaces/ModelInterfaces";
+import { IEvent, IUser } from "../interfaces/ModelInterfaces";
 import { URL_BASE, EVENT_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENT_PATH}`;
@@ -24,9 +24,9 @@ const getEventById = async (eventId: number, token: string) => {
   }
 };
 
-const getEventsInCity = async (city: string, token: string) => {
+export const getEventsInCity = async (token: string, city: string) => {
   try {
-    const response = await fetch(`${THIS_URL}/city${city}`, {
+    const response = await fetch(`${THIS_URL}/city/${city}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -38,7 +38,28 @@ const getEventsInCity = async (city: string, token: string) => {
       throw new Error("Error in getEventsInCity response: " + response.status);
     }
 
-    const data: Event[] = await response.json();
+    const data: IEvent[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching getEventsInCity: " + error);
+  }
+};
+
+export const getHostForEvent = async (token: string, eventId: number) => {
+  try {
+    const response = await fetch(`${THIS_URL}/host?eventId=${eventId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in getEventsInCity response: " + response.status);
+    }
+
+    const data: IUser = await response.json();
     return data;
   } catch (error) {
     console.error("Error while fetching getEventsInCity: " + error);

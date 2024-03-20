@@ -37,12 +37,14 @@ public class EventRepository
         }
     }
 
-    public async Task<ICollection<Event>> GetEventsInCity(string city)
+    public async Task<ICollection<Event>> GetEventsInCity(string city, string userId)
     {
         try
         {
             return await _context.Events
                 .Where(e => e.Location.City == city && e.Visibility == Visibility.PUBLIC)
+                .Where(e => !_context.EventRelations.Any(er => er.EventID == e.EventID && er.UserID == userId))
+                .Include(e => e.Location)
                 .ToListAsync();
         }
         catch (InvalidOperationException)
@@ -135,7 +137,7 @@ public class EventRepository
 
     public async Task CreateEvent(Event newEvent)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -144,17 +146,17 @@ public class EventRepository
 
                 await transaction.CommitAsync();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
             }
         }
     }
 
     public async Task<Event> UpdateEvent(Event newEvent, Event oldEvent)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -170,14 +172,14 @@ public class EventRepository
 
                 _context.Events.Update(oldEvent);
                 await _context.SaveChangesAsync();
-                
+
                 await transaction.CommitAsync();
                 return oldEvent;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
             }
         }
     }
@@ -188,6 +190,24 @@ public class EventRepository
         {
             _context.Remove(eventToDelete);
             await _context.SaveChangesAsync();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
+    }
+
+    public async Task<User?> GetHostForEvent(int eventId)
+    {
+        try
+        {
+            return await _context.Events
+                .Where(e => e.EventID == eventId)
+                .SelectMany(e => e.EventRelations)
+                .Where(er => er.EventRole == 0)
+                .Select(er => er.User)
+                .FirstOrDefaultAsync();
+
         }
         catch (InvalidOperationException)
         {
@@ -217,4 +237,5 @@ public class EventRepository
 
         return eventVisibility;
     }
+
 }

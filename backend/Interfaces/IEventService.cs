@@ -17,12 +17,20 @@ public interface IEventService
     Task<Event?> GetEventByID(int eventId);
 
     /// <summary>
-    /// Fetches a list of Events based on what city you are in.
+    /// Fetches a list of Events based on what city you are in, and that the user relation is non-existent
     /// USED FOR ONE OF THE FEED TABS
     /// </summary>
     /// <param name="city"></param>
+    /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
-    Task<ICollection<Event>> GetEventsInCity(string city);
+    Task<ICollection<Event>> GetEventsInCity(string city, string userId);
+
+    /// <summary>
+    /// Fetches the user that has projectRole CREATOR
+    /// </summary>
+    /// <param name="eventId"></param>
+    /// <returns>A User object</returns>
+    Task<User> GetHostForEvent(int eventId);
 
     /// <summary>
     /// Fetches a list of Events where the user has the UserRelation Friends to the creator and visibility set to friends.
