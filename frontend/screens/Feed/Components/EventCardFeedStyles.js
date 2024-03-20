@@ -1,51 +1,47 @@
 import { StyleSheet } from "react-native";
+import { colors } from "../../../styles/colors";
 import {
   moderateScale,
+  horizontalScale,
   verticalScale,
 } from "../../../styles/genericDimensions";
 
 export const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.foreground,
     borderRadius: moderateScale(16),
     padding: moderateScale(16),
-    marginVertical: verticalScale(10),
+    gap: verticalScale(8),
     width: "100%",
   },
   iconTextWrapper: {
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
-    marginVertical: verticalScale(4),
+    gap: horizontalScale(4),
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: verticalScale(10),
   },
   headerText: {
     fontSize: moderateScale(14),
     fontFamily: "BalooRegular",
-    color: "gray",
+    color: colors.grey,
   },
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: verticalScale(10),
+    gap: horizontalScale(8),
+    maxHeight: verticalScale(200),
   },
   leftSide: {
     flex: 2,
     flexDirection: "column",
     justifyContent: "space-between",
-    marginRight: moderateScale(10),
   },
-  upperLeftSide: {
-    marginVertical: verticalScale(6),
-  },
+  upperLeftSide: {},
   title: {
-    fontSize: moderateScale(22),
-    fontWeight: "bold",
+    fontSize: moderateScale(24),
     fontFamily: "BalooBold",
   },
   text: {
@@ -53,33 +49,33 @@ export const styles = StyleSheet.create({
     fontFamily: "BalooRegular",
   },
   lowerLeftSide: {
-    marginVertical: verticalScale(8),
+    gap: verticalScale(3),
   },
   addressText: {
-    marginLeft: moderateScale(3),
+    marginLeft: horizontalScale(3),
     fontSize: moderateScale(14),
     fontFamily: "BalooRegular",
-    color: "gray",
+    color: colors.grey,
   },
   button: {
     justifyContent: "center",
     alignItems: "center",
     borderRadius: moderateScale(12),
-    backgroundColor: "#474AEE",
+    backgroundColor: colors.primary,
     height: verticalScale(40),
     width: moderateScale(150),
   },
   buttonText: {
     color: "#FFFFFF",
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(20),
     fontWeight: "bold",
-    fontFamily: "BalooRBold",
+    fontFamily: "BalooBold",
   },
   rightSide: {
     flex: 1,
   },
   image: {
-    height: verticalScale(120),
+    height: "100%",
     width: "100%",
     resizeMode: "cover",
     borderRadius: moderateScale(16),

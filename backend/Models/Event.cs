@@ -9,6 +9,8 @@ public class Event
     [Key]
     public int EventID { get; set; }
     public string EventName { get; set; }
+
+    [StringLength(16, ErrorMessage = "EventDescription length can't be more than 16.")]
     public string EventDescription { get; set; }
     public DateTime EventDateTimeStart { get; set; }
     public DateTime EventDateTimeEnd { get; set; }
@@ -23,9 +25,9 @@ public class Event
     public Location Location { get; set; }
     public ICollection<EventRelation>? EventRelations { get; set; }
 
-    public Event() {}
+    public Event() { }
 
-    public Event(string eventName, string eventDescription, 
+    public Event(string eventName, string eventDescription,
         DateTime eventDateTimeStart, DateTime eventDateTimeEnd, Visibility visibility, string inviteURL, int locationID, Location location)
     {
         EventName = eventName;
@@ -37,4 +39,4 @@ public class Event
         LocationID = locationID;
         Location = location;
     }
-}   
+}
