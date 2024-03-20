@@ -1,37 +1,25 @@
-import { View, Text } from "react-native";
+import { ScrollView, View } from "react-native";
 import { styles } from "./PublicFeedStyles";
 import EventCardFeed from "../Components/EventCardFeed";
 import { getEventsInCity, getHostForEvent } from "../../../api/EventAPI";
 import { joinOpenEvent } from "../../../api/EventRelationAPI";
 import { useEffect, useState } from "react";
 import { IEvent } from "../../../interfaces/ModelInterfaces";
+import { useTokenProvider } from "../../../providers/TokenProvider";
 
 const imageSource = require("../../../assets/cbum.jpg");
 
 export default function PublicFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
   const [hostNames, setHostNames] = useState<{ [eventId: string]: string }>({});
-
-  const cardProps = {
-    numberOfPeople: "4 - 20",
-    dateTime: "2022-03-25",
-    title: "Bursdagsfest",
-    hostName: "John Doe",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    address: "123 Main Street",
-    imageSource: imageSource,
-    onJoinPress: () => {
-      // Define your join press handler here
-      console.log("Join pressed");
-    },
-  };
+  const { token, setToken } = useTokenProvider();
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const eventsData: IEvent[] | undefined = await getEventsInCity(
-          "TOKEN",
-          "GEOLOCATION CITY"
+          token,
+          "Brightville"
         );
         setEvents(eventsData);
         eventsData?.forEach(async (event) => {
@@ -92,7 +80,7 @@ export default function PublicFeed() {
 
   const handleJoinPress = async (eventId: number) => {
     try {
-      await joinOpenEvent("Token", eventId);
+      await joinOpenEvent(token, eventId);
       // Remove the event from the events array
       setEvents((prevEvents) =>
         prevEvents?.filter((event) => event.eventID !== eventId)
@@ -103,27 +91,28 @@ export default function PublicFeed() {
   };
 
   return (
-    <View style={styles.wrapper}>
-      <EventCardFeed {...cardProps} />
-      {events?.map((event) => (
-        <EventCardFeed
-          key={event.eventID}
-          numberOfPeople={formatCapacityRange(
-            event.minCapacity,
-            event.maxCapacity
-          )}
-          dateTime={formatDate(
-            event.eventDateTimeStart,
-            event.eventDateTimeEnd
-          )}
-          title={event.eventName}
-          hostName={hostNames[event.eventID] || ""}
-          bio={event.eventDescription}
-          address={`${event.location.postalcode}, ${event.location.city}`}
-          imageSource={event.frontImage}
-          onJoinPress={() => handleJoinPress(event.eventID)}
-        />
-      ))}
-    </View>
+    <ScrollView>
+      <View style={styles.wrapper}>
+        {events?.map((event) => (
+          <EventCardFeed
+            key={event.eventID}
+            numberOfPeople={formatCapacityRange(
+              event.minCapacity,
+              event.maxCapacity
+            )}
+            dateTime={formatDate(
+              event.eventDateTimeStart,
+              event.eventDateTimeEnd
+            )}
+            title={event.eventName}
+            hostName={hostNames[event.eventID] || ""}
+            bio={event.eventDescription}
+            address={`${event.location.postalcode}, ${event.location.city}`}
+            imageSource={event.frontImage}
+            onJoinPress={() => handleJoinPress(event.eventID)}
+          />
+        ))}
+      </View>
+    </ScrollView>
   );
 }
