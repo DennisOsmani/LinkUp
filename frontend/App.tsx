@@ -15,6 +15,7 @@ export default function App() {
     await Font.loadAsync({
       BalooBold: require("./assets/fonts/Baloo2-Bold.ttf"),
       BalooRegular: require("./assets/fonts/Baloo2-Regular.ttf"),
+      BalooSemiBold: require("./assets/fonts/Baloo2-SemiBold.ttf"),
     });
 
     setTimeout(() => {

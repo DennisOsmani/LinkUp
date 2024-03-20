@@ -1,14 +1,15 @@
+import { AUTH_PATH, URL_BASE} from "./UrlPaths";
 import {
   IRegistrationRequest,
   ILoginRequest,
   IToken,
 } from "../interfaces/ModelInterfaces";
 
-const BASE_URL: string = "http://localhost:5173/api/auth";
+const THIS_URL: string = `${URL_BASE}${AUTH_PATH}`;
 
 export const registerUser = async (request: IRegistrationRequest) => {
   try {
-    const response = await fetch(`${BASE_URL}/register`, {
+    const response = await fetch(`${THIS_URL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +30,7 @@ export const registerUser = async (request: IRegistrationRequest) => {
 
 export const loginUser = async (request: ILoginRequest) => {
   try {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${THIS_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

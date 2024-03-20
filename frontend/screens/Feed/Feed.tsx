@@ -6,7 +6,7 @@ import FriendFeed from "./Friends/FriendFeed";
 export default function Feed() {
   return (
     <View>
-      <TabBackground firstTab="Offentlig" secondTab="Venner">
+      <TabBackground firstTab="For alle" secondTab="Venner">
         <PublicFeed />
         <FriendFeed />
       </TabBackground>

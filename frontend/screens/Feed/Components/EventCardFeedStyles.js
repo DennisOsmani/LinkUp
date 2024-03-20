@@ -28,6 +28,11 @@ export const styles = StyleSheet.create({
     fontFamily: "BalooRegular",
     color: colors.grey,
   },
+  headerIcon: {
+    fontSize: moderateScale(14),
+    marginTop: verticalScale(-1),
+    color: colors.grey,
+  },
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -42,11 +47,20 @@ export const styles = StyleSheet.create({
   upperLeftSide: {},
   title: {
     fontSize: moderateScale(24),
+    marginTop: verticalScale(-4),
     fontFamily: "BalooBold",
   },
   text: {
     fontSize: moderateScale(16),
     fontFamily: "BalooRegular",
+  },
+  hostText: {
+    fontSize: moderateScale(16),
+    fontFamily: "BalooSemiBold",
+  },
+  hostIcon: {
+    fontSize: moderateScale(18),
+    marginTop: verticalScale(-2),
   },
   lowerLeftSide: {
     gap: verticalScale(3),
