@@ -2,8 +2,7 @@ import { View, Image, Text, Pressable, TextInput } from "react-native";
 import { styles } from "./CreateEventStyles";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-import { uploadImage } from "../../util/firebaseImageUpload";
-import * as ImagePicker from "expo-image-picker";
+import { handleChooseAndUploadImage } from "../../util/imageHandler";
 
 enum EventVisibility {
   PUBLIC,
@@ -12,7 +11,7 @@ enum EventVisibility {
 }
 
 export default function CreateEvent() {
-  const [eventImage, setEventImage] = useState<string>(
+  const [eventImage, setEventImage] = useState<string | undefined>(
     "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
   );
   const [eventName, setEventName] = useState<string>("");
@@ -34,29 +33,10 @@ export default function CreateEvent() {
    * Required fields
    * Alerts / user feedback
    */
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      return result.assets[0].uri;
-    }
-  };
 
   const handleUploadImage = async () => {
-    try {
-      const imageURI = await pickImage();
-
-      const uploadedURL = await uploadImage(imageURI);
-      setEventImage(uploadedURL);
-    } catch (error) {
-      // PROMPT USER WITH ERROR MESSAGE OR DISPLAY ERROR IMAGE!
-      console.error("Error uploading image:", error);
-    }
+    const responseUrl = await handleChooseAndUploadImage();
+    setEventImage(responseUrl);
   };
 
   const handleLocation = () => {
