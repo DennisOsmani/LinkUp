@@ -7,15 +7,9 @@ import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import { GetUserFriends } from "../../../api/UserAPI";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 
-// IF STRING IS EMPTY MAKE IT SHOW ALL USERS (BACKEND)
-
 // TODO
-// - Legg til venn knappen med Userraltion API (search)
-// - Filtrere usercards på søk (search & friends) $$
-// - Profilbilde
-// - Style likt og style med functions
+// - Profilbilde (search & friends)
 // - Linke hvert kort til profil (search & friends)
-// - Ikke få opp seg selv når man søker (search)
 
 export default function FriendsPeople() {
   const [searchText, setSearchText] = useState("");

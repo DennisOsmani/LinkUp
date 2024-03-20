@@ -9,7 +9,11 @@ import { useTokenProvider } from "../../../providers/TokenProvider";
 
 // When register, add date of birth
 
-// IF STRING IS EMPTY MAKE IT SHOW ALL USERS (BACKEND)
+// TODO
+// - Legg til venn knappen med Userraltion API (search)
+// - Profilbilde (search & friends)
+// - Linke hvert kort til profil (search & friends)
+// - Ikke få opp seg selv når man søker (search)
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");

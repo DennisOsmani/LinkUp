@@ -1,5 +1,5 @@
 import { View, Image, Text } from "react-native";
-import styles from "./UserCardStyles";
+import styles from "./UserCardFriendsStyles";
 import { Feather } from "@expo/vector-icons";
 
 // Legge inn Pressable --> sendes til Other Profile

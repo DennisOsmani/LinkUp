@@ -1,5 +1,5 @@
 import { View, Image, Text, Pressable } from "react-native";
-import styles from "./UserCardStyles";
+import styles from "./UserCardSearchStyles";
 import { Feather } from "@expo/vector-icons";
 
 // For search in People Screen

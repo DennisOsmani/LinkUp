@@ -1,27 +1,30 @@
 import { StyleSheet } from "react-native";
 import { colors } from "../../../styles/colors";
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from "../../../styles/genericDimensions";
 
 export default StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: 15,
+    paddingHorizontal: horizontalScale(15),
   },
   searchContainer: {
     flexDirection: "row",
   },
   searchBar: {
-    borderColor: "red",
-    borderWidth: 0,
-    paddingLeft: 10,
-    marginTop: 20,
+    paddingLeft: horizontalScale(10),
+    marginTop: verticalScale(20),
     backgroundColor: colors.foreground,
-    borderRadius: 15,
-    height: 35,
-    width: 335,
+    borderRadius: moderateScale(15),
+    height: verticalScale(35),
+    width: horizontalScale(335),
   },
   icon: {
-    fontSize: 25,
+    fontSize: moderateScale(25),
     color: colors.grey,
-    marginTop: 26,
-    marginLeft: 5,
+    marginTop: verticalScale(26),
+    marginLeft: horizontalScale(5),
   },
 });
