@@ -116,4 +116,24 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(28),
     color: "white",
   },
+
+  datetimepickerBox: {
+    backgroundColor: colors.foreground,
+    height: verticalScale(40),
+    width: "90%",
+    borderRadius: moderateScale(10),
+    paddingLeft: horizontalScale(15),
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%",
+    alignItems: "center",
+    paddingRight: horizontalScale(5),
+  },
+
+  datetimepickerText: {
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(22),
+    color: "gray",
+    opacity: 0.45,
+  },
 });

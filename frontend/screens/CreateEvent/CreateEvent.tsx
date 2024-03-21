@@ -5,60 +5,87 @@ import { useState } from "react";
 import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { IEvent, ILocation } from "../../interfaces/ModelInterfaces";
+import { createEvent } from "../../api/EventAPI";
+import LocationModal from "./components/LocationModal/LocationModal";
+import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import InviteModal from "./components/InviteModal/InviteModal";
 
-enum EventVisibility {
-  PUBLIC,
-  PRIVATE,
-  FREIENDS,
-}
+const date = new Date();
 
 export default function CreateEvent() {
+  const [locationModalVisible, setLocationModalVisible] =
+    useState<boolean>(false);
+  const [inviteModalVisible, setInviteModalVisible] = useState<boolean>(false);
   const [eventImageUri, setEventImageUri] = useState<string | undefined>(
     "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
   );
-  const [eventName, setEventName] = useState<string>("");
-  const [startDatetime, setStartDatetime] = useState<string>("");
-  const [endDatetime, setEndDatetime] = useState<string>("");
-  const [eventVisability, setEventVisability] = useState<EventVisibility>(
-    EventVisibility.PUBLIC
-  );
-  const [eventDetails, setEventDetails] = useState<string>("");
+
+  const [event, setEvent] = useState<IEvent>({
+    eventName: "",
+    eventDescription: "",
+    eventDateTimeStart: "",
+    eventDateTimeEnd: "",
+    visibility: 0,
+    inviteURL: "",
+    frontImage:
+      "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png",
+  });
+  const [location, setLocation] = useState<ILocation>({
+    address: undefined,
+    postalcode: undefined,
+    city: "",
+    country: "",
+  });
 
   const { token } = useTokenProvider();
+
+  const onChangeStart = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date | undefined
+  ) => {
+    event;
+    setEvent((event: IEvent) => ({
+      ...event,
+      eventDateTimeStart: selectedDate
+        ? selectedDate.toISOString()
+        : event.eventDateTimeStart,
+    }));
+  };
+
+  const onChangeEnd = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date | undefined
+  ) => {
+    event;
+    setEvent((event: IEvent) => ({
+      ...event,
+      eventDateTimeEnd: selectedDate
+        ? selectedDate.toISOString()
+        : event.eventDateTimeEnd,
+    }));
+  };
+
   /*
    * TODO
    * legge til max/min capacity
    *
    * EventVisability trenger dropdown
-   * Datetimepicker
-   * Upload image func
-   * Input validering
+   * Input validering -> Max 16 characters på event navn
    * Required fields
    * Alerts / user feedback
-   *
-   * START HER
-   * Fikse ferdig slik at bilde bare lastes opp når man trykker create event
-   * Fikse sånn at man har ett default bilde
-   * Legge til token?
    */
 
   const handleUploadImage = async () => {
     const uri: any = await pickImage();
-    console.log("URI " + uri);
     setEventImageUri(uri);
   };
 
-  const handleLocation = () => {
-    // TODO
-    console.log("Location modal");
-  };
-
-  const handleInvite = () => {
-    // TODO
-    console.log("Invite modal");
-  };
-
   const handleCreateEvent = async () => {
+    console.log(location);
+    return;
+
     try {
       // Upload to azure
       let eventImageUrl: string | undefined;
@@ -66,61 +93,112 @@ export default function CreateEvent() {
         eventImageUrl = await uploadImage(eventImageUri, token);
       }
 
-      console.log(eventImageUrl);
+      const eventToCreate: IEvent = {
+        ...event,
+        location: location,
+      };
 
-      // TODO
-      console.log("Creating event");
+      const eventResponse = await createEvent(eventToCreate, token);
+      console.log("Created event, response: " + eventResponse);
     } catch (error) {
+      // setToken("");
       console.log("Error creating a event, and uploading", error);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Pressable onPress={handleUploadImage} style={styles.uploadContainer}>
-          <Feather name="upload" size={20} color="white" />
-          <Text style={styles.uploadText}>Last opp</Text>
-        </Pressable>
-        <Image style={styles.imageContainer} source={{ uri: eventImageUri }} />
-      </View>
+    <>
+      {/* Modals */}
+      <LocationModal
+        visible={locationModalVisible}
+        setVisible={setLocationModalVisible}
+        location={location}
+        setLocation={setLocation}
+      />
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          onChangeText={(input) => setEventName(input)}
-          placeholder="Navn på Event"
-          style={styles.inputBox}
-        />
-        <TextInput
-          onChangeText={(input) => setStartDatetime(input)}
-          placeholder="Startdato og -tidspunkt"
-          style={styles.inputBox}
-        />
-        <TextInput
-          onChangeText={(input) => setEndDatetime(input)}
-          placeholder="Sluttdato og -tidspunkt"
-          style={styles.inputBox}
-        />
-        <TextInput placeholder="Hvem kan se Eventet?" style={styles.inputBox} />
-        <TextInput
-          onChangeText={(input) => setEventDetails(input)}
-          multiline
-          placeholder="Hva er detaljene?"
-          style={styles.inputBoxMultiline}
-        />
+      <InviteModal
+        inviteVisible={inviteModalVisible}
+        setInviteVisible={setInviteModalVisible}
+      />
 
-        <View style={styles.smallButtonContainer}>
-          <Pressable onPress={handleLocation} style={styles.smallButton}>
-            <Text style={styles.buttonText}>Sted</Text>
+      <View
+        style={{
+          ...styles.container,
+          opacity: locationModalVisible || inviteModalVisible ? 0.4 : 1,
+        }}
+      >
+        <View style={styles.imageContainer}>
+          <Pressable onPress={handleUploadImage} style={styles.uploadContainer}>
+            <Feather name="upload" size={20} color="white" />
+            <Text style={styles.uploadText}>Last opp</Text>
           </Pressable>
-          <Pressable onPress={handleInvite} style={styles.smallButton}>
-            <Text style={styles.buttonText}>Inviter</Text>
+          <Image
+            style={styles.imageContainer}
+            source={{ uri: eventImageUri }}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            onChangeText={(input) =>
+              setEvent((event: IEvent) => ({ ...event, eventName: input }))
+            }
+            placeholder="Navn på Event"
+            style={styles.inputBox}
+          />
+
+          <View style={styles.datetimepickerBox}>
+            <Text style={styles.datetimepickerText}>Event start</Text>
+            <DateTimePicker
+              value={date}
+              mode={"datetime"}
+              onChange={onChangeStart}
+            />
+          </View>
+          <View style={styles.datetimepickerBox}>
+            <Text style={styles.datetimepickerText}>Event slutt</Text>
+            <DateTimePicker
+              value={date}
+              mode={"datetime"}
+              onChange={onChangeEnd}
+            />
+          </View>
+
+          <TextInput
+            placeholder="Hvem kan se Eventet?"
+            style={styles.inputBox}
+          />
+          <TextInput
+            onChangeText={(input) =>
+              setEvent((event: IEvent) => ({
+                ...event,
+                eventDescription: input,
+              }))
+            }
+            multiline
+            placeholder="Hva er detaljene?"
+            style={styles.inputBoxMultiline}
+          />
+
+          <View style={styles.smallButtonContainer}>
+            <Pressable
+              onPress={() => setLocationModalVisible(true)}
+              style={styles.smallButton}
+            >
+              <Text style={styles.buttonText}>Sted</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => setInviteModalVisible(true)}
+              style={styles.smallButton}
+            >
+              <Text style={styles.buttonText}>Inviter</Text>
+            </Pressable>
+          </View>
+          <Pressable onPress={handleCreateEvent} style={styles.bigButtonStyles}>
+            <Text style={styles.bigButtonText}>Opprett Event</Text>
           </Pressable>
         </View>
-        <Pressable onPress={handleCreateEvent} style={styles.bigButtonStyles}>
-          <Text style={styles.bigButtonText}>Opprett Event</Text>
-        </Pressable>
       </View>
-    </View>
+    </>
   );
 }
