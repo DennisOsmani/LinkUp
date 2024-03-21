@@ -6,6 +6,8 @@ import Feed from "../screens/Feed/Feed";
 import Profile from "../screens/Profile/Profile";
 import Events from "../screens/Events/Events";
 import People from "../screens/People/People";
+import { Feather } from "@expo/vector-icons";
+import TabNavigatorStyles from "./TabNavigatorStyles";
 
 const Tab = createBottomTabNavigator<NavigationTypeList>();
 
@@ -14,10 +16,12 @@ export default function TabNavigator() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          options={{ headerShown: false }}
+          options={{ headerShown: false, tabBarIcon: () => (
+            <Feather style={TabNavigatorStyles.feed} name="home" ></Feather>
+          ) }}
           name="Feed"
           component={Feed}
-        />
+        /> 
         <Tab.Screen
           options={{ headerShown: false }}
           name="Events"
