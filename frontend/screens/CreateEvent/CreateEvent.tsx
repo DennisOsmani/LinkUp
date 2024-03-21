@@ -2,7 +2,7 @@ import { View, Image, Text, Pressable, TextInput } from "react-native";
 import { styles } from "./CreateEventStyles";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-import { handleChooseAndUploadImage } from "../../util/imageHandler";
+import { handleChooseAndUploadImage, pickImage } from "../../util/imageHandler";
 
 enum EventVisibility {
   PUBLIC,
@@ -11,9 +11,13 @@ enum EventVisibility {
 }
 
 export default function CreateEvent() {
-  const [eventImage, setEventImage] = useState<string | undefined>(
-    "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
-  );
+  const [eventImage, setEventImage] = useState<any>("./bg.jpeg");
+
+  /*
+                          const [eventImage, setEventImage] = useState<string | undefined>(
+                            "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
+                          );
+                          */
   const [eventName, setEventName] = useState<string>("");
   const [startDatetime, setStartDatetime] = useState<string>("");
   const [endDatetime, setEndDatetime] = useState<string>("");
@@ -32,9 +36,18 @@ export default function CreateEvent() {
    * Input validering
    * Required fields
    * Alerts / user feedback
+   *
+   * START HER
+   * Fikse ferdig slik at bilde bare lastes opp når man trykker create event
+   * Fikse sånn at man har ett default bilde
+   * Legge til token?
    */
 
   const handleUploadImage = async () => {
+    const uri: any = await pickImage();
+    setEventImage(uri.assets[0].uri);
+
+    return;
     const responseUrl = await handleChooseAndUploadImage();
     setEventImage(responseUrl);
   };

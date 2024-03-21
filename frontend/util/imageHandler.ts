@@ -18,14 +18,13 @@ export async function handleChooseAndUploadImage() {
     const blob = await response.blob();
 
     const imageURL = await uploadImage(blob, "TOKEN_NEED_HERE_LOL");
-    console.log("DET FUNGERER NÅÅÅÅ HAHAHA LOL");
     return imageURL;
   } catch (error) {
     console.log("Error while handling image upload and choosing", error);
   }
 }
 
-const pickImage = async () => {
+export const pickImage = async () => {
   let result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
     allowsEditing: false,
