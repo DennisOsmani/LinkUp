@@ -11,13 +11,12 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
-    marginTop: verticalScale(50),
     backgroundColor: colors.background,
   },
 
   imageContainer: {
     width: "100%",
-    height: verticalScale(170),
+    height: verticalScale(220),
     position: "absolute",
     zIndex: 1,
   },
@@ -74,7 +73,7 @@ export const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     height: "100%",
-    marginTop: verticalScale(190),
+    marginTop: verticalScale(240),
     gap: moderateScale(20),
     alignItems: "center",
   },

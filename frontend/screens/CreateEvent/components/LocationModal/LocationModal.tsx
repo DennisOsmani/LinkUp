@@ -1,8 +1,14 @@
-import { Modal, Pressable, Text, TextInput, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+  Keyboard,
+} from "react-native";
 import { styles } from "./LocationModalStyles";
 import React from "react";
 import { ILocation } from "../../../../interfaces/ModelInterfaces";
-import { Feather } from "@expo/vector-icons";
 
 interface LocationModalProps {
   visible: boolean;
@@ -17,6 +23,16 @@ export default function LocationModal({
   location,
   setLocation,
 }: LocationModalProps) {
+  const handleKeyPress = (e: any) => {
+    // Check if 'Enter' was pressed
+    if (e.nativeEvent.key === "Enter") {
+      // Dismiss the keyboard
+      Keyboard.dismiss();
+      // Prevent 'Enter' from being added to the text
+      e.preventDefault(); // This line might not be needed in React Native, just an illustration
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -35,6 +51,7 @@ export default function LocationModal({
           <TextInput
             style={styles.inputBox}
             placeholder={"Adresse"}
+            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             value={location.address}
             onChangeText={(input) =>
               setLocation((location: ILocation) => ({
@@ -42,10 +59,12 @@ export default function LocationModal({
                 address: input,
               }))
             }
+            onKeyPress={handleKeyPress}
           />
           <TextInput
             style={styles.inputBox}
             placeholder={"Postnummer"}
+            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             value={location.postalcode}
             onChangeText={(input) =>
               setLocation((location: ILocation) => ({
@@ -53,10 +72,12 @@ export default function LocationModal({
                 postalcode: input,
               }))
             }
+            onKeyPress={handleKeyPress}
           />
           <TextInput
             style={styles.inputBox}
             placeholder={"By"}
+            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             value={location.city}
             onChangeText={(input) =>
               setLocation((location: ILocation) => ({
@@ -64,10 +85,12 @@ export default function LocationModal({
                 city: input,
               }))
             }
+            onKeyPress={handleKeyPress}
           />
           <TextInput
             style={styles.inputBox}
             placeholder={"Land"}
+            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             value={location.country}
             onChangeText={(input) =>
               setLocation((location: ILocation) => ({
@@ -75,6 +98,7 @@ export default function LocationModal({
                 country: input,
               }))
             }
+            onKeyPress={handleKeyPress}
           />
           <Pressable
             style={styles.saveButton}

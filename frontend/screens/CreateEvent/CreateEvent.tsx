@@ -1,4 +1,11 @@
-import { View, Image, Text, Pressable, TextInput } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  Pressable,
+  TextInput,
+  Keyboard,
+} from "react-native";
 import { styles } from "./CreateEventStyles";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
@@ -65,6 +72,16 @@ export default function CreateEvent() {
         ? selectedDate.toISOString()
         : event.eventDateTimeEnd,
     }));
+  };
+
+  const handleKeyPress = (e: any) => {
+    // Check if 'Enter' was pressed
+    if (e.nativeEvent.key === "Enter") {
+      // Dismiss the keyboard
+      Keyboard.dismiss();
+      // Prevent 'Enter' from being added to the text
+      e.preventDefault(); // This line might not be needed in React Native, just an illustration
+    }
   };
 
   /*
@@ -140,11 +157,13 @@ export default function CreateEvent() {
 
         <View style={styles.inputContainer}>
           <TextInput
+            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             onChangeText={(input) =>
               setEvent((event: IEvent) => ({ ...event, eventName: input }))
             }
             placeholder="Navn på Event"
             style={styles.inputBox}
+            onKeyPress={handleKeyPress}
           />
 
           <View style={styles.datetimepickerBox}>
@@ -165,10 +184,13 @@ export default function CreateEvent() {
           </View>
 
           <TextInput
+            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             placeholder="Hvem kan se Eventet?"
             style={styles.inputBox}
+            onKeyPress={handleKeyPress}
           />
           <TextInput
+            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             onChangeText={(input) =>
               setEvent((event: IEvent) => ({
                 ...event,
@@ -178,6 +200,7 @@ export default function CreateEvent() {
             multiline
             placeholder="Hva er detaljene?"
             style={styles.inputBoxMultiline}
+            onKeyPress={handleKeyPress}
           />
 
           <View style={styles.smallButtonContainer}>

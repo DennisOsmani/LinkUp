@@ -17,8 +17,8 @@ export const styles = StyleSheet.create({
   modalCard: {
     gap: verticalScale(20),
     marginBottom: verticalScale(40),
-    width: "80%",
-    height: "45%",
+    width: "95%",
+    height: "48%",
     borderRadius: moderateScale(15),
     justifyContent: "center",
     alignItems: "center",
@@ -36,11 +36,11 @@ export const styles = StyleSheet.create({
   inputBox: {
     fontFamily: "BalooRegular",
     fontSize: moderateScale(22),
-    backgroundColor: colors.foreground,
     height: verticalScale(40),
     width: "90%",
     borderRadius: moderateScale(10),
     paddingLeft: horizontalScale(15),
+    backgroundColor: colors.foreground,
   },
 
   saveButton: {

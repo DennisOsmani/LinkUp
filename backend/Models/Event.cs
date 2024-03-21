@@ -23,9 +23,9 @@ public class Event
     public Location Location { get; set; }
     public ICollection<EventRelation>? EventRelations { get; set; }
 
-    public Event() {}
+    public Event() { }
 
-    public Event(string eventName, string eventDescription, 
+    public Event(string eventName, string eventDescription,
         DateTime eventDateTimeStart, DateTime eventDateTimeEnd, Visibility visibility, string inviteURL, int locationID, Location location)
     {
         EventName = eventName;
@@ -37,4 +37,4 @@ public class Event
         LocationID = locationID;
         Location = location;
     }
-}   
+}

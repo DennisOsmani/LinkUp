@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
 
   modalCard: {
     marginBottom: verticalScale(40),
-    width: "80%",
+    width: "95%",
     height: "50%",
     borderRadius: moderateScale(15),
     justifyContent: "center",

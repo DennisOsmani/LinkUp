@@ -1,6 +1,8 @@
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace YourNamespace
 {
@@ -16,9 +18,16 @@ namespace YourNamespace
         }
 
         [HttpPost]
+        [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
         public async Task<IActionResult> Upload()
         {
-            Console.WriteLine("FORM RECEIVED!");
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("No user ID claim present in token.");
+            }
+
 
             // Assume a default content type if none is provided, or derive it from other sources if possible
             string contentType = Request.ContentType ?? "application/octet-stream";
