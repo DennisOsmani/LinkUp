@@ -2,7 +2,9 @@ import { View, Image, Text, Pressable, TextInput } from "react-native";
 import { styles } from "./CreateEventStyles";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-import { handleChooseAndUploadImage, pickImage } from "../../util/imageHandler";
+import { pickImage } from "../../util/imageHandler";
+import { uploadImage } from "../../api/UploadImageAPI";
+import { useTokenProvider } from "../../providers/TokenProvider";
 
 enum EventVisibility {
   PUBLIC,
@@ -11,13 +13,9 @@ enum EventVisibility {
 }
 
 export default function CreateEvent() {
-  const [eventImage, setEventImage] = useState<any>("./bg.jpeg");
-
-  /*
-                          const [eventImage, setEventImage] = useState<string | undefined>(
-                            "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
-                          );
-                          */
+  const [eventImageUri, setEventImageUri] = useState<string | undefined>(
+    "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
+  );
   const [eventName, setEventName] = useState<string>("");
   const [startDatetime, setStartDatetime] = useState<string>("");
   const [endDatetime, setEndDatetime] = useState<string>("");
@@ -26,6 +24,7 @@ export default function CreateEvent() {
   );
   const [eventDetails, setEventDetails] = useState<string>("");
 
+  const { token } = useTokenProvider();
   /*
    * TODO
    * legge til max/min capacity
@@ -45,11 +44,8 @@ export default function CreateEvent() {
 
   const handleUploadImage = async () => {
     const uri: any = await pickImage();
-    setEventImage(uri.assets[0].uri);
-
-    return;
-    const responseUrl = await handleChooseAndUploadImage();
-    setEventImage(responseUrl);
+    console.log("URI " + uri);
+    setEventImageUri(uri);
   };
 
   const handleLocation = () => {
@@ -62,9 +58,21 @@ export default function CreateEvent() {
     console.log("Invite modal");
   };
 
-  const handleCreate = () => {
-    // TODO
-    console.log("Creating event");
+  const handleCreateEvent = async () => {
+    try {
+      // Upload to azure
+      let eventImageUrl: string | undefined;
+      if (eventImageUri) {
+        eventImageUrl = await uploadImage(eventImageUri, token);
+      }
+
+      console.log(eventImageUrl);
+
+      // TODO
+      console.log("Creating event");
+    } catch (error) {
+      console.log("Error creating a event, and uploading", error);
+    }
   };
 
   return (
@@ -74,7 +82,7 @@ export default function CreateEvent() {
           <Feather name="upload" size={20} color="white" />
           <Text style={styles.uploadText}>Last opp</Text>
         </Pressable>
-        <Image style={styles.imageContainer} source={{ uri: eventImage }} />
+        <Image style={styles.imageContainer} source={{ uri: eventImageUri }} />
       </View>
 
       <View style={styles.inputContainer}>
@@ -109,7 +117,7 @@ export default function CreateEvent() {
             <Text style={styles.buttonText}>Inviter</Text>
           </Pressable>
         </View>
-        <Pressable onPress={handleCreate} style={styles.bigButtonStyles}>
+        <Pressable onPress={handleCreateEvent} style={styles.bigButtonStyles}>
           <Text style={styles.bigButtonText}>Opprett Event</Text>
         </Pressable>
       </View>

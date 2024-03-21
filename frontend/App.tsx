@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import Splash from "./screens/Splash/Splash";
 import { TokenProvider } from "./providers/TokenProvider";
-import TabNavigator from "./navigation/TabNavigator";
 import "./firebase";
 
 export default function App() {
@@ -30,8 +29,7 @@ export default function App() {
 
   return (
     <TokenProvider>
-      <TabNavigator />
-      {/* <LoginWallRouter /> */}
+      <LoginWallRouter />
     </TokenProvider>
   );
 }
