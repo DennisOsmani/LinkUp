@@ -55,9 +55,15 @@ public class EventController : ControllerBase
     public async Task<ActionResult> GetEventsInCity(string city)
     {
         city = SecurityElement.Escape(city);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in JWT");
+        }
         try
         {
-            var events = await _eventService.GetEventsInCity(city);
+            var events = await _eventService.GetEventsInCity(city, userIdClaim);
             return Ok(events);
         }
         catch (InvalidOperationException e)
@@ -69,6 +75,30 @@ public class EventController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpGet("host")]
+    [AllowAnonymous]
+    public async Task<ActionResult> GetHostForEvent(int eventId)
+    {
+        try
+        {
+            var user = await _eventService.GetHostForEvent(eventId);
+            return Ok(user);
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
 
     [HttpGet("friends")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]

@@ -47,6 +47,23 @@ public class UserService : IUserService
         return user;
     }
 
+    public async Task<ICollection<User?>> GetUserFriends(string userId)
+    {
+        if (string.IsNullOrEmpty(userId)) 
+        {
+            throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
+        }
+
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
+        }
+
+        return await _userRelRepo.GetUserFriends(user.UserID);
+    } 
+
     public async Task CreateUser(User user)
     {
         string id = Guid.NewGuid().ToString();

@@ -48,4 +48,11 @@ public interface IUserService
     /// <param name="eventId"></param>
     /// <returns>A list of Users</returns>
     Task<ICollection<User>> GetUsersFromEvent(int eventId);   // Maybe just use GetEvent, if the event returns a list of users in its own object.
+
+    /// <summary>
+    /// Fetches a list of Users that is friends with the user logged in.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>A list of Users</returns>
+    Task<ICollection<User?>> GetUserFriends(string userId);
 }

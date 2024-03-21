@@ -1,19 +1,21 @@
 import { StyleSheet } from "react-native";
 import { colors } from "../../../../styles/colors";
-import { moderateScale } from "../../../../styles/genericDimensions";
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from "../../../../styles/genericDimensions";
 
 export default StyleSheet.create({
   card: {
-    paddingVertical: 50,
-    paddingHorizontal: 30,
-    marginTop: 40,
+    paddingVertical: verticalScale(50),
+    paddingHorizontal: horizontalScale(30),
+    marginTop: verticalScale(40),
     backgroundColor: colors.background,
-    borderRadius: 30,
+    borderRadius: moderateScale(30),
   },
 
   inputContainer: {
-    borderColor: colors.red,
-    borderWidth: 0,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -21,29 +23,29 @@ export default StyleSheet.create({
 
   input: {
     backgroundColor: colors.foreground,
-    height: 50,
-    borderRadius: 15,
-    marginBottom: 30,
-    width: 300,
-    paddingLeft: 12,
+    height: verticalScale(50),
+    borderRadius: moderateScale(15),
+    marginBottom: verticalScale(30),
+    width: horizontalScale(300),
+    paddingLeft: horizontalScale(12),
     fontFamily: "BalooRegular",
-    fontSize: 20,
+    fontSize: moderateScale(20),
   },
 
   button: {
     backgroundColor: colors.primary,
-    borderRadius: 15,
+    borderRadius: moderateScale(15),
     alignItems: "center",
     justifyContent: "center",
-    width: 230,
-    height: 55,
-    marginBottom: 20,
+    width: horizontalScale(230),
+    height: verticalScale(55),
+    marginBottom: verticalScale(20),
     fontFamily: "BalooBold",
   },
 
   text: {
     color: colors.background,
-    fontSize: 26,
+    fontSize: moderateScale(26),
     fontWeight: "bold",
     fontFamily: "BalooBold",
   },
@@ -54,7 +56,7 @@ export default StyleSheet.create({
 
   question: {
     color: colors.grey,
-    marginRight: 5,
+    marginRight: horizontalScale(5),
   },
 
   link: {

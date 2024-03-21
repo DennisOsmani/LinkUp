@@ -1,11 +1,14 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { TabBackground } from "../../components/TabBackground/TabBackground";
+import PublicFeed from "./Public/PulicFeed";
+import FriendFeed from "./Friends/FriendFeed";
 
 export default function Feed() {
   return (
     <View>
       <TabBackground firstTab="Offentlig" secondTab="Venner">
-        <Text> hei</Text>
+        <PublicFeed />
+        <FriendFeed />
       </TabBackground>
     </View>
   );
