@@ -59,7 +59,7 @@ export async function getUser(token: string, userId?: string) {
 
 export async function GetUserFriends(token: string, userId?: string) {
   try {
-    const response = await fetch(`${THIS_URL}/friends`, 
+    const response = await fetch(`${THIS_URL}/friends`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
