@@ -92,6 +92,16 @@ export default function CreateEvent() {
    * Input validering -> Max 16 characters på event navn
    * Required fields
    * Alerts / user feedback
+   *
+   * Ha en lsite for venner og en for "inviterte venner"
+   * Når man trykker legg til venn så byttes de til listen "inviterte venner"
+   * Legg til en prop til inviteUserCard som sier om det skal rendres fjern eller legg til knapp
+   * I InviteFriends map til InviteUserCard to ganger, først for inviterte vcenner så for resten
+   * Legg til funksjonalitet for å fjerne / legge til
+   *
+   * Fiks createEvent med location inni, eller del opp til to api kall, en til event og en til location
+   * Fiks å sende ut invitasjoner til alle som er i invitert listen, kanskje Promise.all?
+   *
    */
 
   const handleUploadImage = async () => {
