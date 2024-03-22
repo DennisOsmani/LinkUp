@@ -24,12 +24,9 @@ export default function LocationModal({
   setLocation,
 }: LocationModalProps) {
   const handleKeyPress = (e: any) => {
-    // Check if 'Enter' was pressed
     if (e.nativeEvent.key === "Enter") {
-      // Dismiss the keyboard
       Keyboard.dismiss();
-      // Prevent 'Enter' from being added to the text
-      e.preventDefault(); // This line might not be needed in React Native, just an illustration
+      e.preventDefault();
     }
   };
 

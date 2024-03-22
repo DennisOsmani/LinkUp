@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
   bigButtonStyles: {
     backgroundColor: colors.primary,
     marginTop: verticalScale(20),
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(20),
     width: horizontalScale(280),
     height: verticalScale(50),
     justifyContent: "center",

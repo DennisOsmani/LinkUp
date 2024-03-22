@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { styles } from './TabBackgroundStyles';
+import React, { useState } from "react";
+import { View, Text, Pressable } from "react-native";
+import { styles } from "./TabBackgroundStyles";
 
 interface TabBackgroundProps {
   firstTab: string;
@@ -11,7 +11,7 @@ interface TabBackgroundProps {
 export function TabBackground({
   firstTab,
   secondTab,
-  children,
+  children
 }: TabBackgroundProps) {
   const [activeTab, setActiveTab] = useState<number>(1);
 
@@ -28,7 +28,7 @@ export function TabBackground({
               <Text
                 style={{
                   ...styles.tabText,
-                  opacity: isActive(index + 1) ? 1 : 0.5,
+                  opacity: isActive(index + 1) ? 1 : 0.5
                 }}
               >
                 {tabname}
@@ -37,8 +37,8 @@ export function TabBackground({
                 style={{
                   ...styles.tabUnderline,
                   backgroundColor: isActive(index + 1)
-                    ? 'white'
-                    : 'rgba(255, 255, 255, 0.5)',
+                    ? "white"
+                    : "rgba(255, 255, 255, 0.5)"
                 }}
               />
             </View>

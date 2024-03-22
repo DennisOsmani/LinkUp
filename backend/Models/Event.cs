@@ -9,6 +9,8 @@ public class Event
     [Key]
     public int EventID { get; set; }
     public string EventName { get; set; }
+
+    [StringLength(16, ErrorMessage = "EventDescription length can't be more than 16.")]
     public string EventDescription { get; set; }
     public DateTime EventDateTimeStart { get; set; }
     public DateTime EventDateTimeEnd { get; set; }

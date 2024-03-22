@@ -1,15 +1,13 @@
 import { TextInput, View, ScrollView, Text } from "react-native";
-import styles from "../../People/Search/SearchStyles";
+import styles from "./FriendsModalStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { IUser } from "../../../interfaces/ModelInterfaces";
-import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
-import { GetUserFriends } from "../../../api/UserAPI";
-import { useTokenProvider } from "../../../providers/TokenProvider";
+import { IUser } from "../../../../interfaces/ModelInterfaces";
+import { getUserFriendEvents } from "../../../../api/EventAPI";
+import { useTokenProvider } from "../../../../providers/TokenProvider";
 
 // TODO
 // - Profilbilde (search & friends)
-// - Linke hvert kort til profil (search & friends)
 
 export default function FriendsPeople() {
   const [searchText, setSearchText] = useState("");
@@ -19,30 +17,21 @@ export default function FriendsPeople() {
   );
 
   const calculateAge = (dateBorn: string) => {
-    // Parse the dateBorn string into a JavaScript Date object
     const birthDate = new Date(dateBorn);
-
-    // Get the current date
     const today = new Date();
-
-    // Calculate the difference in years
     let age = today.getFullYear() - birthDate.getFullYear();
-
-    // Check if the birthday hasn't occurred yet this year
     const monthDiff = today.getMonth() - birthDate.getMonth();
     const dayDiff = today.getDate() - birthDate.getDate();
 
-    // If the birthday hasn't occurred yet this year, decrement the age
     if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
       age--;
     }
     return age;
   };
 
-  const { token, setToken } = useTokenProvider();
+  const { token } = useTokenProvider();
 
   useEffect(() => {
-    // Fetch all friends when the component mounts
     fetchAllFriends();
   }, []);
 

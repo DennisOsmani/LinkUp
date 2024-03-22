@@ -1,21 +1,27 @@
 import { TextInput, View, ScrollView, Text } from "react-native";
-import { UserCard } from "../../../components/UserCard/UserCard";
+import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { SearchUsers } from "../../../api/UserAPI";
-import { User } from "../../../interfaces/ModelInterfaces";
+import { IUser } from "../../../interfaces/ModelInterfaces";
+import { useTokenProvider } from "../../../providers/TokenProvider";
 
 // When register, add date of birth
 
-// IF STRING IS EMPTY MAKE IT SHOW ALL USERS (BACKEND)
+// TODO
+// - Legg til venn knappen med Userraltion API (search)
+// - Profilbilde (search & friends)
+// - Linke hvert kort til profil (search & friends)
+// - Ikke få opp seg selv når man søker (search)
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
-  const [searchResult, setSearchResult] = useState<User[] | undefined>([]);
+  const [searchResult, setSearchResult] = useState<IUser[] | undefined>([]);
 
   const calculateAge = (dateBorn: string) => {
     // Parse the dateBorn string into a JavaScript Date object
+
     const birthDate = new Date(dateBorn);
 
     // Get the current date
@@ -40,17 +46,20 @@ export default function SearchPeople() {
     setSearchResult([]);
   };
 
+  const { token, setToken } = useTokenProvider();
+
   const handleSearch = async () => {
     try {
-      const results: User[] | undefined = await SearchUsers(searchText);
+      const results: IUser[] | undefined = await SearchUsers(searchText, token);
       setSearchResult(results);
     } catch (error) {
+      setToken("");
       console.error("Error while searching users: " + error);
     }
   };
 
   const handleKeyPress = (nativeEvent: any) => {
-    if (nativeEvent.key === "Enter" || "retur") {
+    if (nativeEvent.key === "Enter") {
       handleSearch();
     }
   };
@@ -71,17 +80,18 @@ export default function SearchPeople() {
         </View>
 
         {searchResult &&
-          searchResult.map((user: User, index: number) => (
-            <UserCard
-              key={index}
-              userCardInfo={{
-                firstname: user.firstname,
-                lastname: user.lastname,
-                age: calculateAge(user.dateBorn),
-              }}
-              onPressButon={() => {}}
-            ></UserCard>
-          ))}
+          searchResult //.filter(user => user.userID !== loggedInUserID)
+            .map((user: IUser, index: number) => (
+              <UserCardSearch
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                }}
+                onPressButon={() => {}}
+              ></UserCardSearch>
+            ))}
       </View>
     </ScrollView>
   );
