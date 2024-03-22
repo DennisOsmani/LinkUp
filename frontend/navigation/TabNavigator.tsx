@@ -16,7 +16,7 @@ export default function TabNavigator() {
         <Tab.Screen
           options={{ headerShown: false }}
           name="Feed"
-          component={Feed}
+          component={/*Feed*/ Events} // RESET THIS BACK!!
         />
         <Tab.Screen
           options={{ headerShown: false }}

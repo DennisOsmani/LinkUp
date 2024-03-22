@@ -30,8 +30,7 @@ export default function App() {
 
   return (
     <TokenProvider>
-      <TabNavigator />
-      {/* <LoginWallRouter />*/}
+      <LoginWallRouter />
     </TokenProvider>
   );
 }

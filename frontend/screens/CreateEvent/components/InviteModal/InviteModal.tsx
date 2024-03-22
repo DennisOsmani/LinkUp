@@ -1,5 +1,8 @@
 import { Modal, View, Text, Pressable } from "react-native";
 import { styles } from "./InviteModalStyles";
+import InviteFriends from "../InviteFriends/InviteFriends";
+import { IUser } from "../../../../interfaces/ModelInterfaces";
+import { useState } from "react";
 
 interface InviteModalProps {
   inviteVisible: boolean;
@@ -10,8 +13,13 @@ export default function InviteModal({
   inviteVisible,
   setInviteVisible,
 }: InviteModalProps) {
+  const [usersToInvite, setUsersToInvite] = useState<string[]>([]);
+
   const handleSendInvites = async () => {
-    // TODO
+    setInviteVisible(!inviteVisible);
+
+    console.log("SENDING INVITES TO...");
+    usersToInvite.forEach((user: string) => console.log(user));
   };
 
   return (
@@ -23,10 +31,8 @@ export default function InviteModal({
     >
       <View style={styles.container}>
         <View style={styles.modalCard}>
-          <Pressable
-            style={styles.saveButton}
-            onPress={() => setInviteVisible(!inviteVisible)}
-          >
+          <InviteFriends setUsersToInvite={setUsersToInvite} />
+          <Pressable style={styles.saveButton} onPress={handleSendInvites}>
             <Text style={styles.saveText}>Inviter</Text>
           </Pressable>
         </View>

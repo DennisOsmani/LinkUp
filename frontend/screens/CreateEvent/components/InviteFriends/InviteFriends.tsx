@@ -1,15 +1,22 @@
-import { TextInput, View, ScrollView, Text } from "react-native";
-import styles from "./FriendsModalStyles";
+import { TextInput, View, ScrollView, Keyboard } from "react-native";
+import { styles } from "./InviteFriendsStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { IUser } from "../../../../interfaces/ModelInterfaces";
 import { getUserFriendEvents } from "../../../../api/EventAPI";
 import { useTokenProvider } from "../../../../providers/TokenProvider";
+import { GetUserFriends } from "../../../../api/UserAPI";
+import { InviteUserCard } from "../InviteUserCard/InviteUserCard";
 
 // TODO
 // - Profilbilde (search & friends)
+interface InviteFriendsProps {
+  setUsersToInvite: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
-export default function FriendsPeople() {
+export default function InviteFriends({
+  setUsersToInvite,
+}: InviteFriendsProps) {
   const [searchText, setSearchText] = useState("");
   const [allFriends, setAllFriends] = useState<IUser[] | undefined>([]);
   const [filteredFriends, setFilteredFriends] = useState<IUser[] | undefined>(
@@ -41,6 +48,7 @@ export default function FriendsPeople() {
       setAllFriends(results);
       setFilteredFriends(results);
     } catch (error) {
+      // TODO - setToken("")
       console.error("Error while fetching all friends: " + error);
     }
   };
@@ -70,6 +78,13 @@ export default function FriendsPeople() {
     fetchAllFriends();
   };
 
+  const handleKeyPress = (e: any) => {
+    if (e.nativeEvent.key === "Enter") {
+      Keyboard.dismiss();
+      e.preventDefault();
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.contentContainer}>
@@ -79,20 +94,22 @@ export default function FriendsPeople() {
             placeholder="Søk"
             value={searchText}
             onChangeText={handleSearchTextChange}
-          ></TextInput>
+            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
+            onKeyPress={handleKeyPress}
+          />
           <Feather style={styles.icon} name="x" onPress={clearSearchText} />
         </View>
 
         {filteredFriends &&
           filteredFriends.map((user: IUser, index: number) => (
-            <UserCardFriends
+            <InviteUserCard
               key={index}
-              userCardInfo={{
-                firstname: user.firstname,
-                lastname: user.lastname,
-                age: calculateAge(user.dateBorn),
-              }}
-            ></UserCardFriends>
+              firstname={user.firstname}
+              lastname={user.lastname}
+              age={calculateAge(user.dateBorn)}
+              userId={user.userID}
+              setUsersToInvite={setUsersToInvite}
+            />
           ))}
       </View>
     </ScrollView>

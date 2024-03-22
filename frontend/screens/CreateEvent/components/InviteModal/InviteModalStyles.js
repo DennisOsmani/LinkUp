@@ -15,9 +15,10 @@ export const styles = StyleSheet.create({
   },
 
   modalCard: {
+    zIndex: 2,
     marginBottom: verticalScale(40),
     width: "95%",
-    height: "50%",
+    height: "70%",
     borderRadius: moderateScale(15),
     justifyContent: "center",
     alignItems: "center",
@@ -49,9 +50,9 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     width: horizontalScale(180),
     height: verticalScale(45),
-    marginTop: verticalScale(10),
     borderWidth: moderateScale(3),
     borderColor: colors.primary,
+    marginBottom: horizontalScale(20),
   },
 
   saveText: {
