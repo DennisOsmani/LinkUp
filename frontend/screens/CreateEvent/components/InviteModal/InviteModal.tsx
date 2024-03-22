@@ -14,6 +14,7 @@ export default function InviteModal({
   setInviteVisible,
 }: InviteModalProps) {
   const [usersToInvite, setUsersToInvite] = useState<string[]>([]);
+  const [invitedUsers, setInvitedUsers] = useState<string[]>([]);
 
   const handleSendInvites = async () => {
     setInviteVisible(!inviteVisible);

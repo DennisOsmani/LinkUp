@@ -75,7 +75,7 @@ export default function InviteFriends({
 
   const clearSearchText = () => {
     setSearchText("");
-    fetchAllFriends();
+    setFilteredFriends(allFriends);
   };
 
   const handleKeyPress = (e: any) => {

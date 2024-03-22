@@ -19,30 +19,21 @@ export default function FriendsPeople() {
   );
 
   const calculateAge = (dateBorn: string) => {
-    // Parse the dateBorn string into a JavaScript Date object
     const birthDate = new Date(dateBorn);
-
-    // Get the current date
     const today = new Date();
-
-    // Calculate the difference in years
     let age = today.getFullYear() - birthDate.getFullYear();
-
-    // Check if the birthday hasn't occurred yet this year
     const monthDiff = today.getMonth() - birthDate.getMonth();
     const dayDiff = today.getDate() - birthDate.getDate();
 
-    // If the birthday hasn't occurred yet this year, decrement the age
     if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
       age--;
     }
     return age;
   };
 
-  const { token, setToken } = useTokenProvider();
+  const { token } = useTokenProvider();
 
   useEffect(() => {
-    // Fetch all friends when the component mounts
     fetchAllFriends();
   }, []);
 
@@ -78,7 +69,7 @@ export default function FriendsPeople() {
 
   const clearSearchText = () => {
     setSearchText("");
-    fetchAllFriends();
+    setFilteredFriends(allFriends);
   };
 
   return (
