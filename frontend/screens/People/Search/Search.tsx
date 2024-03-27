@@ -14,6 +14,7 @@ import { useTokenProvider } from "../../../providers/TokenProvider";
 // - Profilbilde (search & friends)
 // - Linke hvert kort til profil (search & friends)
 // - Ikke få opp seg selv når man søker (search)
+// - Allerede venner skal ikke vises m knapp men som --> (UserCardFriends)
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
@@ -80,7 +81,7 @@ export default function SearchPeople() {
         </View>
 
         {searchResult &&
-          searchResult //.filter(user => user.userID !== loggedInUserID)
+          searchResult
             .map((user: IUser, index: number) => (
               <UserCardSearch
                 key={index}
