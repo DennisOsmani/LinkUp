@@ -1,9 +1,10 @@
 import { TextInput, View, ScrollView, Text } from "react-native";
 import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
+import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { SearchUsers } from "../../../api/UserAPI";
+import React, { useEffect, useState } from "react";
+import { SearchUsers, GetUserFriends } from "../../../api/UserAPI";
 import { IUser } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 
@@ -19,6 +20,7 @@ import { useTokenProvider } from "../../../providers/TokenProvider";
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
   const [searchResult, setSearchResult] = useState<IUser[] | undefined>([]);
+  const [friends, setFriends] = useState<IUser[]>([]);
 
   const calculateAge = (dateBorn: string) => {
     // Parse the dateBorn string into a JavaScript Date object
@@ -41,13 +43,26 @@ export default function SearchPeople() {
     }
     return age;
   };
+  
+  const { token, setToken } = useTokenProvider();
+
+  useEffect(() => {
+      fetchFriends();
+  }, []);
+
+  const fetchFriends = async () => {
+    try {
+     const friends: IUser[] = await GetUserFriends(token); 
+     setFriends(friends);
+    } catch (error) {
+      console.error("Error in fetching users friends (Search) " + error);
+    }}
 
   const clearSearchText = () => {
     setSearchText("");
     setSearchResult([]);
   };
 
-  const { token, setToken } = useTokenProvider();
 
   const handleSearch = async () => {
     try {
@@ -82,7 +97,27 @@ export default function SearchPeople() {
 
         {searchResult &&
           searchResult
-            .map((user: IUser, index: number) => (
+            .map((user: IUser, index: number) => {
+
+                // Check if the logged-in user's friends list contains the current user
+            const isFriend = friends.some(friend => friend.userID === user.userID);
+
+            // Render different user card based on friendship status
+            if (isFriend) {
+              // Render a different user card for friends
+
+              return (
+                <UserCardFriends
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                }}
+                ></UserCardFriends>
+              );
+            } else {
+              return (
               <UserCardSearch
                 key={index}
                 userCardInfo={{
@@ -92,7 +127,8 @@ export default function SearchPeople() {
                 }}
                 onPressButon={() => {}}
               ></UserCardSearch>
-            ))}
+               );}
+          })}
       </View>
     </ScrollView>
   );
