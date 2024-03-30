@@ -35,7 +35,7 @@ export default StyleSheet.create({
   },
   iconContainer: {
     flexDirection: "row",
-    marginLeft: horizontalScale(10),
+    marginLeft: horizontalScale(13),
   },
   icon: {
     fontSize: moderateScale(19),
