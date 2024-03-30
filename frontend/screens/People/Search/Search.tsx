@@ -101,13 +101,11 @@ export default function SearchPeople() {
           searchResult
             .map((user: IUser, index: number) => {
 
-                // Check if the logged-in user's friends list contains the current user
+            // Check if the logged-in user's friends list contains the current user
             const isFriend = friends.some(friend => friend.userID === user.userID);
 
             // Render different user card based on friendship status
             if (isFriend) {
-              // Render a different user card for friends
-
               return (
                 <UserCardFriends
                 key={index}
