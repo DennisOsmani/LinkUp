@@ -5,17 +5,17 @@ import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { SearchUsers, GetUserFriends } from "../../../api/UserAPI";
-import { IUser } from "../../../interfaces/ModelInterfaces";
+import { IUser, IUserRelation, IUserRelationDTO, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
+import { CreateUserRelation } from "../../../api/UserRelationAPI";
 
-// When register, add date of birth
+// When register, add date of birth ??
 
 // TODO
 // - Legg til venn knappen med Userraltion API (search)
 // - Profilbilde (search & friends)
 // - Linke hvert kort til profil (search & friends)
 // - Ikke få opp seg selv når man søker (search)
-// - Allerede venner skal ikke vises m knapp men som --> (UserCardFriends)
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
@@ -23,21 +23,15 @@ export default function SearchPeople() {
   const [friends, setFriends] = useState<IUser[]>([]);
 
   const calculateAge = (dateBorn: string) => {
-    // Parse the dateBorn string into a JavaScript Date object
 
     const birthDate = new Date(dateBorn);
 
-    // Get the current date
     const today = new Date();
-
-    // Calculate the difference in years
     let age = today.getFullYear() - birthDate.getFullYear();
 
-    // Check if the birthday hasn't occurred yet this year
     const monthDiff = today.getMonth() - birthDate.getMonth();
     const dayDiff = today.getDate() - birthDate.getDate();
 
-    // If the birthday hasn't occurred yet this year, decrement the age
     if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
       age--;
     }
@@ -57,6 +51,14 @@ export default function SearchPeople() {
     } catch (error) {
       console.error("Error in fetching users friends (Search) " + error);
     }}
+
+    const handleAddFriend = async (friendId: string) => {
+      try {
+        await CreateUserRelation(token, { userId: "token.getUserId", otherUserId: friendId, type: UserRelationType.FRIENDS });
+      } catch (error) {
+        console.error("Error in adding a friend (search) " + error)
+      }
+    }
 
   const clearSearchText = () => {
     setSearchText("");
@@ -125,7 +127,7 @@ export default function SearchPeople() {
                   lastname: user.lastname,
                   age: calculateAge(user.dateBorn),
                 }}
-                onPressButon={() => {}}
+                onPressButon={() => handleAddFriend(user.userID)}
               ></UserCardSearch>
                );}
           })}
