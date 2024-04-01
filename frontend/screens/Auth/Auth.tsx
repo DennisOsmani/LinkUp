@@ -1,12 +1,16 @@
 import { View, Alert } from "react-native";
-import { IToken, registerUser } from "../../api/AuthAPI";
+import { registerUser } from "../../api/AuthAPI";
 import { loginUser } from "../../api/AuthAPI";
 import { useEffect, useState } from "react";
 import { styles } from "./AuthStyles";
-import { IRegistrationRequest, ILoginRequest } from "../../api/AuthAPI";
 import LoginCard from "./components/Login/LoginCard";
 import RegisterCard from "./components/Register/RegisterCard";
 import { useTokenProvider } from "../../providers/TokenProvider";
+import {
+  IRegistrationRequest,
+  ILoginRequest,
+  IToken,
+} from "../../interfaces/ModelInterfaces";
 
 enum State {
   LOGIN,
@@ -25,7 +29,7 @@ export default function Auth({ trigger, setTrigger }: AuthProps) {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
 
-  const { token, setToken, setUserId } = useTokenProvider();
+  const { setToken, setUserId } = useTokenProvider();
 
   const handleLogin = async () => {
     try {
