@@ -25,7 +25,7 @@ export default function Auth({ trigger, setTrigger }: AuthProps) {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
 
-  const { token, setToken } = useTokenProvider();
+  const { token, setToken, setUserId } = useTokenProvider();
 
   const handleLogin = async () => {
     try {
@@ -36,6 +36,7 @@ export default function Auth({ trigger, setTrigger }: AuthProps) {
 
       const response: IToken | undefined = await loginUser(request);
       setToken(response.token);
+      setUserId(response.userId);
     } catch (error) {
       Alert.alert(
         "Ugyldig Login",
