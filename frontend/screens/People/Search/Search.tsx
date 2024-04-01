@@ -1,21 +1,18 @@
-import { TextInput, View, ScrollView, Text } from "react-native";
+import { TextInput, View, ScrollView, Alert } from "react-native";
 import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { SearchUsers, GetUserFriends } from "../../../api/UserAPI";
-import { IUser, IUserRelation, IUserRelationDTO, UserRelationType } from "../../../interfaces/ModelInterfaces";
+import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import { CreateUserRelation } from "../../../api/UserRelationAPI";
 
 // When register, add date of birth ??
 
 // TODO
-// - Legg til venn knappen med Userraltion API (search)
-// - Profilbilde (search & friends)
-// - Linke hvert kort til profil (search & friends)
-// - Ikke få opp seg selv når man søker (search)
+// - TRELLO
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
@@ -54,7 +51,10 @@ export default function SearchPeople() {
 
     const handleAddFriend = async (friendId: string) => {
       try {
-        await CreateUserRelation(token, { userId: "token.getUserId", otherUserId: friendId, type: UserRelationType.FRIENDS });
+        await CreateUserRelation(token, { userId: "", otherUserId: friendId, type: UserRelationType.FRIENDS });
+        Alert.alert('Venneforespørsel er sendt!');
+          clearSearchText();
+          await fetchFriends();
       } catch (error) {
         console.error("Error in adding a friend (search) " + error)
       }
