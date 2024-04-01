@@ -29,8 +29,7 @@ export default function TabNavigator() {
             />
           ) }}
           name="Feed"
-          component={Feed}
-          
+          component={Feed}          
         /> 
         <Tab.Screen
           options={{ headerShown: false,  tabBarIcon: ({color}) => (

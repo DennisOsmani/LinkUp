@@ -1,6 +1,7 @@
 // LAGE ENUMS OGSÅ SIDEN DE BLIR SENDT SOM INT???
 export interface IToken {
   token: string;
+  userId: string;
 }
 
 export interface ILoginRequest {
@@ -37,7 +38,7 @@ export interface IUser {
 }
 
 export interface IEvent {
-  eventID: number;
+  eventID?: number;
   eventName: string;
   eventDescription: string;
   eventDateTimeStart: string;
@@ -47,13 +48,13 @@ export interface IEvent {
   frontImage?: string;
   minCapacity?: string;
   maxCapacity?: string;
-  locationID: number;
-  location: ILocation;
+  locationID?: number;
+  location?: ILocation;
   eventRelations?: [];
 }
 
 export interface ILocation {
-  locationID: number;
+  locationID?: number;
   address?: string;
   postalcode?: string;
   city: string;
