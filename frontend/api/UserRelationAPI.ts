@@ -3,7 +3,7 @@ import { IUserRelation, IUserRelationDTO } from "../interfaces/ModelInterfaces";
 
 const THIS_URL: string = `${URL_BASE}${USERRELATION_PATH}`;
 
-const createUserRelation = async (token: string, dto: IUserRelationDTO) => {
+export async function CreateUserRelation(token: string, dto: IUserRelationDTO) {
   try {
     const response = await fetch(`${THIS_URL}`, {
       method: "POST",
