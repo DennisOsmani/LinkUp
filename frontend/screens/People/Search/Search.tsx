@@ -104,7 +104,6 @@ export default function SearchPeople() {
             // Check if the logged-in user's friends list contains the current user
             const isFriend = friends.some(friend => friend.userID === user.userID);
 
-            // Render different user card based on friendship status
             if (isFriend) {
               return (
                 <UserCardFriends
