@@ -35,7 +35,7 @@ export default function SearchPeople() {
     return age;
   };
   
-  const { token, setToken } = useTokenProvider();
+  const { token, setToken, userId } = useTokenProvider();
 
   useEffect(() => {
       fetchFriends();
@@ -69,7 +69,13 @@ export default function SearchPeople() {
   const handleSearch = async () => {
     try {
       const results: IUser[] | undefined = await SearchUsers(searchText, token);
-      setSearchResult(results);
+
+      if (results.some(id => id.userID === userId)) {
+        const filteredResults = results.filter(user => user.userID !== userId);
+        setSearchResult(filteredResults);
+      } else {
+        setSearchResult(results);
+      }
     } catch (error) {
       setToken("");
       console.error("Error while searching users: " + error);
