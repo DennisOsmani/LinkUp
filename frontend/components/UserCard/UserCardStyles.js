@@ -1,27 +1,32 @@
 import { colors } from "../../styles/colors";
 import { StyleSheet } from "react-native";
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from "../../styles/genericDimensions";
 
 export default StyleSheet.create({
   card: {
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    marginTop: 20,
+    paddingVertical: verticalScale(15),
+    paddingHorizontal: horizontalScale(10),
+    marginTop: verticalScale(20),
     backgroundColor: colors.foreground,
-    borderRadius: 20,
+    borderRadius: moderateScale(20),
     shadowColor: "black",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
+    shadowOffset: { width: horizontalScale(0), height: verticalScale(4) },
+    shadowOpacity: moderateScale(0.5),
+    shadowRadius: moderateScale(4),
   },
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
   image: {
-    width: 65,
-    height: 65,
-    borderRadius: 100,
-    marginLeft: 10,
+    width: horizontalScale(65),
+    height: verticalScale(65),
+    borderRadius: moderateScale(100),
+    marginLeft: horizontalScale(10),
   },
   detailsContainer: {
     flexDirection: "column",
@@ -29,38 +34,61 @@ export default StyleSheet.create({
   },
   iconContainer: {
     flexDirection: "row",
-    marginLeft: 10,
+    marginLeft: horizontalScale(10),
   },
   icon: {
-    fontSize: 20,
-    marginRight: 4,
-    marginTop: 2,
+    fontSize: moderateScale(19),
+    marginRight: horizontalScale(4),
+    marginTop: verticalScale(5),
   },
   textName: {
-    fontSize: 20,
-    marginRight: 3,
+    fontSize: moderateScale(20),
+    marginRight: horizontalScale(3),
+    fontFamily: "BalooRegular",
+    marginBottom: verticalScale(-15),
   },
   textAge: {
-    fontSize: 14,
-    marginLeft: 13,
+    fontSize: moderateScale(16),
+    marginLeft: horizontalScale(13),
     color: colors.grey,
+    fontFamily: "BalooRegular",
+    marginBottom: verticalScale(-12),
   },
   buttonContainer: {
-    marginRight: 10,
+    marginRight: horizontalScale(10),
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
-  button: {
-    borderRadius: 10,
+  buttonAdd: {
+    borderRadius: moderateScale(10),
     backgroundColor: colors.primary,
     justifyContent: "center",
-    height: 30,
-    width: 130,
+    height: verticalScale(30),
+    width: horizontalScale(130),
   },
-  buttonText: {
+  buttonTextAdd: {
     color: colors.foreground,
     textAlign: "center",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: moderateScale(18),
+    fontFamily: "BalooBold",
   },
+  buttonPending: {
+    borderRadius: moderateScale(10),
+    borderColor: colors.primary,
+    borderWidth: moderateScale(2),
+    backgroundColor: colors.foreground,
+    justifyContent: "center",
+    height: verticalScale(30),
+    width: horizontalScale(130),
+  },
+  buttonTextPending: {
+    color: colors.primary,
+    textAlign: "center",
+    fontSize: moderateScale(18),
+    fontFamily: "BalooBold",
+  },
+  buttonAccept: {},
+  buttonTextAccept: {},
+  buttonReject: {},
+  buttonTextReject: {},
 });

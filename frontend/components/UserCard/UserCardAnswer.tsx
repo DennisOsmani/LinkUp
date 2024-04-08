@@ -12,10 +12,15 @@ interface UserCardInfo {
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
-  onPressButon: () => void;
+  onPressAccept: () => void;
+  onPressReject: () => void;
 }
 
-export function UserCardSearch({ userCardInfo, onPressButon }: UserCardProps) {
+export function UserCardAnswer({
+  userCardInfo,
+  onPressAccept,
+  onPressReject,
+}: UserCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
@@ -33,8 +38,11 @@ export function UserCardSearch({ userCardInfo, onPressButon }: UserCardProps) {
             {userCardInfo.age} <Text style={styles.textAge}>år</Text>
           </Text>
           <View style={styles.buttonContainer}>
-            <Pressable style={styles.buttonAdd} onPress={onPressButon}>
-              <Text style={styles.buttonTextAdd}>Legg til venn</Text>
+            <Pressable style={styles.buttonAccept} onPress={onPressAccept}>
+              <Text style={styles.buttonTextAccept}>Godta</Text>
+            </Pressable>
+            <Pressable style={styles.buttonReject} onPress={onPressReject}>
+              <Text style={styles.buttonTextReject}>Avslå</Text>
             </Pressable>
           </View>
         </View>
