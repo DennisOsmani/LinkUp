@@ -55,4 +55,11 @@ public interface IUserService
     /// <param name="userId"></param>
     /// <returns>A list of Users</returns>
     Task<ICollection<User?>> GetUserFriends(string userId);
+
+     /// <summary>
+    /// Fetches a list of Users that logged in user has sent a friend request to.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>A list of Users</returns>
+    Task<ICollection<User?>> GetPendingFriendRequests(string userId);
 }

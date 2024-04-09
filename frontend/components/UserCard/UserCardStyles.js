@@ -18,35 +18,42 @@ export default StyleSheet.create({
     shadowOpacity: moderateScale(0.5),
     shadowRadius: moderateScale(4),
   },
+
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
+
   image: {
     width: horizontalScale(65),
     height: verticalScale(65),
     borderRadius: moderateScale(100),
     marginLeft: horizontalScale(10),
   },
+
   detailsContainer: {
     flexDirection: "column",
     width: "80%",
   },
+
   iconContainer: {
     flexDirection: "row",
     marginLeft: horizontalScale(10),
   },
+
   icon: {
     fontSize: moderateScale(19),
     marginRight: horizontalScale(4),
     marginTop: verticalScale(5),
   },
+
   textName: {
     fontSize: moderateScale(20),
     marginRight: horizontalScale(3),
     fontFamily: "BalooRegular",
     marginBottom: verticalScale(-15),
   },
+
   textAge: {
     fontSize: moderateScale(16),
     marginLeft: horizontalScale(13),
@@ -54,11 +61,14 @@ export default StyleSheet.create({
     fontFamily: "BalooRegular",
     marginBottom: verticalScale(-12),
   },
+
   buttonContainer: {
     marginRight: horizontalScale(10),
     justifyContent: "flex-end",
     alignItems: "flex-end",
+    flexDirection: "row",
   },
+
   buttonAdd: {
     borderRadius: moderateScale(10),
     backgroundColor: colors.primary,
@@ -72,6 +82,7 @@ export default StyleSheet.create({
     fontSize: moderateScale(18),
     fontFamily: "BalooBold",
   },
+
   buttonPending: {
     borderRadius: moderateScale(10),
     borderColor: colors.primary,
@@ -87,8 +98,35 @@ export default StyleSheet.create({
     fontSize: moderateScale(18),
     fontFamily: "BalooBold",
   },
-  buttonAccept: {},
-  buttonTextAccept: {},
-  buttonReject: {},
-  buttonTextReject: {},
+
+  buttonAccept: {
+    borderRadius: moderateScale(10),
+    backgroundColor: colors.primary,
+    justifyContent: "center",
+    height: verticalScale(30),
+    width: horizontalScale(80),
+    marginRight: horizontalScale(5),
+  },
+  buttonTextAccept: {
+    color: colors.foreground,
+    textAlign: "center",
+    fontSize: moderateScale(18),
+    fontFamily: "BalooBold",
+  },
+
+  buttonReject: {
+    borderRadius: moderateScale(10),
+    borderColor: colors.primary,
+    borderWidth: moderateScale(2),
+    backgroundColor: colors.foreground,
+    justifyContent: "center",
+    height: verticalScale(30),
+    width: horizontalScale(80),
+  },
+  buttonTextReject: {
+    color: colors.primary,
+    textAlign: "center",
+    fontSize: moderateScale(18),
+    fontFamily: "BalooBold",
+  },
 });

@@ -154,4 +154,21 @@ public class UserRelationRepository
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }
     }
+
+    // Gets the users sent friend request that is pending
+    public async Task<ICollection<User?>> GetPendingFriendRequests(string userId)
+    {
+        try 
+        {
+            return await _context.UserRelations
+                .Where(ur => (ur.User_first_ID == userId || ur.User_second_ID == userId)
+                    && ur.Type == UserRelationType.PENDING_FIRST_SECOND)
+                .Select(ur => ur.User_second)
+                .ToListAsync();
+        }
+         catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
+    }
 }

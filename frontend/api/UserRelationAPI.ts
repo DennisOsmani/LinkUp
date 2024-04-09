@@ -25,9 +25,12 @@ export async function CreateUserRelation(token: string, dto: IUserRelationDTO) {
   } catch (error) {
     console.error("Error while fetching createUserRelation " + error);
   }
-};
+}
 
-const updateUserRelationType = async (token: string, dto: IUserRelationDTO) => {
+export async function UpdateUserRelationType(
+  token: string,
+  dto: IUserRelationDTO
+) {
   try {
     const response = await fetch(`${THIS_URL}`, {
       method: "PUT",
@@ -49,9 +52,9 @@ const updateUserRelationType = async (token: string, dto: IUserRelationDTO) => {
   } catch (error) {
     console.error("Error while fetching updateUserRelationType " + error);
   }
-};
+}
 
-const deleteUserRelation = async (token: string, otherUserId: string) => {
+export async function DeleteUserRelation(token: string, otherUserId: string) {
   try {
     const response = await fetch(`${THIS_URL}/${otherUserId}`, {
       method: "DELETE",
@@ -71,4 +74,4 @@ const deleteUserRelation = async (token: string, otherUserId: string) => {
   } catch (error) {
     console.error("Error while fetching deleteUserRelation " + error);
   }
-};
+}
