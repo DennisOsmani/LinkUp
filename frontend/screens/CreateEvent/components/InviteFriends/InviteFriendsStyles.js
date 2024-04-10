@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
 
   searchContainer: {
     flexDirection: "row",
+    width: "90%",
   },
 
   searchBar: {

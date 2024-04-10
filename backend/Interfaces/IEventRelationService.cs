@@ -63,4 +63,11 @@ public interface IEventRelationService
     /// <param name="userId"></param>
     /// <returns>True if conditions met, else false</returns>
     Task<bool> IsUserHostOrCreator(int eventId, string userId);
+
+    /// <summary>
+    /// Invites a list of user to a event 
+    /// </summary>
+    /// <param name="userIds"></param>
+    /// <param name="eventId"></param>
+    Task InviteUsersForEvent(ICollection<string> userIds, int eventId);
 }

@@ -3,7 +3,6 @@ import { styles } from "./InviteFriendsStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { IUser } from "../../../../interfaces/ModelInterfaces";
-import { getUserFriendEvents } from "../../../../api/EventAPI";
 import { useTokenProvider } from "../../../../providers/TokenProvider";
 import { GetUserFriends } from "../../../../api/UserAPI";
 import { InviteUserCard } from "../InviteUserCard/InviteUserCard";
@@ -11,17 +10,23 @@ import { InviteUserCard } from "../InviteUserCard/InviteUserCard";
 // TODO
 // - Profilbilde (search & friends)
 interface InviteFriendsProps {
-  setUsersToInvite: React.Dispatch<React.SetStateAction<string[]>>;
+  allFriends: IUser[];
+  setAllFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
+  filteredFriends: IUser[];
+  setFilteredFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
+  invitedFriends: IUser[];
+  setInvitedFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
 }
 
 export default function InviteFriends({
-  setUsersToInvite,
+  setAllFriends,
+  setFilteredFriends,
+  allFriends,
+  setInvitedFriends,
+  invitedFriends,
+  filteredFriends,
 }: InviteFriendsProps) {
   const [searchText, setSearchText] = useState("");
-  const [allFriends, setAllFriends] = useState<IUser[] | undefined>([]);
-  const [filteredFriends, setFilteredFriends] = useState<IUser[] | undefined>(
-    []
-  );
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -45,6 +50,7 @@ export default function InviteFriends({
   const fetchAllFriends = async () => {
     try {
       const results: IUser[] | undefined = await GetUserFriends(token);
+      console.log("HENTET");
       setAllFriends(results);
       setFilteredFriends(results);
     } catch (error) {
@@ -62,7 +68,7 @@ export default function InviteFriends({
     if (text === "") {
       setFilteredFriends(allFriends);
     } else {
-      const filtered: IUser[] | undefined = allFriends?.filter(
+      const filtered: IUser[] = allFriends?.filter(
         (friend) =>
           (friend.firstname + " " + friend.lastname)
             .toLowerCase()
@@ -85,6 +91,38 @@ export default function InviteFriends({
     }
   };
 
+  const handleUninviteClick = (user: IUser) => {
+    if (!allFriends) return;
+
+    setInvitedFriends(
+      invitedFriends.filter(
+        (userIter: IUser) => userIter.userID !== user.userID
+      )
+    );
+
+    if (!allFriends.some((userIter) => userIter.userID === user.userID)) {
+      setAllFriends((prevAllFriends) =>
+        prevAllFriends ? [...prevAllFriends, user] : [user]
+      );
+    }
+  };
+
+  const handleInviteClick = (user: IUser) => {
+    if (!allFriends || !filteredFriends) return;
+
+    setAllFriends(
+      allFriends.filter((userIter) => userIter.userID !== user.userID)
+    );
+
+    setFilteredFriends(
+      filteredFriends.filter((userIter) => userIter.userID !== user.userID)
+    );
+
+    if (!invitedFriends.some((userIter) => userIter.userID === user.userID)) {
+      setInvitedFriends((prevInvitedFriends) => [...prevInvitedFriends, user]);
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.contentContainer}>
@@ -100,6 +138,19 @@ export default function InviteFriends({
           <Feather style={styles.icon} name="x" onPress={clearSearchText} />
         </View>
 
+        {invitedFriends &&
+          invitedFriends.map((user: IUser, index: number) => (
+            <InviteUserCard
+              key={index}
+              firstname={user.firstname}
+              lastname={user.lastname}
+              age={calculateAge(user.dateBorn)}
+              invited={true}
+              onInviteClick={() => handleInviteClick(user)}
+              onUninviteClick={() => handleUninviteClick(user)}
+            />
+          ))}
+
         {filteredFriends &&
           filteredFriends.map((user: IUser, index: number) => (
             <InviteUserCard
@@ -107,8 +158,9 @@ export default function InviteFriends({
               firstname={user.firstname}
               lastname={user.lastname}
               age={calculateAge(user.dateBorn)}
-              userId={user.userID}
-              setUsersToInvite={setUsersToInvite}
+              invited={false}
+              onInviteClick={() => handleInviteClick(user)}
+              onUninviteClick={() => handleUninviteClick(user)}
             />
           ))}
       </View>

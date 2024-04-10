@@ -138,7 +138,7 @@ export const getUserJoinedEvents = async (token: string) => {
 export const createEvent = async (event: IEvent, token: string) => {
   console.log("URL: " + `${THIS_URL}/create`);
   try {
-    const response = await fetch(`${THIS_URL} / create`, {
+    const response = await fetch(`${THIS_URL}/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -181,7 +181,7 @@ export const updateEvent = async (event: Event, token: string) => {
 
 export const deleteEvent = async (eventId: number, token: string) => {
   try {
-    const response = await fetch(`${THIS_URL} / ${eventId}`, {
+    const response = await fetch(`${THIS_URL}/${eventId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -14,12 +14,13 @@ import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { IEvent, ILocation } from "../../interfaces/ModelInterfaces";
+import { IEvent, ILocation, IUser } from "../../interfaces/ModelInterfaces";
 import { createEvent } from "../../api/EventAPI";
 import LocationModal from "./components/LocationModal/LocationModal";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import InviteModal from "./components/InviteModal/InviteModal";
 import { colors } from "../../styles/colors";
+import { inviteUsersForEvent } from "../../api/EventRelationAPI";
 
 const date = new Date();
 
@@ -53,6 +54,8 @@ export default function CreateEvent() {
     city: "",
     country: "",
   });
+
+  const [usersToInvite, setUsersToInvite] = useState<Set<string>>(new Set());
 
   const { token } = useTokenProvider();
 
@@ -94,15 +97,9 @@ export default function CreateEvent() {
    * TODO
    * Required fields
    *
-   * Ha en lsite for venner og en for "inviterte venner"
-   * Når man trykker legg til venn så byttes de til listen "inviterte venner"
-   * Legg til en prop til inviteUserCard som sier om det skal rendres fjern eller legg til knapp
-   * I InviteFriends map til InviteUserCard to ganger, først for inviterte vcenner så for resten
-   * Legg til funksjonalitet for å fjerne / legge til
-   *
-   * Fiks createEvent med location inni, eller del opp til to api kall, en til event og en til location
-   * Fiks å sende ut invitasjoner til alle som er i invitert listen, kanskje Promise.all?
-   *
+   * Endre CreateEvent slik at den returnerer id til opprettet event
+   * Bruk id til å sende ut invitasjoner.
+   * Valider med db.
    */
 
   const handleVisibilityButtonPressed = (value: number) => {
@@ -141,13 +138,26 @@ export default function CreateEvent() {
       };
 
       const eventResponse = await createEvent(eventToCreate, token);
-      console.log("Created event, response: " + eventResponse);
+      if (eventResponse === 200) {
+        Alert.alert("TODO", "Kast brukeren til eventet som ble laget");
+      }
     } catch (error) {
       // setToken("");
-      console.log("Error creating a event, and uploading" + error);
+      Alert.alert("Noe gikk galt", "Prøv igjen senere.");
     }
 
-    // Send invites
+    await sendInvites(eventId);
+  };
+
+  const sendInvites = async (eventId: number) => {
+    try {
+      const userIds = Array.from(usersToInvite);
+
+      await inviteUsersForEvent(eventId, userIds, token);
+    } catch (error) {
+      Alert.alert("Noe gikk galt", "Dine venneforespørseler ble ikke sendt!");
+      throw new Error("Error while sending invites!" + error);
+    }
   };
 
   return (
@@ -160,6 +170,8 @@ export default function CreateEvent() {
       />
 
       <InviteModal
+        usersToInvite={usersToInvite}
+        setUsersToInvite={setUsersToInvite}
         inviteVisible={inviteModalVisible}
         setInviteVisible={setInviteModalVisible}
       />

@@ -84,4 +84,22 @@ export const styles = StyleSheet.create({
     width: "93%",
     alignItems: "flex-end",
   },
+
+  uninviteButton: {
+    height: verticalScale(29),
+    width: horizontalScale(110),
+    borderRadius: moderateScale(10),
+    backgroundColor: colors.foreground,
+    borderColor: colors.primary,
+    borderWidth: moderateScale(3),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  uninviteButtonText: {
+    fontFamily: "BalooBold",
+    fontSize: moderateScale(20),
+    color: colors.primary,
+    textAlign: "center",
+  },
 });
