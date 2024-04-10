@@ -2,10 +2,15 @@ import { TextInput, View, ScrollView, Text } from "react-native";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { IUser } from "../../../interfaces/ModelInterfaces";
+import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import { GetUserFriends } from "../../../api/UserAPI";
 import { useTokenProvider } from "../../../providers/TokenProvider";
+import { UserCardAnswer } from "../../../components/UserCard/UserCardAnswer";
+import {
+  UpdateUserRelationType,
+  DeleteUserRelation,
+} from "../../../api/UserRelationAPI";
 
 // TODO
 // - Profilbilde (search & friends)
@@ -17,6 +22,10 @@ export default function FriendsPeople() {
   const [filteredFriends, setFilteredFriends] = useState<IUser[] | undefined>(
     []
   );
+  const [allFriendRequests, setAllFriendRequests] = useState<
+    IUser[] | undefined
+  >([]);
+  const { token } = useTokenProvider();
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -31,8 +40,6 @@ export default function FriendsPeople() {
     return age;
   };
 
-  const { token } = useTokenProvider();
-
   useEffect(() => {
     fetchAllFriends();
   }, []);
@@ -44,6 +51,38 @@ export default function FriendsPeople() {
       setFilteredFriends(results);
     } catch (error) {
       console.error("Error while fetching all friends: " + error);
+    }
+  };
+
+  const fetchAllFriendRequests = async () => {
+    try {
+      const results: IUser[] | undefined = await GetUserFriends(token);
+      setAllFriends(results);
+      setFilteredFriends(results);
+    } catch (error) {
+      console.error("Error while fetching all friends: " + error);
+    }
+  };
+
+  const handleAcceptRequest = async (otherId: string) => {
+    try {
+      await UpdateUserRelationType(token, {
+        userId: "",
+        otherUserId: otherId,
+        type: UserRelationType.FRIENDS,
+      });
+      console.log("Ny venn!!!!");
+    } catch (error) {
+      console.error("Error in accepting a friendRequest (search) " + error);
+    }
+  };
+
+  const handleRejectRequest = async (otherId: string) => {
+    try {
+      await DeleteUserRelation(token, otherId);
+      console.log("Vil fæn itte bli din venn!!");
+    } catch (error) {
+      console.error("Error in rejecting a friendRequest (search) " + error);
     }
   };
 

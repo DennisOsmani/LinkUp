@@ -1,7 +1,6 @@
 import { TextInput, View, ScrollView, Alert } from "react-native";
 import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
-import { UserCardAnswer } from "../../../components/UserCard/UserCardAnswer";
 import { UserCardPending } from "../../../components/UserCard/UserCardPending";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
@@ -13,11 +12,7 @@ import {
 } from "../../../api/UserAPI";
 import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
-import {
-  CreateUserRelation,
-  UpdateUserRelationType,
-  DeleteUserRelation,
-} from "../../../api/UserRelationAPI";
+import { CreateUserRelation } from "../../../api/UserRelationAPI";
 
 // When register, add date of birth ??
 
@@ -90,26 +85,7 @@ export default function SearchPeople() {
   // ------------------------------------------------------------------------
   // SKAL DETTE VÆRE HER ELLER ET ANNET STED??????
   // SKAL DET VÆRE EN EGEN NOTIFICATIONS SIDE...??
-  const handleAcceptRequest = async (otherId: string) => {
-    try {
-      await UpdateUserRelationType(token, {
-        userId: "",
-        otherUserId: otherId,
-        type: UserRelationType.FRIENDS,
-      });
-      Alert.alert("Gratulerer med ny venn:)");
-    } catch (error) {
-      console.error("Error in accepting a friendRequest (search) " + error);
-    }
-  };
 
-  const handleRejectRequest = async (otherId: string) => {
-    try {
-      await DeleteUserRelation(token, otherId);
-    } catch (error) {
-      console.error("Error in rejecting a friendRequest (search) " + error);
-    }
-  };
   //  --------------------------------------------------------------^^^^^^^^
 
   const clearSearchText = () => {
