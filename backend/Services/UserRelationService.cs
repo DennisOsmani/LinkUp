@@ -16,6 +16,30 @@ public class UserRelationService : IUserRelationService
         _userRepo = userRepo;
     }
 
+    public async Task<UserRelation?> GetUserRelation(string userId, string otherUserId) {
+        User? user = await _userRepo.GetUserByID(userId);
+        User? otherUser = await _userRepo.GetUserByID(otherUserId);
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserRelationService)");
+        }
+
+        if(otherUser == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {otherUserId}, does not exist! (UserRelationService)");
+        }
+
+        UserRelation relation = await _userRelationRepo.GetUserRelation(userId, otherUserId);
+
+        Console.WriteLine("Relasjon id" + relation.UserRelationID + " type: " + relation.Type +
+        " 1: " + relation.User_first_ID + 
+        " 2: " + relation.User_second_ID + 
+        " Brukere: " + user.UserID + " " + otherUser.UserID);
+
+        return relation;
+    }   
+
     public async Task<UserRelation> CreateUserRelation(string userId, string otherUserId, string type)
     {
         User? user = await _userRepo.GetUserByID(userId);

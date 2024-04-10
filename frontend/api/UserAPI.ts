@@ -102,6 +102,29 @@ export async function GetPendingFriendRequests(token: string, userId?: string) {
   }
 }
 
+export async function GetUserFriendRequests(token: string, userId?: string) {
+  try {
+    const response = await fetch(`${THIS_URL}/request`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "Error in GetUserFriendRequests response: " + response.status
+      );
+    }
+
+    const data: IUser[] = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error("Error while fetching in GetUserFriendRequests " + error);
+  }
+}
+
 export async function updateUser(user: IUser, token: string) {
   try {
     const response = await fetch(`${THIS_URL}/update`, {

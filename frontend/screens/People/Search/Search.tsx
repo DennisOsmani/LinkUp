@@ -12,12 +12,17 @@ import {
 } from "../../../api/UserAPI";
 import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
-import { CreateUserRelation } from "../../../api/UserRelationAPI";
+import {
+  CreateUserRelation,
+  UpdateUserRelationType,
+  GetUserRelation,
+} from "../../../api/UserRelationAPI";
 
 // When register, add date of birth ??
 
 // TODO
 // - TRELLO
+// - Filtrere brukerne når man søker!!
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
@@ -70,23 +75,29 @@ export default function SearchPeople() {
 
   const handleSendFriendRequest = async (otherId: string) => {
     try {
-      await CreateUserRelation(token, {
+      const isRelation = await GetUserRelation(token, otherId);
+      // Hvordan fikse at det kan returneres null???
+      if (isRelation == undefined) {
+        await CreateUserRelation(token, {
+          userId: "",
+          otherUserId: otherId,
+          type: UserRelationType.PENDING_FIRST_SECOND,
+        });
+      }
+
+      // Sjekke om brukere er blokkert SKAL DISSE VISES??
+      await UpdateUserRelationType(token, {
         userId: "",
         otherUserId: otherId,
-        type: UserRelationType.PENDING_FIRST_SECOND,
+        type: UserRelationType.FRIENDS,
       });
+
       Alert.alert("Venneforespørsel er sendt!");
       clearSearchText();
     } catch (error) {
       console.error("Error in sending a friendRequest (search) " + error);
     }
   };
-
-  // ------------------------------------------------------------------------
-  // SKAL DETTE VÆRE HER ELLER ET ANNET STED??????
-  // SKAL DET VÆRE EN EGEN NOTIFICATIONS SIDE...??
-
-  //  --------------------------------------------------------------^^^^^^^^
 
   const clearSearchText = () => {
     setSearchText("");

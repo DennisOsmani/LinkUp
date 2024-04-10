@@ -3,6 +3,27 @@ import { IUserRelation, IUserRelationDTO } from "../interfaces/ModelInterfaces";
 
 const THIS_URL: string = `${URL_BASE}${USERRELATION_PATH}`;
 
+export async function GetUserRelation(token: string, otherUserId?: string) {
+  try {
+    const response = await fetch(`${THIS_URL}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in GetUserRelation response: " + response.status);
+    }
+
+    const data: IUserRelation = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching GetUserRelation " + error);
+  }
+}
+
 export async function CreateUserRelation(token: string, dto: IUserRelationDTO) {
   try {
     const response = await fetch(`${THIS_URL}`, {

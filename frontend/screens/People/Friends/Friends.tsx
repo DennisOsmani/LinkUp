@@ -4,7 +4,7 @@ import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
-import { GetUserFriends } from "../../../api/UserAPI";
+import { GetUserFriends, GetUserFriendRequests } from "../../../api/UserAPI";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import { UserCardAnswer } from "../../../components/UserCard/UserCardAnswer";
 import {
@@ -42,6 +42,7 @@ export default function FriendsPeople() {
 
   useEffect(() => {
     fetchAllFriends();
+    fetchAllFriendRequests();
   }, []);
 
   const fetchAllFriends = async () => {
@@ -56,11 +57,10 @@ export default function FriendsPeople() {
 
   const fetchAllFriendRequests = async () => {
     try {
-      const results: IUser[] | undefined = await GetUserFriends(token);
-      setAllFriends(results);
-      setFilteredFriends(results);
+      const results: IUser[] | undefined = await GetUserFriendRequests(token);
+      setAllFriendRequests(results);
     } catch (error) {
-      console.error("Error while fetching all friends: " + error);
+      console.error("Error while fetching all friend requests: " + error);
     }
   };
 
@@ -111,6 +111,9 @@ export default function FriendsPeople() {
     setFilteredFriends(allFriends);
   };
 
+  // Filtrere bort request når det søkes og det ikke samsvarer med søket
+  // eller ha de øverst hele tiden??
+
   return (
     <ScrollView>
       <View style={styles.contentContainer}>
@@ -123,6 +126,20 @@ export default function FriendsPeople() {
           ></TextInput>
           <Feather style={styles.icon} name="x" onPress={clearSearchText} />
         </View>
+
+        {allFriendRequests &&
+          allFriendRequests.map((user: IUser, index: number) => (
+            <UserCardAnswer
+              key={index}
+              userCardInfo={{
+                firstname: user.firstname,
+                lastname: user.lastname,
+                age: calculateAge(user.dateBorn),
+              }}
+              onPressAccept={() => handleAcceptRequest(user.userID)}
+              onPressReject={() => handleRejectRequest(user.userID)}
+            ></UserCardAnswer>
+          ))}
 
         {filteredFriends &&
           filteredFriends.map((user: IUser, index: number) => (
