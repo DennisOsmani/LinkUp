@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import Splash from "./screens/Splash/Splash";
 import { TokenProvider } from "./providers/TokenProvider";
+import { LocationProvider } from "./providers/LocationProvider";
 import "./firebase";
 import TabNavigator from "./navigation/TabNavigator";
 
@@ -17,6 +18,7 @@ export default function App() {
     await Font.loadAsync({
       BalooBold: require("./assets/fonts/Baloo2-Bold.ttf"),
       BalooRegular: require("./assets/fonts/Baloo2-Regular.ttf"),
+      BalooSemiBold: require("./assets/fonts/Baloo2-SemiBold.ttf"),
     });
 
     setTimeout(() => {
@@ -30,7 +32,9 @@ export default function App() {
 
   return (
     <TokenProvider>
-      <LoginWallRouter />
+      <LocationProvider>
+        <LoginWallRouter />
+      </LocationProvider>
     </TokenProvider>
   );
 }
