@@ -64,6 +64,8 @@ public class EventRepository
         try
         {
             return await _context.EventRelations
+                .Include(er => er.Event) // Include the related Event entity
+                    .ThenInclude(e => e.Location) // Include the related Location entity
                 .Where(
                     er => userIds.Contains(er.UserID)
                     && er.EventRole == EventRole.CREATOR

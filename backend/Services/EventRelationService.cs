@@ -96,11 +96,15 @@ public class EventRelationService : IEventRelationService
 
         if (eventt.Visibility == Visibility.FRIENDS)
         {
-            var creatorList = await _erRepo.GetUsersFromEventByRole(eventt.EventID, EventRole.CREATOR);
-            User? creator = creatorList.FirstOrDefault();
+            User? creator = await _eventRepo.GetHostForEvent(eventRelation.EventID);
             UserRelation? userRelation = await _userRelRepo.GetOneUserRelation(user.UserID, creator.UserID);
+            if (userRelation == null)
+            {
+                userRelation = await _userRelRepo.GetOneUserRelation(creator.UserID, user.UserID);
+            }
             if (userRelation.Type == UserRelationType.FRIENDS)
             {
+                Console.WriteLine("MOOOOOOOOOOOORDI");
                 await _erRepo.CreateEventRelation(eventRelation);
                 user.EventsJoined++;
                 await _userRepo.UpdateUser(user.UserID, user);
