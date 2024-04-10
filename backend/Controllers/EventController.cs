@@ -49,6 +49,7 @@ public class EventController : ControllerBase
         }
     }
 
+    // ENDRE TILBAKE!! - TODO
     [HttpGet("city/{city}")]
     [AllowAnonymous]
     public async Task<ActionResult> GetEventsInCity(string city)

@@ -1,26 +1,31 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../../../styles/colors";
+import { colors } from "../../../../styles/colors";
 import {
   moderateScale,
   verticalScale,
   horizontalScale,
-} from "../../../styles/genericDimensions";
+} from "../../../../styles/genericDimensions";
 
-export default StyleSheet.create({
+export const styles = StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: horizontalScale(15),
+    alignItems: "center",
   },
+
   searchContainer: {
     flexDirection: "row",
   },
+
   searchBar: {
     paddingLeft: horizontalScale(10),
     marginTop: verticalScale(20),
     backgroundColor: colors.foreground,
     borderRadius: moderateScale(15),
-    height: verticalScale(35),
-    width: horizontalScale(335),
+    height: verticalScale(40),
+    width: "90%",
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(20),
   },
+
   icon: {
     fontSize: moderateScale(25),
     color: colors.grey,

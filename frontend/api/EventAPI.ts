@@ -135,7 +135,7 @@ export const getUserJoinedEvents = async (token: string) => {
   }
 };
 
-export const createEvent = async (event: Event, token: string) => {
+export const createEvent = async (event: IEvent, token: string) => {
   try {
     const response = await fetch(`${THIS_URL}/create`, {
       method: "POST",

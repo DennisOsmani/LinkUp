@@ -9,3 +9,6 @@ export const EVENTRELATION_PATH = "/eventrelation";
 export const USERRELATION_PATH = "/userrelation";
 
 export const AUTH_PATH = "/auth";
+
+export const IMAGE_PATH = "/upload";
+

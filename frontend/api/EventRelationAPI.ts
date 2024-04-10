@@ -23,6 +23,14 @@ const x = async (token: string) => {
     console.error("Error while fetching x " + error);
   }
 };
+
+const x = async (token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}/`, {
+      method: "XXXXXXXXXXX",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
 */
 
 export const joinOpenEvent = async (token: string, eventId: number) => {
@@ -109,3 +117,4 @@ const x = async (token: string) => {
   }
 };
 */
+
