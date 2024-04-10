@@ -46,7 +46,6 @@ export default function PublicFeed() {
       // Wait for all promises to resolve
       await Promise.all(promises || []);
       setHostNames(hostNamesObj);
-      console.log("got events");
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {

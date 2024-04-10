@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(200),
   },
   midscreenMessagesText: {
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(20),
     fontFamily: "BalooSemiBold",
     marginTop: moderateScale(20),
   },
