@@ -34,7 +34,7 @@ export default function InviteModal({
         <View style={styles.modalCard}>
           <InviteFriends setUsersToInvite={setUsersToInvite} />
           <Pressable style={styles.saveButton} onPress={handleSendInvites}>
-            <Text style={styles.saveText}>Inviter</Text>
+            <Text style={styles.saveText}>Lukk</Text>
           </Pressable>
         </View>
       </View>

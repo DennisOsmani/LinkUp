@@ -5,6 +5,7 @@ import {
   Pressable,
   TextInput,
   Keyboard,
+  Alert,
 } from "react-native";
 import { styles } from "./CreateEventStyles";
 import { Feather } from "@expo/vector-icons";
@@ -18,10 +19,16 @@ import { createEvent } from "../../api/EventAPI";
 import LocationModal from "./components/LocationModal/LocationModal";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import InviteModal from "./components/InviteModal/InviteModal";
+import { colors } from "../../styles/colors";
 
 const date = new Date();
 
 export default function CreateEvent() {
+  const [selectedVisibility, setSelectedVisibility] = useState({
+    public: true,
+    private: false,
+    friends: false,
+  });
   const [locationModalVisible, setLocationModalVisible] =
     useState<boolean>(false);
   const [inviteModalVisible, setInviteModalVisible] = useState<boolean>(false);
@@ -32,13 +39,14 @@ export default function CreateEvent() {
   const [event, setEvent] = useState<IEvent>({
     eventName: "",
     eventDescription: "",
-    eventDateTimeStart: "",
-    eventDateTimeEnd: "",
+    eventDateTimeStart: date.toISOString(),
+    eventDateTimeEnd: date.toISOString(),
     visibility: 0,
     inviteURL: "",
     frontImage:
       "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png",
   });
+
   const [location, setLocation] = useState<ILocation>({
     address: undefined,
     postalcode: undefined,
@@ -77,21 +85,14 @@ export default function CreateEvent() {
   const handleKeyPress = (e: any) => {
     // Check if 'Enter' was pressed
     if (e.nativeEvent.key === "Enter") {
-      // Dismiss the keyboard
       Keyboard.dismiss();
-      // Prevent 'Enter' from being added to the text
       e.preventDefault(); // This line might not be needed in React Native, just an illustration
     }
   };
 
   /*
    * TODO
-   * legge til max/min capacity
-   *
-   * EventVisability trenger dropdown
-   * Input validering -> Max 16 characters på event navn
    * Required fields
-   * Alerts / user feedback
    *
    * Ha en lsite for venner og en for "inviterte venner"
    * Når man trykker legg til venn så byttes de til listen "inviterte venner"
@@ -104,14 +105,28 @@ export default function CreateEvent() {
    *
    */
 
+  const handleVisibilityButtonPressed = (value: number) => {
+    setSelectedVisibility({
+      public: value === 0 ? true : false,
+      private: value === 1 ? true : false,
+      friends: value === 2 ? true : false,
+    });
+
+    setEvent((event) => ({ ...event, visibility: value }));
+  };
+
   const handleUploadImage = async () => {
     const uri: any = await pickImage();
     setEventImageUri(uri);
   };
 
   const handleCreateEvent = async () => {
-    console.log(location);
-    return;
+    if (event.eventName.length > 16) {
+      Alert.alert(
+        "Ugyldig Input!",
+        "Navnet til eventet er for langt, max 16 tegn."
+      );
+    }
 
     try {
       // Upload to azure
@@ -129,13 +144,14 @@ export default function CreateEvent() {
       console.log("Created event, response: " + eventResponse);
     } catch (error) {
       // setToken("");
-      console.log("Error creating a event, and uploading", error);
+      console.log("Error creating a event, and uploading" + error);
     }
+
+    // Send invites
   };
 
   return (
     <>
-      {/* Modals */}
       <LocationModal
         visible={locationModalVisible}
         setVisible={setLocationModalVisible}
@@ -192,13 +208,41 @@ export default function CreateEvent() {
               onChange={onChangeEnd}
             />
           </View>
-
-          <TextInput
-            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
-            placeholder="Hvem kan se Eventet?"
-            style={styles.inputBox}
-            onKeyPress={handleKeyPress}
-          />
+          <View style={styles.visibilityContainer}>
+            <Pressable
+              onPress={() => handleVisibilityButtonPressed(0)}
+              style={{
+                ...styles.visibilityBox,
+                borderColor: selectedVisibility.public
+                  ? colors.primary
+                  : "white",
+              }}
+            >
+              <Text style={styles.visibilityText}>Public</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => handleVisibilityButtonPressed(1)}
+              style={{
+                ...styles.visibilityBox,
+                borderColor: selectedVisibility.private
+                  ? colors.primary
+                  : "white",
+              }}
+            >
+              <Text style={styles.visibilityText}>Private</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => handleVisibilityButtonPressed(2)}
+              style={{
+                ...styles.visibilityBox,
+                borderColor: selectedVisibility.friends
+                  ? colors.primary
+                  : "white",
+              }}
+            >
+              <Text style={styles.visibilityText}>Friends</Text>
+            </Pressable>
+          </View>
           <TextInput
             placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             onChangeText={(input) =>

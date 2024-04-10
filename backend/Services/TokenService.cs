@@ -30,7 +30,7 @@ public class TokenService
             Expires = DateTime.UtcNow.AddDays(1),   // Må endres
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Issuer = _configuration["Jwt:Issuer"], // Add this line
-            Audience = _configuration["Jwt:Audience"] 
+            Audience = _configuration["Jwt:Audience"]
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
