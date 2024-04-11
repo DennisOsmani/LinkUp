@@ -24,11 +24,7 @@ export default function InviteModal({
   const handleSendInvites = async () => {
     const ids: string[] = invitedFriends.map((user: IUser) => user.userID);
 
-    setUsersToInvite((prevState) => {
-      const updatedState = new Set(prevState);
-      ids.forEach((id) => updatedState.add(id));
-      return updatedState;
-    });
+    setUsersToInvite(new Set(ids));
 
     setInviteVisible(!inviteVisible);
   };
@@ -49,10 +45,8 @@ export default function InviteModal({
             setAllFriends={setAllFriends}
             filteredFriends={filteredFriends}
             setFilteredFriends={setFilteredFriends}
+            handleSendInvites={handleSendInvites}
           />
-          <Pressable style={styles.saveButton} onPress={handleSendInvites}>
-            <Text style={styles.saveText}>Lukk</Text>
-          </Pressable>
         </View>
       </View>
     </Modal>

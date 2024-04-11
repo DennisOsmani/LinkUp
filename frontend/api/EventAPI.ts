@@ -151,8 +151,7 @@ export const createEvent = async (event: IEvent, token: string) => {
     }
 
     const data: number = await response.json();
-    console.log(data);
-    return response;
+    return data;
   } catch (error) {
     throw new Error("Error while createEvent " + error);
   }

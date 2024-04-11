@@ -9,6 +9,7 @@ import {
 export const styles = StyleSheet.create({
   contentContainer: {
     alignItems: "center",
+    marginBottom: verticalScale(80),
   },
 
   searchContainer: {
@@ -32,5 +33,32 @@ export const styles = StyleSheet.create({
     color: colors.grey,
     marginTop: verticalScale(26),
     marginLeft: horizontalScale(5),
+  },
+
+  saveButton: {
+    position: "absolute",
+    bottom: verticalScale(7),
+    borderRadius: moderateScale(15),
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    width: horizontalScale(180),
+    height: verticalScale(45),
+    borderWidth: moderateScale(3),
+    borderColor: colors.primary,
+    marginBottom: horizontalScale(10),
+    shadowOffset: {
+      width: horizontalScale(5),
+      height: verticalScale(10),
+    },
+    shadowColor: "black",
+    shadowOpacity: 0.3,
+  },
+
+  saveText: {
+    fontFamily: "BalooBold",
+    fontSize: moderateScale(24),
+    textAlign: "center",
+    color: colors.primary,
   },
 });

@@ -1,4 +1,11 @@
-import { TextInput, View, ScrollView, Keyboard } from "react-native";
+import {
+  TextInput,
+  View,
+  ScrollView,
+  Keyboard,
+  Pressable,
+  Text,
+} from "react-native";
 import { styles } from "./InviteFriendsStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -16,6 +23,7 @@ interface InviteFriendsProps {
   setFilteredFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
   invitedFriends: IUser[];
   setInvitedFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
+  handleSendInvites: () => void;
 }
 
 export default function InviteFriends({
@@ -25,6 +33,7 @@ export default function InviteFriends({
   setInvitedFriends,
   invitedFriends,
   filteredFriends,
+  handleSendInvites,
 }: InviteFriendsProps) {
   const [searchText, setSearchText] = useState("");
 
@@ -124,46 +133,52 @@ export default function InviteFriends({
   };
 
   return (
-    <ScrollView>
-      <View style={styles.contentContainer}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchBar}
-            placeholder="Søk"
-            value={searchText}
-            onChangeText={handleSearchTextChange}
-            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
-            onKeyPress={handleKeyPress}
-          />
-          <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+    <>
+      <ScrollView>
+        <View style={styles.contentContainer}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Søk"
+              value={searchText}
+              onChangeText={handleSearchTextChange}
+              placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
+              onKeyPress={handleKeyPress}
+            />
+            <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+          </View>
+
+          {invitedFriends &&
+            invitedFriends.map((user: IUser, index: number) => (
+              <InviteUserCard
+                key={index}
+                firstname={user.firstname}
+                lastname={user.lastname}
+                age={calculateAge(user.dateBorn)}
+                invited={true}
+                onInviteClick={() => handleInviteClick(user)}
+                onUninviteClick={() => handleUninviteClick(user)}
+              />
+            ))}
+
+          {filteredFriends &&
+            filteredFriends.map((user: IUser, index: number) => (
+              <InviteUserCard
+                key={index}
+                firstname={user.firstname}
+                lastname={user.lastname}
+                age={calculateAge(user.dateBorn)}
+                invited={false}
+                onInviteClick={() => handleInviteClick(user)}
+                onUninviteClick={() => handleUninviteClick(user)}
+              />
+            ))}
         </View>
+      </ScrollView>
 
-        {invitedFriends &&
-          invitedFriends.map((user: IUser, index: number) => (
-            <InviteUserCard
-              key={index}
-              firstname={user.firstname}
-              lastname={user.lastname}
-              age={calculateAge(user.dateBorn)}
-              invited={true}
-              onInviteClick={() => handleInviteClick(user)}
-              onUninviteClick={() => handleUninviteClick(user)}
-            />
-          ))}
-
-        {filteredFriends &&
-          filteredFriends.map((user: IUser, index: number) => (
-            <InviteUserCard
-              key={index}
-              firstname={user.firstname}
-              lastname={user.lastname}
-              age={calculateAge(user.dateBorn)}
-              invited={false}
-              onInviteClick={() => handleInviteClick(user)}
-              onUninviteClick={() => handleUninviteClick(user)}
-            />
-          ))}
-      </View>
-    </ScrollView>
+      <Pressable style={styles.saveButton} onPress={handleSendInvites}>
+        <Text style={styles.saveText}>Lukk</Text>
+      </Pressable>
+    </>
   );
 }

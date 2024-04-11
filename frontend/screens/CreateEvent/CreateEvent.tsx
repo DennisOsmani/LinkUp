@@ -125,6 +125,8 @@ export default function CreateEvent() {
       );
     }
 
+    let eventId: number = -1;
+
     try {
       // Upload to azure
       let eventImageUrl: string | undefined;
@@ -137,24 +139,24 @@ export default function CreateEvent() {
         location: location,
       };
 
-      const event132 = await createEvent(eventToCreate, token);
-      return;
-      if (eventId === -1) {
-        Alert.alert("TODO", "Kast brukeren til eventet som ble laget");
-      }
+      eventId = await createEvent(eventToCreate, token);
 
       console.log("EVENT JUST CREATED ID: " + eventId);
-      await sendInvites(eventId);
     } catch (error) {
-      // setToken("");
       Alert.alert("Noe gikk galt", "Prøv igjen senere.");
       console.error(error);
+      return;
     }
-  };
 
-  const sendInvites = async (eventId: number) => {
+    if (eventId == -1) {
+      Alert.alert("Noe gikk galt", "Prøv å opprette event igjen 69");
+      return;
+    }
+
     try {
       const userIds = Array.from(usersToInvite);
+
+      if (userIds.length === 0) return;
 
       await inviteUsersForEvent(eventId, userIds, token);
     } catch (error) {
@@ -233,7 +235,16 @@ export default function CreateEvent() {
                   : "white",
               }}
             >
-              <Text style={styles.visibilityText}>Public</Text>
+              <Text
+                style={{
+                  ...styles.visibilityText,
+                  color: selectedVisibility.public
+                    ? colors.primary
+                    : "rgba(128, 128, 128, 0.4)",
+                }}
+              >
+                Public
+              </Text>
             </Pressable>
             <Pressable
               onPress={() => handleVisibilityButtonPressed(1)}
@@ -244,7 +255,16 @@ export default function CreateEvent() {
                   : "white",
               }}
             >
-              <Text style={styles.visibilityText}>Private</Text>
+              <Text
+                style={{
+                  ...styles.visibilityText,
+                  color: selectedVisibility.private
+                    ? colors.primary
+                    : "rgba(128, 128, 128, 0.4)",
+                }}
+              >
+                Private
+              </Text>
             </Pressable>
             <Pressable
               onPress={() => handleVisibilityButtonPressed(2)}
@@ -255,7 +275,16 @@ export default function CreateEvent() {
                   : "white",
               }}
             >
-              <Text style={styles.visibilityText}>Friends</Text>
+              <Text
+                style={{
+                  ...styles.visibilityText,
+                  color: selectedVisibility.friends
+                    ? colors.primary
+                    : "rgba(128, 128, 128, 0.4)",
+                }}
+              >
+                Friends
+              </Text>
             </Pressable>
           </View>
           <TextInput

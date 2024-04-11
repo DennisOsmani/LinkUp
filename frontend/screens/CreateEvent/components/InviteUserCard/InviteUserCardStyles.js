@@ -64,6 +64,11 @@ export const styles = StyleSheet.create({
     fontFamily: "BalooRegular",
   },
 
+  inviteButtonWrapper: {
+    width: "93%",
+    alignItems: "flex-end",
+  },
+
   inviteButton: {
     height: verticalScale(29),
     width: horizontalScale(110),
@@ -71,18 +76,6 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  inviteButtonText: {
-    fontFamily: "BalooBold",
-    fontSize: moderateScale(20),
-    color: "white",
-    textAlign: "center",
-  },
-
-  inviteButtonWrapper: {
-    width: "93%",
-    alignItems: "flex-end",
   },
 
   uninviteButton: {
@@ -96,10 +89,18 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  inviteButtonText: {
+    fontFamily: "BalooBold",
+    fontSize: moderateScale(20),
+    color: "white",
+    textAlign: "center",
+  },
+
   uninviteButtonText: {
     fontFamily: "BalooBold",
     fontSize: moderateScale(20),
     color: colors.primary,
     textAlign: "center",
+    paddingBottom: 30,
   },
 });
