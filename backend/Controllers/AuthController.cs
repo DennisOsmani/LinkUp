@@ -2,7 +2,6 @@ using Services;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Auth;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using Exceptions;
