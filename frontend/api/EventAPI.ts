@@ -150,9 +150,10 @@ export const createEvent = async (event: IEvent, token: string) => {
       throw new Error("Error in createEvent response " + response.status);
     }
 
-    return response.status;
+    const data: number = await response.json();
+    return data;
   } catch (error) {
-    console.error("Error while fetching createEvent " + error);
+    throw new Error("Error while createEvent " + error);
   }
 };
 

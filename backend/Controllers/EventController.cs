@@ -21,7 +21,7 @@ public class EventController : ControllerBase
 
     [HttpGet("{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> GetEventByID(int eventId)
+    public async Task<ActionResult<Event>> GetEventByID(int eventId)
     {
         var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         var userRoleClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
@@ -192,7 +192,7 @@ public class EventController : ControllerBase
 
     [HttpPost("create")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> CreateEvent([FromBody] Event newEvent)
+    public async Task<ActionResult<int>> CreateEvent([FromBody] Event newEvent)
     {
         var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -204,7 +204,7 @@ public class EventController : ControllerBase
         try
         {
             var eventt = await _eventService.CreateEvent(newEvent, userIdClaims);
-            return Ok(eventt);
+            return Ok(eventt?.EventID);
         }
         catch (InvalidOperationException e)
         {

@@ -25,6 +25,29 @@ public class EventRelationController : ControllerBase
         _erRepo = eventRelationRepository;
     }
 
+    [HttpPost("create/{eventId}")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult> CreateEventRealation(int eventId, [FromBody] List<string> userIds)
+    {
+        try
+        {
+            await _erService.InviteUsersForEvent(userIds, eventId);
+            return Ok("Invited all users!");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
     [HttpGet("users/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<ICollection<User>>> GetUsersFromEvent(int eventId)

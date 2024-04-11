@@ -5,6 +5,7 @@ import {
   Pressable,
   TextInput,
   Keyboard,
+  Alert,
 } from "react-native";
 import { styles } from "./CreateEventStyles";
 import { Feather } from "@expo/vector-icons";
@@ -18,10 +19,17 @@ import { createEvent } from "../../api/EventAPI";
 import LocationModal from "./components/LocationModal/LocationModal";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import InviteModal from "./components/InviteModal/InviteModal";
+import { colors } from "../../styles/colors";
+import { inviteUsersForEvent } from "../../api/EventRelationAPI";
 
 const date = new Date();
 
 export default function CreateEvent() {
+  const [selectedVisibility, setSelectedVisibility] = useState({
+    public: true,
+    private: false,
+    friends: false,
+  });
   const [locationModalVisible, setLocationModalVisible] =
     useState<boolean>(false);
   const [inviteModalVisible, setInviteModalVisible] = useState<boolean>(false);
@@ -39,12 +47,15 @@ export default function CreateEvent() {
     frontImage:
       "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png",
   });
+
   const [location, setLocation] = useState<ILocation>({
     address: undefined,
     postalcode: undefined,
     city: "",
     country: "",
   });
+
+  const [usersToInvite, setUsersToInvite] = useState<Set<string>>(new Set());
 
   const { token } = useTokenProvider();
 
@@ -77,41 +88,50 @@ export default function CreateEvent() {
   const handleKeyPress = (e: any) => {
     // Check if 'Enter' was pressed
     if (e.nativeEvent.key === "Enter") {
-      // Dismiss the keyboard
       Keyboard.dismiss();
-      // Prevent 'Enter' from being added to the text
       e.preventDefault(); // This line might not be needed in React Native, just an illustration
     }
   };
 
-  /*
-   * TODO
-   * legge til max/min capacity
-   *
-   * EventVisability trenger dropdown
-   * Input validering -> Max 16 characters på event navn
-   * Required fields
-   * Alerts / user feedback
-   *
-   * Ha en lsite for venner og en for "inviterte venner"
-   * Når man trykker legg til venn så byttes de til listen "inviterte venner"
-   * Legg til en prop til inviteUserCard som sier om det skal rendres fjern eller legg til knapp
-   * I InviteFriends map til InviteUserCard to ganger, først for inviterte vcenner så for resten
-   * Legg til funksjonalitet for å fjerne / legge til
-   *
-   * Fiks createEvent med location inni, eller del opp til to api kall, en til event og en til location
-   * Fiks å sende ut invitasjoner til alle som er i invitert listen, kanskje Promise.all?
-   *
-   */
+  const handleVisibilityButtonPressed = (value: number) => {
+    setSelectedVisibility({
+      public: value === 0 ? true : false,
+      private: value === 1 ? true : false,
+      friends: value === 2 ? true : false,
+    });
+
+    setEvent((event) => ({ ...event, visibility: value }));
+  };
 
   const handleUploadImage = async () => {
     const uri: any = await pickImage();
+    if (uri === "EXIT") return;
+
     setEventImageUri(uri);
   };
 
   const handleCreateEvent = async () => {
-    console.log(location);
-    return;
+    if (event.eventName === "") {
+      Alert.alert("Manglende informasjon", "Eventet må ha ett navn!");
+      return;
+    }
+
+    if (location.city === "" || location.postalcode === "") {
+      Alert.alert(
+        "Manglende informasjon",
+        'By og postnummer under "Sted" må fylles ut!'
+      );
+      return;
+    }
+
+    if (event.eventName.length > 16) {
+      Alert.alert(
+        "Ugyldig Input!",
+        "Navnet til eventet er for langt, max 16 tegn."
+      );
+    }
+
+    let eventId: number = -1;
 
     try {
       // Upload to azure
@@ -125,17 +145,34 @@ export default function CreateEvent() {
         location: location,
       };
 
-      const eventResponse = await createEvent(eventToCreate, token);
-      console.log("Created event, response: " + eventResponse);
+      eventId = await createEvent(eventToCreate, token);
+
+      console.log("EVENT JUST CREATED ID: " + eventId);
     } catch (error) {
-      // setToken("");
-      console.log("Error creating a event, and uploading", error);
+      Alert.alert("Noe gikk galt", "Prøv igjen senere.");
+      console.error(error);
+      return;
+    }
+
+    if (eventId == -1) {
+      Alert.alert("Noe gikk galt", "Prøv å opprette event igjen 69");
+      return;
+    }
+
+    try {
+      const userIds = Array.from(usersToInvite);
+
+      if (userIds.length === 0) return;
+
+      await inviteUsersForEvent(eventId, userIds, token);
+    } catch (error) {
+      Alert.alert("Noe gikk galt", "Dine venneforespørseler ble ikke sendt!");
+      throw new Error("Error while sending invites!" + error);
     }
   };
 
   return (
     <>
-      {/* Modals */}
       <LocationModal
         visible={locationModalVisible}
         setVisible={setLocationModalVisible}
@@ -144,6 +181,8 @@ export default function CreateEvent() {
       />
 
       <InviteModal
+        usersToInvite={usersToInvite}
+        setUsersToInvite={setUsersToInvite}
         inviteVisible={inviteModalVisible}
         setInviteVisible={setInviteModalVisible}
       />
@@ -192,13 +231,68 @@ export default function CreateEvent() {
               onChange={onChangeEnd}
             />
           </View>
-
-          <TextInput
-            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
-            placeholder="Hvem kan se Eventet?"
-            style={styles.inputBox}
-            onKeyPress={handleKeyPress}
-          />
+          <View style={styles.visibilityContainer}>
+            <Pressable
+              onPress={() => handleVisibilityButtonPressed(0)}
+              style={{
+                ...styles.visibilityBox,
+                borderColor: selectedVisibility.public
+                  ? colors.primary
+                  : "white",
+              }}
+            >
+              <Text
+                style={{
+                  ...styles.visibilityText,
+                  color: selectedVisibility.public
+                    ? colors.primary
+                    : "rgba(128, 128, 128, 0.4)",
+                }}
+              >
+                Public
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => handleVisibilityButtonPressed(1)}
+              style={{
+                ...styles.visibilityBox,
+                borderColor: selectedVisibility.private
+                  ? colors.primary
+                  : "white",
+              }}
+            >
+              <Text
+                style={{
+                  ...styles.visibilityText,
+                  color: selectedVisibility.private
+                    ? colors.primary
+                    : "rgba(128, 128, 128, 0.4)",
+                }}
+              >
+                Private
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => handleVisibilityButtonPressed(2)}
+              style={{
+                ...styles.visibilityBox,
+                borderColor: selectedVisibility.friends
+                  ? colors.primary
+                  : "white",
+              }}
+            >
+              <Text
+                style={{
+                  ...styles.visibilityText,
+                  color: selectedVisibility.friends
+                    ? colors.primary
+                    : "rgba(128, 128, 128, 0.4)",
+                }}
+              >
+                Friends
+              </Text>
+            </Pressable>
+          </View>
           <TextInput
             placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             onChangeText={(input) =>

@@ -7,20 +7,26 @@ import { useState } from "react";
 interface InviteModalProps {
   inviteVisible: boolean;
   setInviteVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  usersToInvite: Set<string>;
+  setUsersToInvite: React.Dispatch<React.SetStateAction<Set<string>>>;
 }
 
 export default function InviteModal({
   inviteVisible,
   setInviteVisible,
+  usersToInvite,
+  setUsersToInvite,
 }: InviteModalProps) {
-  const [usersToInvite, setUsersToInvite] = useState<string[]>([]);
-  const [invitedUsers, setInvitedUsers] = useState<string[]>([]);
+  const [allFriends, setAllFriends] = useState<IUser[]>([]);
+  const [invitedFriends, setInvitedFriends] = useState<IUser[]>([]);
+  const [filteredFriends, setFilteredFriends] = useState<IUser[]>([]);
 
   const handleSendInvites = async () => {
-    setInviteVisible(!inviteVisible);
+    const ids: string[] = invitedFriends.map((user: IUser) => user.userID);
 
-    console.log("SENDING INVITES TO...");
-    usersToInvite.forEach((user: string) => console.log(user));
+    setUsersToInvite(new Set(ids));
+
+    setInviteVisible(!inviteVisible);
   };
 
   return (
@@ -32,10 +38,15 @@ export default function InviteModal({
     >
       <View style={styles.container}>
         <View style={styles.modalCard}>
-          <InviteFriends setUsersToInvite={setUsersToInvite} />
-          <Pressable style={styles.saveButton} onPress={handleSendInvites}>
-            <Text style={styles.saveText}>Inviter</Text>
-          </Pressable>
+          <InviteFriends
+            invitedFriends={invitedFriends}
+            setInvitedFriends={setInvitedFriends}
+            allFriends={allFriends}
+            setAllFriends={setAllFriends}
+            filteredFriends={filteredFriends}
+            setFilteredFriends={setFilteredFriends}
+            handleSendInvites={handleSendInvites}
+          />
         </View>
       </View>
     </Modal>

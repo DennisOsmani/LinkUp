@@ -6,8 +6,9 @@ interface InviteUserCardProps {
   firstname: string;
   lastname: string;
   age: number;
-  userId: string;
-  setUsersToInvite: React.Dispatch<React.SetStateAction<string[]>>;
+  invited: boolean;
+  onInviteClick: () => void;
+  onUninviteClick: () => void;
   // image: string; SENERE, LEGGE INN MOCK DATA
 }
 
@@ -15,13 +16,10 @@ export function InviteUserCard({
   firstname,
   lastname,
   age,
-  userId,
-  setUsersToInvite,
+  invited,
+  onInviteClick,
+  onUninviteClick,
 }: InviteUserCardProps) {
-  const handleInvitePressed = () => {
-    setUsersToInvite((prev: string[]) => [...prev, userId]);
-  };
-
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
@@ -38,14 +36,25 @@ export function InviteUserCard({
           <Text style={styles.textAge}>
             {age} <Text style={styles.textAge}>år</Text>
           </Text>
-          <View style={styles.inviteButtonWrapper}>
-            <Pressable
-              onPress={handleInvitePressed}
-              style={styles.inviteButton}
-            >
-              <Text style={styles.inviteButtonText}>Inviter</Text>
-            </Pressable>
-          </View>
+
+          {!invited && (
+            <View style={styles.inviteButtonWrapper}>
+              <Pressable onPress={onInviteClick} style={styles.inviteButton}>
+                <Text style={styles.inviteButtonText}>Inviter</Text>
+              </Pressable>
+            </View>
+          )}
+
+          {invited && (
+            <View style={styles.inviteButtonWrapper}>
+              <Pressable
+                onPress={onUninviteClick}
+                style={styles.uninviteButton}
+              >
+                <Text style={styles.uninviteButtonText}>Fjern</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
       </View>
     </View>
