@@ -136,7 +136,6 @@ export const getUserJoinedEvents = async (token: string) => {
 };
 
 export const createEvent = async (event: IEvent, token: string) => {
-  console.log("URL: " + `${THIS_URL}/create`);
   try {
     const response = await fetch(`${THIS_URL}/create`, {
       method: "POST",
@@ -151,7 +150,9 @@ export const createEvent = async (event: IEvent, token: string) => {
       throw new Error("Error in createEvent response " + response.status);
     }
 
-    return response.status;
+    const data: number = await response.json();
+    console.log(data);
+    return response;
   } catch (error) {
     throw new Error("Error while createEvent " + error);
   }

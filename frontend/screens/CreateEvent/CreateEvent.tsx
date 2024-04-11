@@ -137,16 +137,19 @@ export default function CreateEvent() {
         location: location,
       };
 
-      const eventResponse = await createEvent(eventToCreate, token);
-      if (eventResponse === 200) {
+      const event132 = await createEvent(eventToCreate, token);
+      return;
+      if (eventId === -1) {
         Alert.alert("TODO", "Kast brukeren til eventet som ble laget");
       }
+
+      console.log("EVENT JUST CREATED ID: " + eventId);
+      await sendInvites(eventId);
     } catch (error) {
       // setToken("");
       Alert.alert("Noe gikk galt", "Prøv igjen senere.");
+      console.error(error);
     }
-
-    await sendInvites(eventId);
   };
 
   const sendInvites = async (eventId: number) => {
