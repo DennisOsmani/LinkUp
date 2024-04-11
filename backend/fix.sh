@@ -5,4 +5,3 @@ dotnet ef database update
 git add .
 git commit -m ":bug:"
 git push
-git checkout location-cascade
