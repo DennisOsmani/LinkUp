@@ -14,11 +14,6 @@ import { View } from "react-native";
 const Tab = createBottomTabNavigator<NavigationTypeList>();
 
 export default function TabNavigator() {
-  // const [isPressed, setIsPressed] = useState<boolean>(false);
-
-  // const handlePress = () => {
-  //   setIsPressed(true);
-  // }
 
   return (
     <NavigationContainer>

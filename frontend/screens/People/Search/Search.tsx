@@ -1,57 +1,81 @@
-import { TextInput, View, ScrollView, Text } from "react-native";
+import { TextInput, View, ScrollView, Alert } from "react-native";
 import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
+import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { SearchUsers } from "../../../api/UserAPI";
-import { IUser } from "../../../interfaces/ModelInterfaces";
+import React, { useEffect, useState } from "react";
+import { SearchUsers, GetUserFriends } from "../../../api/UserAPI";
+import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
+import { CreateUserRelation } from "../../../api/UserRelationAPI";
 
-// When register, add date of birth
+// When register, add date of birth ??
 
 // TODO
-// - Legg til venn knappen med Userraltion API (search)
-// - Profilbilde (search & friends)
-// - Linke hvert kort til profil (search & friends)
-// - Ikke få opp seg selv når man søker (search)
+// - TRELLO
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
   const [searchResult, setSearchResult] = useState<IUser[] | undefined>([]);
+  const [friends, setFriends] = useState<IUser[]>([]);
 
   const calculateAge = (dateBorn: string) => {
-    // Parse the dateBorn string into a JavaScript Date object
 
     const birthDate = new Date(dateBorn);
 
-    // Get the current date
     const today = new Date();
-
-    // Calculate the difference in years
     let age = today.getFullYear() - birthDate.getFullYear();
 
-    // Check if the birthday hasn't occurred yet this year
     const monthDiff = today.getMonth() - birthDate.getMonth();
     const dayDiff = today.getDate() - birthDate.getDate();
 
-    // If the birthday hasn't occurred yet this year, decrement the age
     if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
       age--;
     }
     return age;
   };
+  
+  const { token, setToken, userId } = useTokenProvider();
+
+  useEffect(() => {
+      fetchFriends();
+  }, []);
+
+  const fetchFriends = async () => {
+    try {
+     const friends: IUser[] = await GetUserFriends(token); 
+     setFriends(friends);
+    } catch (error) {
+      console.error("Error in fetching users friends (Search) " + error);
+    }}
+
+    const handleAddFriend = async (friendId: string) => {
+      try {
+        await CreateUserRelation(token, { userId: "", otherUserId: friendId, type: UserRelationType.FRIENDS });
+        Alert.alert('Venneforespørsel er sendt!');
+          clearSearchText();
+          await fetchFriends();
+      } catch (error) {
+        console.error("Error in adding a friend (search) " + error)
+      }
+    }
 
   const clearSearchText = () => {
     setSearchText("");
     setSearchResult([]);
   };
 
-  const { token, setToken } = useTokenProvider();
 
   const handleSearch = async () => {
     try {
       const results: IUser[] | undefined = await SearchUsers(searchText, token);
-      setSearchResult(results);
+
+      if (results.some(id => id.userID === userId)) {
+        const filteredResults = results.filter(user => user.userID !== userId);
+        setSearchResult(filteredResults);
+      } else {
+        setSearchResult(results);
+      }
     } catch (error) {
       setToken("");
       console.error("Error while searching users: " + error);
@@ -80,8 +104,25 @@ export default function SearchPeople() {
         </View>
 
         {searchResult &&
-          searchResult //.filter(user => user.userID !== loggedInUserID)
-            .map((user: IUser, index: number) => (
+          searchResult
+            .map((user: IUser, index: number) => {
+
+            // Check if the logged-in user's friends list contains the current user
+            const isFriend = friends.some(friend => friend.userID === user.userID);
+
+            if (isFriend) {
+              return (
+                <UserCardFriends
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                }}
+                ></UserCardFriends>
+              );
+            } else {
+              return (
               <UserCardSearch
                 key={index}
                 userCardInfo={{
@@ -89,9 +130,10 @@ export default function SearchPeople() {
                   lastname: user.lastname,
                   age: calculateAge(user.dateBorn),
                 }}
-                onPressButon={() => {}}
+                onPressButon={() => handleAddFriend(user.userID)}
               ></UserCardSearch>
-            ))}
+               );}
+          })}
       </View>
     </ScrollView>
   );

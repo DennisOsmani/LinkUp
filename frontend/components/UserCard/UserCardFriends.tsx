@@ -26,7 +26,7 @@ export function UserCardFriends({ userCardInfo }: UserCardProps) {
         ></Image>
         <View style={styles.detailsContainer}>
           <View style={styles.iconContainer}>
-            <Feather name="user" style={styles.icon}></Feather>
+            <Feather name="user-check" style={styles.icon}></Feather>
             <Text style={styles.textName}>{userCardInfo.firstname}</Text>
             <Text style={styles.textName}>{userCardInfo.lastname}</Text>
           </View>
