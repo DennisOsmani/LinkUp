@@ -42,7 +42,8 @@ namespace backend.Migrations
 
                     b.Property<string>("EventName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
 
                     b.Property<string>("FrontImage")
                         .HasColumnType("text");

@@ -60,7 +60,7 @@ namespace backend.Migrations
                 {
                     EventID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    EventName = table.Column<string>(type: "text", nullable: false),
+                    EventName = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     EventDescription = table.Column<string>(type: "text", nullable: false),
                     EventDateTimeStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EventDateTimeEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
