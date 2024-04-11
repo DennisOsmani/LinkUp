@@ -20,6 +20,7 @@ interface LoginCardProps {
 export default function LoginCard({
   onPressButton,
   onLinkPress,
+  email,
   setEmail,
   setPassword,
 }: LoginCardProps) {
@@ -31,7 +32,8 @@ export default function LoginCard({
           <TextInput
             style={styles.input}
             placeholder={"Email"}
-            onChangeText={(input) => setEmail(input)}
+            onChangeText={(input) => setEmail(input.toLocaleLowerCase())}
+            value={email}
           />
           <TextInput
             style={styles.input}
