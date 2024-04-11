@@ -14,7 +14,7 @@ import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { IEvent, ILocation, IUser } from "../../interfaces/ModelInterfaces";
+import { IEvent, ILocation } from "../../interfaces/ModelInterfaces";
 import { createEvent } from "../../api/EventAPI";
 import LocationModal from "./components/LocationModal/LocationModal";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
@@ -40,8 +40,8 @@ export default function CreateEvent() {
   const [event, setEvent] = useState<IEvent>({
     eventName: "",
     eventDescription: "",
-    eventDateTimeStart: date.toISOString(),
-    eventDateTimeEnd: date.toISOString(),
+    eventDateTimeStart: "",
+    eventDateTimeEnd: "",
     visibility: 0,
     inviteURL: "",
     frontImage:
@@ -93,15 +93,6 @@ export default function CreateEvent() {
     }
   };
 
-  /*
-   * TODO
-   * Required fields
-   *
-   * Endre CreateEvent slik at den returnerer id til opprettet event
-   * Bruk id til å sende ut invitasjoner.
-   * Valider med db.
-   */
-
   const handleVisibilityButtonPressed = (value: number) => {
     setSelectedVisibility({
       public: value === 0 ? true : false,
@@ -114,10 +105,25 @@ export default function CreateEvent() {
 
   const handleUploadImage = async () => {
     const uri: any = await pickImage();
+    if (uri === "EXIT") return;
+
     setEventImageUri(uri);
   };
 
   const handleCreateEvent = async () => {
+    if (event.eventName === "") {
+      Alert.alert("Manglende informasjon", "Eventet må ha ett navn!");
+      return;
+    }
+
+    if (location.city === "" || location.postalcode === "") {
+      Alert.alert(
+        "Manglende informasjon",
+        'By og postnummer under "Sted" må fylles ut!'
+      );
+      return;
+    }
+
     if (event.eventName.length > 16) {
       Alert.alert(
         "Ugyldig Input!",
