@@ -40,8 +40,8 @@ export default function CreateEvent() {
   const [event, setEvent] = useState<IEvent>({
     eventName: "",
     eventDescription: "",
-    eventDateTimeStart: "",
-    eventDateTimeEnd: "",
+    eventDateTimeStart: date.toISOString(),
+    eventDateTimeEnd: date.toISOString(),
     visibility: 0,
     inviteURL: "",
     frontImage:
@@ -150,12 +150,13 @@ export default function CreateEvent() {
       console.log("EVENT JUST CREATED ID: " + eventId);
     } catch (error) {
       Alert.alert("Noe gikk galt", "Prøv igjen senere.");
+      console.log("SÅ HER");
       console.error(error);
       return;
     }
 
     if (eventId == -1) {
-      Alert.alert("Noe gikk galt", "Prøv å opprette event igjen 69");
+      Alert.alert("Noe gikk galt", "Prøv å opprette event igjen");
       return;
     }
 
