@@ -1,7 +1,7 @@
 // LAGE ENUMS OGSÅ SIDEN DE BLIR SENDT SOM INT???
 export interface IToken {
   token: string;
-  userId: string;
+  userID: string;
 }
 
 export interface ILoginRequest {

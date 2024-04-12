@@ -3,9 +3,9 @@ import { IUserRelation, IUserRelationDTO } from "../interfaces/ModelInterfaces";
 
 const THIS_URL: string = `${URL_BASE}${USERRELATION_PATH}`;
 
-export async function GetUserRelation(token: string, otherUserId?: string) {
+export async function GetUserRelation(token: string, otherUserId: string) {
   try {
-    const response = await fetch(`${THIS_URL}`, {
+    const response = await fetch(`${THIS_URL}?otherUserId=${otherUserId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -14,6 +14,9 @@ export async function GetUserRelation(token: string, otherUserId?: string) {
     });
 
     if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      }
       throw new Error("Error in GetUserRelation response: " + response.status);
     }
 

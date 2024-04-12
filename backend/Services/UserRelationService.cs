@@ -55,17 +55,10 @@ public class UserRelationService : IUserRelationService
             throw new KeyNotFoundException($"User with UserID: {otherUserId}, does not exist! (UserRelationService)");
         }
 
-        UserRelation? userRelationOne = await _userRelationRepo.GetOneUserRelation(userId, otherUserId);
-        UserRelation? userRelationTwo = await _userRelationRepo.GetOneUserRelation(otherUserId, userId);
+        UserRelation? userRelation = await IsPendingFriendRequest(userId, otherUserId);
 
-        if(userRelationOne != null)
-        {
-            await _userRelationRepo.DeleteUserRelation(userRelationOne);
-        }
-
-        if(userRelationTwo != null)
-        {
-            await _userRelationRepo.DeleteUserRelation(userRelationTwo);
+        if (userRelation != null) {
+            return userRelation;
         }
 
         UserRelationType userRelationType = StringToUserRelationTypeEnum(type);
@@ -114,6 +107,19 @@ public class UserRelationService : IUserRelationService
         {
             await _userRelationRepo.DeleteUserRelation(userRelationTwo);
         }
+    }
+
+    public async Task<UserRelation?> IsPendingFriendRequest(string userId, string otherUserId) {
+
+        UserRelation? userRelation = await _userRelationRepo.GetUserRelation(userId, otherUserId);
+    
+        if(userRelation != null && 
+        ((userRelation.Type == UserRelationType.PENDING_FIRST_SECOND && userRelation.User_second_ID == userId ) || 
+        userRelation.Type == UserRelationType.PENDING_SECOND_FIRST && userRelation.User_first_ID == userId))
+        {
+            return await _userRelationRepo.UpdateUserRelationType(userRelation, UserRelationType.FRIENDS);
+        }
+        return userRelation;
     }
 
     public UserRelationType StringToUserRelationTypeEnum(string type)

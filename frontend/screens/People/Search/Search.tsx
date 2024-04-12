@@ -12,11 +12,7 @@ import {
 } from "../../../api/UserAPI";
 import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
-import {
-  CreateUserRelation,
-  UpdateUserRelationType,
-  GetUserRelation,
-} from "../../../api/UserRelationAPI";
+import { CreateUserRelation } from "../../../api/UserRelationAPI";
 
 // When register, add date of birth ??
 
@@ -45,7 +41,7 @@ export default function SearchPeople() {
     return age;
   };
 
-  const { token, setToken, userId } = useTokenProvider();
+  const { token, setToken, userID } = useTokenProvider();
 
   useEffect(() => {
     fetchFriends();
@@ -75,24 +71,11 @@ export default function SearchPeople() {
 
   const handleSendFriendRequest = async (otherId: string) => {
     try {
-      const isRelation = await GetUserRelation(token, otherId);
-      // Hvordan fikse at det kan returneres null???
-      if (isRelation == undefined) {
-        await CreateUserRelation(token, {
-          userId: "",
-          otherUserId: otherId,
-          type: UserRelationType.PENDING_FIRST_SECOND,
-        });
-      }
-
-      // Sjekke om brukere er blokkert SKAL DISSE VISES??
-      await UpdateUserRelationType(token, {
+      await CreateUserRelation(token, {
         userId: "",
         otherUserId: otherId,
-        type: UserRelationType.FRIENDS,
+        type: UserRelationType.PENDING_FIRST_SECOND,
       });
-
-      Alert.alert("Venneforespørsel er sendt!");
       clearSearchText();
     } catch (error) {
       console.error("Error in sending a friendRequest (search) " + error);
@@ -108,9 +91,10 @@ export default function SearchPeople() {
     try {
       const results: IUser[] | undefined = await SearchUsers(searchText, token);
 
-      if (results.some((id) => id.userID === userId)) {
+      console.log("ID = " + userID);
+      if (results.some((id) => id.userID === userID)) {
         const filteredResults = results.filter(
-          (user) => user.userID !== userId
+          (user) => user.userID !== userID
         );
         setSearchResult(filteredResults);
       } else {

@@ -22,7 +22,7 @@ public class UserRelationController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult<UserRelation>> GetUserRelation([FromQuery] string? otherUserId) {
+    public async Task<ActionResult<UserRelation>> GetUserRelation([FromQuery] string otherUserId) {
         otherUserId = SecurityElement.Escape(otherUserId);
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -33,8 +33,8 @@ public class UserRelationController : ControllerBase
 
         try
         {
-            await _urService.GetUserRelation(userIdClaim, otherUserId);
-            return Ok();
+            var result = await _urService.GetUserRelation(userIdClaim, otherUserId);
+            return Ok(result);
         }
         catch (InvalidOperationException e)
         {
@@ -66,7 +66,7 @@ public class UserRelationController : ControllerBase
         string? type = SecurityElement.Escape(dto.Type.ToString());
 
         try
-        {
+        { 
             var result = await _urService.CreateUserRelation(userIdClaim, otherUserId, type);
             return Ok(result);
         }

@@ -39,4 +39,13 @@ public interface IUserRelationService
     /// </summary>
     /// <param name="userRelationId">Id for the UserRelation</param>
     Task DeleteUserRelation(string userId, string otherUserId);
+
+    /// <summary>
+    /// Checks if there is a userRelation, if there is it updates it to Friends, else it returns
+    /// </summary>
+    /// <param name="userId">The User logged in</param>
+    /// <param name="otherUserId">The other User we want to check the relation of with logged in user</param>
+    /// <returns>true or false</returns>
+
+    Task<UserRelation> IsPendingFriendRequest(string userId, string otherUserId);
 }

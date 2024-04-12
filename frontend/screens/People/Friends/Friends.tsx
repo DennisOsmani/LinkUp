@@ -111,9 +111,6 @@ export default function FriendsPeople() {
     setFilteredFriends(allFriends);
   };
 
-  // Filtrere bort request når det søkes og det ikke samsvarer med søket
-  // eller ha de øverst hele tiden??
-
   return (
     <ScrollView>
       <View style={styles.contentContainer}>
