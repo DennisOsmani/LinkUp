@@ -89,26 +89,30 @@ export default function SearchPeople() {
 
   const handleSearch = async () => {
     try {
+      if (searchText === "") {
+        setSearchResult([]);
+        return;
+      }
       const results: IUser[] | undefined = await SearchUsers(searchText, token);
 
-      console.log("ID = " + userID);
       if (results.some((id) => id.userID === userID)) {
-        const filteredResults = results.filter(
+        const filterLoggedInUser = results.filter(
           (user) => user.userID !== userID
         );
-        setSearchResult(filteredResults);
+        setSearchResult(filterLoggedInUser);
       } else {
-        setSearchResult(results);
+        const filtered: IUser[] | undefined = results.filter(
+          (user) =>
+            (user.firstname + " " + user.lastname)
+              .toLowerCase()
+              .startsWith(searchText.toLowerCase()) ||
+            user.lastname.toLowerCase().startsWith(searchText.toLowerCase())
+        );
+        setSearchResult(filtered);
       }
     } catch (error) {
       setToken("");
       console.error("Error while searching users: " + error);
-    }
-  };
-
-  const handleKeyPress = (nativeEvent: any) => {
-    if (nativeEvent.key === "Enter") {
-      handleSearch();
     }
   };
 
@@ -122,7 +126,6 @@ export default function SearchPeople() {
             value={searchText}
             onChangeText={setSearchText}
             onSubmitEditing={handleSearch}
-            onKeyPress={handleKeyPress}
           ></TextInput>
           <Feather style={styles.icon} name="x" onPress={clearSearchText} />
         </View>
