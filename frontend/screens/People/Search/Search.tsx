@@ -101,6 +101,7 @@ export default function SearchPeople() {
         );
         setSearchResult(filterLoggedInUser);
       } else {
+        // En bokstav fucker opp, mens fra 2 er den bra
         const filtered: IUser[] | undefined = results.filter(
           (user) =>
             (user.firstname + " " + user.lastname)
