@@ -150,7 +150,6 @@ export default function CreateEvent() {
       console.log("EVENT JUST CREATED ID: " + eventId);
     } catch (error) {
       Alert.alert("Noe gikk galt", "Prøv igjen senere.");
-      console.log("SÅ HER");
       console.error(error);
       return;
     }
