@@ -38,7 +38,7 @@ export interface IUser {
 }
 
 export interface IEvent {
-  eventID?: number;
+  eventID: number;
   eventName: string;
   eventDescription: string;
   eventDateTimeStart: string;
@@ -49,7 +49,7 @@ export interface IEvent {
   minCapacity?: string;
   maxCapacity?: string;
   locationID?: number;
-  location?: ILocation;
+  location: ILocation;
   eventRelations?: [];
 }
 
