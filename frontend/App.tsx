@@ -4,7 +4,6 @@ import * as Font from "expo-font";
 import Splash from "./screens/Splash/Splash";
 import { TokenProvider } from "./providers/TokenProvider";
 import { LocationProvider } from "./providers/LocationProvider";
-import "./firebase";
 import TabNavigator from "./navigation/TabNavigator";
 
 export default function App() {

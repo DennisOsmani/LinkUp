@@ -42,23 +42,4 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     paddingLeft: horizontalScale(15),
   },
-
-  saveButton: {
-    borderRadius: moderateScale(15),
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-    width: horizontalScale(180),
-    height: verticalScale(45),
-    borderWidth: moderateScale(3),
-    borderColor: colors.primary,
-    marginBottom: horizontalScale(20),
-  },
-
-  saveText: {
-    fontFamily: "BalooBold",
-    fontSize: moderateScale(24),
-    textAlign: "center",
-    color: colors.primary,
-  },
 });

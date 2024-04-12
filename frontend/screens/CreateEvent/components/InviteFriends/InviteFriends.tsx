@@ -1,9 +1,15 @@
-import { TextInput, View, ScrollView, Keyboard } from "react-native";
+import {
+  TextInput,
+  View,
+  ScrollView,
+  Keyboard,
+  Pressable,
+  Text,
+} from "react-native";
 import { styles } from "./InviteFriendsStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { IUser } from "../../../../interfaces/ModelInterfaces";
-import { getUserFriendEvents } from "../../../../api/EventAPI";
 import { useTokenProvider } from "../../../../providers/TokenProvider";
 import { GetUserFriends } from "../../../../api/UserAPI";
 import { InviteUserCard } from "../InviteUserCard/InviteUserCard";
@@ -11,17 +17,25 @@ import { InviteUserCard } from "../InviteUserCard/InviteUserCard";
 // TODO
 // - Profilbilde (search & friends)
 interface InviteFriendsProps {
-  setUsersToInvite: React.Dispatch<React.SetStateAction<string[]>>;
+  allFriends: IUser[];
+  setAllFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
+  filteredFriends: IUser[];
+  setFilteredFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
+  invitedFriends: IUser[];
+  setInvitedFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
+  handleSendInvites: () => void;
 }
 
 export default function InviteFriends({
-  setUsersToInvite,
+  setAllFriends,
+  setFilteredFriends,
+  allFriends,
+  setInvitedFriends,
+  invitedFriends,
+  filteredFriends,
+  handleSendInvites,
 }: InviteFriendsProps) {
   const [searchText, setSearchText] = useState("");
-  const [allFriends, setAllFriends] = useState<IUser[] | undefined>([]);
-  const [filteredFriends, setFilteredFriends] = useState<IUser[] | undefined>(
-    []
-  );
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -45,6 +59,7 @@ export default function InviteFriends({
   const fetchAllFriends = async () => {
     try {
       const results: IUser[] | undefined = await GetUserFriends(token);
+      console.log("HENTET");
       setAllFriends(results);
       setFilteredFriends(results);
     } catch (error) {
@@ -62,7 +77,7 @@ export default function InviteFriends({
     if (text === "") {
       setFilteredFriends(allFriends);
     } else {
-      const filtered: IUser[] | undefined = allFriends?.filter(
+      const filtered: IUser[] = allFriends?.filter(
         (friend) =>
           (friend.firstname + " " + friend.lastname)
             .toLowerCase()
@@ -85,33 +100,85 @@ export default function InviteFriends({
     }
   };
 
-  return (
-    <ScrollView>
-      <View style={styles.contentContainer}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchBar}
-            placeholder="Søk"
-            value={searchText}
-            onChangeText={handleSearchTextChange}
-            placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
-            onKeyPress={handleKeyPress}
-          />
-          <Feather style={styles.icon} name="x" onPress={clearSearchText} />
-        </View>
+  const handleUninviteClick = (user: IUser) => {
+    if (!allFriends) return;
 
-        {filteredFriends &&
-          filteredFriends.map((user: IUser, index: number) => (
-            <InviteUserCard
-              key={index}
-              firstname={user.firstname}
-              lastname={user.lastname}
-              age={calculateAge(user.dateBorn)}
-              userId={user.userID}
-              setUsersToInvite={setUsersToInvite}
+    setInvitedFriends(
+      invitedFriends.filter(
+        (userIter: IUser) => userIter.userID !== user.userID
+      )
+    );
+
+    if (!allFriends.some((userIter) => userIter.userID === user.userID)) {
+      setAllFriends((prevAllFriends) =>
+        prevAllFriends ? [...prevAllFriends, user] : [user]
+      );
+    }
+  };
+
+  const handleInviteClick = (user: IUser) => {
+    if (!allFriends || !filteredFriends) return;
+
+    setAllFriends(
+      allFriends.filter((userIter) => userIter.userID !== user.userID)
+    );
+
+    setFilteredFriends(
+      filteredFriends.filter((userIter) => userIter.userID !== user.userID)
+    );
+
+    if (!invitedFriends.some((userIter) => userIter.userID === user.userID)) {
+      setInvitedFriends((prevInvitedFriends) => [...prevInvitedFriends, user]);
+    }
+  };
+
+  return (
+    <>
+      <ScrollView>
+        <View style={styles.contentContainer}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Søk"
+              value={searchText}
+              onChangeText={handleSearchTextChange}
+              placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
+              onKeyPress={handleKeyPress}
             />
-          ))}
-      </View>
-    </ScrollView>
+            <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+          </View>
+
+          {invitedFriends &&
+            invitedFriends.map((user: IUser, index: number) => (
+              <InviteUserCard
+                key={index}
+                firstname={user.firstname}
+                lastname={user.lastname}
+                age={calculateAge(user.dateBorn)}
+                invited={true}
+                onInviteClick={() => handleInviteClick(user)}
+                onUninviteClick={() => handleUninviteClick(user)}
+              />
+            ))}
+
+          {filteredFriends &&
+            filteredFriends.map((user: IUser, index: number) => (
+              <InviteUserCard
+                key={index}
+                firstname={user.firstname}
+                lastname={user.lastname}
+                age={calculateAge(user.dateBorn)}
+                invited={false}
+                onInviteClick={() => handleInviteClick(user)}
+                onUninviteClick={() => handleUninviteClick(user)}
+              />
+            ))}
+        </View>
+      </ScrollView>
+
+      <Pressable style={styles.saveButton} onPress={handleSendInvites}>
+        <Text style={styles.saveText}>Lukk</Text>
+      </Pressable>
+    </>
   );
 }

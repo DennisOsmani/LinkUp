@@ -64,11 +64,27 @@ export const styles = StyleSheet.create({
     fontFamily: "BalooRegular",
   },
 
+  inviteButtonWrapper: {
+    width: "93%",
+    alignItems: "flex-end",
+  },
+
   inviteButton: {
     height: verticalScale(29),
     width: horizontalScale(110),
     borderRadius: moderateScale(10),
     backgroundColor: colors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  uninviteButton: {
+    height: verticalScale(29),
+    width: horizontalScale(110),
+    borderRadius: moderateScale(10),
+    backgroundColor: colors.foreground,
+    borderColor: colors.primary,
+    borderWidth: moderateScale(3),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -80,8 +96,11 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  inviteButtonWrapper: {
-    width: "93%",
-    alignItems: "flex-end",
+  uninviteButtonText: {
+    fontFamily: "BalooBold",
+    fontSize: moderateScale(20),
+    color: colors.primary,
+    textAlign: "center",
+    paddingBottom: 30,
   },
 });

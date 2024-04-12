@@ -135,4 +135,27 @@ export const styles = StyleSheet.create({
     color: "gray",
     opacity: 0.45,
   },
+
+  visibilityContainer: {
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  visibilityText: {
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(22),
+    color: "rgba(128, 128, 128, 0.4)",
+  },
+
+  visibilityBox: {
+    backgroundColor: colors.foreground,
+    height: verticalScale(40),
+    width: "30%",
+    borderRadius: moderateScale(10),
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 3,
+    borderColor: "white",
+  },
 });
