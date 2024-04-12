@@ -49,9 +49,8 @@ public class EventController : ControllerBase
         }
     }
 
-    // ENDRE TILBAKE!! - TODO
     [HttpGet("city/{city}")]
-    [AllowAnonymous]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> GetEventsInCity(string city)
     {
         city = SecurityElement.Escape(city);

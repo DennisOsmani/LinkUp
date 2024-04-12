@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
     padding: moderateScale(25),
     borderTopEndRadius: moderateScale(25),
     borderTopStartRadius: moderateScale(25),
+    gap: 20,
   },
   midscreenMessages: {
     flex: 1,
@@ -20,6 +21,7 @@ export const styles = StyleSheet.create({
   },
   midscreenMessagesText: {
     fontSize: moderateScale(20),
+    textAlign: "center",
     fontFamily: "BalooSemiBold",
     marginTop: moderateScale(20),
   },

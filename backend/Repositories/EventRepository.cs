@@ -42,7 +42,7 @@ public class EventRepository
         try
         {
             return await _context.Events
-                .Where(e => e.Location.City == city && e.Visibility == Visibility.PUBLIC)
+                .Where(e => e.Location.City == city && e.Visibility == Visibility.PUBLIC && e.EventDateTimeStart < DateTime.Now)
                 .Where(e => !_context.EventRelations.Any(er => er.EventID == e.EventID && er.UserID == userId))
                 .Include(e => e.Location)
                 .ToListAsync();
@@ -59,11 +59,11 @@ public class EventRepository
     /// <param name="userIds">A list of userIds, that consists of this users friends</param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">If Linq query is faulty.</exception>
-    public async Task<ICollection<Event?>> GetUserFriendEvents(List<String> userIds)
+    public async Task<ICollection<Event?>> GetUserFriendEvents(List<string> userIds, string userId)
     {
         try
         {
-            return await _context.EventRelations
+            var eventsForFriends = await _context.EventRelations
                 .Include(er => er.Event) // Include the related Event entity
                     .ThenInclude(e => e.Location) // Include the related Location entity
                 .Where(
@@ -71,8 +71,15 @@ public class EventRepository
                     && er.EventRole == EventRole.CREATOR
                 )
                 .Select(er => er.Event)
-                .Where(e => e.Visibility == Visibility.FRIENDS)
+                .Where(e => e.Visibility == Visibility.FRIENDS && e.EventDateTimeStart < DateTime.Now)
                 .ToListAsync();
+
+            var usersEvents = await _context.EventRelations
+                .Where(er => er.UserID == userId)
+                .Select(er => er.Event)
+                .ToListAsync();
+
+            return eventsForFriends.Except(usersEvents).ToList();
         }
         catch (InvalidOperationException)
         {

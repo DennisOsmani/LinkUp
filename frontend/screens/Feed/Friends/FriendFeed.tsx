@@ -23,7 +23,6 @@ export default function FriendFeed() {
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
-    const currentTime = new Date().getTime();
     fetchEvents();
   }, []);
 
@@ -144,7 +143,10 @@ export default function FriendFeed() {
           ) : (
             <View style={styles.midscreenMessages}>
               <Text style={styles.midscreenMessagesText}>
-                Det er for tiden ingen eventer i din by!
+                Her var det tomt!
+              </Text>
+              <Text style={styles.midscreenMessagesText}>
+                Ingen av dine venner har lagt ut nye eventer for kun venner.
               </Text>
             </View>
           )}

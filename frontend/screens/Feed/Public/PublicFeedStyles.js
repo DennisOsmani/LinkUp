@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
     padding: moderateScale(25),
     borderTopEndRadius: moderateScale(25),
     borderTopStartRadius: moderateScale(25),
-    backgroundColor: colors.background,
     gap: 20,
   },
   midscreenMessages: {
