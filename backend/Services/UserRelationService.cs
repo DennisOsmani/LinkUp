@@ -32,11 +32,6 @@ public class UserRelationService : IUserRelationService
 
         UserRelation relation = await _userRelationRepo.GetUserRelation(userId, otherUserId);
 
-        Console.WriteLine("Relasjon id" + relation.UserRelationID + " type: " + relation.Type +
-        " 1: " + relation.User_first_ID + 
-        " 2: " + relation.User_second_ID + 
-        " Brukere: " + user.UserID + " " + otherUser.UserID);
-
         return relation;
     }   
 

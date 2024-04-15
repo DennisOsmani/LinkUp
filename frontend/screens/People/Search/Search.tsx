@@ -9,8 +9,13 @@ import {
   SearchUsers,
   GetUserFriends,
   GetPendingFriendRequests,
+  getUser,
 } from "../../../api/UserAPI";
-import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
+import {
+  IUser,
+  IUserRelation,
+  UserRelationType,
+} from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import { CreateUserRelation } from "../../../api/UserRelationAPI";
 
@@ -70,15 +75,22 @@ export default function SearchPeople() {
 
   const handleSendFriendRequest = async (otherId: string) => {
     try {
-      await CreateUserRelation(token, {
+      const ur: IUserRelation | undefined = await CreateUserRelation(token, {
         userId: "",
         otherUserId: otherId,
         type: UserRelationType.PENDING_FIRST_SECOND,
       });
-      // clearSearchText();
-      // Need to update the states, and update the UI to correct userCard
-      console.log("Friends2: " + friends.length);
-      console.log("Pending2: " + pending.length);
+
+      if (ur?.type === UserRelationType.PENDING_FIRST_SECOND) {
+        const user = await getUser(token, ur.user_second_ID);
+        setPending((prevState) => [...prevState, user]);
+      }
+
+      if (ur?.type === UserRelationType.FRIENDS) {
+        const user = await getUser(token, ur.user_second_ID);
+        setFriends((prevState) => [...prevState, user]);
+      }
+      console.log("Legger til VENNN!!!");
     } catch (error) {
       console.error("Error in sending a friendRequest (search) " + error);
     }
@@ -93,8 +105,6 @@ export default function SearchPeople() {
     try {
       if (searchText === "") {
         setSearchResult([]);
-        console.log("Friends1: " + friends.length);
-        console.log("Pending1: " + pending.length);
         return;
       }
       const results: IUser[] | undefined = await SearchUsers(searchText, token);

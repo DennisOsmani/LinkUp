@@ -4,7 +4,11 @@ import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
-import { GetUserFriends, GetUserFriendRequests } from "../../../api/UserAPI";
+import {
+  GetUserFriends,
+  GetUserFriendRequests,
+  getUser,
+} from "../../../api/UserAPI";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import { UserCardAnswer } from "../../../components/UserCard/UserCardAnswer";
 import {
@@ -18,14 +22,10 @@ import {
 
 export default function FriendsPeople() {
   const [searchText, setSearchText] = useState("");
-  const [allFriends, setAllFriends] = useState<IUser[] | undefined>([]);
-  const [filteredFriends, setFilteredFriends] = useState<IUser[] | undefined>(
-    []
-  );
-  const [allFriendRequests, setAllFriendRequests] = useState<
-    IUser[] | undefined
-  >([]);
-  const { token } = useTokenProvider();
+  const [allFriends, setAllFriends] = useState<IUser[]>([]);
+  const [filteredFriends, setFilteredFriends] = useState<IUser[]>([]);
+  const [allFriendRequests, setAllFriendRequests] = useState<IUser[]>([]);
+  const { token, userID } = useTokenProvider();
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -47,7 +47,7 @@ export default function FriendsPeople() {
 
   const fetchAllFriends = async () => {
     try {
-      const results: IUser[] | undefined = await GetUserFriends(token);
+      const results: IUser[] = await GetUserFriends(token);
       setAllFriends(results);
       setFilteredFriends(results);
     } catch (error) {
@@ -57,7 +57,7 @@ export default function FriendsPeople() {
 
   const fetchAllFriendRequests = async () => {
     try {
-      const results: IUser[] | undefined = await GetUserFriendRequests(token);
+      const results: IUser[] = await GetUserFriendRequests(token);
       setAllFriendRequests(results);
     } catch (error) {
       console.error("Error while fetching all friend requests: " + error);
@@ -66,11 +66,25 @@ export default function FriendsPeople() {
 
   const handleAcceptRequest = async (otherId: string) => {
     try {
-      await UpdateUserRelationType(token, {
+      const ur = await UpdateUserRelationType(token, {
         userId: "",
         otherUserId: otherId,
         type: UserRelationType.FRIENDS,
       });
+
+      if (ur?.type === UserRelationType.FRIENDS) {
+        const user = await getUser(
+          token,
+          ur.user_first_ID == userID ? ur.user_second_ID : ur.user_first_ID
+        );
+
+        setAllFriends((prevState) => [...prevState, user]);
+        //NEED TO UPDATE THE FILTERFRIENDS [] TO SHOW THE NEW ADDED FRIEND
+        setAllFriendRequests((prevState) =>
+          [...prevState].filter((u) => u.userID !== user.userID)
+        );
+      }
+
       console.log("Ny venn!!!!");
     } catch (error) {
       console.error("Error in accepting a friendRequest (search) " + error);

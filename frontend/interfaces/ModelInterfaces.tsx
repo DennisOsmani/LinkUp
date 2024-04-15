@@ -67,7 +67,7 @@ export interface IUserRelation {
   user_fisrt?: IUser;
   user_second_ID: string;
   user_second?: IUser;
-  userRelationType: number;
+  type: number;
 }
 
 export interface IEventRelations {
