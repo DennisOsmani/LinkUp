@@ -18,7 +18,6 @@ import { CreateUserRelation } from "../../../api/UserRelationAPI";
 
 // TODO
 // - TRELLO
-// - Filtrere brukerne når man søker!!
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
@@ -76,7 +75,10 @@ export default function SearchPeople() {
         otherUserId: otherId,
         type: UserRelationType.PENDING_FIRST_SECOND,
       });
-      clearSearchText();
+      // clearSearchText();
+      // Need to update the states, and update the UI to correct userCard
+      console.log("Friends2: " + friends.length);
+      console.log("Pending2: " + pending.length);
     } catch (error) {
       console.error("Error in sending a friendRequest (search) " + error);
     }
@@ -91,6 +93,8 @@ export default function SearchPeople() {
     try {
       if (searchText === "") {
         setSearchResult([]);
+        console.log("Friends1: " + friends.length);
+        console.log("Pending1: " + pending.length);
         return;
       }
       const results: IUser[] | undefined = await SearchUsers(searchText, token);
