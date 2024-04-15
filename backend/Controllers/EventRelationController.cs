@@ -25,6 +25,37 @@ public class EventRelationController : ControllerBase
         _erRepo = eventRelationRepository;
     }
 
+    [HttpGet]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult<EventRelation>> GetEventRelation(int eventId)
+    {
+
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+        try
+        {
+            var er = _erService.GetEventRelation(eventId, userIdClaim);
+            return Ok(er);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+
     [HttpPost("create/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> CreateEventRealation(int eventId, [FromBody] List<string> userIds)

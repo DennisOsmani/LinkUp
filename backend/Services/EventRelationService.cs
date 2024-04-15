@@ -21,6 +21,16 @@ public class EventRelationService : IEventRelationService
         _userRelRepo = userRelRepo;
     }
 
+    public async Task<EventRelation> GetEventRelation(int eventId, string userId)
+    {
+        EventRelation? eventRelation = await _erRepo.GetEventRelation(eventId, userId);
+        if (eventRelation == null)
+        {
+            throw new KeyNotFoundException($"EventRelation with eventID: {eventId}, and UserID: {userId}, was not found! (EventRelationService)");
+        }
+        return eventRelation;
+    }
+
     public async Task<EventRelation> UpdateEventRelationRole(int eventId, string userId, string role)
     {
         EventRelation? eventRelation = await _erRepo.GetEventRelation(eventId, userId);

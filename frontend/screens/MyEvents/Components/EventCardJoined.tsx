@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { styles } from "./EventCardJoinedStyles";
 import { Feather } from "@expo/vector-icons";
+import { IEventRelations } from "../../../interfaces/ModelInterfaces";
 
 interface EventCardJoinedProps {
   numberOfPeople: string;
@@ -11,8 +12,8 @@ interface EventCardJoinedProps {
   bio: string;
   address: string;
   imageSource: any;
-  onJoinPress: () => void;
-  eventRole: string;
+  onButtonPress: () => void;
+  eventRelation: IEventRelations;
 }
 
 const EventCardJoined = ({
@@ -23,9 +24,18 @@ const EventCardJoined = ({
   bio,
   address,
   imageSource,
-  onJoinPress,
-  eventRole
+  onButtonPress,
+  eventRelation,
 }: EventCardJoinedProps) => {
+  const MAX_LETTERS_DESCRIPTION = 90;
+  const MAX_LETTERS_TITLE = 16;
+
+  const truncateDescription = (text: string, maxLetters: number) => {
+    if (text.length > maxLetters && maxLetters != MAX_LETTERS_TITLE) {
+      return text.substring(0, maxLetters) + "...";
+    }
+    return text.substring(0, maxLetters);
+  };
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -38,17 +48,22 @@ const EventCardJoined = ({
       <View style={styles.content}>
         <View style={styles.leftSide}>
           <View style={styles.upperLeftSide}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title}>
+              {truncateDescription(title, MAX_LETTERS_TITLE)}
+            </Text>
             <View style={styles.iconTextWrapper}>
               <Feather name="user" style={styles.text} />
               <Text style={styles.text}>{hostName}</Text>
             </View>
-            <Text style={styles.text}>{bio}</Text>
+            <Text style={styles.text}>
+              {truncateDescription(bio, MAX_LETTERS_DESCRIPTION)}
+            </Text>
           </View>
           <View style={styles.lowerLeftSide}>
             <Text style={styles.addressText}>{address}</Text>
-            <Pressable style={styles.button} onPress={onJoinPress}>
-              {eventRole === "CREATOR" || eventRole === "HOST" ? (
+            <Pressable style={styles.button} onPress={onButtonPress}>
+              {eventRelation.eventRole === 1 || //host or creator
+              eventRelation.eventRole === 1 ? (
                 <Text style={styles.buttonText}>Rediger</Text>
               ) : (
                 <Text style={styles.buttonText}>Forlat Event</Text>
@@ -63,7 +78,7 @@ const EventCardJoined = ({
               height: "100%",
               width: "100%",
               resizeMode: "cover",
-              borderRadius: 16
+              borderRadius: 16,
             }}
           />
         </View>

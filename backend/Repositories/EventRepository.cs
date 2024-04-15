@@ -42,7 +42,7 @@ public class EventRepository
         try
         {
             return await _context.Events
-                .Where(e => e.Location.City.ToUpper() == city.ToUpper() && e.Visibility == Visibility.PUBLIC && e.EventDateTimeStart < DateTime.Now)
+                .Where(e => e.Location.City.ToUpper() == city.ToUpper() && e.Visibility == Visibility.PUBLIC /* && e.EventDateTimeStart < DateTime.Now*/)
                 .Where(e => !_context.EventRelations.Any(er => er.EventID == e.EventID && er.UserID == userId))
                 .Include(e => e.Location)
                 .ToListAsync();
@@ -114,6 +114,7 @@ public class EventRepository
                 .Where(
                     er => er.UserID.Equals(userId)
                     && er.EventRelationParticipation == EventRelationParticipation.JOINED
+                    //&& er.EventDateTimeEnd < Datetime.Now
                 )
                 .Select(er => er.Event)
                 .ToListAsync();

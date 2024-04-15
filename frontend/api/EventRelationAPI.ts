@@ -1,6 +1,28 @@
+import { IEventRelations, IUser } from "../interfaces/ModelInterfaces";
 import { URL_BASE, EVENTRELATION_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENTRELATION_PATH}`;
+
+export const getEventRelation = async (eventId: number, token: string) => {
+  try {
+    const response = await fetch(`${THIS_URL}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in getEventById response: " + response.status);
+    }
+
+    const data: IEventRelations = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching getEventRelation " + error);
+  }
+};
 
 export const inviteUsersForEvent = async (
   eventId: number,
