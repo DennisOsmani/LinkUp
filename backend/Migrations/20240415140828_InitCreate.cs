@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Create : Migration
+    public partial class InitCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -62,8 +62,8 @@ namespace backend.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     EventName = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     EventDescription = table.Column<string>(type: "text", nullable: false),
-                    EventDateTimeStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EventDateTimeEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EventDateTimeStart = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EventDateTimeEnd = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Visibility = table.Column<int>(type: "integer", nullable: false),
                     InviteURL = table.Column<string>(type: "text", nullable: false),
                     FrontImage = table.Column<string>(type: "text", nullable: true),
