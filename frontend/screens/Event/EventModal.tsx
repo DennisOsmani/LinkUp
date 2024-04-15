@@ -21,7 +21,7 @@ export function EventModal({
       <TabBackground firstTab="Event" secondTab="Folk">
         <EventTab
           modalVisible={modalVisible}
-          setModalVisible={modalVisible}
+          setModalVisible={setModalVisible}
           event={event}
         />
         <PeopleTab />

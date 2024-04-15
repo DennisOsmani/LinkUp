@@ -90,29 +90,101 @@ export const styles = StyleSheet.create({
     color: "black",
   },
 
-  thirdRowWrapper: {},
+  thirdRowWrapper: {
+    width: "90%",
+  },
 
   enrolledText: {
-    fontSize: moderateScale(20),
+    fontSize: moderateScale(22),
     fontFamily: "BalooRegular",
     color: colors.grey,
   },
 
   enrolledBarOutline: {
-    borderRadius: moderateScale(5),
-    backgroundColor: colors.primary,
+    width: "100%",
+    height: verticalScale(50),
+    borderRadius: moderateScale(15),
+    backgroundColor: "white",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
   },
 
   enrolledBar: {
-    borderRadius: moderateScale(5),
-    backgroundColor: colors.secondary,
+    borderRadius: moderateScale(15),
+    width: "100%",
+    height: "100%",
+    backgroundColor: colors.primary,
   },
 
-  enrolledCount: {},
+  enrolledCount: {
+    position: "absolute",
+    fontSize: moderateScale(23),
+    fontFamily: "BalooBold",
+    color: "black",
+    right: horizontalScale(15),
+  },
 
-  descriptionHeader: {},
+  fourthRowWrapper: {
+    width: "90%",
+  },
 
-  fourthRowWrapper: {},
+  descriptionHeader: {
+    fontSize: moderateScale(22),
+    fontFamily: "BalooRegular",
+    color: colors.grey,
+  },
 
-  leaveEventButton: {},
+  descriptionBox: {
+    backgroundColor: "white",
+    paddingVertical: moderateScale(10),
+    paddingHorizontal: moderateScale(20),
+    borderRadius: moderateScale(15),
+  },
+
+  description: {
+    fontSize: moderateScale(20),
+    fontFamily: "BalooRegular",
+    color: "black",
+    lineHeight: moderateScale(24),
+  },
+
+  buttonWrapper: {
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+
+  backButton: {
+    backgroundColor: colors.primary,
+    borderRadius: moderateScale(10),
+    width: horizontalScale(160),
+    height: moderateScale(50),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  backButtonText: {
+    fontFamily: "BalooBold",
+    color: "white",
+    fontSize: moderateScale(24),
+  },
+
+  leaveEventButton: {
+    backgroundColor: colors.foreground,
+    borderColor: colors.primary,
+    borderWidth: moderateScale(3.5),
+    borderRadius: moderateScale(10),
+    width: horizontalScale(160),
+    height: moderateScale(50),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  leaveEventButtonText: {
+    fontFamily: "BalooBold",
+    fontSize: moderateScale(24),
+    color: colors.primary,
+  },
 });

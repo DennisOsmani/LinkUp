@@ -75,15 +75,26 @@ export function EventTab({
 
       <View style={styles.fourthRowWrapper}>
         <Text style={styles.descriptionHeader}>Beskrivelse</Text>
-        <Text>
-          {event?.eventDescription}Lorem ipsum dolores sigmatures engalada mote.
-          Sindele infurate motelago konatello finite.
-        </Text>
+        <View style={styles.descriptionBox}>
+          <Text style={styles.description}>
+            {event?.eventDescription}Lorem ipsum dolores sigmatures engalada
+            mote. Sindele infurate motelago konatello finite.
+          </Text>
+        </View>
       </View>
 
-      <Pressable style={styles.leaveEventButton}>
-        <Text>Forlat Event</Text>
-      </Pressable>
+      <View style={styles.buttonWrapper}>
+        <Pressable
+          onPress={() => setModalVisible(false)}
+          style={styles.backButton}
+        >
+          <Text style={styles.backButtonText}>Tilbake</Text>
+        </Pressable>
+
+        <Pressable style={styles.leaveEventButton}>
+          <Text style={styles.leaveEventButtonText}>Forlat Event</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
