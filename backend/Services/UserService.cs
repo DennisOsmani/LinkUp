@@ -64,6 +64,57 @@ public class UserService : IUserService
         return await _userRelRepo.GetUserFriends(user.UserID);
     } 
 
+    public async Task<ICollection<User?>> GetPendingFriendRequests(string userId)
+    {
+        if (string.IsNullOrEmpty(userId)) 
+        {
+            throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
+        }
+
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
+        }
+
+        return await _userRelRepo.GetPendingFriendRequests(user.UserID);
+    } 
+
+    public async Task<ICollection<User?>> GetUserFriendRequests(string userId)
+    {
+        if (string.IsNullOrEmpty(userId)) 
+        {
+            throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
+        }
+
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
+        }
+
+        return await _userRelRepo.GetUserFriendRequests(user.UserID);
+    } 
+
+    public async Task<ICollection<User?>> GetUserBlocks(string userId)
+    {
+         if (string.IsNullOrEmpty(userId)) 
+        {
+            throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
+        }
+
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
+        }
+
+        return await _userRelRepo.GetUserBlocks(userId);
+    }
+
     public async Task CreateUser(User user)
     {
         string id = Guid.NewGuid().ToString();
@@ -122,9 +173,18 @@ public class UserService : IUserService
         await _userRepo.DeleteUser(user);
     }
 
-    public async Task<ICollection<User>> SearchUsers(string searchString)
+    public async Task<ICollection<User>> SearchUsers(string searchString, string userId)
     {
-        return await _userRepo.SearchUsers(searchString);
+        ICollection<User?> usersBlocked = await _userRelRepo.GetUsersBlockedLoggedInUser(userId);
+
+        ICollection<User> searchedUsers = await _userRepo.SearchUsers(searchString);
+
+        foreach (var blockedUser in usersBlocked)
+        {
+            searchedUsers = searchedUsers.Where(user => user.UserID != blockedUser?.UserID).ToList();
+        }
+
+        return searchedUsers;
     }
 
     //probably needs an update, need eventrepo/service access first

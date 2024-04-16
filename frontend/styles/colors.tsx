@@ -7,4 +7,5 @@ export const colors = {
   green: "#36AE46",
   red: "#DE1240",
   grey: "#808080",
+  blocked: "#C9C9C9",
 };

@@ -20,6 +20,37 @@ public class UserRelationController : ControllerBase
         _urService = urService;
     }
 
+    [HttpGet]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult<UserRelation>> GetUserRelation([FromQuery] string otherUserId) {
+        otherUserId = SecurityElement.Escape(otherUserId);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+
+        try
+        {
+            var result = await _urService.GetUserRelation(userIdClaim, otherUserId);
+            return Ok(result);
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+
     [HttpPost]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<UserRelation>> CreateUserRelation([FromBody] UserRelationDTO dto)
@@ -35,7 +66,7 @@ public class UserRelationController : ControllerBase
         string? type = SecurityElement.Escape(dto.Type.ToString());
 
         try
-        {
+        { 
             var result = await _urService.CreateUserRelation(userIdClaim, otherUserId, type);
             return Ok(result);
         }

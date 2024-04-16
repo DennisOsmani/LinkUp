@@ -8,6 +8,14 @@ namespace Interfaces;
 public interface IUserRelationService
 {
     /// <summary>
+    /// Get a UserRelation
+    /// </summary>
+    /// <param name="userId">The User logged in</param>
+    /// <param name="otherUserId">The other User we want to get the relation of with logged in user</param>
+    /// <returns>The UserRelation</returns>
+    Task<UserRelation> GetUserRelation(string userId, string otherUserId);
+
+    /// <summary>
     /// Creates a UserRelations Type.
     /// </summary>
     /// <param name="userId">The User logged in</param>
@@ -31,4 +39,13 @@ public interface IUserRelationService
     /// </summary>
     /// <param name="userRelationId">Id for the UserRelation</param>
     Task DeleteUserRelation(string userId, string otherUserId);
+
+    /// <summary>
+    /// Checks if there is a userRelation, if there is it updates it to Friends, else it returns
+    /// </summary>
+    /// <param name="userId">The User logged in</param>
+    /// <param name="otherUserId">The other User we want to check the relation of with logged in user</param>
+    /// <returns>true or false</returns>
+
+    Task<UserRelation> IsPendingFriendRequest(string userId, string otherUserId);
 }

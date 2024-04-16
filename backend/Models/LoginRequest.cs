@@ -1,15 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Auth;
+namespace Models;
 
-public class RegistrationRequest
+public class LoginRequest
 {
-    [Required]
-    public string Firstname { get; set; }
-
-    [Required]
-    public string Lastname { get; set; }
-
     [Required]
     [EmailAddress]
     public string Email { get; set; }
