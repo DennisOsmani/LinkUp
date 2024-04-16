@@ -2,6 +2,7 @@ import { TextInput, View, ScrollView, Alert } from "react-native";
 import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import { UserCardPending } from "../../../components/UserCard/UserCardPending";
+import { UserCardBlocked } from "../../../components/UserCard/UserCardBlocked";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -159,14 +160,14 @@ export default function SearchPeople() {
 
             if (isFriend) {
               return (
-                <UserCardFriends
+                <UserCardBlocked
                   key={index}
                   userCardInfo={{
                     firstname: user.firstname,
                     lastname: user.lastname,
-                    age: calculateAge(user.dateBorn),
+                    // age: calculateAge(user.dateBorn),
                   }}
-                ></UserCardFriends>
+                ></UserCardBlocked>
               );
             } else if (isPendig) {
               return (

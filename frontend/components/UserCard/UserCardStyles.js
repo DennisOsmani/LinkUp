@@ -23,12 +23,34 @@ export default StyleSheet.create({
     paddingVertical: verticalScale(15),
     paddingHorizontal: horizontalScale(10),
     marginTop: verticalScale(20),
-    backgroundColor: colors.red,
+    backgroundColor: colors.foreground,
     borderRadius: moderateScale(20),
     shadowColor: "black",
     shadowOffset: { width: horizontalScale(0), height: verticalScale(4) },
     shadowOpacity: moderateScale(0.5),
     shadowRadius: moderateScale(4),
+  },
+
+  blockedOpacity: {
+    opacity: moderateScale(0.8),
+  },
+  blockedContainer: {
+    flexDirection: "column",
+    width: "80%",
+  },
+
+  textBlocked: {
+    color: colors.red,
+    borderRadius: moderateScale(10),
+    borderWidth: moderateScale(2),
+    width: "25%",
+    paddingLeft: horizontalScale(6),
+    borderColor: colors.red,
+    fontFamily: "BalooRegular",
+    justifyContent: "flex-end",
+    marginLeft: horizontalScale(193),
+    marginTop: verticalScale(-30),
+    marginBottom: verticalScale(-5),
   },
 
   imageContainer: {

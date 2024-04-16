@@ -17,13 +17,14 @@ interface UserCardProps {
 
 export function UserCardBlocked({ userCardInfo }: UserCardProps) {
   return (
-    <View style={styles.card}>
+    <View style={[styles.blockedCard, styles.blockedOpacity]}>
       <View style={styles.imageContainer}>
         <Image
           source={require("../../assets/cbum.jpg")}
           style={styles.image}
         ></Image>
-        <View style={styles.detailsContainer}>
+        <View style={styles.blockedContainer}>
+          <Text style={styles.textBlocked}>Blokkert</Text>
           <View style={styles.iconContainer}>
             <Feather name="user" style={styles.icon}></Feather>
             <Text style={styles.textName}>{userCardInfo.firstname}</Text>
