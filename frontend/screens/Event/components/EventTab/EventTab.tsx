@@ -1,32 +1,72 @@
-import { View, Text, Pressable, Image, TextInput } from "react-native";
-import { IEvent } from "../../../../interfaces/ModelInterfaces";
+import { View, Text, Pressable, Image, ScrollView, Alert } from "react-native";
+import { IEvent, ILocation } from "../../../../interfaces/ModelInterfaces";
 import { styles } from "./EventTabStyles";
 import { Feather } from "@expo/vector-icons";
+import { updateEventParticipation } from "../../../../api/EventRelationAPI";
+import { useTokenProvider } from "../../../../providers/TokenProvider";
 
 interface EventTabProps {
-  modalVisible: boolean;
-  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   event: IEvent | null;
 }
 
-export function EventTab({
-  modalVisible,
-  setModalVisible,
-  event,
-}: EventTabProps) {
+export function EventTab({ event }: EventTabProps) {
+  const { token } = useTokenProvider();
+
   const convertVisibilityToText = (): string => {
-    // TODO
-    return "";
+    switch (event?.visibility) {
+      case 0:
+        return "Offentlig";
+      case 1:
+        return "Privat";
+      case 2:
+        return "Kun venner";
+      default:
+        return "Offentlig";
+    }
   };
 
-  const convertDatetimeToText = (): string => {
-    // TODO
-    return "";
+  const convertDatetimeToText = () => {
+    if (!event) return;
+
+    const startDate: string = event?.eventDateTimeStart.toString();
+    const endDate: string = event?.eventDateTimeEnd.toString();
+
+    const startDateTime = new Date(startDate);
+    const endDateTime = endDate === "" ? null : new Date(endDate);
+
+    const formatDateTime = (dateTime: Date) => {
+      const month = dateTime.toLocaleString("default", { month: "short" });
+      const day = dateTime.getDate();
+      const formattedTime = formatTime(dateTime);
+      return `${day}. ${month} ${formattedTime}`;
+    };
+
+    const formatTime = (dateTime: Date) => {
+      const hours = dateTime.getHours();
+      const minutes = dateTime.getMinutes();
+      return `${hours}:${minutes.toString().padStart(2, "0")}`;
+    };
+
+    if (endDateTime) {
+      const sameDay =
+        startDateTime.toDateString() === endDateTime.toDateString();
+      if (sameDay) {
+        // Only show time for endDateTime if it's the same day
+        return `${formatDateTime(startDateTime)} - ${formatTime(endDateTime)}`;
+      } else {
+        return `${formatDateTime(startDateTime)} - ${formatDateTime(endDateTime)}`;
+      }
+    } else {
+      return formatDateTime(startDateTime);
+    }
   };
 
   const convertLocationToText = (): string => {
-    // TODO
-    return "";
+    const location: ILocation | undefined = event?.location;
+    if (!location?.address && !location?.city && !location?.country)
+      return "Adressen er ikke definert";
+
+    return `${location?.address ? location.address + "," : ""} ${location?.city} ${location?.country}`;
   };
 
   const getEnrolledCount = (): string => {
@@ -34,67 +74,82 @@ export function EventTab({
     return "";
   };
 
+  const leaveEventThenRedirect = async () => {
+    if (!event) return;
+
+    // TODO
+    await updateEventParticipation(event.eventID, "BAILED", token);
+  };
+
+  const handleLeaveEvent = () => {
+    Alert.alert(
+      "Advarsel",
+      "Denne handlingen vil gi deg høyere bailscore. Vil du forlate eventet?",
+      [
+        {
+          text: "Nei",
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: leaveEventThenRedirect,
+        },
+      ]
+    );
+  };
+
   return (
-    <View style={styles.eventTabContainer}>
-      <Image
-        style={styles.imageContainer}
-        source={{ uri: event?.frontImage }}
-      />
+    <ScrollView style={styles.scrollContainer}>
+      <View style={styles.eventTabContainer}>
+        <Image
+          style={styles.imageContainer}
+          source={{ uri: event?.frontImage }}
+        />
 
-      <View style={styles.firstRowWrapper}>
-        <View style={styles.visibility}>
-          <Text style={styles.visibilityText}>
-            {convertVisibilityToText()}Kun venner
-          </Text>
+        <View style={styles.firstRowWrapper}>
+          <View style={styles.visibility}>
+            <Text style={styles.visibilityText}>
+              {convertVisibilityToText()}
+            </Text>
+          </View>
+          <View style={styles.datetime}>
+            <Feather name="clock" size={25} color="black" />
+            <Text style={styles.datetimeText}>{convertDatetimeToText()}</Text>
+          </View>
         </View>
-        <View style={styles.datetime}>
-          <Feather name="clock" size={25} color="black" />
-          <Text style={styles.datetimeText}>
-            {convertDatetimeToText()}Onsdag 3.Mars - Kl 10.00
-          </Text>
+
+        <View style={styles.secondRowWrapper}>
+          <Text style={styles.eventNameText}>{event?.eventName}</Text>
+          <View style={styles.locationWrapper}>
+            <Feather name="map-pin" size={25} color="black" />
+            <Text style={styles.locationText}>{convertLocationToText()} </Text>
+          </View>
+        </View>
+
+        <View style={styles.thirdRowWrapper}>
+          <Text style={styles.enrolledText}>Påmeldte</Text>
+          <View style={styles.enrolledBarOutline}>
+            <View style={styles.enrolledBar} />
+            <Text style={styles.enrolledCount}>{getEnrolledCount()}30/40</Text>
+          </View>
+        </View>
+
+        <View style={styles.fourthRowWrapper}>
+          <Text style={styles.descriptionHeader}>Beskrivelse</Text>
+          <View style={styles.descriptionBox}>
+            <Text style={styles.description}>
+              {event?.eventDescription}Lorem ipsum dolores sigmatures engalada
+              mote. Sindele infurate motelago konatello finite.{" "}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.buttonWrapper}>
+          <Pressable onPress={handleLeaveEvent} style={styles.leaveEventButton}>
+            <Text style={styles.leaveEventButtonText}>Forlat Event</Text>
+          </Pressable>
         </View>
       </View>
-
-      <View style={styles.secondRowWrapper}>
-        <Text style={styles.eventNameText}>{event?.eventName}</Text>
-        <View style={styles.locationWrapper}>
-          <Feather name="map-pin" size={25} color="black" />
-          <Text style={styles.locationText}>
-            {convertLocationToText()}Nygårdsgaten 70, Bergen Norge
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.thirdRowWrapper}>
-        <Text style={styles.enrolledText}>Påmeldte</Text>
-        <View style={styles.enrolledBarOutline}>
-          <View style={styles.enrolledBar} />
-          <Text style={styles.enrolledCount}>{getEnrolledCount()}30/40</Text>
-        </View>
-      </View>
-
-      <View style={styles.fourthRowWrapper}>
-        <Text style={styles.descriptionHeader}>Beskrivelse</Text>
-        <View style={styles.descriptionBox}>
-          <Text style={styles.description}>
-            {event?.eventDescription}Lorem ipsum dolores sigmatures engalada
-            mote. Sindele infurate motelago konatello finite.
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.buttonWrapper}>
-        <Pressable
-          onPress={() => setModalVisible(false)}
-          style={styles.backButton}
-        >
-          <Text style={styles.backButtonText}>Tilbake</Text>
-        </Pressable>
-
-        <Pressable style={styles.leaveEventButton}>
-          <Text style={styles.leaveEventButtonText}>Forlat Event</Text>
-        </Pressable>
-      </View>
-    </View>
+    </ScrollView>
   );
 }

@@ -93,3 +93,10 @@ export interface IUserRelationDTO {
   otherUserId: string;
   type: UserRelationType;
 }
+
+export interface IEventRelationDTO {
+  eventId: number | undefined;
+  userId: string;
+  participation: number;
+  eventRole: number;
+}

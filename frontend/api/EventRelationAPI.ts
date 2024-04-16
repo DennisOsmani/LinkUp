@@ -1,3 +1,4 @@
+import { IEventRelationDTO } from "../interfaces/ModelInterfaces";
 import { URL_BASE, EVENTRELATION_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENTRELATION_PATH}`;
@@ -59,27 +60,34 @@ export const joinOpenEvent = async (token: string, eventId: number) => {
   }
 };
 
-/*
-const x = async (token: string) => {
+export const updateEventParticipation = async (
+  eventId: number,
+  participation: string,
+  token: string
+) => {
   try {
-    const response = await fetch(`${THIS_URL}/`, {
-      method: "XXXXXXXXXXX",
+    const response = await fetch(`${THIS_URL}/participation/${eventId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(participation),
     });
 
     if (!response.ok) {
-      throw new Error("Error in x response: " + response.status);
+      throw new Error(
+        "Error in updateEventParticipation  response: " + response.status
+      );
     }
 
-    const data: XXXXXXXXXX = await response.json();
-    return data;
+    console.log("Left event!");
   } catch (error) {
-    console.error("Error while fetching x " + error);
+    console.error("Error while fetching updateEventParticipation  " + error);
   }
 };
+
+/*
 
 const x = async (token: string) => {
   try {

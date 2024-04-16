@@ -22,7 +22,8 @@ import InviteModal from "./components/InviteModal/InviteModal";
 import { colors } from "../../styles/colors";
 import { inviteUsersForEvent } from "../../api/EventRelationAPI";
 
-const date = new Date();
+const dateStart = new Date();
+const dateEnd = new Date();
 
 export default function CreateEvent() {
   const [selectedVisibility, setSelectedVisibility] = useState({
@@ -40,8 +41,8 @@ export default function CreateEvent() {
   const [event, setEvent] = useState<IEvent>({
     eventName: "",
     eventDescription: "",
-    eventDateTimeStart: date.toISOString(),
-    eventDateTimeEnd: date.toISOString(),
+    eventDateTimeStart: dateStart.toISOString(),
+    eventDateTimeEnd: dateEnd.toISOString(),
     visibility: 0,
     inviteURL: "",
     frontImage:
@@ -111,6 +112,9 @@ export default function CreateEvent() {
   };
 
   const handleCreateEvent = async () => {
+    console.log("START " + event.eventDateTimeStart);
+    console.log("END " + event.eventDateTimeEnd);
+
     if (event.eventName === "") {
       Alert.alert("Manglende informasjon", "Eventet må ha ett navn!");
       return;
@@ -143,6 +147,7 @@ export default function CreateEvent() {
       const eventToCreate: IEvent = {
         ...event,
         location: location,
+        frontImage: eventImageUrl,
       };
 
       eventId = await createEvent(eventToCreate, token);
@@ -218,7 +223,7 @@ export default function CreateEvent() {
           <View style={styles.datetimepickerBox}>
             <Text style={styles.datetimepickerText}>Event start</Text>
             <DateTimePicker
-              value={date}
+              value={new Date(event.eventDateTimeStart.toString())}
               mode={"datetime"}
               onChange={onChangeStart}
             />
@@ -226,7 +231,7 @@ export default function CreateEvent() {
           <View style={styles.datetimepickerBox}>
             <Text style={styles.datetimepickerText}>Event slutt</Text>
             <DateTimePicker
-              value={date}
+              value={new Date(event.eventDateTimeEnd.toString())}
               mode={"datetime"}
               onChange={onChangeEnd}
             />
