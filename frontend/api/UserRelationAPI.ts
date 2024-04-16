@@ -72,7 +72,6 @@ export async function UpdateUserRelationType(
     }
 
     const data: IUserRelation = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Error while fetching updateUserRelationType " + error);

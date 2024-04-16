@@ -23,6 +23,8 @@ import { CreateUserRelation } from "../../../api/UserRelationAPI";
 
 // TODO
 // - TRELLO
+// - Skal man kunne se de som man har blokkert?? feks et grått kort?
+// - Skal man kunne se folk som har blokket deg når man søker? (backend implememntasjon i searchUser API)
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
@@ -90,7 +92,6 @@ export default function SearchPeople() {
         const user = await getUser(token, ur.user_second_ID);
         setFriends((prevState) => [...prevState, user]);
       }
-      console.log("Legger til VENNN!!!");
     } catch (error) {
       console.error("Error in sending a friendRequest (search) " + error);
     }

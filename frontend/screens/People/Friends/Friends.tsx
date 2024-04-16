@@ -79,13 +79,11 @@ export default function FriendsPeople() {
         );
 
         setAllFriends((prevState) => [...prevState, user]);
-        //NEED TO UPDATE THE FILTERFRIENDS [] TO SHOW THE NEW ADDED FRIEND
+        setFilteredFriends((prevState) => [...prevState, user]);
         setAllFriendRequests((prevState) =>
           [...prevState].filter((u) => u.userID !== user.userID)
         );
       }
-
-      console.log("Ny venn!!!!");
     } catch (error) {
       console.error("Error in accepting a friendRequest (search) " + error);
     }
@@ -94,7 +92,10 @@ export default function FriendsPeople() {
   const handleRejectRequest = async (otherId: string) => {
     try {
       await DeleteUserRelation(token, otherId);
-      console.log("Vil fæn itte bli din venn!!");
+
+      setAllFriendRequests((prevState) =>
+        [...prevState].filter((u) => u.userID !== otherId)
+      );
     } catch (error) {
       console.error("Error in rejecting a friendRequest (search) " + error);
     }
