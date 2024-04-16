@@ -1,4 +1,4 @@
-export const URL_BASE = "https://1f9e-95-34-122-200.ngrok-free.app/api";
+export const URL_BASE = "https://f342-95-34-122-200.ngrok-free.app/api";
 
 export const EVENT_PATH = "/event";
 

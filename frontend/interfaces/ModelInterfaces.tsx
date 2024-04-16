@@ -73,7 +73,7 @@ export interface IUserRelation {
 export interface IEventRelations {
   eventRelationID: number;
   eventID: number;
-  event?: IEvent;
+  event: IEvent;
   userID: string;
   user: IUser | undefined;
   eventRelationParticipation: number;

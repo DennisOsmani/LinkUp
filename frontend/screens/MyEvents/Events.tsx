@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { TabBackground } from "../../components/TabBackground/TabBackground";
-import JoinedFeed from "./h_Joined/JoinedFeed";
+import JoinedFeed from "./Joined/JoinedFeed";
 import InvitesFeed from "./Invites/InvitesFeed";
 
 export default function Feed() {

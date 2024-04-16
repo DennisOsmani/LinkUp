@@ -161,7 +161,7 @@ public class EventController : ControllerBase
 
     [HttpGet("joined")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> GetUserJoinedEvents()
+    public async Task<ActionResult<ICollection<Event>>> GetUserJoinedEvents()
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 

@@ -6,12 +6,20 @@ import {
   View,
 } from "react-native";
 import { styles } from "./InvitesFeedStyles";
-import { getEventsInCity, getHostForEvent } from "../../../api/EventAPI";
-import { joinOpenEvent } from "../../../api/EventRelationAPI";
+import {
+  getEventsInCity,
+  getHostForEvent,
+  getUserEventInvites,
+} from "../../../api/EventAPI";
+import {
+  joinOpenEvent,
+  updateEventRelationParticipation,
+} from "../../../api/EventRelationAPI";
 import { useEffect, useState } from "react";
 import { IEvent } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import { useLocation } from "../../../providers/LocationProvider";
+import EventCardInvite from "../Components/EventCardInvite";
 
 const imageSource = require("../../../assets/cbum.jpg");
 
@@ -23,16 +31,13 @@ export default function InvitesFeed() {
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
-    //fetchEvents();
+    fetchEvents();
   }, []);
 
   //Change this:
-  const fetchEvents = async (city: string) => {
+  const fetchEvents = async () => {
     try {
-      const eventsData: IEvent[] | undefined = await getEventsInCity(
-        token,
-        city
-      );
+      const eventsData: IEvent[] | undefined = await getUserEventInvites(token);
       setEvents(eventsData);
       const hostNamesObj: { [eventId: string]: string } = {};
       const promises = eventsData?.map(async (event) => {
@@ -53,7 +58,8 @@ export default function InvitesFeed() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchEvents("");
+    fetchEvents();
+    setRefreshing(false);
   };
 
   const formatDate = (startDate: string, endDate?: string) => {
@@ -99,7 +105,19 @@ export default function InvitesFeed() {
 
   const handleJoinPress = async (eventId: number) => {
     try {
-      await joinOpenEvent(token, eventId);
+      await updateEventRelationParticipation(token, eventId, "JOINED");
+      // Remove the event from the events array
+      setEvents((prevEvents) =>
+        prevEvents?.filter((event) => event.eventID !== eventId)
+      );
+    } catch (error) {
+      console.error("Error joining event:", error);
+    }
+  };
+
+  const handleDeclinePress = async (eventId: number) => {
+    try {
+      await updateEventRelationParticipation(token, eventId, "DECLINED");
       // Remove the event from the events array
       setEvents((prevEvents) =>
         prevEvents?.filter((event) => event.eventID !== eventId)
@@ -119,17 +137,36 @@ export default function InvitesFeed() {
         <View style={styles.midscreenMessages}>
           <ActivityIndicator size="large" color="#5A5DF0" />
           <Text style={styles.midscreenMessagesText}>
-            Henter eventer i din by...
+            Henter dine invitasjoner...
           </Text>
         </View>
       ) : (
         <View style={styles.wrapper}>
           {events && events.length > 0 ? (
-            events?.map((event /*TODOOOOOOOOOOOOOOO CARD*/) => <Text>Yo</Text>)
+            events?.map((event) => (
+              <EventCardInvite
+                key={event.eventID}
+                numberOfPeople={formatCapacityRange(
+                  event.minCapacity,
+                  event.maxCapacity
+                )}
+                dateTime={formatDate(
+                  event.eventDateTimeStart,
+                  event.eventDateTimeEnd
+                )}
+                title={event.eventName}
+                hostName={hostNames[event.eventID] || ""}
+                bio={event.eventDescription}
+                address={`${event.location.postalcode}, ${event.location.city}`}
+                imageSource={imageSource}
+                onDeclinePress={() => handleDeclinePress(event.eventID)}
+                onJoinPress={() => handleJoinPress(event.eventID)}
+              />
+            ))
           ) : (
             <View style={styles.midscreenMessages}>
               <Text style={styles.midscreenMessagesText}>
-                Det er for tiden ingen eventer i din by!
+                Du har for tiden ingen invitasjoner!
               </Text>
             </View>
           )}

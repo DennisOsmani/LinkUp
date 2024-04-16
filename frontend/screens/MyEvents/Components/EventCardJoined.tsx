@@ -6,14 +6,14 @@ import { IEventRelations } from "../../../interfaces/ModelInterfaces";
 
 interface EventCardJoinedProps {
   numberOfPeople: string;
-  dateTime: Date;
+  dateTime: string;
   title: string;
   hostName: string;
   bio: string;
   address: string;
   imageSource: any;
   onButtonPress: () => void;
-  eventRelation: IEventRelations;
+  host: boolean;
 }
 
 const EventCardJoined = ({
@@ -25,7 +25,7 @@ const EventCardJoined = ({
   address,
   imageSource,
   onButtonPress,
-  eventRelation,
+  host,
 }: EventCardJoinedProps) => {
   const MAX_LETTERS_DESCRIPTION = 90;
   const MAX_LETTERS_TITLE = 16;
@@ -62,8 +62,7 @@ const EventCardJoined = ({
           <View style={styles.lowerLeftSide}>
             <Text style={styles.addressText}>{address}</Text>
             <Pressable style={styles.button} onPress={onButtonPress}>
-              {eventRelation.eventRole === 1 || //host or creator
-              eventRelation.eventRole === 1 ? (
+              {host ? (
                 <Text style={styles.buttonText}>Rediger</Text>
               ) : (
                 <Text style={styles.buttonText}>Forlat Event</Text>

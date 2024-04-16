@@ -5,7 +5,7 @@ import { Feather } from "@expo/vector-icons";
 
 interface EventCardInviteProps {
   numberOfPeople: string;
-  dateTime: Date;
+  dateTime: string;
   title: string;
   hostName: string;
   bio: string;

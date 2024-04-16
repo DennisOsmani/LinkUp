@@ -42,7 +42,7 @@ public class EventRepository
         try
         {
             return await _context.Events
-                .Where(e => e.Location.City.ToUpper() == city.ToUpper() && e.Visibility == Visibility.PUBLIC /* && e.EventDateTimeStart < DateTime.Now*/)
+                .Where(e => e.Location.City.ToUpper() == city.ToUpper() && e.Visibility == Visibility.PUBLIC /*&& e.EventDateTimeStart < DateTime.Now*/)
                 .Where(e => !_context.EventRelations.Any(er => er.EventID == e.EventID && er.UserID == userId))
                 .Include(e => e.Location)
                 .ToListAsync();
@@ -71,7 +71,7 @@ public class EventRepository
                     && er.EventRole == EventRole.CREATOR
                 )
                 .Select(er => er.Event)
-                .Where(e => e.Visibility == Visibility.FRIENDS && e.EventDateTimeStart < DateTime.Now)
+                .Where(e => e.Visibility == Visibility.FRIENDS /*&& e.EventDateTimeStart < DateTime.Now*/)
                 .ToListAsync();
 
             var usersEvents = await _context.EventRelations
@@ -97,6 +97,7 @@ public class EventRepository
                     && er.EventRelationParticipation == EventRelationParticipation.PENDING
                 )
                 .Select(er => er.Event)
+                .Include(e => e.Location)
                 .ToListAsync();
         }
 
@@ -112,11 +113,12 @@ public class EventRepository
         {
             return await _context.EventRelations
                 .Where(
-                    er => er.UserID.Equals(userId)
+                    er => er.UserID == userId
                     && er.EventRelationParticipation == EventRelationParticipation.JOINED
                     //&& er.EventDateTimeEnd < Datetime.Now
                 )
                 .Select(er => er.Event)
+                .Include(e => e.Location)
                 .ToListAsync();
         }
 

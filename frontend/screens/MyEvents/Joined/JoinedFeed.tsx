@@ -6,49 +6,24 @@ import {
   View,
 } from "react-native";
 import { styles } from "./JoinedFeedStyles";
+import { getHostForEvent, getUserJoinedEvents } from "../../../api/EventAPI";
 import {
-  getEventsInCity,
-  getHostForEvent,
-  getUserJoinedEvents,
-} from "../../../api/EventAPI";
-import { joinOpenEvent, getEventRelation } from "../../../api/EventRelationAPI";
+  getEventRelation,
+  removeFromEvent,
+} from "../../../api/EventRelationAPI";
 import { useEffect, useState } from "react";
 import { IEvent, IEventRelations } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
-import { useLocation } from "../../../providers/LocationProvider";
 import EventCardJoined from "../Components/EventCardJoined";
 
 const imageSource = require("../../../assets/cbum.jpg");
-
-const mockEventRel: IEventRelations = {
-  eventRelationID: 20,
-  eventID: 123,
-  userID: "123456",
-  user: undefined,
-  eventRelationParticipation: 1,
-  eventRole: 1, // Example value for eventRole
-};
-
-const cardProps = {
-  numberOfPeople: "4 - 20",
-  dateTime: new Date(2024, 11, 20),
-  title: "Bursdagsfesten",
-  hostName: "John Doe",
-  bio: "Hei jeg arrangerer lorem ipsum dolor sit amet, dolores poatoes machina. Det blir kostymer og fest",
-  address: "123 Main Street",
-  imageSource: imageSource,
-  onButtonPress: () => {
-    // Define your join press handler here
-    console.log("Button pressed");
-  },
-  eventRelation: mockEventRel,
-};
 
 export default function JoinedFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
   const [eventRelations, setEventRelations] = useState<{
     [eventId: string]: IEventRelations | undefined;
   }>({});
+  const [hostNames, setHostNames] = useState<{ [eventId: string]: string }>({});
   const { token, setToken } = useTokenProvider();
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -57,22 +32,34 @@ export default function JoinedFeed() {
     fetchEvents();
   }, []);
 
-  //Change this:
   const fetchEvents = async () => {
     try {
       const eventsData: IEvent[] | undefined = await getUserJoinedEvents(token);
       setEvents(eventsData);
+
+      const hostNamesObj: { [eventId: string]: string } = {};
       const eventRelationsObj: {
         [eventId: string]: IEventRelations | undefined;
       } = {};
+
       const promises = eventsData?.map(async (event) => {
+        console.log(
+          event.location.address +
+            event.location.city +
+            event.location.country +
+            event.location.postalcode
+        );
         const eventRelation = await getEventRelation(event.eventID, token);
         eventRelationsObj[event.eventID] = eventRelation;
+
+        const host = await getHostForEvent(token, event.eventID);
+        hostNamesObj[event.eventID] = `${host?.firstname} ${host?.lastname}`;
       });
 
       // Wait for all promises to resolve
       await Promise.all(promises || []);
       setEventRelations(eventRelationsObj);
+      setHostNames(hostNamesObj);
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
@@ -128,13 +115,35 @@ export default function JoinedFeed() {
     }
   };
 
-  const handleJoinPress = async (eventId: number) => {
-    try {
-      await joinOpenEvent(token, eventId);
-      // Remove the event from the events array
-      setEvents((prevEvents) =>
-        prevEvents?.filter((event) => event.eventID !== eventId)
+  const isHost = (eventRelation: IEventRelations | undefined) => {
+    if (!eventRelation) {
+      throw new Error(
+        "Error in the eventrelation for the event: " + eventRelations
       );
+    }
+    if (eventRelation.eventRole == 0 || eventRelation.eventRole == 1) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleButtonPress = async (
+    eventRelation: IEventRelations | undefined
+  ) => {
+    if (!eventRelation) {
+      throw new Error(
+        "Error in the eventrelation for the event: " + eventRelations
+      );
+    }
+    try {
+      if (isHost(eventRelation)) {
+        // Redirect to event page
+      } else {
+        await removeFromEvent(token, eventRelation.eventID, "");
+        setEvents((prevEvents) =>
+          prevEvents?.filter((event) => event.eventID !== eventRelation.eventID)
+        );
+      }
     } catch (error) {
       console.error("Error joining event:", error);
     }
@@ -146,29 +155,47 @@ export default function JoinedFeed() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      {/*fetchingEvents ? ( // Show loader if loading is true
+      {fetchingEvents ? ( // Show loader if loading is true
         <View style={styles.midscreenMessages}>
           <ActivityIndicator size="large" color="#5A5DF0" />
           <Text style={styles.midscreenMessagesText}>
-            Henter eventer i din by...
+            Henter dine eventer...
           </Text>
         </View>
       ) : (
         <View style={styles.wrapper}>
           {events && events.length > 0 ? (
-            events?.map((event /*TODOOOOOOOOOOOOOOO CARD/) => <Text>Yo</Text>)
+            events?.map((event) => (
+              <EventCardJoined
+                key={event.eventID}
+                numberOfPeople={formatCapacityRange(
+                  event.minCapacity,
+                  event.maxCapacity
+                )}
+                dateTime={formatDate(
+                  event.eventDateTimeStart,
+                  event.eventDateTimeEnd
+                )}
+                title={event.eventName}
+                hostName={hostNames[event.eventID] || ""}
+                bio={event.eventDescription}
+                address={`${event.location.postalcode}, ${event.location.city}`}
+                imageSource={imageSource}
+                onButtonPress={() =>
+                  handleButtonPress(eventRelations[event.eventID])
+                }
+                host={isHost(eventRelations[event.eventID])}
+              />
+            ))
           ) : (
             <View style={styles.midscreenMessages}>
               <Text style={styles.midscreenMessagesText}>
-                Det er for tiden ingen eventer i din by!
+                Du er for tiden ikke med i noen eventer!
               </Text>
             </View>
           )}
         </View>
-      )*/}
-      <View style={styles.wrapper}>
-        <EventCardJoined {...cardProps} />
-      </View>
+      )}
     </ScrollView>
   );
 }
