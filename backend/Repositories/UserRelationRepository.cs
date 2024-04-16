@@ -19,7 +19,7 @@ public class UserRelationRepository
 
     public async Task<UserRelation> CreateUserRelaton(UserRelation userRelation)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -28,17 +28,17 @@ public class UserRelationRepository
                 await transaction.CommitAsync();
                 return userRelation;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
             }
         }
     }
 
     public async Task<UserRelation> UpdateUserRelationType(UserRelation userRelation, UserRelationType type)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -49,10 +49,10 @@ public class UserRelationRepository
                 await transaction.CommitAsync();
                 return userRelation;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
             }
         }
     }
@@ -64,7 +64,7 @@ public class UserRelationRepository
             _context.Remove(userRelation);
             await _context.SaveChangesAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }
@@ -80,7 +80,7 @@ public class UserRelationRepository
 
             return userRelation;
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }
@@ -98,13 +98,13 @@ public class UserRelationRepository
                 .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }
     }
 
-     public async Task<ICollection<UserRelation>> GetAllUsersRelations(string userId)
+    public async Task<ICollection<UserRelation>> GetAllUsersRelations(string userId)
     {
         try
         {
@@ -112,7 +112,7 @@ public class UserRelationRepository
                 .Where(ur => ur.User_first_ID == userId || ur.User_second_ID == userId)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }
@@ -131,7 +131,7 @@ public class UserRelationRepository
                 .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }
@@ -149,7 +149,7 @@ public class UserRelationRepository
                 .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }

@@ -63,8 +63,16 @@ public class AppDbContext : DbContext
             .HasForeignKey<Event>(e => e.LocationID)
             .OnDelete(DeleteBehavior.ClientCascade);
 
+        modelBuilder.Entity<Event>()
+            .Property(e => e.EventDateTimeStart)
+            .HasColumnType("timestamp without time zone");
+
+        modelBuilder.Entity<Event>()
+            .Property(e => e.EventDateTimeEnd)
+            .HasColumnType("timestamp without time zone");
+
         /* User */
         modelBuilder.Entity<User>()
-            .HasKey(u => u.UserID);        
+            .HasKey(u => u.UserID);
     }
 }
