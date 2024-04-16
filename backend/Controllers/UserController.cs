@@ -157,10 +157,12 @@ public class UserController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<ICollection<User>>> SearchUsers([FromQuery] string searchString)
     {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
         try
         {
             string escapedSearchString = SecurityElement.Escape(searchString);
-            var users = await _userService.SearchUsers(escapedSearchString);
+            var users = await _userService.SearchUsers(escapedSearchString, userIdClaim);
             return Ok(users);
         }
         catch (InvalidOperationException ex)

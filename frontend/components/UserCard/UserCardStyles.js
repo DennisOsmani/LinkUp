@@ -19,6 +19,18 @@ export default StyleSheet.create({
     shadowRadius: moderateScale(4),
   },
 
+  blockedCard: {
+    paddingVertical: verticalScale(15),
+    paddingHorizontal: horizontalScale(10),
+    marginTop: verticalScale(20),
+    backgroundColor: colors.red,
+    borderRadius: moderateScale(20),
+    shadowColor: "black",
+    shadowOffset: { width: horizontalScale(0), height: verticalScale(4) },
+    shadowOpacity: moderateScale(0.5),
+    shadowRadius: moderateScale(4),
+  },
+
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",

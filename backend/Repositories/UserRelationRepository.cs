@@ -136,7 +136,7 @@ public class UserRelationRepository
         }
     }
 
-    // The Users this user has blocked!
+    // The Users Logged in user has blocked!
     public async Task<ICollection<User?>> GetUserBlocks(string userId)
     {
         try
@@ -145,6 +145,25 @@ public class UserRelationRepository
                 .Where(
                     ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.BLOCKED_FIRST_SECOND)
                     || (ur.User_second_ID == userId && ur.Type == UserRelationType.BLOCKED_SECOND_FIRST)
+                )
+                .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+                .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
+    }
+
+    // The Users that have blocekd the logged in user
+    public async Task<ICollection<User?>> GetUsersBlockedLoggedInUser(string userId)
+    {
+        try
+        {
+            return await _context.UserRelations
+                .Where(
+                    ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.BLOCKED_SECOND_FIRST)
+                    || (ur.User_second_ID == userId && ur.Type == UserRelationType.BLOCKED_FIRST_SECOND)
                 )
                 .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
                 .ToListAsync();

@@ -156,9 +156,18 @@ public class UserService : IUserService
         await _userRepo.DeleteUser(user);
     }
 
-    public async Task<ICollection<User>> SearchUsers(string searchString)
+    public async Task<ICollection<User>> SearchUsers(string searchString, string userId)
     {
-        return await _userRepo.SearchUsers(searchString);
+        ICollection<User?> usersBlocked = await _userRelRepo.GetUsersBlockedLoggedInUser(userId);
+
+        ICollection<User> searchedUsers = await _userRepo.SearchUsers(searchString);
+
+        foreach (var blockedUser in usersBlocked)
+        {
+            searchedUsers = searchedUsers.Where(user => user.UserID != blockedUser?.UserID).ToList();
+        }
+
+        return searchedUsers;
     }
 
     //probably needs an update, need eventrepo/service access first
