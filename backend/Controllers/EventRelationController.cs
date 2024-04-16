@@ -6,7 +6,7 @@ using System.Security;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Repositories;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using DTOs;
 
 namespace Controllers;
 
@@ -121,10 +121,9 @@ public class EventRelationController : ControllerBase
 
     [HttpPut("role")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(int eventId, string userId, string role)
+    public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(EventRelationDTO dto)
     {
-        userId = SecurityElement.Escape(userId);
-        role = SecurityElement.Escape(role);
+        var role = SecurityElement.Escape(dto.EventRole.ToString());
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -133,22 +132,21 @@ public class EventRelationController : ControllerBase
             return Unauthorized("No user ID claim present in token.");
         }
 
-        string escapedUserId = SecurityElement.Escape(userId);
         string escapedRole = SecurityElement.Escape(role);
 
-        bool canUpdate = await _erService.CanUserUpdateRoleInEvent(eventId, userIdClaim);
-        bool userJoined = await _erService.HaveUserJoinedEvent(eventId, escapedUserId);
+        bool canUpdate = await _erService.CanUserUpdateRoleInEvent(dto.EventID, userIdClaim);
+        bool userJoined = await _erService.HaveUserJoinedEvent(dto.EventID, userIdClaim);
 
         try
         {
             if (canUpdate && userJoined)
             {
-                EventRelation eventRelation = await _erService.UpdateEventRelationRole(eventId, escapedUserId, escapedRole);
+                EventRelation eventRelation = await _erService.UpdateEventRelationRole(dto.EventID, userIdClaim, escapedRole);
                 return Ok(eventRelation);
             }
             else
             {
-                return Unauthorized($"No access to update the role of user or the user with ID: {escapedUserId} have not joined Event with ID: {eventId}!");
+                return Unauthorized($"No access to update the role of user or the user with ID: {userIdClaim} have not joined Event with ID: {dto.EventID}!");
             }
         }
         catch (InvalidOperationException e)
@@ -165,9 +163,9 @@ public class EventRelationController : ControllerBase
         }
     }
 
-    [HttpPut("participation")]
+    [HttpPut("participation/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult<EventRelation>> UpdateEventRelationParticipation(int eventId, string participation)
+    public async Task<ActionResult<EventRelation>> UpdateEventRelationParticipation(int eventId, [FromBody] string participation)
     {
         participation = SecurityElement.Escape(participation);
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
