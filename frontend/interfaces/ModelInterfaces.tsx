@@ -22,15 +22,16 @@ export interface IUser {
   lastname: string;
   dateBorn: string;
   phone?: string;
-  RelationshipStatus?: number;
+  relationshipStatus?: number;
   gender?: string;
   description?: string;
-  email?: string;
+  email: string;
   profileImage?: string;
   password?: string;
   salt?: string;
   eventsCreated?: number;
   eventsJoined?: number;
+  eventBails?: number;
   role?: number;
   userRelationsAsFirst?: [];
   userRelationsAsSecond?: [];
