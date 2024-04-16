@@ -125,6 +125,27 @@ export async function GetUserFriendRequests(token: string, userId?: string) {
   }
 }
 
+export async function GetUserBlocks(token: string, userId?: string) {
+  try {
+    const response = await fetch(`${THIS_URL}/blocked`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in GetUserBlocks response: " + response.status);
+    }
+
+    const data: IUser[] = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error("Error while fetching in GetUserBlocks " + error);
+  }
+}
+
 export async function updateUser(user: IUser, token: string) {
   try {
     const response = await fetch(`${THIS_URL}/update`, {

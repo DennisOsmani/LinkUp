@@ -11,6 +11,7 @@ import {
   GetUserFriends,
   GetPendingFriendRequests,
   getUser,
+  GetUserBlocks,
 } from "../../../api/UserAPI";
 import {
   IUser,
@@ -32,6 +33,7 @@ export default function SearchPeople() {
   const [searchResult, setSearchResult] = useState<IUser[] | undefined>([]);
   const [friends, setFriends] = useState<IUser[]>([]);
   const [pending, setPending] = useState<IUser[]>([]);
+  const [blocked, setBlocked] = useState<IUser[]>([]);
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -53,6 +55,7 @@ export default function SearchPeople() {
   useEffect(() => {
     fetchFriends();
     fetchPending();
+    fetchBlocked();
   }, []);
 
   const fetchFriends = async () => {
@@ -71,6 +74,18 @@ export default function SearchPeople() {
     } catch (error) {
       console.error(
         "Error in fetching users pending friend requests from logged in user (Search) " +
+          error
+      );
+    }
+  };
+
+  const fetchBlocked = async () => {
+    try {
+      const blocks: IUser[] = await GetUserBlocks(token);
+      setBlocked(blocks);
+    } catch (error) {
+      console.error(
+        "Error in fetching the blocked users blocked by the logged in user (Search) " +
           error
       );
     }
@@ -158,16 +173,20 @@ export default function SearchPeople() {
               (pending) => pending.userID === user.userID
             );
 
+            const isBlocked = blocked.some(
+              (block) => block.userID === user.userID
+            );
+
             if (isFriend) {
               return (
-                <UserCardBlocked
+                <UserCardFriends
                   key={index}
                   userCardInfo={{
                     firstname: user.firstname,
                     lastname: user.lastname,
-                    // age: calculateAge(user.dateBorn),
+                    age: calculateAge(user.dateBorn),
                   }}
-                ></UserCardBlocked>
+                ></UserCardFriends>
               );
             } else if (isPendig) {
               return (
@@ -179,6 +198,16 @@ export default function SearchPeople() {
                     age: calculateAge(user.dateBorn),
                   }}
                 ></UserCardPending>
+              );
+            } else if (isBlocked) {
+              return (
+                <UserCardBlocked
+                  key={index}
+                  userCardInfo={{
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                  }}
+                ></UserCardBlocked>
               );
             } else {
               return (

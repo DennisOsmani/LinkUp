@@ -71,4 +71,11 @@ public interface IUserService
     /// <param name="userId"></param>
     /// <returns>A list of Users</returns>
     Task<ICollection<User?>> GetUserFriendRequests(string userId);
+
+    /// <summary>
+    /// Fetches a list of Users that logged in user has blocked.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>A list of Users that are blocked</returns>
+    Task<ICollection<User?>> GetUserBlocks(string userId);
 }

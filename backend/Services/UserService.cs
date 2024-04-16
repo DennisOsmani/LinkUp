@@ -98,6 +98,23 @@ public class UserService : IUserService
         return await _userRelRepo.GetUserFriendRequests(user.UserID);
     } 
 
+    public async Task<ICollection<User?>> GetUserBlocks(string userId)
+    {
+         if (string.IsNullOrEmpty(userId)) 
+        {
+            throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
+        }
+
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
+        }
+
+        return await _userRelRepo.GetUserBlocks(userId);
+    }
+
     public async Task CreateUser(User user)
     {
         string id = Guid.NewGuid().ToString();
