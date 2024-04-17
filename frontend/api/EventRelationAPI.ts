@@ -3,7 +3,7 @@ import { URL_BASE, EVENTRELATION_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENTRELATION_PATH}`;
 
-export const getEventRelation = async (eventId: number, token: string) => {
+export const getEventRelation = async (token: string, eventId: number) => {
   try {
     const response = await fetch(`${THIS_URL}?eventId=${eventId}`, {
       method: "GET",

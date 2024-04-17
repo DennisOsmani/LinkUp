@@ -37,29 +37,24 @@ export default function JoinedFeed() {
       const eventsData: IEvent[] | undefined = await getUserJoinedEvents(token);
       setEvents(eventsData);
 
+      // Fetch event relations for each event
       const hostNamesObj: { [eventId: string]: string } = {};
       const eventRelationsObj: {
         [eventId: string]: IEventRelations | undefined;
       } = {};
 
       const promises = eventsData?.map(async (event) => {
-        console.log(
-          event.location.address +
-            event.location.city +
-            event.location.country +
-            event.location.postalcode
-        );
-        const eventRelation = await getEventRelation(event.eventID, token);
-        eventRelationsObj[event.eventID] = eventRelation;
-
         const host = await getHostForEvent(token, event.eventID);
         hostNamesObj[event.eventID] = `${host?.firstname} ${host?.lastname}`;
+
+        const eventRelationsData = await getEventRelation(token, event.eventID); // Fetch event relations
+        eventRelationsObj[event.eventID] = eventRelationsData;
       });
 
       // Wait for all promises to resolve
       await Promise.all(promises || []);
-      setEventRelations(eventRelationsObj);
       setHostNames(hostNamesObj);
+      setEventRelations(eventRelationsObj);
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {

@@ -91,13 +91,17 @@ public class EventRepository
     {
         try
         {
+            //&& er.EventDateTimeEnd < Datetime.Now
             return await _context.EventRelations
+                .Include(er => er.Event)
+                    .ThenInclude(e => e.Location)
                 .Where(
                     er => er.UserID.Equals(userId)
                     && er.EventRelationParticipation == EventRelationParticipation.PENDING
+                    //&& er.EventDateTimeEnd < Datetime.Now
                 )
+
                 .Select(er => er.Event)
-                .Include(e => e.Location)
                 .ToListAsync();
         }
 
@@ -112,13 +116,14 @@ public class EventRepository
         try
         {
             return await _context.EventRelations
+                .Include(er => er.Event)
+                        .ThenInclude(e => e.Location)
                 .Where(
                     er => er.UserID == userId
                     && er.EventRelationParticipation == EventRelationParticipation.JOINED
                     //&& er.EventDateTimeEnd < Datetime.Now
                 )
                 .Select(er => er.Event)
-                .Include(e => e.Location)
                 .ToListAsync();
         }
 

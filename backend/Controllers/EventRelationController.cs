@@ -27,7 +27,7 @@ public class EventRelationController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult<EventRelation>> GetEventRelation([FromQuery] int eventId)
+    public async Task<ActionResult<EventRelation>> GetEventRelation(int eventId)
     {
 
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -38,7 +38,7 @@ public class EventRelationController : ControllerBase
         }
         try
         {
-            var er = _erService.GetEventRelation(eventId, userIdClaim);
+            var er = await _erService.GetEventRelation(eventId, userIdClaim);
             return Ok(er);
         }
         catch (InvalidOperationException ex)

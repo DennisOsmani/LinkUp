@@ -14,9 +14,9 @@ public class EventRelation
     public EventRelationParticipation EventRelationParticipation { get; set; }
     public EventRole EventRole { get; set; }
 
-    public EventRelation() {}
+    public EventRelation() { }
 
-    public EventRelation(int eventId, string userId, EventRelationParticipation eventRelationParticipation, EventRole eventRole) 
+    public EventRelation(int eventId, string userId, EventRelationParticipation eventRelationParticipation, EventRole eventRole)
     {
         EventID = eventId;
         UserID = userId;
