@@ -27,7 +27,7 @@ public class EventRelationController : ControllerBase
 
     [HttpPost("create/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> CreateEventRealation(int eventId, [FromBody] List<string> userIds)
+    public async Task<ActionResult> CreateEventRealations(int eventId, [FromBody] List<string> userIds)
     {
         try
         {
