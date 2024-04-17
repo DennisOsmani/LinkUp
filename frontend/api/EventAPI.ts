@@ -1,4 +1,4 @@
-import { IEvent, IUser } from "../interfaces/ModelInterfaces";
+import { IEvent, IEventDTO, IUser } from "../interfaces/ModelInterfaces";
 import { URL_BASE, EVENT_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENT_PATH}`;
@@ -135,7 +135,7 @@ export const getUserJoinedEvents = async (token: string) => {
   }
 };
 
-export const createEvent = async (event: IEvent, token: string) => {
+export const createEvent = async (event: IEventDTO, token: string) => {
   try {
     const response = await fetch(`${THIS_URL}/create`, {
       method: "POST",

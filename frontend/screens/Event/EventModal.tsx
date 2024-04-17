@@ -26,7 +26,7 @@ export function EventModal({
         handleBack={handleBack}
       >
         <EventTab event={event} />
-        <PeopleTab />
+        <PeopleTab event={event} />
       </TabBackground>
     </Modal>
   );

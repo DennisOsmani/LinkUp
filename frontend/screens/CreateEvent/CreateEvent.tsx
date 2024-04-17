@@ -14,7 +14,7 @@ import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { IEvent, ILocation } from "../../interfaces/ModelInterfaces";
+import { IEventDTO, ILocation } from "../../interfaces/ModelInterfaces";
 import { createEvent } from "../../api/EventAPI";
 import LocationModal from "./components/LocationModal/LocationModal";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
@@ -38,7 +38,7 @@ export default function CreateEvent() {
     "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
   );
 
-  const [event, setEvent] = useState<IEvent>({
+  const [event, setEvent] = useState<IEventDTO>({
     eventName: "",
     eventDescription: "",
     eventDateTimeStart: dateStart.toISOString(),
@@ -65,7 +65,7 @@ export default function CreateEvent() {
     selectedDate?: Date | undefined
   ) => {
     event;
-    setEvent((event: IEvent) => ({
+    setEvent((event: IEventDTO) => ({
       ...event,
       eventDateTimeStart: selectedDate
         ? selectedDate.toISOString()
@@ -78,7 +78,7 @@ export default function CreateEvent() {
     selectedDate?: Date | undefined
   ) => {
     event;
-    setEvent((event: IEvent) => ({
+    setEvent((event: IEventDTO) => ({
       ...event,
       eventDateTimeEnd: selectedDate
         ? selectedDate.toISOString()
@@ -112,9 +112,6 @@ export default function CreateEvent() {
   };
 
   const handleCreateEvent = async () => {
-    console.log("START " + event.eventDateTimeStart);
-    console.log("END " + event.eventDateTimeEnd);
-
     if (event.eventName === "") {
       Alert.alert("Manglende informasjon", "Eventet må ha ett navn!");
       return;
@@ -144,7 +141,7 @@ export default function CreateEvent() {
         eventImageUrl = await uploadImage(eventImageUri, token);
       }
 
-      const eventToCreate: IEvent = {
+      const eventToCreate: IEventDTO = {
         ...event,
         location: location,
         frontImage: eventImageUrl,
@@ -213,7 +210,7 @@ export default function CreateEvent() {
           <TextInput
             placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             onChangeText={(input) =>
-              setEvent((event: IEvent) => ({ ...event, eventName: input }))
+              setEvent((event: IEventDTO) => ({ ...event, eventName: input }))
             }
             placeholder="Navn på Event"
             style={styles.inputBox}
@@ -301,7 +298,7 @@ export default function CreateEvent() {
           <TextInput
             placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             onChangeText={(input) =>
-              setEvent((event: IEvent) => ({
+              setEvent((event: IEventDTO) => ({
                 ...event,
                 eventDescription: input,
               }))

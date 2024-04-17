@@ -1,4 +1,3 @@
-import { IEventRelationDTO } from "../interfaces/ModelInterfaces";
 import { URL_BASE, EVENTRELATION_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENTRELATION_PATH}`;

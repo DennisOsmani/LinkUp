@@ -53,6 +53,21 @@ export interface IEvent {
   eventRelations?: [];
 }
 
+export interface IEventDTO {
+  eventID?: number;
+  eventName: string;
+  eventDescription: string;
+  eventDateTimeStart: string;
+  eventDateTimeEnd: string;
+  visibility: number;
+  inviteURL: string;
+  frontImage?: string;
+  minCapacity?: string;
+  maxCapacity?: string;
+  locationID?: number;
+  location?: ILocation;
+}
+
 export interface ILocation {
   locationID?: number;
   address?: string;

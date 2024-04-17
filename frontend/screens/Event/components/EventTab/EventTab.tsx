@@ -9,6 +9,16 @@ interface EventTabProps {
   event: IEvent | null;
 }
 
+/*
+ * TODO
+ *
+ * Sjekk at leave event fungerer i db
+ * Sjekk at man ikke lenger kan se event informasjon når man leaver
+ * Ikke mulig å joined eventer man ikke har tilgang til
+ * Bli kastet til event siden etter man lager ett event
+ * Bli kastet til Feed når man leaver ett event
+ */
+
 export function EventTab({ event }: EventTabProps) {
   const { token } = useTokenProvider();
 
@@ -77,8 +87,8 @@ export function EventTab({ event }: EventTabProps) {
   const leaveEventThenRedirect = async () => {
     if (!event) return;
 
-    // TODO
     await updateEventParticipation(event.eventID, "BAILED", token);
+    // TODO - Kaste til en annen side!
   };
 
   const handleLeaveEvent = () => {
@@ -134,15 +144,14 @@ export function EventTab({ event }: EventTabProps) {
           </View>
         </View>
 
-        <View style={styles.fourthRowWrapper}>
-          <Text style={styles.descriptionHeader}>Beskrivelse</Text>
-          <View style={styles.descriptionBox}>
-            <Text style={styles.description}>
-              {event?.eventDescription}Lorem ipsum dolores sigmatures engalada
-              mote. Sindele infurate motelago konatello finite.{" "}
-            </Text>
+        {event?.eventDescription && (
+          <View style={styles.fourthRowWrapper}>
+            <Text style={styles.descriptionHeader}>Beskrivelse</Text>
+            <View style={styles.descriptionBox}>
+              <Text style={styles.description}>{event?.eventDescription}</Text>
+            </View>
           </View>
-        </View>
+        )}
 
         <View style={styles.buttonWrapper}>
           <Pressable onPress={handleLeaveEvent} style={styles.leaveEventButton}>

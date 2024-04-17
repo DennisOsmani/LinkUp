@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { styles } from "./EventsStyles";
-import { getEventsInCity } from "../../api/EventAPI";
+import { getEventsInCity, getUserJoinedEvents } from "../../api/EventAPI";
 import { useLocation } from "../../providers/LocationProvider";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import { useEffect, useState } from "react";
@@ -23,15 +23,11 @@ export default function Events() {
   const fetchEvents = async () => {
     try {
       if (token && address) {
-        const response: IEvent[] | undefined = await getEventsInCity(
-          token,
-          address
-        );
+        const response: IEvent[] | undefined = await getUserJoinedEvents(token);
         setEvents(response);
       }
     } catch (error) {
-      console.error("Thuggety buggety brur " + error);
-      console.error("Skjønte du?" + error);
+      console.error("Error while fetching" + error);
     }
   };
 
