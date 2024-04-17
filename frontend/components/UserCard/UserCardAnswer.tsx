@@ -1,8 +1,6 @@
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, Pressable } from "react-native";
 import styles from "./UserCardStyles";
 import { Feather } from "@expo/vector-icons";
-
-// Legge inn Pressable --> sendes til Other Profile
 
 // For search in People Screen
 interface UserCardInfo {
@@ -14,9 +12,15 @@ interface UserCardInfo {
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
+  onPressAccept: () => void;
+  onPressReject: () => void;
 }
 
-export function UserCardFriends({ userCardInfo }: UserCardProps) {
+export function UserCardAnswer({
+  userCardInfo,
+  onPressAccept,
+  onPressReject,
+}: UserCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
@@ -26,13 +30,21 @@ export function UserCardFriends({ userCardInfo }: UserCardProps) {
         ></Image>
         <View style={styles.detailsContainer}>
           <View style={styles.iconContainer}>
-            <Feather name="user-check" style={styles.icon}></Feather>
+            <Feather name="user" style={styles.icon}></Feather>
             <Text style={styles.textName}>{userCardInfo.firstname}</Text>
             <Text style={styles.textName}>{userCardInfo.lastname}</Text>
           </View>
           <Text style={styles.textAge}>
             {userCardInfo.age} <Text style={styles.textAge}>år</Text>
           </Text>
+          <View style={styles.buttonContainer}>
+            <Pressable style={styles.buttonAccept} onPress={onPressAccept}>
+              <Text style={styles.buttonTextAccept}>Godta</Text>
+            </Pressable>
+            <Pressable style={styles.buttonReject} onPress={onPressReject}>
+              <Text style={styles.buttonTextReject}>Avslå</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>

@@ -12,10 +12,9 @@ interface UserCardInfo {
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
-  onPressButon: () => void;
 }
 
-export function UserCard({ userCardInfo, onPressButon }: UserCardProps) {
+export function UserCardPending({ userCardInfo }: UserCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
@@ -33,8 +32,8 @@ export function UserCard({ userCardInfo, onPressButon }: UserCardProps) {
             {userCardInfo.age} <Text style={styles.textAge}>år</Text>
           </Text>
           <View style={styles.buttonContainer}>
-            <Pressable style={styles.button} onPress={onPressButon}>
-              <Text style={styles.buttonText}>Legg til venn</Text>
+            <Pressable style={styles.buttonPending}>
+              <Text style={styles.buttonTextPending}>Venter på svar</Text>
             </Pressable>
           </View>
         </View>

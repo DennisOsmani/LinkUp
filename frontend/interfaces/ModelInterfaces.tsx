@@ -1,7 +1,7 @@
 // LAGE ENUMS OGSÅ SIDEN DE BLIR SENDT SOM INT???
 export interface IToken {
   token: string;
-  userId: string;
+  userID: string;
 }
 
 export interface ILoginRequest {
@@ -67,7 +67,7 @@ export interface IUserRelation {
   user_fisrt?: IUser;
   user_second_ID: string;
   user_second?: IUser;
-  userRelationType: number;
+  type: number;
 }
 
 export interface IEventRelations {

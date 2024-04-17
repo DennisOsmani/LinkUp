@@ -36,11 +36,13 @@ public interface IUserService
     Task DeleteUser(string userId);
 
     /// <summary>
-    /// Fetches a list of User based on a search string for their names.
+    /// Fetches a list of User based on a search string for their names, 
+    /// and removes all users that have blocked the logged in user.
     /// </summary>
-    /// <param name="fullName"></param>
+    /// <param name="searchString"></param>
+    /// <param name="userId"=></param>
     /// <returns>A list of Users</returns>
-    Task<ICollection<User>> SearchUsers(string searchString);
+    Task<ICollection<User>> SearchUsers(string searchString, string userId);
 
     /// <summary>
     /// Fetches a list of Users that have joined a event, by the event id.
@@ -55,4 +57,25 @@ public interface IUserService
     /// <param name="userId"></param>
     /// <returns>A list of Users</returns>
     Task<ICollection<User?>> GetUserFriends(string userId);
+
+    /// <summary>
+    /// Fetches a list of Users that logged in user has sent a friend request to.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>A list of Users</returns>
+    Task<ICollection<User?>> GetPendingFriendRequests(string userId);
+
+    /// <summary>
+    /// Fetches a list of Users that logged in user has got a friend request from.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>A list of Users</returns>
+    Task<ICollection<User?>> GetUserFriendRequests(string userId);
+
+    /// <summary>
+    /// Fetches a list of Users that logged in user has blocked.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>A list of Users that are blocked</returns>
+    Task<ICollection<User?>> GetUserBlocks(string userId);
 }
