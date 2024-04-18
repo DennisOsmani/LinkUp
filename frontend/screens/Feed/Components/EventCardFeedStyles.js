@@ -63,10 +63,10 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(-2),
   },
   lowerLeftSide: {
-    gap: verticalScale(3),
+    gap: verticalScale(4),
   },
   addressText: {
-    marginLeft: horizontalScale(3),
+    marginLeft: horizontalScale(4),
     fontSize: moderateScale(14),
     fontFamily: "BalooRegular",
     color: colors.grey,
@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
     width: moderateScale(150),
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: colors.foreground,
     fontSize: moderateScale(20),
     fontWeight: "bold",
     fontFamily: "BalooBold",

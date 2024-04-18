@@ -6,7 +6,7 @@ import InvitesFeed from "./Invites/InvitesFeed";
 export default function Feed() {
   return (
     <View>
-      <TabBackground firstTab="Joined" secondTab="Invites">
+      <TabBackground firstTab="Deltar" secondTab="Invitert">
         <JoinedFeed />
         <InvitesFeed />
       </TabBackground>

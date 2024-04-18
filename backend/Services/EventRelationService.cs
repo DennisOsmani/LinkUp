@@ -114,7 +114,6 @@ public class EventRelationService : IEventRelationService
             }
             if (userRelation.Type == UserRelationType.FRIENDS)
             {
-                Console.WriteLine("MOOOOOOOOOOOORDI");
                 await _erRepo.CreateEventRelation(eventRelation);
                 user.EventsJoined++;
                 await _userRepo.UpdateUser(user.UserID, user);
@@ -271,8 +270,10 @@ public class EventRelationService : IEventRelationService
         {
             throw new KeyNotFoundException($"EventRelation with EventId {eventId}, and UserID {userId}, does not exist!");
         }
-
+        var user = await _userRepo.GetUserByID(userId);
         await _erRepo.DeleteUserFromEvent(eventRelation);
+        user.EventBails++;
+        await _userRepo.UpdateUser(user.UserID, user);
     }
 
     public async Task<bool> IsUserHostOrCreator(int eventId, string userId)

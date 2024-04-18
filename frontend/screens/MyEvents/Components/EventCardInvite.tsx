@@ -39,7 +39,7 @@ const EventCardInvite = ({
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.iconTextWrapper}>
-          <Feather name="users" style={styles.headerText} />
+          <Feather name="users" style={styles.headerIcon} />
           <Text style={styles.headerText}> {numberOfPeople}</Text>
         </View>
         <Text style={styles.headerText}>{dateTime.toLocaleString()}</Text>
@@ -51,7 +51,7 @@ const EventCardInvite = ({
               {truncateDescription(title, MAX_LETTERS_TITLE)}
             </Text>
             <View style={styles.iconTextWrapper}>
-              <Feather name="user" style={styles.text} />
+              <Feather name="user" style={styles.hostIcon} />
               <Text style={styles.hostText}>{hostName}</Text>
             </View>
             <Text style={styles.text}>

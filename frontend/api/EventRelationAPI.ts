@@ -100,7 +100,7 @@ export const removeFromEvent = async (token: string, eventId: number, userId? :s
 
 export const updateEventRelationParticipation = async (token: string, eventId: number, participation: string) => {
   try {
-    const response = await fetch(`${THIS_URL}/participation`, {
+    const response = await fetch(`${THIS_URL}/participation?eventId=${eventId}&participation=${participation}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -36,11 +36,15 @@ const EventCardJoined = ({
     }
     return text.substring(0, maxLetters);
   };
+  const handleCardPress = () => {
+    /*TODOOOOOOOOOO???? FOR THE LITTLE BOY*/
+  };
+
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={handleCardPress}>
       <View style={styles.header}>
         <View style={styles.iconTextWrapper}>
-          <Feather name="users" style={styles.headerText} />
+          <Feather name="users" style={styles.headerIcon} />
           <Text style={styles.headerText}> {numberOfPeople}</Text>
         </View>
         <Text style={styles.headerText}>{dateTime.toLocaleString()}</Text>
@@ -52,8 +56,8 @@ const EventCardJoined = ({
               {truncateDescription(title, MAX_LETTERS_TITLE)}
             </Text>
             <View style={styles.iconTextWrapper}>
-              <Feather name="user" style={styles.text} />
-              <Text style={styles.text}>{hostName}</Text>
+              <Feather name="user" style={styles.hostIcon} />
+              <Text style={styles.hostText}>{hostName}</Text>
             </View>
             <Text style={styles.text}>
               {truncateDescription(bio, MAX_LETTERS_DESCRIPTION)}
@@ -61,13 +65,16 @@ const EventCardJoined = ({
           </View>
           <View style={styles.lowerLeftSide}>
             <Text style={styles.addressText}>{address}</Text>
-            <Pressable style={styles.button} onPress={onButtonPress}>
-              {host ? (
+
+            {host ? (
+              <Pressable style={styles.button} onPress={onButtonPress}>
                 <Text style={styles.buttonText}>Rediger</Text>
-              ) : (
-                <Text style={styles.buttonText}>Forlat Event</Text>
-              )}
-            </Pressable>
+              </Pressable>
+            ) : (
+              <Pressable style={styles.leaveButton} onPress={onButtonPress}>
+                <Text style={styles.leaveButtonText}>Forlat event</Text>
+              </Pressable>
+            )}
           </View>
         </View>
         <View style={styles.rightSide}>
@@ -82,7 +89,7 @@ const EventCardJoined = ({
           />
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
