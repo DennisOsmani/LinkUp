@@ -1,10 +1,11 @@
-import { View, Text, Image, Pressable, TextInput } from "react-native";
+import { View, Text, Image, Pressable, TextInput, Switch } from "react-native";
 import { styles } from "./ProfileStyles";
 import { getUser } from "../../api/UserAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import { useEffect, useState } from "react";
 import { IUser } from "../../interfaces/ModelInterfaces";
 import { Feather } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 
 // interface ProfileInfo {
 //   image?: string;
@@ -27,12 +28,13 @@ import { Feather } from "@expo/vector-icons";
 // }
 
 export default function Profile() {
-  const { token, userID } = useTokenProvider();
+  const { token } = useTokenProvider();
   const [profile, setProfile] = useState<IUser>();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     fetchProfile();
-  });
+  }, [isFocused]);
 
   const fetchProfile = async () => {
     const user = await getUser(token);
@@ -52,7 +54,22 @@ export default function Profile() {
     if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
       age--;
     }
-    return age;
+    return age.toString();
+  };
+
+  const defineRelationshipStatus = (relStatus: string) => {
+    switch (relStatus) {
+      case "0":
+        return "Gift";
+      case "1":
+        return "Forhold";
+      case "2":
+        return "Singel";
+      case "3":
+        return "Komplisert";
+      default:
+        return "?";
+    }
   };
 
   return (
@@ -86,55 +103,81 @@ export default function Profile() {
       </View>
 
       <View style={styles.foregroundCard}>
-        <View style={styles.inputBoxRegular}>
-          <TextInput
-            style={styles.inputText}
-            value={profile?.firstname + " " + profile?.lastname}
-          ></TextInput>
+        <View style={styles.legendContainer}>
+          <Text style={styles.legendText}>Navn</Text>
+          <View style={styles.inputBoxRegular}>
+            <TextInput
+              style={styles.inputText}
+              value={profile?.firstname + " " + profile?.lastname}
+            ></TextInput>
+          </View>
         </View>
-        <View style={styles.inputBoxRegular}>
-          <TextInput
-            style={styles.inputText}
-            value={profile?.phone}
-          ></TextInput>
+        <View style={styles.legendContainer}>
+          <Text style={styles.legendText}>Telefonnummer</Text>
+          <View style={styles.inputBoxRegular}>
+            <TextInput
+              style={styles.inputText}
+              value={profile?.phone}
+            ></TextInput>
+          </View>
         </View>
-        <View style={styles.inputBoxRegular}>
-          <TextInput
-            style={styles.inputText}
-            value={profile?.email}
-          ></TextInput>
+        <View style={styles.legendContainer}>
+          <Text style={styles.legendText}>Mail</Text>
+          <View style={styles.inputBoxRegular}>
+            <TextInput
+              style={styles.inputText}
+              value={profile?.email}
+            ></TextInput>
+          </View>
         </View>
 
         <View style={styles.smallBoxesContainer}>
-          <View style={styles.inputBoxSmall}>
-            <TextInput
-              style={styles.inputText}
-              value={profile?.gender}
-            ></TextInput>
+          <View style={styles.legendContainerSmallBox}>
+            <Text style={styles.legendTextSmallBox}>Kjønn</Text>
+            <View style={styles.inputBoxSmall}>
+              <TextInput
+                style={styles.inputText}
+                value={profile?.gender === "F" ? "Kvinne" : "Mann"}
+              ></TextInput>
+            </View>
           </View>
-          <View style={styles.inputBoxSmall}>
-            <TextInput
-              style={styles.inputText}
-              value={profile?.dateBorn}
-            ></TextInput>
+
+          <View style={styles.legendContainerSmallBox}>
+            <Text style={styles.legendTextSmallBox}>Alder</Text>
+            <View style={styles.inputBoxSmall}>
+              <TextInput
+                style={styles.inputText}
+                value={
+                  calculateAge(profile?.dateBorn ? profile.dateBorn : "") +
+                  " år"
+                }
+              ></TextInput>
+            </View>
           </View>
-          <View style={styles.inputBoxSmall}>
-            <TextInput
-              style={styles.inputText}
-              value={
-                profile?.relationshipStatus
-                  ? profile.relationshipStatus.toString()
-                  : ""
-              }
-            ></TextInput>
+
+          <View style={styles.legendContainerSmallBox}>
+            <Text style={styles.legendTextSmallBox}>Sivilstatus</Text>
+            <View style={styles.inputBoxSmall}>
+              <TextInput
+                style={styles.inputText}
+                value={defineRelationshipStatus(
+                  profile?.relationshipStatus?.toString()
+                    ? profile.relationshipStatus.toString()
+                    : ""
+                )}
+              ></TextInput>
+            </View>
           </View>
         </View>
 
-        <View style={styles.inputBoxBig}>
-          <TextInput
-            style={styles.inputTextBig}
-            value={profile?.description}
-          ></TextInput>
+        <View style={styles.legendContainer}>
+          <Text style={styles.legendText}>Bio</Text>
+          <View style={styles.inputBoxBig}>
+            <TextInput
+              style={styles.inputTextBig}
+              value={profile?.description}
+            ></TextInput>
+          </View>
         </View>
 
         <View style={styles.editButton}>

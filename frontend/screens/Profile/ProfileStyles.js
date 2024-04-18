@@ -16,16 +16,16 @@ export const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    width: horizontalScale(150),
-    height: verticalScale(150),
+    width: horizontalScale(180),
+    height: verticalScale(180),
     borderRadius: moderateScale(100),
-    marginBottom: verticalScale(12),
+    marginBottom: verticalScale(20),
   },
 
   uploadContainer: {
     position: "absolute",
-    right: horizontalScale(5),
-    bottom: verticalScale(5),
+    right: horizontalScale(7),
+    bottom: verticalScale(7),
     backgroundColor: "rgba(0, 0, 0, 0.7)",
     width: horizontalScale(27),
     height: verticalScale(25),
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginBottom: verticalScale(10),
+    marginBottom: verticalScale(15),
   },
 
   stats: {
@@ -51,18 +51,18 @@ export const styles = StyleSheet.create({
 
   statsText: {
     fontFamily: "BalooBold",
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(20),
     color: colors.foreground,
-    lineHeight: verticalScale(20),
+    lineHeight: verticalScale(25),
   },
 
   foregroundCard: {
     backgroundColor: colors.background,
-    height: "65%",
+    height: "58%",
     width: "100%",
     borderTopEndRadius: moderateScale(25),
     borderTopStartRadius: moderateScale(25),
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
 
@@ -101,25 +101,52 @@ export const styles = StyleSheet.create({
 
   inputTextBig: {
     paddingTop: verticalScale(10),
-    paddingLeft: horizontalScale(10),
+    paddingLeft: horizontalScale(15),
   },
 
   inputText: {
-    paddingLeft: horizontalScale(10),
+    paddingLeft: horizontalScale(15),
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(18),
   },
 
   editButton: {
     borderRadius: moderateScale(10),
     backgroundColor: colors.primary,
     justifyContent: "center",
-    height: verticalScale(40),
-    width: horizontalScale(130),
+    height: verticalScale(50),
+    width: horizontalScale(170),
+    marginBottom: verticalScale(20),
   },
 
   editButtonText: {
     color: colors.foreground,
     textAlign: "center",
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(22),
     fontFamily: "BalooBold",
+  },
+
+  legendContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+  legendContainerSmallBox: {},
+  legendText: {
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(12),
+    color: colors.thirdary,
+    zIndex: 1,
+    position: "absolute",
+    top: -10,
+    left: 36,
+  },
+  legendTextSmallBox: {
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(12),
+    color: colors.thirdary,
+    zIndex: 1,
+    position: "absolute",
+    top: -10,
+    left: 16,
   },
 });
