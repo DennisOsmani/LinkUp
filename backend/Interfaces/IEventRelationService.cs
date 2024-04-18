@@ -9,6 +9,14 @@ namespace Interfaces;
 public interface IEventRelationService
 {
     /// <summary>
+    /// Retreives an eventrelation based on the params
+    /// </summary>
+    /// <param name="eventId">Id of event</param>
+    /// <param name="userId">Id of user</param>
+    /// <returns>The eventrelation that is found</returns>
+    Task<EventRelation> GetEventRelation(int eventId, string userId);
+
+    /// <summary>
     /// Updates a EventRelations Role.
     /// </summary>
     /// <param name="eventId">The event we want to update our relation to</param>

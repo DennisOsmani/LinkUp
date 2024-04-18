@@ -17,16 +17,17 @@ public class EventRelationRepository
     {
         _context = context;
     }
-    
+
     public async Task<ICollection<User?>> GetUsersFromEventByParticipation(int eventId, EventRelationParticipation participation)
     {
-        try{
+        try
+        {
             return await _context.EventRelations
                 .Where(er => er.EventID == eventId && er.EventRelationParticipation == participation)
                 .Select(er => er.User)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
         }
@@ -35,14 +36,15 @@ public class EventRelationRepository
     public async Task<ICollection<User?>> GetUsersFromEventByRole(int eventId, EventRole role)
     {
         Console.WriteLine("ROLE : " + role);
-        
-        try{
+
+        try
+        {
             return await _context.EventRelations
                 .Where(er => er.EventID == eventId && er.EventRole == role)
                 .Select(er => er.User)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
         }
@@ -50,7 +52,7 @@ public class EventRelationRepository
 
     public async Task<EventRelation> UpdateEventRelationRole(EventRelation eventRelation, EventRole role)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -61,7 +63,7 @@ public class EventRelationRepository
                 await transaction.CommitAsync();
                 return eventRelation;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
                 throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
@@ -71,7 +73,7 @@ public class EventRelationRepository
 
     public async Task<EventRelation> UpdateEventRelationParticipation(EventRelation eventRelation, EventRelationParticipation participation)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -82,7 +84,7 @@ public class EventRelationRepository
                 await transaction.CommitAsync();
                 return eventRelation;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
                 throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
@@ -98,13 +100,13 @@ public class EventRelationRepository
                 .Where(er => er.EventID == eventId && er.UserID == userId)
                 .FirstOrDefaultAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
         }
     }
 
-     public async Task<ICollection<EventRelation>> GetAllEventRelations(int eventId)
+    public async Task<ICollection<EventRelation>> GetAllEventRelations(int eventId)
     {
         try
         {
@@ -112,7 +114,7 @@ public class EventRelationRepository
                 .Where(er => er.EventID == eventId)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
         }
@@ -120,7 +122,7 @@ public class EventRelationRepository
 
     public async Task CreateEventRelation(EventRelation newEventRelation)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -129,16 +131,16 @@ public class EventRelationRepository
 
                 await transaction.CommitAsync();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
             }
         }
     }
 
     public async Task<ICollection<string>> GetExistingUserIds(ICollection<string> userIds)
-    {   
+    {
         try
         {
             return await _context.Users
@@ -146,7 +148,7 @@ public class EventRelationRepository
                 .Select(u => u.UserID)
                 .ToListAsync();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
         }
@@ -161,7 +163,7 @@ public class EventRelationRepository
                     er => er.EventID == eventId && er.UserID == userId && (er.EventRole == EventRole.CREATOR || er.EventRole == EventRole.HOST)
                 );
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
         }
@@ -169,8 +171,16 @@ public class EventRelationRepository
 
     public async Task DeleteUserFromEvent(EventRelation eventRelation)
     {
-        _context.Remove(eventRelation);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Remove(eventRelation);
+            await _context.SaveChangesAsync();
+        }
+
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRelationRepo)");
+        }
 
     }
 }

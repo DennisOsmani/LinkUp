@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../../../styles/colors";
 import {
   moderateScale,
   horizontalScale,
@@ -25,6 +24,7 @@ export const styles = StyleSheet.create({
   },
   midscreenMessagesText: {
     fontSize: moderateScale(20),
+    textAlign: "center",
     fontFamily: "BalooSemiBold",
     marginTop: moderateScale(20),
   },

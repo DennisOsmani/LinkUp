@@ -1,104 +1,122 @@
-import { StyleSheet, ImageStyle } from "react-native";
+import { StyleSheet } from "react-native";
+import { colors } from "../../../styles/colors";
+import {
+  moderateScale,
+  horizontalScale,
+  verticalScale,
+} from "../../../styles/genericDimensions";
 
 export const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
-    padding: 16,
-    gap: 10,
-    width: "100%"
+    backgroundColor: colors.foreground,
+    borderRadius: moderateScale(16),
+    padding: moderateScale(16),
+    gap: verticalScale(8),
+    width: "100%",
   },
   iconTextWrapper: {
     flexDirection: "row",
-    gap: 4
+    alignItems: "center",
+    gap: horizontalScale(4),
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   headerText: {
-    fontSize: 14,
-    color: "gray"
+    fontSize: moderateScale(14),
+    fontFamily: "BalooRegular",
+    color: colors.grey,
+  },
+  headerIcon: {
+    fontSize: moderateScale(14),
+    marginTop: verticalScale(-1),
+    color: colors.grey,
   },
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 10,
-    height: 200,
-    display: "flex"
+    gap: horizontalScale(8),
+    maxHeight: verticalScale(200),
   },
   leftSide: {
     flex: "2",
     flexDirection: "column",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
-  upperLeftSide: {
-    gap: 6
-  },
+  upperLeftSide: {},
   title: {
-    fontSize: 22,
-    fontWeight: "bold"
-  },
-  hostText: {
-    fontSize: 16
+    fontSize: moderateScale(24),
+    marginTop: verticalScale(-4),
+    fontFamily: "BalooBold",
   },
   text: {
-    fontSize: 16
+    fontSize: moderateScale(16),
+    fontFamily: "BalooRegular",
+  },
+  hostText: {
+    fontSize: moderateScale(16),
+    fontFamily: "BalooSemiBold",
+  },
+  hostIcon: {
+    fontSize: moderateScale(18),
+    marginTop: verticalScale(-2),
   },
   lowerLeftSide: {
-    gap: 8
+    gap: verticalScale(4),
   },
   addressText: {
-    marginLeft: 3,
-    fontSize: 14,
-    color: "gray"
+    marginLeft: horizontalScale(4),
+    fontSize: moderateScale(14),
+    fontFamily: "BalooRegular",
+    color: colors.grey,
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    gap: 12
+    gap: 12,
   },
   button: {
     display: "flex",
     justifyContent: "center",
-    borderRadius: 10,
-    backgroundColor: "#474AEE",
-    height: 32,
-    width: 90
+    borderRadius: moderateScale(10),
+    backgroundColor: colors.primary,
+    height: verticalScale(32),
+    width: moderateScale(90),
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: colors.foreground,
     textAlign: "center",
-    fontSize: 16,
+    fontSize: moderateScale(20),
     fontWeight: "bold",
-    fontFamily: ""
+    fontFamily: "BalooBold",
   },
   invertedButton: {
     display: "flex",
     justifyContent: "center",
-    borderRadius: 10,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 2,
-    borderColor: "#474AEE",
-    height: 32,
-    width: 90
+    borderRadius: moderateScale(10),
+    backgroundColor: colors.foreground,
+    borderWidth: moderateScale(2.5),
+    borderColor: colors.primary,
+    height: verticalScale(32),
+    width: moderateScale(90),
   },
   invertedButtonText: {
-    color: "#474AEE",
+    color: colors.primary,
     textAlign: "center",
-    fontSize: 16,
+    fontSize: moderateScale(20),
     fontWeight: "bold",
-    fontFamily: ""
+    fontFamily: "BalooBold",
   },
   rightSide: {
-    flex: 1
+    flex: 1,
   },
   ///THIS DOES NOT WORK
   image: {
     height: "100%",
     width: "100%",
     resizeMode: "cover",
-    borderRadius: 16
-  }
+    borderRadius: moderateScale(16),
+  },
   /////////////////////
 });

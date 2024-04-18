@@ -25,6 +25,37 @@ public class EventRelationController : ControllerBase
         _erRepo = eventRelationRepository;
     }
 
+    [HttpGet]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult<EventRelation>> GetEventRelation(int eventId)
+    {
+
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("No user ID claim present in token.");
+        }
+        try
+        {
+            var er = await _erService.GetEventRelation(eventId, userIdClaim);
+            return Ok(er);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+
     [HttpPost("create/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult> CreateEventRealation(int eventId, [FromBody] List<string> userIds)
@@ -177,10 +208,7 @@ public class EventRelationController : ControllerBase
             return Unauthorized("No user ID claim present in token.");
         }
 
-        string escapedUserId = SecurityElement.Escape(userIdClaim);
-        string escapedParticipation = SecurityElement.Escape(participation);
-
-        EventRelation? evRel = await _erRepo.GetEventRelation(eventId, escapedUserId);
+        EventRelation? evRel = await _erRepo.GetEventRelation(eventId, userIdClaim);
 
         if (evRel == null)
         {
@@ -189,7 +217,7 @@ public class EventRelationController : ControllerBase
 
         try
         {
-            EventRelation eventRelation = await _erService.UpdateEventRelationParticipation(eventId, escapedUserId, escapedParticipation);
+            EventRelation eventRelation = await _erService.UpdateEventRelationParticipation(eventId, userIdClaim, participation);
             return Ok(eventRelation);
         }
         catch (InvalidOperationException e)
@@ -208,9 +236,8 @@ public class EventRelationController : ControllerBase
 
     [HttpDelete]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult> RemoveUserFromEvent([FromQuery] int eventId, [FromQuery] string userId)
+    public async Task<ActionResult> RemoveUserFromEvent([FromQuery] int eventId, [FromQuery] string? userId)
     {
-        userId = SecurityElement.Escape(userId);
         var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if (userIdClaims == null)
@@ -218,16 +245,24 @@ public class EventRelationController : ControllerBase
             return Unauthorized("No user ID claim present in token.");
         }
 
-        bool isUserHostOrCreator = await _erService.IsUserHostOrCreator(eventId, userIdClaims);
-        if (!isUserHostOrCreator)
-        {
-            return Unauthorized("User does not have permission");
-        }
-
         try
         {
-            await _erService.RemoveUserFromEvent(eventId, userId);
-            return NoContent();
+            var eventRel = await _erService.GetEventRelation(eventId, userIdClaims);
+            bool isUserHostOrCreator = await _erService.IsUserHostOrCreator(eventId, userIdClaims);
+            if (!isUserHostOrCreator && eventRel == null)
+            {
+                return Unauthorized("User does not have permission");
+            }
+            if (userId == null)
+            {
+                await _erService.RemoveUserFromEvent(eventId, userIdClaims);
+                return Ok("User removed from event successfully");
+            }
+            else
+            {
+                await _erService.RemoveUserFromEvent(eventId, userId);
+                return Ok("User removed from event successfully");
+            }
         }
         catch (InvalidOperationException e)
         {
