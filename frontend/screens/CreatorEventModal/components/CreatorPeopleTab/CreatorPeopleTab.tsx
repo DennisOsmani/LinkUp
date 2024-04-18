@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, TextInput, Pressable } from "react-native";
 import { useState } from "react";
-import { styles } from "./PeopleTabStyles";
+import { styles } from "./CreatorPeopleTabStyles";
 import { colors } from "../../../../styles/colors";
 import { Feather } from "@expo/vector-icons";
 import { IEvent } from "../../../../interfaces/ModelInterfaces";
@@ -10,7 +10,7 @@ interface PeopleTabProps {
   event: IEvent | null;
 }
 
-export function PeopleTab({ event }: PeopleTabProps) {
+export function CreatorPeopleTab({ event }: PeopleTabProps) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   return (

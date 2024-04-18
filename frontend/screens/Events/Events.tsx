@@ -5,7 +5,7 @@ import { useLocation } from "../../providers/LocationProvider";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import { useEffect, useState } from "react";
 import { IEvent } from "../../interfaces/ModelInterfaces";
-import { EventModal } from "../Event/EventModal";
+import { EventModal } from "../EventModal/EventModal";
 import { TabBackground } from "../../components/TabBackground/TabBackground";
 
 export default function Events() {

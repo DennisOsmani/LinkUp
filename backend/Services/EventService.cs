@@ -1,11 +1,9 @@
-
+using DTOs;
 using Repositories;
 using Interfaces;
 using Models;
 using System.Collections.ObjectModel;
 using Enums;
-using System.Net.Http.Headers;
-using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace Services;
 
@@ -234,6 +232,30 @@ public class EventService : IEventService
         User? creator = creatorList.FirstOrDefault();
 
         return creator.UserID == userId;
+    }
 
+    public async Task<ICollection<UserWithEventParticipationDTO>> GetEventRelationsFromEvent(int eventId)
+    {
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+
+        if (eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId},  was not found! (EventService)");
+        }
+
+        ICollection<EventRelation> eventRelations = await _eventRepo.GetEventRelationsFromEvent(eventId);
+        ICollection<UserWithEventParticipationDTO> uweps = new List<UserWithEventParticipationDTO>();
+
+        foreach (var er in eventRelations)
+        {
+            if (er.User != null)
+            {
+                var uwep = new UserWithEventParticipationDTO(er.User.UserID, er.User.ProfileImage == null ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" : er.User.ProfileImage,
+                        er.User.Firstname, er.User.Lastname, er.User.DateBorn, er.EventRelationParticipation, er.EventRole);
+                uweps.Add(uwep);
+            }
+        }
+
+        return uweps;
     }
 }

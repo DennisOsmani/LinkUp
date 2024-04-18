@@ -89,10 +89,15 @@ export const styles = StyleSheet.create({
   },
 
   cardContainer: {
-    width: "90%",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
     rowGap: moderateScale(15),
+    paddingBottom: verticalScale(80),
+  },
+
+  scrollView: {
+    width: "100%",
   },
 });

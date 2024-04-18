@@ -1,4 +1,5 @@
 using Models;
+using DTOs;
 
 /// <summary>
 /// Service Interface for all operations on Events, and fetching Events.
@@ -99,4 +100,12 @@ public interface IEventService
     /// <param name="userId">Id of the relevant user</param>
     /// <returns>True if permisson should be granted, false else<returns> 
     Task<bool> CanUserDeleteEvent(int eventId, string userId);
+
+
+    /// <summary>
+    /// Gets all EventRelations for a given event, including the user connected to the relation.
+    /// </summary>
+    /// <param name="eventId">Id of the relevant event</param>
+    /// <returns>A list of EventRelations including the user connected to the relation<returns> 
+    Task<ICollection<UserWithEventParticipationDTO>> GetEventRelationsFromEvent(int eventId);
 }

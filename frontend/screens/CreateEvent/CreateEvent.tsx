@@ -143,6 +143,8 @@ export default function CreateEvent() {
 
       const eventToCreate: IEventDTO = {
         ...event,
+        eventDateTimeStart: event.eventDateTimeStart.replace("Z", ""),
+        eventDateTimeEnd: event.eventDateTimeEnd.replace("Z", ""),
         location: location,
         frontImage: eventImageUrl,
       };

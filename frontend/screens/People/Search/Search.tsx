@@ -20,7 +20,6 @@ export default function SearchPeople() {
   const [friends, setFriends] = useState<IUser[]>([]);
 
   const calculateAge = (dateBorn: string) => {
-
     const birthDate = new Date(dateBorn);
 
     const today = new Date();
@@ -34,44 +33,50 @@ export default function SearchPeople() {
     }
     return age;
   };
-  
+
   const { token, setToken, userId } = useTokenProvider();
 
   useEffect(() => {
-      fetchFriends();
+    fetchFriends();
   }, []);
 
   const fetchFriends = async () => {
     try {
-     const friends: IUser[] = await GetUserFriends(token); 
-     setFriends(friends);
+      const friends: IUser[] = await GetUserFriends(token);
+      setFriends(friends);
     } catch (error) {
       console.error("Error in fetching users friends (Search) " + error);
-    }}
-
-    const handleAddFriend = async (friendId: string) => {
-      try {
-        await CreateUserRelation(token, { userId: "", otherUserId: friendId, type: UserRelationType.FRIENDS });
-        Alert.alert('Venneforespørsel er sendt!');
-          clearSearchText();
-          await fetchFriends();
-      } catch (error) {
-        console.error("Error in adding a friend (search) " + error)
-      }
     }
+  };
+
+  const handleAddFriend = async (friendId: string) => {
+    try {
+      await CreateUserRelation(token, {
+        userId: "",
+        otherUserId: friendId,
+        type: UserRelationType.FRIENDS,
+      });
+      Alert.alert("Venneforespørsel er sendt!");
+      clearSearchText();
+      await fetchFriends();
+    } catch (error) {
+      console.error("Error in adding a friend (search) " + error);
+    }
+  };
 
   const clearSearchText = () => {
     setSearchText("");
     setSearchResult([]);
   };
 
-
   const handleSearch = async () => {
     try {
       const results: IUser[] | undefined = await SearchUsers(searchText, token);
 
-      if (results.some(id => id.userID === userId)) {
-        const filteredResults = results.filter(user => user.userID !== userId);
+      if (results.some((id) => id.userID === userId)) {
+        const filteredResults = results.filter(
+          (user) => user.userID !== userId
+        );
         setSearchResult(filteredResults);
       } else {
         setSearchResult(results);
@@ -104,35 +109,36 @@ export default function SearchPeople() {
         </View>
 
         {searchResult &&
-          searchResult
-            .map((user: IUser, index: number) => {
-
+          searchResult.map((user: IUser, index: number) => {
             // Check if the logged-in user's friends list contains the current user
-            const isFriend = friends.some(friend => friend.userID === user.userID);
+            const isFriend = friends.some(
+              (friend) => friend.userID === user.userID
+            );
 
             if (isFriend) {
               return (
                 <UserCardFriends
-                key={index}
-                userCardInfo={{
-                  firstname: user.firstname,
-                  lastname: user.lastname,
-                  age: calculateAge(user.dateBorn),
-                }}
+                  key={index}
+                  userCardInfo={{
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    age: calculateAge(user.dateBorn),
+                  }}
                 ></UserCardFriends>
               );
             } else {
               return (
-              <UserCardSearch
-                key={index}
-                userCardInfo={{
-                  firstname: user.firstname,
-                  lastname: user.lastname,
-                  age: calculateAge(user.dateBorn),
-                }}
-                onPressButon={() => handleAddFriend(user.userID)}
-              ></UserCardSearch>
-               );}
+                <UserCardSearch
+                  key={index}
+                  userCardInfo={{
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    age: calculateAge(user.dateBorn),
+                  }}
+                  onPressButon={() => handleAddFriend(user.userID)}
+                ></UserCardSearch>
+              );
+            }
           })}
       </View>
     </ScrollView>

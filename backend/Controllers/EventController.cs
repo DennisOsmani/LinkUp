@@ -5,6 +5,7 @@ using Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using DTOs;
 
 namespace Controllers;
 
@@ -292,5 +293,30 @@ public class EventController : ControllerBase
         {
             return StatusCode(500, e.Message);
         }
+    }
+
+
+    [HttpGet("eventrelations/{eventId}")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult> GetEventRelationsFromEvent(int eventId)
+    {
+        try
+        {
+            ICollection<UserWithEventParticipationDTO> eventRelations = await _eventService.GetEventRelationsFromEvent(eventId);
+            return Ok(eventRelations);
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+
     }
 }

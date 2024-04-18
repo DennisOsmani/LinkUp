@@ -1,10 +1,20 @@
-import { Modal, View, Text, Pressable, TextInput, Alert } from "react-native";
+import {
+  Modal,
+  View,
+  Text,
+  Pressable,
+  TextInput,
+  Alert,
+  ScrollView,
+} from "react-native";
 import { styles } from "./EventInviteModalStyles";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../../../../../../styles/colors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GetUserFriends } from "../../../../../../api/UserAPI";
 import { useTokenProvider } from "../../../../../../providers/TokenProvider";
+import { IUser } from "../../../../../../interfaces/ModelInterfaces";
+import InviteUserCard from "../InviteUserCard/InviteUserCard";
 
 interface EventInviteModal {
   modalVisible: boolean;
@@ -15,16 +25,17 @@ export default function EventInvteModal({
   modalVisible,
   setModalVisible,
 }: EventInviteModal) {
+  const [friends, setFriends] = useState<IUser[]>([]);
   const { token } = useTokenProvider();
 
   useEffect(() => {
     fetchAllFriends();
-    console.log("Triggered");
   }, []);
 
   const fetchAllFriends = async () => {
     try {
-      await GetUserFriends(token);
+      const response: IUser[] = await GetUserFriends(token);
+      setFriends(response);
     } catch (error) {
       console.error(error);
       Alert.alert("Noe gikk feil!", "Lukk eventet, prøv å åpne på nytt!");
@@ -58,11 +69,13 @@ export default function EventInvteModal({
             <TextInput placeholder="Søk ..." style={styles.searchInput} />
           </View>
 
-          <View style={styles.cardContainer}>
-            {[1, 2, 3, 4, 5].map((num) => (
-              <Text>{num}</Text>
-            ))}
-          </View>
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.cardContainer}>
+              {friends.map((user: IUser) => (
+                <InviteUserCard user={user} />
+              ))}
+            </View>
+          </ScrollView>
 
           <Pressable style={styles.inviteButton}>
             <Text style={styles.inviteButtonText}>Inviter</Text>
