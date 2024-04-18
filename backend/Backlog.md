@@ -8,3 +8,8 @@
 ## UserRelation
 
 - Fiks transaksjoner for å opprette og oppdater bruker relasjoner..
+
+## Register
+
+- En bruker skal også velge kjønn og fødselsdato når man registrerer seg
+- To dropdown varianter.
