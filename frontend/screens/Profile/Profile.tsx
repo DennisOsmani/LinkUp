@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, TextInput, Switch } from "react-native";
+import { View, Text, Image, Pressable, TextInput } from "react-native";
 import { styles } from "./ProfileStyles";
 import { getUser } from "../../api/UserAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
@@ -6,31 +6,27 @@ import { useEffect, useState } from "react";
 import { IUser } from "../../interfaces/ModelInterfaces";
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
+import { UpdateUser } from "../../api/UserAPI";
+import { Picker } from "@react-native-picker/picker";
 
-// interface ProfileInfo {
-//   image?: string;
-//   created?: number;
-//   joined?: number;
-//   bails?: number;
-//   firstname: string;
-//   lastname: string;
-//   phone?: string;
-//   email: string;
-//   gender?: string;
-//   age?: number;
-//   relationshipStatus?: string;
-//   description?: string;
-// }
-
-// interface ProfileProps {
-//   profileInfo: ProfileInfo;
-//   onPressEdit: () => void;
-// }
+// TODO
+// - Farge rundt border på de som er endret
+// - Kun endre tlf, Status, Bio og Bilde
+// - Shadow rundt profilbilde
+// - VALIDATION of INPUT
 
 export default function Profile() {
   const { token } = useTokenProvider();
-  const [profile, setProfile] = useState<IUser>();
   const isFocused = useIsFocused();
+  const [profile, setProfile] = useState<IUser>();
+  const [editMode, setEditMode] = useState(false);
+  const [relStatus, setRelStatus] = useState(profile?.relationshipStatus);
+  const [updatedBio, setUpdatedBio] = useState<string>(
+    profile?.description ? profile.description : ""
+  );
+  const [updatedPhone, setUpdatedPhone] = useState<string>(
+    profile?.phone ? profile.phone : ""
+  );
 
   useEffect(() => {
     fetchProfile();
@@ -39,6 +35,49 @@ export default function Profile() {
   const fetchProfile = async () => {
     const user = await getUser(token);
     setProfile(user);
+    setEditMode(false); //?? for å nullstille siden
+  };
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+  };
+
+  // Funker å oppdatere med tomme verdier..., se på dette
+  // Få verdiene i updatePhone og updateBio til å nli satt til brukerens verdi fra fetchProfile
+  // altså slik at de vises når man går inn i editMode!!
+
+  const updateProfile = async () => {
+    try {
+      const updatedUser: IUser = {
+        ...profile!,
+        phone: updatedPhone,
+        relationshipStatus: relStatus,
+        description: updatedBio,
+      };
+
+      console.log(updatedUser);
+      const newUser = await UpdateUser(updatedUser, token);
+
+      setProfile(newUser);
+      setEditMode(false);
+    } catch (error) {
+      console.error("Error in updating profile details: ", error);
+    }
+  };
+
+  // const handleProfileChange = (newValue: string, field: keyof IUser) => {
+  //   setProfile((prevState) => {
+  //     if (!prevState) return undefined;
+  //     return { ...prevState, [field]: newValue };
+  //   });
+  // };
+
+  const handleRelationshipStatusChange = (status: number) => {
+    setRelStatus(status);
+    setProfile((prevState) => {
+      if (!prevState) return undefined;
+      return { ...prevState, relationshipStatus: status };
+    });
   };
 
   const calculateAge = (dateBorn: string) => {
@@ -56,6 +95,13 @@ export default function Profile() {
     }
     return age.toString();
   };
+
+  const relationshipStatuses = [
+    { label: "Gift", value: 0 },
+    { label: "Forhold", value: 1 },
+    { label: "Singel", value: 2 },
+    { label: "Komplisert", value: 3 },
+  ];
 
   const defineRelationshipStatus = (relStatus: string) => {
     switch (relStatus) {
@@ -75,18 +121,20 @@ export default function Profile() {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        {/* Vises kun etter rediger knappen er trykket!! */}
-        <Pressable
-          onPress={() => console.log("NUDES")}
-          style={styles.uploadContainer}
-        >
-          <Feather name="upload" size={16} color="white" />
-        </Pressable>
+        {editMode && (
+          <Pressable
+            onPress={() => console.log("NUDES")}
+            style={styles.uploadContainer}
+          >
+            <Feather name="upload" size={16} color="white" />
+          </Pressable>
+        )}
         <Image
           style={styles.imageContainer}
           source={require("../../assets/cbum.jpg")}
         ></Image>
       </View>
+
       <View style={styles.statsContainer}>
         <View style={styles.stats}>
           <Text style={styles.statsText}>Opprettet</Text>
@@ -106,28 +154,31 @@ export default function Profile() {
         <View style={styles.legendContainer}>
           <Text style={styles.legendText}>Navn</Text>
           <View style={styles.inputBoxRegular}>
-            <TextInput
-              style={styles.inputText}
-              value={profile?.firstname + " " + profile?.lastname}
-            ></TextInput>
+            <Text style={styles.inputText}>
+              {profile?.firstname + " " + profile?.lastname}
+            </Text>
           </View>
         </View>
         <View style={styles.legendContainer}>
           <Text style={styles.legendText}>Telefonnummer</Text>
           <View style={styles.inputBoxRegular}>
-            <TextInput
-              style={styles.inputText}
-              value={profile?.phone}
-            ></TextInput>
+            {!editMode && (
+              <Text style={styles.inputText}>{profile?.phone}</Text>
+            )}
+
+            {editMode && (
+              <TextInput
+                style={styles.inputText}
+                value={updatedPhone}
+                onChangeText={(text) => setUpdatedPhone(text)}
+              />
+            )}
           </View>
         </View>
         <View style={styles.legendContainer}>
           <Text style={styles.legendText}>Mail</Text>
           <View style={styles.inputBoxRegular}>
-            <TextInput
-              style={styles.inputText}
-              value={profile?.email}
-            ></TextInput>
+            <Text style={styles.inputText}>{profile?.email}</Text>
           </View>
         </View>
 
@@ -135,37 +186,51 @@ export default function Profile() {
           <View style={styles.legendContainerSmallBox}>
             <Text style={styles.legendTextSmallBox}>Kjønn</Text>
             <View style={styles.inputBoxSmall}>
-              <TextInput
-                style={styles.inputText}
-                value={profile?.gender === "F" ? "Kvinne" : "Mann"}
-              ></TextInput>
+              <Text style={styles.inputText}>
+                {profile?.gender === "F" ? "Kvinne" : "Mann"}
+              </Text>
             </View>
           </View>
 
           <View style={styles.legendContainerSmallBox}>
             <Text style={styles.legendTextSmallBox}>Alder</Text>
             <View style={styles.inputBoxSmall}>
-              <TextInput
-                style={styles.inputText}
-                value={
-                  calculateAge(profile?.dateBorn ? profile.dateBorn : "") +
-                  " år"
-                }
-              ></TextInput>
+              <Text style={styles.inputText}>
+                {calculateAge(profile?.dateBorn ? profile.dateBorn : "") +
+                  " år"}
+              </Text>
             </View>
           </View>
 
           <View style={styles.legendContainerSmallBox}>
             <Text style={styles.legendTextSmallBox}>Sivilstatus</Text>
             <View style={styles.inputBoxSmall}>
-              <TextInput
-                style={styles.inputText}
-                value={defineRelationshipStatus(
-                  profile?.relationshipStatus?.toString()
-                    ? profile.relationshipStatus.toString()
-                    : ""
-                )}
-              ></TextInput>
+              {!editMode && (
+                <Text style={styles.inputText}>
+                  {defineRelationshipStatus(
+                    profile?.relationshipStatus?.toString()
+                      ? profile.relationshipStatus.toString()
+                      : ""
+                  )}
+                </Text>
+              )}
+
+              {editMode && (
+                <Picker
+                  selectedValue={relStatus}
+                  onValueChange={(itemValue) =>
+                    handleRelationshipStatusChange(itemValue)
+                  }
+                >
+                  {relationshipStatuses.map((status, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={status.label}
+                      value={status.value}
+                    />
+                  ))}
+                </Picker>
+              )}
             </View>
           </View>
         </View>
@@ -173,18 +238,35 @@ export default function Profile() {
         <View style={styles.legendContainer}>
           <Text style={styles.legendText}>Bio</Text>
           <View style={styles.inputBoxBig}>
-            <TextInput
-              style={styles.inputTextBig}
-              value={profile?.description}
-            ></TextInput>
+            {!editMode && (
+              <Text style={styles.inputTextBig}>{profile?.description}</Text>
+            )}
+
+            {editMode && (
+              <TextInput
+                style={styles.inputTextBig}
+                value={updatedBio}
+                onChangeText={(text) => setUpdatedBio(text)}
+              />
+            )}
           </View>
         </View>
 
-        <View style={styles.editButton}>
-          <Pressable onPress={() => console.log("RAY")}>
-            <Text style={styles.editButtonText}>Rediger</Text>
-          </Pressable>
-        </View>
+        {!editMode && (
+          <View style={styles.editButton}>
+            <Pressable onPress={toggleEditMode}>
+              <Text style={styles.editButtonText}>Rediger</Text>
+            </Pressable>
+          </View>
+        )}
+
+        {editMode && (
+          <View style={styles.saveButton}>
+            <Pressable onPress={updateProfile}>
+              <Text style={styles.saveButtonText}>Lagre</Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     </View>
   );

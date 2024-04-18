@@ -102,6 +102,8 @@ export const styles = StyleSheet.create({
   inputTextBig: {
     paddingTop: verticalScale(10),
     paddingLeft: horizontalScale(15),
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(18),
   },
 
   inputText: {
@@ -119,8 +121,26 @@ export const styles = StyleSheet.create({
     marginBottom: verticalScale(20),
   },
 
+  saveButton: {
+    borderRadius: moderateScale(10),
+    borderColor: colors.primary,
+    borderWidth: moderateScale(3),
+    backgroundColor: colors.foreground,
+    justifyContent: "center",
+    height: verticalScale(50),
+    width: horizontalScale(170),
+    marginBottom: verticalScale(20),
+  },
+
   editButtonText: {
     color: colors.foreground,
+    textAlign: "center",
+    fontSize: moderateScale(22),
+    fontFamily: "BalooBold",
+  },
+
+  saveButtonText: {
+    color: colors.primary,
     textAlign: "center",
     fontSize: moderateScale(22),
     fontFamily: "BalooBold",
