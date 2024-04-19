@@ -180,6 +180,7 @@ export default function JoinedFeed() {
                   handleButtonPress(eventRelations[event.eventID])
                 }
                 host={isHost(eventRelations[event.eventID])}
+                event={event}
               />
             ))
           ) : (

@@ -42,6 +42,7 @@ export default function Auth({ trigger, setTrigger }: AuthProps) {
       setToken(response.token);
       setUserID(response.userID);
     } catch (error) {
+      console.log(error);
       Alert.alert(
         "Ugyldig Login",
         "Mail addressen eller passord er feil, eller finnes ikke!"

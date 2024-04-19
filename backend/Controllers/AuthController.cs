@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
             await _userService.CreateUser(user);
             var token = _tokenService.CreateToken(user);
 
-            return Ok(new AuthResponse { Token = token,  UserID = user.UserID });
+            return Ok(new AuthResponse { Token = token, UserID = user.UserID });
         }
         catch (InvalidOperationException ex)
         {

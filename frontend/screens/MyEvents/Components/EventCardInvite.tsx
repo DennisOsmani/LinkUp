@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { styles } from "./EventCardInviteStyles";
 import { Feather } from "@expo/vector-icons";
@@ -26,7 +26,7 @@ const EventCardInvite = ({
   onJoinPress,
   onDeclinePress,
 }: EventCardInviteProps) => {
-  const MAX_LETTERS_DESCRIPTION = 90;
+  const MAX_LETTERS_DESCRIPTION = 70;
   const MAX_LETTERS_TITLE = 16;
 
   const truncateDescription = (text: string, maxLetters: number) => {

@@ -3,7 +3,6 @@ using Repositories;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Exceptions;
-using Enums;
 
 namespace Services;
 
@@ -49,7 +48,7 @@ public class UserService : IUserService
 
     public async Task<ICollection<User?>> GetUserFriends(string userId)
     {
-        if (string.IsNullOrEmpty(userId)) 
+        if (string.IsNullOrEmpty(userId))
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
@@ -62,11 +61,11 @@ public class UserService : IUserService
         }
 
         return await _userRelRepo.GetUserFriends(user.UserID);
-    } 
+    }
 
     public async Task<ICollection<User?>> GetPendingFriendRequests(string userId)
     {
-        if (string.IsNullOrEmpty(userId)) 
+        if (string.IsNullOrEmpty(userId))
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
@@ -79,11 +78,11 @@ public class UserService : IUserService
         }
 
         return await _userRelRepo.GetPendingFriendRequests(user.UserID);
-    } 
+    }
 
     public async Task<ICollection<User?>> GetUserFriendRequests(string userId)
     {
-        if (string.IsNullOrEmpty(userId)) 
+        if (string.IsNullOrEmpty(userId))
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
@@ -96,11 +95,11 @@ public class UserService : IUserService
         }
 
         return await _userRelRepo.GetUserFriendRequests(user.UserID);
-    } 
+    }
 
     public async Task<ICollection<User?>> GetUserBlocks(string userId)
     {
-         if (string.IsNullOrEmpty(userId)) 
+        if (string.IsNullOrEmpty(userId))
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
@@ -153,7 +152,7 @@ public class UserService : IUserService
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
-        
+
         User? user = await GetUser(userId);
 
         ICollection<Event?> eventsCreated = await _eventRepo.GetCreatedEvents(userId);
