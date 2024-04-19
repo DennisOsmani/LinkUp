@@ -232,6 +232,22 @@ public class EventRepository
         }
     }
 
+
+    public async Task<ICollection<EventRelation>> GetEventRelationsFromEvent(int eventId)
+    {
+        try
+        {
+            return await _context.EventRelations
+                .Where(e => e.EventID == eventId)
+                .Include(e => e.User)
+                .ToListAsync();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
+    }
+
     public Visibility StringToVisibilityEnum(string visibility)
     {
         Visibility eventVisibility;

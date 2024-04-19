@@ -14,7 +14,7 @@ import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { IEvent, ILocation } from "../../interfaces/ModelInterfaces";
+import { IEventDTO, ILocation } from "../../interfaces/ModelInterfaces";
 import { createEvent } from "../../api/EventAPI";
 import LocationModal from "./components/LocationModal/LocationModal";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
@@ -22,7 +22,8 @@ import InviteModal from "./components/InviteModal/InviteModal";
 import { colors } from "../../styles/colors";
 import { inviteUsersForEvent } from "../../api/EventRelationAPI";
 
-const date = new Date();
+const dateStart = new Date();
+const dateEnd = new Date();
 
 export default function CreateEvent() {
   const [selectedVisibility, setSelectedVisibility] = useState({
@@ -37,11 +38,11 @@ export default function CreateEvent() {
     "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
   );
 
-  const [event, setEvent] = useState<IEvent>({
+  const [event, setEvent] = useState<IEventDTO>({
     eventName: "",
     eventDescription: "",
-    eventDateTimeStart: date.toISOString(),
-    eventDateTimeEnd: date.toISOString(),
+    eventDateTimeStart: dateStart.toISOString(),
+    eventDateTimeEnd: dateEnd.toISOString(),
     visibility: 0,
     inviteURL: "",
     frontImage:
@@ -64,7 +65,7 @@ export default function CreateEvent() {
     selectedDate?: Date | undefined
   ) => {
     event;
-    setEvent((event: IEvent) => ({
+    setEvent((event: IEventDTO) => ({
       ...event,
       eventDateTimeStart: selectedDate
         ? selectedDate.toISOString()
@@ -77,7 +78,7 @@ export default function CreateEvent() {
     selectedDate?: Date | undefined
   ) => {
     event;
-    setEvent((event: IEvent) => ({
+    setEvent((event: IEventDTO) => ({
       ...event,
       eventDateTimeEnd: selectedDate
         ? selectedDate.toISOString()
@@ -140,9 +141,12 @@ export default function CreateEvent() {
         eventImageUrl = await uploadImage(eventImageUri, token);
       }
 
-      const eventToCreate: IEvent = {
+      const eventToCreate: IEventDTO = {
         ...event,
+        eventDateTimeStart: event.eventDateTimeStart.replace("Z", ""),
+        eventDateTimeEnd: event.eventDateTimeEnd.replace("Z", ""),
         location: location,
+        frontImage: eventImageUrl,
       };
 
       eventId = await createEvent(eventToCreate, token);
@@ -150,7 +154,6 @@ export default function CreateEvent() {
       console.log("EVENT JUST CREATED ID: " + eventId);
     } catch (error) {
       Alert.alert("Noe gikk galt", "Prøv igjen senere.");
-      console.log("SÅ HER");
       console.error(error);
       return;
     }
@@ -209,7 +212,7 @@ export default function CreateEvent() {
           <TextInput
             placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             onChangeText={(input) =>
-              setEvent((event: IEvent) => ({ ...event, eventName: input }))
+              setEvent((event: IEventDTO) => ({ ...event, eventName: input }))
             }
             placeholder="Navn på Event"
             style={styles.inputBox}
@@ -219,7 +222,7 @@ export default function CreateEvent() {
           <View style={styles.datetimepickerBox}>
             <Text style={styles.datetimepickerText}>Event start</Text>
             <DateTimePicker
-              value={date}
+              value={new Date(event.eventDateTimeStart.toString())}
               mode={"datetime"}
               onChange={onChangeStart}
             />
@@ -227,7 +230,7 @@ export default function CreateEvent() {
           <View style={styles.datetimepickerBox}>
             <Text style={styles.datetimepickerText}>Event slutt</Text>
             <DateTimePicker
-              value={date}
+              value={new Date(event.eventDateTimeEnd.toString())}
               mode={"datetime"}
               onChange={onChangeEnd}
             />
@@ -297,7 +300,7 @@ export default function CreateEvent() {
           <TextInput
             placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
             onChangeText={(input) =>
-              setEvent((event: IEvent) => ({
+              setEvent((event: IEventDTO) => ({
                 ...event,
                 eventDescription: input,
               }))

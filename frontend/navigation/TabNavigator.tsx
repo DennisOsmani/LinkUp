@@ -8,8 +8,6 @@ import Events from "../screens/MyEvents/Events";
 import People from "../screens/People/People";
 import { Feather } from "@expo/vector-icons";
 import styles from "./TabNavigatorStyles";
-import { useState } from "react";
-import { View } from "react-native";
 
 const Tab = createBottomTabNavigator<NavigationTypeList>();
 

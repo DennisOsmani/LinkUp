@@ -1,4 +1,4 @@
-import { TextInput, View, ScrollView, Alert } from "react-native";
+import { TextInput, View, ScrollView } from "react-native";
 import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import { UserCardPending } from "../../../components/UserCard/UserCardPending";

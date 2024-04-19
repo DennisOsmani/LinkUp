@@ -53,6 +53,21 @@ export interface IEvent {
   eventRelations?: [];
 }
 
+export interface IEventDTO {
+  eventID?: number;
+  eventName: string;
+  eventDescription: string;
+  eventDateTimeStart: string;
+  eventDateTimeEnd: string;
+  visibility: number;
+  inviteURL: string;
+  frontImage?: string;
+  minCapacity?: string;
+  maxCapacity?: string;
+  locationID?: number;
+  location?: ILocation;
+}
+
 export interface ILocation {
   locationID?: number;
   address?: string;
@@ -92,4 +107,34 @@ export interface IUserRelationDTO {
   userId: string;
   otherUserId: string;
   type: UserRelationType;
+}
+
+export interface IEventRelationDTO {
+  eventId: number | undefined;
+  userId: string;
+  participation: number;
+  eventRole: number;
+}
+
+export interface IUserWithEventParticipationDTO {
+  userID: string;
+  imageUrl: string;
+  firstname: string;
+  lastname: string;
+  dateBorn: Date;
+  participation: EventRelationParticipation;
+  role: EventRole;
+}
+
+export enum EventRelationParticipation {
+  JOINED,
+  DECLINED,
+  PENDING,
+  BAILED,
+}
+
+export enum EventRole {
+  CREATOR,
+  HOST,
+  PARTICIPANT,
 }

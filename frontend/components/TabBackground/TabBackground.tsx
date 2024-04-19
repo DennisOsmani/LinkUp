@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
 import { styles } from "./TabBackgroundStyles";
+import { Feather } from "@expo/vector-icons";
 
 interface TabBackgroundProps {
   firstTab: string;
   secondTab: string;
   children: React.ReactNode;
+
+  backButton?: boolean;
+  handleBack?: () => void;
 }
 
 export function TabBackground({
   firstTab,
   secondTab,
-  children
+  children,
+  backButton,
+  handleBack,
 }: TabBackgroundProps) {
   const [activeTab, setActiveTab] = useState<number>(1);
 
@@ -22,13 +28,18 @@ export function TabBackground({
   return (
     <View style={styles.backgroundCard}>
       <View style={styles.tabWrapper}>
+        {backButton && (
+          <Pressable onPress={handleBack} style={styles.backButton}>
+            <Feather name="chevron-left" color="white" size={50} />
+          </Pressable>
+        )}
         {[firstTab, secondTab].map((tabname, index) => (
           <Pressable key={tabname} onPress={() => setActiveTab(index + 1)}>
             <View style={styles.tabContainer}>
               <Text
                 style={{
                   ...styles.tabText,
-                  opacity: isActive(index + 1) ? 1 : 0.5
+                  opacity: isActive(index + 1) ? 1 : 0.5,
                 }}
               >
                 {tabname}
@@ -38,7 +49,7 @@ export function TabBackground({
                   ...styles.tabUnderline,
                   backgroundColor: isActive(index + 1)
                     ? "white"
-                    : "rgba(255, 255, 255, 0.5)"
+                    : "rgba(255, 255, 255, 0.5)",
                 }}
               />
             </View>
