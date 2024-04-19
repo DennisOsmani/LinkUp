@@ -13,20 +13,16 @@ import { Picker } from "@react-native-picker/picker";
 // - Farge rundt border på de som er endret
 // - Kun endre tlf, Status, Bio og Bilde
 // - Shadow rundt profilbilde
-// - VALIDATION of INPUT
+// - VALIDATION of INPUT (red when edited and worng, green when correct)
 
 export default function Profile() {
   const { token } = useTokenProvider();
   const isFocused = useIsFocused();
   const [profile, setProfile] = useState<IUser>();
   const [editMode, setEditMode] = useState(false);
-  const [relStatus, setRelStatus] = useState(profile?.relationshipStatus);
-  const [updatedBio, setUpdatedBio] = useState<string>(
-    profile?.description ? profile.description : ""
-  );
-  const [updatedPhone, setUpdatedPhone] = useState<string>(
-    profile?.phone ? profile.phone : ""
-  );
+  const [relStatus, setRelStatus] = useState<number>();
+  const [updatedBio, setUpdatedBio] = useState<string>();
+  const [updatedPhone, setUpdatedPhone] = useState<string>();
 
   useEffect(() => {
     fetchProfile();
@@ -35,6 +31,9 @@ export default function Profile() {
   const fetchProfile = async () => {
     const user = await getUser(token);
     setProfile(user);
+    setRelStatus(profile?.relationshipStatus);
+    setUpdatedBio(profile?.description ? profile.description : "");
+    setUpdatedPhone(profile?.phone ? profile.phone : "");
     setEditMode(false); //?? for å nullstille siden
   };
 
@@ -42,22 +41,19 @@ export default function Profile() {
     setEditMode(!editMode);
   };
 
-  // Funker å oppdatere med tomme verdier..., se på dette
-  // Få verdiene i updatePhone og updateBio til å nli satt til brukerens verdi fra fetchProfile
-  // altså slik at de vises når man går inn i editMode!!
-
   const updateProfile = async () => {
     try {
       const updatedUser: IUser = {
         ...profile!,
         phone: updatedPhone,
-        relationshipStatus: relStatus,
+        relationshipStatus: Number.parseInt(relStatus?.toString()!),
         description: updatedBio,
       };
 
       console.log(updatedUser);
       const newUser = await UpdateUser(updatedUser, token);
 
+      console.log(typeof newUser.relationshipStatus);
       setProfile(newUser);
       setEditMode(false);
     } catch (error) {
@@ -65,15 +61,9 @@ export default function Profile() {
     }
   };
 
-  // const handleProfileChange = (newValue: string, field: keyof IUser) => {
-  //   setProfile((prevState) => {
-  //     if (!prevState) return undefined;
-  //     return { ...prevState, [field]: newValue };
-  //   });
-  // };
-
   const handleRelationshipStatusChange = (status: number) => {
     setRelStatus(status);
+    console.log(relStatus + "mordi");
     setProfile((prevState) => {
       if (!prevState) return undefined;
       return { ...prevState, relationshipStatus: status };
@@ -103,8 +93,8 @@ export default function Profile() {
     { label: "Komplisert", value: 3 },
   ];
 
-  const defineRelationshipStatus = (relStatus: string) => {
-    switch (relStatus) {
+  const defineRelationshipStatus = (relStatuses: string) => {
+    switch (relStatuses) {
       case "0":
         return "Gift";
       case "1":
@@ -130,7 +120,7 @@ export default function Profile() {
           </Pressable>
         )}
         <Image
-          style={styles.imageContainer}
+          style={styles.image}
           source={require("../../assets/cbum.jpg")}
         ></Image>
       </View>

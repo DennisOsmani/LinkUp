@@ -22,6 +22,14 @@ export const styles = StyleSheet.create({
     marginBottom: verticalScale(20),
   },
 
+  image: {
+    borderRadius: moderateScale(100),
+    width: horizontalScale(180),
+    height: verticalScale(180),
+    borderWidth: moderateScale(3),
+    borderColor: colors.foreground,
+  },
+
   uploadContainer: {
     position: "absolute",
     right: horizontalScale(7),

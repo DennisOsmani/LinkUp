@@ -13,3 +13,7 @@
 
 - En bruker skal også velge kjønn og fødselsdato når man registrerer seg
 - To dropdown varianter.
+
+## Profile
+
+- Se TODO øverst i klassen

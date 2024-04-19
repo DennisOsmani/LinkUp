@@ -32,7 +32,7 @@ export interface IUser {
   eventsCreated?: number;
   eventsJoined?: number;
   eventBails?: number;
-  role?: number;
+  role: number;
   userRelationsAsFirst?: [];
   userRelationsAsSecond?: [];
   eventRelations?: [];
