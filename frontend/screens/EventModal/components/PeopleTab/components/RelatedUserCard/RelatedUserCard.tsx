@@ -1,14 +1,26 @@
-import { IUser } from "../../../../../../interfaces/ModelInterfaces";
+import {
+  EventRelationParticipation,
+  IUserWithEventParticipationDTO,
+} from "../../../../../../interfaces/ModelInterfaces";
 import { View, Text, Image } from "react-native";
 import { styles } from "./RelatedUserCardStyles";
 import { Feather } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import { colors } from "../../../../../../styles/colors";
 
 interface RelatedUserCardProps {
-  user: IUser;
+  user: IUserWithEventParticipationDTO;
 }
 
 export default function RelatedUserCard({ user }: RelatedUserCardProps) {
-  const calculateAge = (dateBorn: string) => {
+  const [participationColor, setParticipationColor] = useState<string>("");
+  const [participationText, setParticipationText] = useState<string>("");
+
+  useEffect(() => {
+    parseEventParticipation();
+  }, []);
+
+  const calculateAge = (dateBorn: string): number => {
     const birthDate = new Date(dateBorn);
 
     const today = new Date();
@@ -21,6 +33,27 @@ export default function RelatedUserCard({ user }: RelatedUserCardProps) {
       age--;
     }
     return age;
+  };
+
+  const parseEventParticipation = (): void => {
+    switch (user.participation) {
+      case EventRelationParticipation.JOINED:
+        setParticipationColor(colors.green);
+        setParticipationText("Kommer");
+        break;
+      case EventRelationParticipation.DECLINED:
+        setParticipationColor(colors.red);
+        setParticipationText("Kommer ikke");
+        break;
+      case EventRelationParticipation.PENDING:
+        setParticipationColor(colors.primary);
+        setParticipationText("Invitert");
+        break;
+      case EventRelationParticipation.BAILED:
+        setParticipationColor(colors.red);
+        setParticipationText("Bailed");
+        break;
+    }
   };
 
   return (
@@ -42,11 +75,18 @@ export default function RelatedUserCard({ user }: RelatedUserCardProps) {
               {user.firstname + " " + user.lastname}
             </Text>
           </View>
-          <Text style={styles.age}>{calculateAge(user.dateBorn)} år</Text>
+          <Text style={styles.age}>
+            {calculateAge(user.dateBorn.toString())} år
+          </Text>
         </View>
         <View style={styles.secondLine}>
-          <View style={styles.participationIcon}>
-            <Text style={styles.participationText}>participation</Text>
+          <View
+            style={{
+              ...styles.participationIcon,
+              backgroundColor: participationColor,
+            }}
+          >
+            <Text style={styles.participationText}>{participationText}</Text>
           </View>
         </View>
       </View>

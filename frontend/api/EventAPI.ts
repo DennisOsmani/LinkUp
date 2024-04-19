@@ -1,4 +1,9 @@
-import { IEvent, IEventDTO, IUser } from "../interfaces/ModelInterfaces";
+import {
+  IEvent,
+  IEventDTO,
+  IUser,
+  IUserWithEventParticipationDTO,
+} from "../interfaces/ModelInterfaces";
 import { URL_BASE, EVENT_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENT_PATH}`;
@@ -196,5 +201,31 @@ export const deleteEvent = async (eventId: number, token: string) => {
     return response.status;
   } catch (error) {
     console.error("Error while fetching deleteEvent " + error);
+  }
+};
+
+export const GetEventRelationsFromEvent = async (
+  eventId: number,
+  token: string
+) => {
+  try {
+    const response = await fetch(`${THIS_URL}/eventrelations/${eventId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "Error in GetEventRelationsFromEvent response: " + response.status
+      );
+    }
+
+    const data: IUserWithEventParticipationDTO[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching GetEventRelationsFromEvent" + error);
   }
 };

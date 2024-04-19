@@ -70,20 +70,19 @@ export const styles = StyleSheet.create({
 
   participationIcon: {
     borderRadius: moderateScale(10),
-    backgroundColor: "red",
     justifyContent: "center",
     alignItems: "center",
     width: horizontalScale(130),
-    height: verticalScale(27),
+    height: verticalScale(30),
   },
 
   participationText: {
     fontFamily: "BalooBold",
     fontSize: moderateScale(18),
     lineHeight: moderateScale(20),
-    color: "white",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: verticalScale(7),
+    marginTop: verticalScale(8),
+    color: "white",
   },
 });

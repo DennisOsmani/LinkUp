@@ -1,16 +1,28 @@
-import { View, ScrollView, TextInput } from "react-native";
+import { View, ScrollView, TextInput, ActivityIndicator } from "react-native";
 import { styles } from "./PeopleTabStyles";
 import { colors } from "../../../../styles/colors";
 import { Feather } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { IUser } from "../../../../interfaces/ModelInterfaces";
-import { GetUserFriends } from "../../../../api/UserAPI";
+import {
+  IEvent,
+  IUserWithEventParticipationDTO,
+} from "../../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../../providers/TokenProvider";
 import RelatedUserCard from "./components/RelatedUserCard/RelatedUserCard";
+import { GetEventRelationsFromEvent } from "../../../../api/EventAPI";
 
-export function PeopleTab() {
-  const [relatedUsers, setRelatedUsers] = useState<IUser[]>([]);
-  const [searchResults, setSearchResults] = useState<IUser[]>([]);
+interface PeopleTabProps {
+  event: IEvent | null;
+}
+
+export function PeopleTab({ event }: PeopleTabProps) {
+  const [relatedUsers, setRelatedUsers] = useState<
+    IUserWithEventParticipationDTO[] | undefined
+  >([]);
+  const [searchResults, setSearchResults] = useState<
+    IUserWithEventParticipationDTO[] | undefined
+  >([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const { token } = useTokenProvider();
 
   useEffect(() => {
@@ -18,14 +30,19 @@ export function PeopleTab() {
   }, []);
 
   const fetchRelatedUsers = async () => {
-    const response: IUser[] = await GetUserFriends(token);
+    if (!event) return;
+
+    const response: IUserWithEventParticipationDTO[] | undefined =
+      await GetEventRelationsFromEvent(event.eventID, token);
     setRelatedUsers(response);
     setSearchResults(response);
+    setLoading(false);
   };
 
   const handleSearchInput = (input: string) => {
+    if (!relatedUsers) return;
     setSearchResults(
-      relatedUsers.filter((user: IUser) =>
+      relatedUsers.filter((user: IUserWithEventParticipationDTO) =>
         (user.firstname + user.lastname)
           .toUpperCase()
           .replaceAll(" ", "")
@@ -33,6 +50,14 @@ export function PeopleTab() {
       )
     );
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#5A5DF0" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.tabContainer}>
@@ -53,9 +78,10 @@ export function PeopleTab() {
 
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.scrollTabContainer}>
-          {searchResults.map((user: IUser) => (
-            <RelatedUserCard user={user} />
-          ))}
+          {searchResults &&
+            searchResults.map((user: IUserWithEventParticipationDTO) => (
+              <RelatedUserCard user={user} />
+            ))}
         </View>
       </ScrollView>
     </View>

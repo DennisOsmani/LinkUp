@@ -7,6 +7,13 @@ import {
 import { colors } from "../../../../styles/colors";
 
 export const styles = StyleSheet.create({
+  loader: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   tabContainer: {
     width: "100%",
     alignItems: "center",

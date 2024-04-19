@@ -115,3 +115,26 @@ export interface IEventRelationDTO {
   participation: number;
   eventRole: number;
 }
+
+export interface IUserWithEventParticipationDTO {
+  userID: string;
+  imageUrl: string;
+  firstname: string;
+  lastname: string;
+  dateBorn: Date;
+  participation: EventRelationParticipation;
+  role: EventRole;
+}
+
+export enum EventRelationParticipation {
+  JOINED,
+  DECLINED,
+  PENDING,
+  BAILED,
+}
+
+export enum EventRole {
+  CREATOR,
+  HOST,
+  PARTICIPANT,
+}
