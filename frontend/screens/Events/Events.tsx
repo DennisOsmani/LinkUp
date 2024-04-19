@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { styles } from "./EventsStyles";
-import { getEventsInCity, getUserJoinedEvents } from "../../api/EventAPI";
+import { getUserJoinedEvents } from "../../api/EventAPI";
 import { useLocation } from "../../providers/LocationProvider";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import { useEffect, useState } from "react";

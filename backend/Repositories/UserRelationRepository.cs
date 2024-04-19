@@ -70,6 +70,7 @@ public class UserRelationRepository
         }
     }
 
+    // Needed in one specific way (Amund Fremming author)
     public async Task<UserRelation?> GetOneUserRelation(string userId, string otherUserId)
     {
         try
@@ -81,6 +82,23 @@ public class UserRelationRepository
             return userRelation;
         }
         catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
+    }
+
+    public async Task<UserRelation?> GetUserRelation(string userId, string otherUserId)
+    {
+        try
+        {
+            UserRelation? userRelation = await _context.UserRelations
+                .Where(ur => (ur.User_first_ID == userId && ur.User_second_ID == otherUserId) 
+                || (ur.User_first_ID == otherUserId && ur.User_second_ID == userId))
+                .FirstOrDefaultAsync();
+
+            return userRelation;
+        }
+        catch(InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }
@@ -118,7 +136,7 @@ public class UserRelationRepository
         }
     }
 
-    // The Users this user has blocked!
+    // The Users Logged in user has blocked!
     public async Task<ICollection<User?>> GetUserBlocks(string userId)
     {
         try
@@ -137,6 +155,25 @@ public class UserRelationRepository
         }
     }
 
+    // The Users that have blocekd the logged in user
+    public async Task<ICollection<User?>> GetUsersBlockedLoggedInUser(string userId)
+    {
+        try
+        {
+            return await _context.UserRelations
+                .Where(
+                    ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.BLOCKED_SECOND_FIRST)
+                    || (ur.User_second_ID == userId && ur.Type == UserRelationType.BLOCKED_FIRST_SECOND)
+                )
+                .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+                .ToListAsync();
+        }
+        catch(InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
+    }
+
     public async Task<ICollection<User?>> GetUserFriendRequests(string userId)
     {
         try
@@ -150,6 +187,25 @@ public class UserRelationRepository
                 .ToListAsync();
         }
         catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
+        }
+    }
+
+  // Gets the users sent friend request that is pending
+    public async Task<ICollection<User?>> GetPendingFriendRequests(string userId)
+    {
+        try 
+        {
+            return await _context.UserRelations
+                .Where(
+                    ur => (ur.User_first_ID == userId && ur.Type == UserRelationType.PENDING_FIRST_SECOND)
+                    || (ur.User_second_ID == userId && ur.Type == UserRelationType.PENDING_SECOND_FIRST)
+                )
+                .Select(ur => ur.User_first_ID == userId ? ur.User_second : ur.User_first)
+                .ToListAsync();
+        }
+         catch(InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (UserRelationRepo)");
         }

@@ -6,3 +6,4 @@
   - resulting in not blocking a user from getting their data
   - Also need to clear the token when a user log out
 - Er ikke mulig å slette invites når man går tilbake til InviteModal
+- Backend methods for returning events for different feeds needs to check time, time is now bugged

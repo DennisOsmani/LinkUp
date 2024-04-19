@@ -1,4 +1,4 @@
-namespace Auth;
+namespace Models;
 
 public class AuthResponse
 {

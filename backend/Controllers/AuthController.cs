@@ -2,7 +2,6 @@ using Services;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Auth;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using Exceptions;
@@ -50,7 +49,7 @@ public class AuthController : ControllerBase
             await _userService.CreateUser(user);
             var token = _tokenService.CreateToken(user);
 
-            return Ok(new AuthResponse { Token = token });
+            return Ok(new AuthResponse { Token = token,  UserID = user.UserID });
         }
         catch (InvalidOperationException ex)
         {

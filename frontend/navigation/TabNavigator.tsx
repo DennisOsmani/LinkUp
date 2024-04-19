@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import CreateEvent from "../screens/CreateEvent/CreateEvent";
 import Feed from "../screens/Feed/Feed";
 import Profile from "../screens/Profile/Profile";
-import Events from "../screens/Events/Events";
+import Events from "../screens/MyEvents/Events";
 import People from "../screens/People/People";
 import { Feather } from "@expo/vector-icons";
 import styles from "./TabNavigatorStyles";

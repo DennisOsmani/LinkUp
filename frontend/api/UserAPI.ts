@@ -6,7 +6,6 @@ const THIS_URL: string = `${URL_BASE}${USER_PATH}`;
 export async function SearchUsers(searchString: string, token: string) {
   try {
     const response = await fetch(
-
       `${THIS_URL}/search/?searchString=${searchString}`,
       {
         method: "GET",
@@ -75,6 +74,75 @@ export async function GetUserFriends(token: string, userId?: string) {
     return data;
   } catch (error) {
     throw new Error("Error while fetching in getUserFriends " + error);
+  }
+}
+
+export async function GetPendingFriendRequests(token: string, userId?: string) {
+  try {
+    const response = await fetch(`${THIS_URL}/pending`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "Error in getPendingFriendRequests response: " + response.status
+      );
+    }
+
+    const data: IUser[] = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(
+      "Error while fetching in getPendingFriendRequests " + error
+    );
+  }
+}
+
+export async function GetUserFriendRequests(token: string, userId?: string) {
+  try {
+    const response = await fetch(`${THIS_URL}/request`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "Error in GetUserFriendRequests response: " + response.status
+      );
+    }
+
+    const data: IUser[] = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error("Error while fetching in GetUserFriendRequests " + error);
+  }
+}
+
+export async function GetUserBlocks(token: string, userId?: string) {
+  try {
+    const response = await fetch(`${THIS_URL}/blocked`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error in GetUserBlocks response: " + response.status);
+    }
+
+    const data: IUser[] = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error("Error while fetching in GetUserBlocks " + error);
   }
 }
 

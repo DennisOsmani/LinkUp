@@ -47,7 +47,7 @@ public interface IEventService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
-    Task<ICollection<Event>> GetUserEventInvites(string userId);
+    Task<ICollection<Event?>> GetUserEventInvites(string userId);
 
     /// <summary>
     /// Fetches a list of the Events the user has joined, aka status accepted
@@ -55,7 +55,7 @@ public interface IEventService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
-    Task<ICollection<Event>> GetUserJoinedEvents(string userId);
+    Task<ICollection<Event?>> GetUserJoinedEvents(string userId);
 
     /// <summary>
     /// Creates a new Event and sets the userrole as CREATOR.

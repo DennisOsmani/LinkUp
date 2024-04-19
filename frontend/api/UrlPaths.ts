@@ -1,4 +1,4 @@
-export const URL_BASE = "http://localhost:5173/api";
+export const URL_BASE = "https://localhost:5173/api";
 
 export const EVENT_PATH = "/event";
 
