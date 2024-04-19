@@ -15,6 +15,7 @@ import {
   UpdateUserRelationType,
   DeleteUserRelation,
 } from "../../../api/UserRelationAPI";
+import OtherProfile from "../../OtherProfile/OtherProfile";
 
 // TODO
 // - Profilbilde (search & friends)
@@ -26,6 +27,10 @@ export default function FriendsPeople() {
   const [filteredFriends, setFilteredFriends] = useState<IUser[]>([]);
   const [allFriendRequests, setAllFriendRequests] = useState<IUser[]>([]);
   const { token, userID } = useTokenProvider();
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedProfile, setSelectedProfile] = useState<IUser | undefined>(
+    undefined
+  );
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -126,45 +131,61 @@ export default function FriendsPeople() {
     setFilteredFriends(allFriends);
   };
 
+  const handleUserCardPressed = (profile: IUser) => {
+    setSelectedProfile(profile);
+    setModalVisible(true);
+  };
+
   return (
-    <ScrollView>
-      <View style={styles.contentContainer}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchBar}
-            placeholder="Søk"
-            value={searchText}
-            onChangeText={handleSearchTextChange}
-          ></TextInput>
-          <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+    <>
+      <OtherProfile
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        profile={selectedProfile!}
+      ></OtherProfile>
+
+      <ScrollView>
+        <View style={styles.contentContainer}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Søk"
+              value={searchText}
+              onChangeText={handleSearchTextChange}
+            ></TextInput>
+            <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+          </View>
+
+          {allFriendRequests &&
+            allFriendRequests.map((user: IUser, index: number) => (
+              <UserCardAnswer
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                }}
+                onPressAccept={() => handleAcceptRequest(user.userID)}
+                onPressReject={() => handleRejectRequest(user.userID)}
+                onPressCard={() => handleUserCardPressed(user)}
+              ></UserCardAnswer>
+            ))}
+
+          {filteredFriends &&
+            filteredFriends.map((user: IUser, index: number) => (
+              <UserCardFriends
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                }}
+                onPressCard={() => handleUserCardPressed(user)}
+                // The modal shows a remove friend button when FriendCard is pressed
+              ></UserCardFriends>
+            ))}
         </View>
-
-        {allFriendRequests &&
-          allFriendRequests.map((user: IUser, index: number) => (
-            <UserCardAnswer
-              key={index}
-              userCardInfo={{
-                firstname: user.firstname,
-                lastname: user.lastname,
-                age: calculateAge(user.dateBorn),
-              }}
-              onPressAccept={() => handleAcceptRequest(user.userID)}
-              onPressReject={() => handleRejectRequest(user.userID)}
-            ></UserCardAnswer>
-          ))}
-
-        {filteredFriends &&
-          filteredFriends.map((user: IUser, index: number) => (
-            <UserCardFriends
-              key={index}
-              userCardInfo={{
-                firstname: user.firstname,
-                lastname: user.lastname,
-                age: calculateAge(user.dateBorn),
-              }}
-            ></UserCardFriends>
-          ))}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 }

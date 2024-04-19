@@ -1,4 +1,4 @@
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, Pressable } from "react-native";
 import styles from "./UserCardStyles";
 import { Feather } from "@expo/vector-icons";
 
@@ -14,11 +14,12 @@ interface UserCardInfo {
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
+  onPressCard: () => void;
 }
 
-export function UserCardFriends({ userCardInfo }: UserCardProps) {
+export function UserCardFriends({ userCardInfo, onPressCard }: UserCardProps) {
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={onPressCard}>
       <View style={styles.imageContainer}>
         <Image
           source={require("../../assets/cbum.jpg")}
@@ -35,6 +36,6 @@ export function UserCardFriends({ userCardInfo }: UserCardProps) {
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }

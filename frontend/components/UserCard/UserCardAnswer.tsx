@@ -1,6 +1,7 @@
 import { View, Image, Text, Pressable } from "react-native";
 import styles from "./UserCardStyles";
 import { Feather } from "@expo/vector-icons";
+import { IUser } from "../../interfaces/ModelInterfaces";
 
 // For search in People Screen
 interface UserCardInfo {
@@ -14,15 +15,17 @@ interface UserCardProps {
   userCardInfo: UserCardInfo;
   onPressAccept: () => void;
   onPressReject: () => void;
+  onPressCard: () => void;
 }
 
 export function UserCardAnswer({
   userCardInfo,
   onPressAccept,
   onPressReject,
+  onPressCard,
 }: UserCardProps) {
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={onPressCard}>
       <View style={styles.imageContainer}>
         <Image
           source={require("../../assets/cbum.jpg")}
@@ -47,6 +50,6 @@ export function UserCardAnswer({
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }

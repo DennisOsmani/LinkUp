@@ -12,11 +12,12 @@ interface UserCardInfo {
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
+  onPressCard: () => void;
 }
 
-export function UserCardPending({ userCardInfo }: UserCardProps) {
+export function UserCardPending({ userCardInfo, onPressCard }: UserCardProps) {
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={onPressCard}>
       <View style={styles.imageContainer}>
         <Image
           source={require("../../assets/cbum.jpg")}
@@ -38,6 +39,6 @@ export function UserCardPending({ userCardInfo }: UserCardProps) {
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }

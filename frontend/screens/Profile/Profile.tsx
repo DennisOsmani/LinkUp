@@ -53,7 +53,6 @@ export default function Profile() {
       console.log(updatedUser);
       const newUser = await UpdateUser(updatedUser, token);
 
-      console.log(typeof newUser.relationshipStatus);
       setProfile(newUser);
       setEditMode(false);
     } catch (error) {
@@ -63,7 +62,6 @@ export default function Profile() {
 
   const handleRelationshipStatusChange = (status: number) => {
     setRelStatus(status);
-    console.log(relStatus + "mordi");
     setProfile((prevState) => {
       if (!prevState) return undefined;
       return { ...prevState, relationshipStatus: status };

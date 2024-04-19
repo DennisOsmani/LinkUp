@@ -13,11 +13,16 @@ interface UserCardInfo {
 interface UserCardProps {
   userCardInfo: UserCardInfo;
   onPressButton: () => void;
+  onPressCard: () => void;
 }
 
-export function UserCardSearch({ userCardInfo, onPressButton }: UserCardProps) {
+export function UserCardSearch({
+  userCardInfo,
+  onPressButton,
+  onPressCard,
+}: UserCardProps) {
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={onPressCard}>
       <View style={styles.imageContainer}>
         <Image
           source={require("../../assets/cbum.jpg")}
@@ -39,6 +44,6 @@ export function UserCardSearch({ userCardInfo, onPressButton }: UserCardProps) {
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
