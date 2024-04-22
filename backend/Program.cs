@@ -101,7 +101,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-else
+else // REMOVE IN PROD!
 {
     app.UseSwagger();
     app.UseSwaggerUI();
