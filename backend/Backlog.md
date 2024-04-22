@@ -8,3 +8,5 @@
 ## UserRelation
 
 - Fiks transaksjoner for å opprette og oppdater bruker relasjoner..
+
+- Test
