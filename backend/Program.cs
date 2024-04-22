@@ -48,7 +48,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Controller and Service config
-builder.Services.AddControllers().AddJsonOptions(options =>         
+builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;     // Ignores relation cycles!!! Important!
 });
@@ -97,6 +97,11 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+else
 {
     app.UseSwagger();
     app.UseSwaggerUI();
