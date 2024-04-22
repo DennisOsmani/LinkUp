@@ -17,3 +17,11 @@
 ## Profile
 
 - Se TODO øverst i klassen
+
+## Navbar
+
+- Endre fra engelsk til norsk
+
+## Generelt
+
+- Bruk av styling, samme størrelse på alle komponenter
