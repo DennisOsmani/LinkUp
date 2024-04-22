@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "3.1" # Specify your .NET Core version, update this as necessary
+          dotnet-version: "8.0.101" # Use the exact version of .NET your project requires
 
       - name: Install dependencies and build
         run: |
@@ -28,11 +28,4 @@ jobs:
       - name: Publish
         run: |
           cd backend
-          dotnet publish --no-restore --configuration Release --output publish
-
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: "linkupBackend"
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: backend/publish
+          dotnet publish --no-restore
