@@ -1,20 +1,28 @@
 import { Modal, View, Image, Text, Pressable } from "react-native";
-import { IUser } from "../../interfaces/ModelInterfaces";
+import {
+  IUser,
+  IUserRelation,
+  UserRelationType,
+} from "../../interfaces/ModelInterfaces";
 import { Feather } from "@expo/vector-icons";
 import styles from "./OtherProfileStyles";
+import { useTokenProvider } from "../../providers/TokenProvider";
 
 interface OtherProfileProps {
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   profile: IUser;
+  userRelation: IUserRelation;
 }
 
 export default function OtherProfile({
   modalVisible,
   setModalVisible,
   profile,
+  userRelation,
 }: OtherProfileProps) {
   const handleBack = () => setModalVisible(false);
+  const { userID } = useTokenProvider();
 
   const defineRelationshipStatus = (relStatuses: string) => {
     switch (relStatuses) {
@@ -142,16 +150,46 @@ export default function OtherProfile({
             <View style={styles.inputBoxBig}>
               <Text style={styles.inputTextBig}>{profile?.description}</Text>
             </View>
-
-            {/* Legg til venn hvis UserCardSearch er pressed */}
-            {/* <View style={styles.addFriendButton}>
-              <Pressable onPress={() => console.log("friend request sent!")}>
-                <Text style={styles.addFriendButtonText}>Legg til venn</Text>
-              </Pressable>
-            </View> */}
-            {/* Unblock oppe i hjørnet hvis UserCardBlocked er pressed */}
-            {/* Godta/Avslå hvis UserCardAnswer er pressed */}
-            {/* Fjern venn hvis UserCardFriend er pressed */}
+            <View style={styles.button}>
+              {userRelation &&
+              /* Fjern venn hvis UserCardFriend er pressed */
+              userRelation.type === UserRelationType.FRIENDS ? (
+                <Pressable
+                  style={styles.removeFriendButton}
+                  onPress={() => console.log("SLETTA!")}
+                >
+                  <Text style={styles.removeFriendButtonText}>Fjern venn</Text>
+                </Pressable>
+              ) : /* Legg til venn hvis UserCardSearch er pressed */
+              userRelation === undefined || userRelation === null ? (
+                <Pressable
+                  style={styles.addFriendButton}
+                  onPress={() => console.log("friend request sent!")}
+                >
+                  <Text style={styles.addFriendButtonText}>Legg til venn</Text>
+                </Pressable>
+              ) : /* Godta/Avslå hvis UserCardAnswer er pressed ? avslå */
+              userRelation.type === UserRelationType.PENDING_FIRST_SECOND &&
+                userID === userRelation.user_second_ID ? (
+                <Pressable onPress={() => console.log("Venn lagt til!")}>
+                  <Text style={styles.addFriendButtonText}>Godta</Text>
+                </Pressable>
+              ) : /* Venter på svar hvis UserCardPending er pressed */
+              userRelation.type === UserRelationType.PENDING_FIRST_SECOND &&
+                userID === userRelation.user_first_ID ? (
+                <Pressable
+                  style={styles.pendingRequestButton}
+                  onPress={() => console.log("PENDING")}
+                >
+                  <Text style={styles.pendingRequestButtonText}>
+                    Venter på svar
+                  </Text>
+                </Pressable>
+              ) : (
+                <Text>Moren din</Text>
+                /* Unblock oppe i hjørnet hvis UserCardBlocked er pressed */
+              )}
+            </View>
           </View>
         </View>
       </View>

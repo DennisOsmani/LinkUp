@@ -143,8 +143,8 @@ export default StyleSheet.create({
     color: colors.thirdary,
     zIndex: 1,
     position: "absolute",
-    top: -10,
-    left: 36,
+    top: verticalScale(-10),
+    left: horizontalScale(36),
   },
   legendTextSmallBox: {
     fontFamily: "BalooRegular",
@@ -152,13 +152,58 @@ export default StyleSheet.create({
     color: colors.thirdary,
     zIndex: 1,
     position: "absolute",
-    top: -10,
-    left: 16,
+    top: verticalScale(-10),
+    left: horizontalScale(36),
   },
 
-  addFriendButton: {},
-  addFriendButtonText: {},
+  button: {
+    width: "90%",
+    height: "30%",
+    alignItems: "center",
+    marginTop: verticalScale(15),
+  },
 
-  removeFriendButton: {},
-  removeFriendButton: {},
+  addFriendButton: {
+    borderRadius: moderateScale(10),
+    backgroundColor: colors.primary,
+    justifyContent: "center",
+    height: verticalScale(50),
+    width: horizontalScale(170),
+  },
+  addFriendButtonText: {
+    color: colors.foreground,
+    textAlign: "center",
+    fontSize: moderateScale(22),
+    fontFamily: "BalooBold",
+  },
+
+  removeFriendButton: {
+    borderRadius: moderateScale(10),
+    backgroundColor: colors.red,
+    justifyContent: "center",
+    height: verticalScale(50),
+    width: horizontalScale(170),
+  },
+  removeFriendButtonText: {
+    color: colors.foreground,
+    textAlign: "center",
+    fontSize: moderateScale(22),
+    fontFamily: "BalooBold",
+  },
+
+  pendingRequestButton: {
+    borderRadius: moderateScale(10),
+    borderColor: colors.primary,
+    borderWidth: moderateScale(3),
+    backgroundColor: colors.foreground,
+    height: verticalScale(50),
+    width: horizontalScale(170),
+    justifyContent: "center",
+  },
+  pendingRequestButtonText: {
+    color: colors.primary,
+    textAlign: "center",
+    fontSize: moderateScale(22),
+    fontFamily: "BalooBold",
+  },
 });

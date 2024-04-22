@@ -2,7 +2,11 @@ import { TextInput, View, ScrollView, Text } from "react-native";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
+import {
+  IUser,
+  IUserRelation,
+  UserRelationType,
+} from "../../../interfaces/ModelInterfaces";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import {
   GetUserFriends,
@@ -14,6 +18,7 @@ import { UserCardAnswer } from "../../../components/UserCard/UserCardAnswer";
 import {
   UpdateUserRelationType,
   DeleteUserRelation,
+  GetUserRelation,
 } from "../../../api/UserRelationAPI";
 import OtherProfile from "../../OtherProfile/OtherProfile";
 
@@ -31,6 +36,7 @@ export default function FriendsPeople() {
   const [selectedProfile, setSelectedProfile] = useState<IUser | undefined>(
     undefined
   );
+  const [relationType, setRelationType] = useState<IUserRelation>();
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -131,7 +137,9 @@ export default function FriendsPeople() {
     setFilteredFriends(allFriends);
   };
 
-  const handleUserCardPressed = (profile: IUser) => {
+  const handleUserCardPressed = async (profile: IUser) => {
+    const rel = await GetUserRelation(token, profile.userID);
+    setRelationType(rel!);
     setSelectedProfile(profile);
     setModalVisible(true);
   };
@@ -142,6 +150,7 @@ export default function FriendsPeople() {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         profile={selectedProfile!}
+        userRelation={relationType!}
       ></OtherProfile>
 
       <ScrollView>

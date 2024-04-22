@@ -25,3 +25,4 @@
 ## Generelt
 
 - Bruk av styling, samme størrelse på alle komponenter
+- Se på ADMIN og SUPERADMIN roller

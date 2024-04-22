@@ -19,7 +19,10 @@ import {
   UserRelationType,
 } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
-import { CreateUserRelation } from "../../../api/UserRelationAPI";
+import {
+  CreateUserRelation,
+  GetUserRelation,
+} from "../../../api/UserRelationAPI";
 import OtherProfile from "../../OtherProfile/OtherProfile";
 
 // When register, add date of birth ??
@@ -39,6 +42,7 @@ export default function SearchPeople() {
   const [selectedProfile, setSelectedProfile] = useState<IUser | undefined>(
     undefined
   );
+  const [relationType, setRelationType] = useState<IUserRelation>();
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -153,7 +157,9 @@ export default function SearchPeople() {
     }
   };
 
-  const handleUserCardPressed = (profile: IUser) => {
+  const handleUserCardPressed = async (profile: IUser) => {
+    const rel = await GetUserRelation(token, profile.userID);
+    setRelationType(rel!);
     setSelectedProfile(profile);
     setModalVisible(true);
   };
@@ -164,6 +170,7 @@ export default function SearchPeople() {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         profile={selectedProfile!}
+        userRelation={relationType!}
       ></OtherProfile>
 
       <ScrollView>
