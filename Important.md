@@ -12,5 +12,3 @@
 <br />
 
 ## Amund
-
-- Test hei hei
