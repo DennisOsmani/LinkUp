@@ -74,28 +74,60 @@ builder.Services.AddScoped<LocationRepository>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-// Database setup with azure secrets
-var databaseConnectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
-builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(databaseConnectionString));
+/* ----------- only for delveopment, revert back to just one after finished ------------*/
+bool azureConfig = true;    // Endre denne til false for localhost kjøring!
 
-// builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (azureConfig)
+{
+    // Database setup with azure secrets
+    var databaseConnectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+    builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(databaseConnectionString));
 
-// JWT
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
+    // Jwt setup with azure secrets
+    var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
+    var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+    var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-            ClockSkew = TimeSpan.Zero
-        };
-    });
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtIssuer,
+                ValidAudience = jwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!)),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+}
+else
+{
+    // Database setup for localhost with config in appsettings
+    builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    // Jwt setup for localhost with config in appsettings
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+}
+
+/*---------------------------------------------------------------------------------------------*/
+
 
 var app = builder.Build();
 
