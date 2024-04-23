@@ -43,7 +43,7 @@ public class UserRepository
 
     public async Task<string?> CreateUser(User user)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -53,10 +53,10 @@ public class UserRepository
                 await transaction.CommitAsync();
                 return user.Email;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
             }
         }
     }
@@ -66,7 +66,7 @@ public class UserRepository
         User? oldUser = await GetUserByID(oldUserId);
         _context.Users.Attach(oldUser);
 
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -88,17 +88,17 @@ public class UserRepository
                 await transaction.CommitAsync();
                 return oldUser;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
             }
         }
     }
 
     public async Task DeleteUser(User user)
     {
-        using(var transaction = await _context.Database.BeginTransactionAsync())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -106,10 +106,10 @@ public class UserRepository
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}"); 
+                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
             }
         }
     }

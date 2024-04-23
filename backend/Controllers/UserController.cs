@@ -210,6 +210,32 @@ public class UserController : ControllerBase
         }
     }
 
+    [HttpGet("users/event/{eventId}")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult<ICollection<User>>> GetFriendsNotInvited(int eventId)
+    {
+
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        try
+        {
+            ICollection<User> users = await _userService.GetFriendsNotInvited(userIdClaim, eventId);
+            return Ok(users);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
     [HttpGet("pending")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<ICollection<User>>> GetPendingFriendRequests([FromQuery] string? userId)

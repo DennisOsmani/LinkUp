@@ -149,7 +149,6 @@ public class EventRelationController : ControllerBase
         }
     }
 
-
     [HttpPut("role")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<EventRelation>> UpdateEventRelationRole(EventRelationDTO dto)
