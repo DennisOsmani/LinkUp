@@ -14,6 +14,8 @@ export interface IRegistrationRequest {
   lastname: string;
   email: string;
   password: string;
+  bornDate: string;
+  gender: string;
 }
 
 export interface IUser {

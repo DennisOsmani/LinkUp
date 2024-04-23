@@ -57,10 +57,13 @@ export default StyleSheet.create({
   question: {
     color: colors.grey,
     marginRight: horizontalScale(5),
+    fontSize: moderateScale(16),
   },
 
   link: {
     color: "blue",
+    fontSize: moderateScale(16),
+    fontWeight: "500",
   },
 
   wrapper: {

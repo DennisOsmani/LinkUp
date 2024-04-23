@@ -16,4 +16,10 @@ public class RegistrationRequest
 
     [Required]
     public string Password { get; set; }
+
+    [Required]
+    public DateTime BornDate { get; set; }
+
+    [Required]
+    public string Gender { get; set; }
 }

@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import { Dispatch, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import styles from "./RegisterCardStyles";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import { colors } from "../../../../styles/colors";
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 interface RegisterCardProps {
   onPressButton: () => Promise<void>;
@@ -19,6 +24,10 @@ interface RegisterCardProps {
   setEmail: Dispatch<React.SetStateAction<string>>;
   password: string;
   setPassword: Dispatch<React.SetStateAction<string>>;
+  bornDate: string;
+  setBornDate: Dispatch<React.SetStateAction<string>>;
+  gender: string;
+  setGender: Dispatch<React.SetStateAction<string>>;
 }
 
 export default function RegisterCard({
@@ -32,7 +41,35 @@ export default function RegisterCard({
   setEmail,
   password,
   setPassword,
+  bornDate,
+  setBornDate,
+  gender,
+  setGender,
 }: RegisterCardProps) {
+  const [selectedGender, setSelectedGender] = useState({
+    male: true,
+    female: false,
+    other: false,
+  });
+
+  const handleGenderButtonPressed = (value: number) => {
+    setSelectedGender({
+      male: value === 0 ? true : false,
+      female: value === 1 ? true : false,
+      other: value === 2 ? true : false,
+    });
+    setGender(value === 0 ? "M" : value === 1 ? "F" : "O");
+  };
+
+  const onChangeDate = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date | undefined
+  ) => {
+    event;
+    setBornDate(
+      selectedDate ? selectedDate.toISOString() : new Date().toISOString()
+    );
+  };
   return (
     <View style={styles.wrapper}>
       <Text style={styles.compHeader}>REGISTRER DEG</Text>
@@ -70,6 +107,86 @@ export default function RegisterCard({
             value={password}
           />
         </View>
+
+        <View style={styles.lastLineWrapper}>
+          <View style={styles.tagAndInput}>
+            <Text style={styles.inputLabel}>Fødselsdato</Text>
+            <View style={styles.datetimepickerBox}>
+              <View style={styles.pickerBox}>
+                <DateTimePicker
+                  value={bornDate ? new Date(bornDate) : new Date()}
+                  onChange={onChangeDate}
+                />
+              </View>
+            </View>
+          </View>
+          <View style={styles.tagAndInput}>
+            <Text style={styles.inputLabel}>Kjønn</Text>
+            <View style={styles.genderContainer}>
+              <Pressable
+                onPress={() => handleGenderButtonPressed(0)}
+                style={{
+                  ...styles.genderBox,
+                  borderColor: selectedGender.male ? colors.primary : "white",
+                }}
+              >
+                <Text
+                  style={{
+                    ...styles.genderText,
+                    color: selectedGender.male
+                      ? colors.primary
+                      : "rgba(128, 128, 128, 0.4)",
+                  }}
+                >
+                  <Ionicons
+                    name="male"
+                    style={{
+                      ...styles.genderText,
+                      color: selectedGender.male
+                        ? colors.primary
+                        : "rgba(128, 128, 128, 0.4)",
+                    }}
+                  />
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => handleGenderButtonPressed(1)}
+                style={{
+                  ...styles.genderBox,
+                  borderColor: selectedGender.female ? colors.primary : "white",
+                }}
+              >
+                <Ionicons
+                  name="female"
+                  style={{
+                    ...styles.genderText,
+                    color: selectedGender.female
+                      ? colors.primary
+                      : "rgba(128, 128, 128, 0.4)",
+                  }}
+                />
+              </Pressable>
+              <Pressable
+                onPress={() => handleGenderButtonPressed(2)}
+                style={{
+                  ...styles.genderBox,
+                  borderColor: selectedGender.other ? colors.primary : "white",
+                }}
+              >
+                <Ionicons
+                  name="ellipse-outline"
+                  style={{
+                    ...styles.genderText,
+                    color: selectedGender.other
+                      ? colors.primary
+                      : "rgba(128, 128, 128, 0.4)",
+                  }}
+                />
+              </Pressable>
+            </View>
+          </View>
+        </View>
+
         <View style={styles.inputContainer}>
           <Pressable style={styles.button} onPress={onPressButton}>
             <Text style={styles.text}>Registrer</Text>
