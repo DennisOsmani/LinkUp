@@ -1,4 +1,4 @@
-import { TextInput, View, ScrollView, Alert } from "react-native";
+import { TextInput, View, ScrollView, Text } from "react-native";
 import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import { UserCardPending } from "../../../components/UserCard/UserCardPending";
@@ -182,6 +182,15 @@ export default function SearchPeople() {
       ></OtherProfile>
 
       <ScrollView>
+        <View style={styles.screenInfo}>
+          {searchText && searchText === "" ? (
+            <Text style={styles.screenInfoText}>
+              Søk etter andre brukere å knytte kontakt med!
+            </Text>
+          ) : (
+            <Text>Fitte</Text>
+          )}
+        </View>
         <View style={styles.contentContainer}>
           <View style={styles.searchContainer}>
             <TextInput

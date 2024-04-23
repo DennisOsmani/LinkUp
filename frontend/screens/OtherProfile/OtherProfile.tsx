@@ -312,7 +312,11 @@ export default function OtherProfile({
               <Text style={styles.legendTextSmallBox}>Kjønn</Text>
               <View style={styles.inputBoxSmall}>
                 <Text style={styles.inputText}>
-                  {profile?.gender === "F" ? "Kvinne" : "Mann"}
+                  {profile?.gender === "F"
+                    ? "Kvinne"
+                    : profile?.gender === "M"
+                    ? "Mann"
+                    : "Annet"}
                 </Text>
               </View>
             </View>

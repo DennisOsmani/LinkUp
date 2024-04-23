@@ -185,7 +185,11 @@ export default function Profile() {
             <Text style={styles.legendTextSmallBox}>Kjønn</Text>
             <View style={styles.inputBoxSmall}>
               <Text style={styles.inputText}>
-                {user?.gender === "F" ? "Kvinne" : "Mann"}
+                {user?.gender === "F"
+                  ? "Kvinne"
+                  : user?.gender === "M"
+                  ? "Mann"
+                  : "Annet"}
               </Text>
             </View>
           </View>

@@ -7,6 +7,16 @@ import {
 } from "../../../styles/genericDimensions";
 
 export default StyleSheet.create({
+  screenInfo: {
+    alignItems: "center",
+  },
+  screenInfoText: {
+    color: colors.red,
+    textAlign: "center",
+    fontSize: moderateScale(40),
+    fontFamily: "BalooBold",
+  },
+
   contentContainer: {
     paddingHorizontal: horizontalScale(15),
   },
