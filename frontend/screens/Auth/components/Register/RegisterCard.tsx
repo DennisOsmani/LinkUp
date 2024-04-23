@@ -77,7 +77,7 @@ export default function RegisterCard({
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder={"Firstname"}
+            placeholder={"Fornavn"}
             onChangeText={(input) => setFirstname(input)}
             value={firstname}
           />
@@ -85,7 +85,7 @@ export default function RegisterCard({
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder={"Lastname"}
+            placeholder={"Etternavn"}
             onChangeText={(input) => setLastname(input)}
             value={lastname}
           />
@@ -93,7 +93,7 @@ export default function RegisterCard({
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder={"Email"}
+            placeholder={"Mail"}
             onChangeText={(input) => setEmail(input)}
             value={email}
           />
@@ -101,7 +101,7 @@ export default function RegisterCard({
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder={"Password"}
+            placeholder={"Passord"}
             secureTextEntry={true}
             onChangeText={(input) => setPassword(input)}
             value={password}
