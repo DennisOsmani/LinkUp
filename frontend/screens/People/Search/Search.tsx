@@ -164,6 +164,13 @@ export default function SearchPeople() {
     setModalVisible(true);
   };
 
+  const handleBack = async () => {
+    setModalVisible(false);
+    await fetchFriends();
+    await fetchPending();
+    await fetchBlocked();
+  };
+
   return (
     <>
       <OtherProfile
@@ -171,6 +178,7 @@ export default function SearchPeople() {
         setModalVisible={setModalVisible}
         profile={selectedProfile!}
         userRelation={relationType!}
+        handleBack={handleBack}
       ></OtherProfile>
 
       <ScrollView>

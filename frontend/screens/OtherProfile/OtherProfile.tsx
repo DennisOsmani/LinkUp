@@ -1,4 +1,4 @@
-import { Modal, View, Image, Text, Pressable } from "react-native";
+import { Modal, View, Image, Text, Pressable, Alert } from "react-native";
 import {
   IUser,
   IUserRelation,
@@ -7,12 +7,19 @@ import {
 import { Feather } from "@expo/vector-icons";
 import styles from "./OtherProfileStyles";
 import { useTokenProvider } from "../../providers/TokenProvider";
+import {
+  UpdateUserRelationType,
+  DeleteUserRelation,
+  CreateUserRelation,
+} from "../../api/UserRelationAPI";
+import { useEffect, useState } from "react";
 
 interface OtherProfileProps {
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   profile: IUser;
   userRelation: IUserRelation;
+  handleBack: () => void;
 }
 
 export default function OtherProfile({
@@ -20,9 +27,156 @@ export default function OtherProfile({
   setModalVisible,
   profile,
   userRelation,
+  handleBack,
 }: OtherProfileProps) {
-  const handleBack = () => setModalVisible(false);
-  const { userID } = useTokenProvider();
+  const goBack = () => handleBack();
+  const { token, userID } = useTokenProvider();
+  const [updatedUserRelation, setUpdatedUserRelation] =
+    useState<IUserRelation>();
+
+  useEffect(() => {
+    setUpdatedUserRelation(userRelation);
+  }, [userRelation]);
+
+  const handleBlock = async (otherId: string) => {
+    try {
+      Alert.alert(
+        "Blokker bruker",
+        "Er du sikker på at du vil blokkere bruker?",
+        [
+          {
+            text: "Tilbake",
+            style: "cancel",
+          },
+          {
+            text: "Blokker",
+            onPress: async () => {
+              // blokkere
+              // await DeleteUserRelation(token, otherId);
+              // setUpdatedUserRelation(undefined);
+            },
+            style: "destructive",
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error("Error in blocking a user (otherProfile) " + error);
+    }
+  };
+
+  const handleRemoveFriend = async (otherId: string) => {
+    try {
+      Alert.alert(
+        "Fjern Venn",
+        "Er du sikker på at du vil fjerne venn?",
+        [
+          {
+            text: "Tilbake",
+            style: "cancel",
+          },
+          {
+            text: "Avslå",
+            onPress: async () => {
+              await DeleteUserRelation(token, otherId);
+              setUpdatedUserRelation(undefined);
+            },
+            style: "destructive",
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error("Error in removing a friend (otherProfile) " + error);
+    }
+  };
+
+  const handleSendFriendRequest = async (otherId: string) => {
+    try {
+      const newUr = await CreateUserRelation(token, {
+        userId: "",
+        otherUserId: otherId,
+        type: UserRelationType.PENDING_FIRST_SECOND,
+      });
+      setUpdatedUserRelation(newUr);
+    } catch (error) {
+      console.error("Error in sending a friendRequest (otherProfile) " + error);
+    }
+  };
+
+  const handleAcceptRequest = async (otherId: string) => {
+    try {
+      await UpdateUserRelationType(token, {
+        userId: "",
+        otherUserId: otherId,
+        type: UserRelationType.FRIENDS,
+      });
+      setUpdatedUserRelation((prevState) => ({
+        ...prevState!,
+        type: UserRelationType.FRIENDS,
+      }));
+    } catch (error) {
+      console.error(
+        "Error in accepting a friendRequest (otherProfile) " + error
+      );
+    }
+  };
+
+  const handleRejectRequest = async (otherId: string) => {
+    try {
+      Alert.alert(
+        "Avslå Venneforespørsel",
+        "Er du sikker på at du vil avslå?",
+        [
+          {
+            text: "Tilbake",
+            style: "cancel",
+          },
+          {
+            text: "Avslå",
+            onPress: async () => {
+              await DeleteUserRelation(token, otherId);
+              setUpdatedUserRelation(undefined);
+            },
+            style: "destructive",
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error(
+        "Error in rejecting a friendRequest (otherProfile) " + error
+      );
+    }
+  };
+
+  const handeleRemovePendingRequest = async (otherId: string) => {
+    try {
+      Alert.alert(
+        "Avbryt Venneforespørsel",
+        "Er du sikker på at du vil trekke tilbake venneforespørselen?",
+        [
+          {
+            text: "Tilbake",
+            style: "cancel",
+          },
+          {
+            text: "Fjern",
+            onPress: async () => {
+              await DeleteUserRelation(token, otherId);
+              setUpdatedUserRelation(undefined);
+            },
+            style: "destructive",
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error(
+        "Error in removing a sent/pending friendRequest (otherProfile) " + error
+      );
+    }
+  };
 
   const defineRelationshipStatus = (relStatuses: string) => {
     switch (relStatuses) {
@@ -62,9 +216,10 @@ export default function OtherProfile({
           <Feather
             name="chevron-left"
             style={styles.icon}
-            onPress={handleBack}
+            onPress={goBack}
           ></Feather>
-          <Pressable onPress={() => console.log("Blocked bitch")}>
+          {updatedUserRelation && updatedUserRelation.type}
+          <Pressable onPress={() => handleBlock(profile.userID)}>
             <Text style={styles.blockText}>Blokker</Text>
           </Pressable>
         </View>
@@ -96,14 +251,6 @@ export default function OtherProfile({
         </View>
 
         <View style={styles.foregroundCard}>
-          {/* <View style={styles.legendContainer}>
-            <Text style={styles.legendText}>Navn</Text>
-            <View style={styles.inputBoxRegular}>
-              <Text style={styles.inputText}>
-                {profile?.firstname + " " + profile?.lastname}
-              </Text>
-            </View>
-          </View> */}
           <View style={styles.legendContainer}>
             <Text style={styles.legendText}>Telefonnummer</Text>
             <View style={styles.inputBoxRegular}>
@@ -150,43 +297,59 @@ export default function OtherProfile({
             <View style={styles.inputBoxBig}>
               <Text style={styles.inputTextBig}>{profile?.description}</Text>
             </View>
+
             <View style={styles.button}>
-              {userRelation &&
+              {updatedUserRelation &&
               /* Fjern venn hvis UserCardFriend er pressed */
-              userRelation.type === UserRelationType.FRIENDS ? (
+              updatedUserRelation.type === UserRelationType.FRIENDS ? (
                 <Pressable
                   style={styles.removeFriendButton}
-                  onPress={() => console.log("SLETTA!")}
+                  onPress={() => handleRemoveFriend(profile.userID)}
                 >
                   <Text style={styles.removeFriendButtonText}>Fjern venn</Text>
                 </Pressable>
               ) : /* Legg til venn hvis UserCardSearch er pressed */
-              userRelation === undefined || userRelation === null ? (
+              updatedUserRelation === undefined ||
+                updatedUserRelation === null ? (
                 <Pressable
                   style={styles.addFriendButton}
-                  onPress={() => console.log("friend request sent!")}
+                  onPress={() => handleSendFriendRequest(profile.userID)}
                 >
                   <Text style={styles.addFriendButtonText}>Legg til venn</Text>
                 </Pressable>
               ) : /* Godta/Avslå hvis UserCardAnswer er pressed ? avslå */
-              userRelation.type === UserRelationType.PENDING_FIRST_SECOND &&
-                userID === userRelation.user_second_ID ? (
-                <Pressable onPress={() => console.log("Venn lagt til!")}>
-                  <Text style={styles.addFriendButtonText}>Godta</Text>
-                </Pressable>
-              ) : /* Venter på svar hvis UserCardPending er pressed */
-              userRelation.type === UserRelationType.PENDING_FIRST_SECOND &&
-                userID === userRelation.user_first_ID ? (
+              updatedUserRelation.type ===
+                  UserRelationType.PENDING_FIRST_SECOND &&
+                userID === updatedUserRelation.user_second_ID ? (
+                <View style={styles.answerButtons}>
+                  <Pressable
+                    style={styles.acceptFriendButton}
+                    onPress={() => handleAcceptRequest(profile.userID)}
+                  >
+                    <Text style={styles.acceptFriendButtonText}>Godta</Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.rejectFriendButton}
+                    onPress={() => handleRejectRequest(profile.userID)}
+                  >
+                    <Text style={styles.rejectFriendButtonText}>Avslå</Text>
+                  </Pressable>
+                </View>
+              ) : /* Venter på svar hvis UserCardPending er pressed --> Hvis trykker 
+              på knappen gjøre sånn at man får opp en alert om å trekke tilbake venneforespørsel*/
+              updatedUserRelation.type ===
+                  UserRelationType.PENDING_FIRST_SECOND &&
+                userID === updatedUserRelation.user_first_ID ? (
                 <Pressable
                   style={styles.pendingRequestButton}
-                  onPress={() => console.log("PENDING")}
+                  onPress={() => handeleRemovePendingRequest(profile.userID)}
                 >
                   <Text style={styles.pendingRequestButtonText}>
                     Venter på svar
                   </Text>
                 </Pressable>
               ) : (
-                <Text>Moren din</Text>
+                <Text>Blocked</Text>
                 /* Unblock oppe i hjørnet hvis UserCardBlocked er pressed */
               )}
             </View>

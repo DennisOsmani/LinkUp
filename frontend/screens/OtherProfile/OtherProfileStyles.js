@@ -160,7 +160,7 @@ export default StyleSheet.create({
     width: "90%",
     height: "30%",
     alignItems: "center",
-    marginTop: verticalScale(15),
+    marginTop: verticalScale(10),
   },
 
   addFriendButton: {
@@ -172,6 +172,42 @@ export default StyleSheet.create({
   },
   addFriendButtonText: {
     color: colors.foreground,
+    textAlign: "center",
+    fontSize: moderateScale(22),
+    fontFamily: "BalooBold",
+  },
+
+  answerButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "73%",
+  },
+
+  acceptFriendButton: {
+    borderRadius: moderateScale(10),
+    backgroundColor: colors.primary,
+    justifyContent: "center",
+    height: verticalScale(50),
+    width: horizontalScale(120),
+  },
+  acceptFriendButtonText: {
+    color: colors.foreground,
+    textAlign: "center",
+    fontSize: moderateScale(22),
+    fontFamily: "BalooBold",
+  },
+
+  rejectFriendButton: {
+    borderRadius: moderateScale(10),
+    borderColor: colors.primary,
+    borderWidth: moderateScale(3),
+    backgroundColor: colors.foreground,
+    justifyContent: "center",
+    height: verticalScale(50),
+    width: horizontalScale(120),
+  },
+  rejectFriendButtonText: {
+    color: colors.primary,
     textAlign: "center",
     fontSize: moderateScale(22),
     fontFamily: "BalooBold",

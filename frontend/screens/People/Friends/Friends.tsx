@@ -21,6 +21,7 @@ import {
   GetUserRelation,
 } from "../../../api/UserRelationAPI";
 import OtherProfile from "../../OtherProfile/OtherProfile";
+import { useIsFocused } from "@react-navigation/native";
 
 // TODO
 // - Profilbilde (search & friends)
@@ -37,6 +38,7 @@ export default function FriendsPeople() {
     undefined
   );
   const [relationType, setRelationType] = useState<IUserRelation>();
+  const isFocused = useIsFocused();
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -54,7 +56,7 @@ export default function FriendsPeople() {
   useEffect(() => {
     fetchAllFriends();
     fetchAllFriendRequests();
-  }, []);
+  }, [isFocused]);
 
   const fetchAllFriends = async () => {
     try {
@@ -139,9 +141,15 @@ export default function FriendsPeople() {
 
   const handleUserCardPressed = async (profile: IUser) => {
     const rel = await GetUserRelation(token, profile.userID);
-    setRelationType(rel!);
+    setRelationType(rel ? rel : undefined);
     setSelectedProfile(profile);
     setModalVisible(true);
+  };
+
+  const handleBack = async () => {
+    setModalVisible(false);
+    await fetchAllFriends();
+    await fetchAllFriendRequests();
   };
 
   return (
@@ -151,6 +159,7 @@ export default function FriendsPeople() {
         setModalVisible={setModalVisible}
         profile={selectedProfile!}
         userRelation={relationType!}
+        handleBack={handleBack}
       ></OtherProfile>
 
       <ScrollView>
@@ -190,7 +199,6 @@ export default function FriendsPeople() {
                   age: calculateAge(user.dateBorn),
                 }}
                 onPressCard={() => handleUserCardPressed(user)}
-                // The modal shows a remove friend button when FriendCard is pressed
               ></UserCardFriends>
             ))}
         </View>
