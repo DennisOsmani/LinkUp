@@ -8,6 +8,8 @@ import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { UpdateUser } from "../../api/UserAPI";
 import { Picker } from "@react-native-picker/picker";
+import { pickImage } from "../../util/imageHandler";
+import { uploadImage } from "../../api/UploadImageAPI";
 
 // TODO
 // - Farge rundt border på de som er endret
@@ -18,11 +20,14 @@ import { Picker } from "@react-native-picker/picker";
 export default function Profile() {
   const { token } = useTokenProvider();
   const isFocused = useIsFocused();
-  const [profile, setProfile] = useState<IUser>();
+  const [user, setProfile] = useState<IUser>();
   const [editMode, setEditMode] = useState(false);
   const [relStatus, setRelStatus] = useState<number>();
   const [updatedBio, setUpdatedBio] = useState<string>();
   const [updatedPhone, setUpdatedPhone] = useState<string>();
+  const [profileImageUri, setProfileImageUri] = useState<string>(
+    "https://t3.ftcdn.net/jpg/00/64/67/80/360_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg"
+  );
 
   useEffect(() => {
     fetchProfile();
@@ -31,9 +36,13 @@ export default function Profile() {
   const fetchProfile = async () => {
     const user = await getUser(token);
     setProfile(user);
-    setRelStatus(profile?.relationshipStatus);
-    setUpdatedBio(profile?.description ? profile.description : "");
-    setUpdatedPhone(profile?.phone ? profile.phone : "");
+    setRelStatus(user?.relationshipStatus);
+    setUpdatedBio(user?.description ? user.description : "");
+    setUpdatedPhone(user?.phone ? user.phone : "");
+
+    if (user?.profileImage !== undefined) {
+      setProfileImageUri(user?.profileImage);
+    }
     setEditMode(false); //?? for å nullstille siden
   };
 
@@ -41,10 +50,20 @@ export default function Profile() {
     setEditMode(!editMode);
   };
 
+  const handleImagePicker = async () => {
+    const uri: any = await pickImage();
+    if (uri === "EXIT") return;
+
+    setProfileImageUri(uri);
+  };
+
   const updateProfile = async () => {
     try {
+      const url: string | undefined = await uploadImage(profileImageUri, token);
+
       const updatedUser: IUser = {
-        ...profile!,
+        ...user!,
+        profileImage: url,
         phone: updatedPhone,
         relationshipStatus: Number.parseInt(relStatus?.toString()!),
         description: updatedBio,
@@ -109,31 +128,25 @@ export default function Profile() {
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         {editMode && (
-          <Pressable
-            onPress={() => console.log("NUDES")}
-            style={styles.uploadContainer}
-          >
+          <Pressable onPress={handleImagePicker} style={styles.uploadContainer}>
             <Feather name="upload" size={16} color="white" />
           </Pressable>
         )}
-        <Image
-          style={styles.image}
-          source={require("../../assets/cbum.jpg")}
-        ></Image>
+        <Image style={styles.image} source={{ uri: profileImageUri }}></Image>
       </View>
 
       <View style={styles.statsContainer}>
         <View style={styles.stats}>
           <Text style={styles.statsText}>Opprettet</Text>
-          <Text style={styles.statsText}>{profile?.eventsCreated}</Text>
+          <Text style={styles.statsText}>{user?.eventsCreated}</Text>
         </View>
         <View style={styles.stats}>
           <Text style={styles.statsText}>Deltatt</Text>
-          <Text style={styles.statsText}>{profile?.eventsJoined}</Text>
+          <Text style={styles.statsText}>{user?.eventsJoined}</Text>
         </View>
         <View style={styles.stats}>
           <Text style={styles.statsText}>Bails</Text>
-          <Text style={styles.statsText}>{profile?.eventBails}</Text>
+          <Text style={styles.statsText}>{user?.eventBails}</Text>
         </View>
       </View>
 
@@ -142,16 +155,14 @@ export default function Profile() {
           <Text style={styles.legendText}>Navn</Text>
           <View style={styles.inputBoxRegular}>
             <Text style={styles.inputText}>
-              {profile?.firstname + " " + profile?.lastname}
+              {user?.firstname + " " + user?.lastname}
             </Text>
           </View>
         </View>
         <View style={styles.legendContainer}>
           <Text style={styles.legendText}>Telefonnummer</Text>
           <View style={styles.inputBoxRegular}>
-            {!editMode && (
-              <Text style={styles.inputText}>{profile?.phone}</Text>
-            )}
+            {!editMode && <Text style={styles.inputText}>{user?.phone}</Text>}
 
             {editMode && (
               <TextInput
@@ -165,7 +176,7 @@ export default function Profile() {
         <View style={styles.legendContainer}>
           <Text style={styles.legendText}>Mail</Text>
           <View style={styles.inputBoxRegular}>
-            <Text style={styles.inputText}>{profile?.email}</Text>
+            <Text style={styles.inputText}>{user?.email}</Text>
           </View>
         </View>
 
@@ -174,7 +185,7 @@ export default function Profile() {
             <Text style={styles.legendTextSmallBox}>Kjønn</Text>
             <View style={styles.inputBoxSmall}>
               <Text style={styles.inputText}>
-                {profile?.gender === "F" ? "Kvinne" : "Mann"}
+                {user?.gender === "F" ? "Kvinne" : "Mann"}
               </Text>
             </View>
           </View>
@@ -183,8 +194,7 @@ export default function Profile() {
             <Text style={styles.legendTextSmallBox}>Alder</Text>
             <View style={styles.inputBoxSmall}>
               <Text style={styles.inputText}>
-                {calculateAge(profile?.dateBorn ? profile.dateBorn : "") +
-                  " år"}
+                {calculateAge(user?.dateBorn ? user.dateBorn : "") + " år"}
               </Text>
             </View>
           </View>
@@ -195,8 +205,8 @@ export default function Profile() {
               {!editMode && (
                 <Text style={styles.inputText}>
                   {defineRelationshipStatus(
-                    profile?.relationshipStatus?.toString()
-                      ? profile.relationshipStatus.toString()
+                    user?.relationshipStatus?.toString()
+                      ? user.relationshipStatus.toString()
                       : ""
                   )}
                 </Text>
@@ -226,7 +236,7 @@ export default function Profile() {
           <Text style={styles.legendText}>Bio</Text>
           <View style={styles.inputBoxBig}>
             {!editMode && (
-              <Text style={styles.inputTextBig}>{profile?.description}</Text>
+              <Text style={styles.inputTextBig}>{user?.description}</Text>
             )}
 
             {editMode && (

@@ -2,13 +2,10 @@ import { View, Image, Text, Pressable } from "react-native";
 import styles from "./UserCardStyles";
 import { Feather } from "@expo/vector-icons";
 
-// Legge inn Pressable --> sendes til Other Profile
-
-// For search in People Screen
 interface UserCardInfo {
   firstname: string;
   lastname: string;
-  // image: string; SENERE, LEGGE INN MOCK DATA
+  profileImage: string;
 }
 
 interface UserCardProps {
@@ -24,7 +21,7 @@ export function UserCardBlocked({ userCardInfo, onPressCard }: UserCardProps) {
     >
       <View style={styles.imageContainer}>
         <Image
-          source={require("../../assets/cbum.jpg")}
+          source={{ uri: userCardInfo.profileImage }}
           style={styles.image}
         ></Image>
         <View style={styles.blockedContainer}>

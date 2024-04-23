@@ -43,6 +43,8 @@ export default function SearchPeople() {
     undefined
   );
   const [relationType, setRelationType] = useState<IUserRelation>();
+  const [profileRelationChanged, setProfileRelationChanged] =
+    useState<boolean>(false);
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -65,7 +67,7 @@ export default function SearchPeople() {
     fetchFriends();
     fetchPending();
     fetchBlocked();
-  }, []);
+  }, [profileRelationChanged]);
 
   const fetchFriends = async () => {
     try {
@@ -159,16 +161,14 @@ export default function SearchPeople() {
 
   const handleUserCardPressed = async (profile: IUser) => {
     const rel = await GetUserRelation(token, profile.userID);
-    setRelationType(rel!);
+    setRelationType(rel ? rel : undefined);
     setSelectedProfile(profile);
     setModalVisible(true);
   };
 
   const handleBack = async () => {
     setModalVisible(false);
-    await fetchFriends();
-    await fetchPending();
-    await fetchBlocked();
+    setProfileRelationChanged(!profileRelationChanged);
   };
 
   return (
@@ -217,6 +217,7 @@ export default function SearchPeople() {
                       firstname: user.firstname,
                       lastname: user.lastname,
                       age: calculateAge(user.dateBorn),
+                      profileImage: user.profileImage!,
                     }}
                     onPressCard={() => handleUserCardPressed(user)}
                     // The modal shows a remove friend button when FriendCard is pressed
@@ -230,6 +231,7 @@ export default function SearchPeople() {
                       firstname: user.firstname,
                       lastname: user.lastname,
                       age: calculateAge(user.dateBorn),
+                      profileImage: user.profileImage!,
                     }}
                     onPressCard={() => handleUserCardPressed(user)}
                     // The modal shows pending button when PendingCard is pressed
@@ -242,6 +244,7 @@ export default function SearchPeople() {
                     userCardInfo={{
                       firstname: user.firstname,
                       lastname: user.lastname,
+                      profileImage: user.profileImage!,
                     }}
                     onPressCard={() => handleUserCardPressed(user)}
                     // The modal shows "Fjern blokkering" i stedet for Blokker eller ha en knapp
@@ -255,6 +258,7 @@ export default function SearchPeople() {
                       firstname: user.firstname,
                       lastname: user.lastname,
                       age: calculateAge(user.dateBorn),
+                      profileImage: user.profileImage!,
                     }}
                     onPressButton={() => handleSendFriendRequest(user.userID)}
                     onPressCard={() => handleUserCardPressed(user)}

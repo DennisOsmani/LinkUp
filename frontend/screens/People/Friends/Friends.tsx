@@ -23,10 +23,6 @@ import {
 import OtherProfile from "../../OtherProfile/OtherProfile";
 import { useIsFocused } from "@react-navigation/native";
 
-// TODO
-// - Profilbilde (search & friends)
-// - Linke hvert kort til profil (search & friends)
-
 export default function FriendsPeople() {
   const [searchText, setSearchText] = useState("");
   const [allFriends, setAllFriends] = useState<IUser[]>([]);
@@ -38,7 +34,8 @@ export default function FriendsPeople() {
     undefined
   );
   const [relationType, setRelationType] = useState<IUserRelation>();
-  const isFocused = useIsFocused();
+  const [profileRelationChanged, setProfileRelationChanged] =
+    useState<boolean>(false);
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -56,7 +53,7 @@ export default function FriendsPeople() {
   useEffect(() => {
     fetchAllFriends();
     fetchAllFriendRequests();
-  }, [isFocused]);
+  }, [profileRelationChanged]);
 
   const fetchAllFriends = async () => {
     try {
@@ -148,8 +145,7 @@ export default function FriendsPeople() {
 
   const handleBack = async () => {
     setModalVisible(false);
-    await fetchAllFriends();
-    await fetchAllFriendRequests();
+    setProfileRelationChanged(false);
   };
 
   return (
@@ -182,6 +178,7 @@ export default function FriendsPeople() {
                   firstname: user.firstname,
                   lastname: user.lastname,
                   age: calculateAge(user.dateBorn),
+                  profileImage: user.profileImage!,
                 }}
                 onPressAccept={() => handleAcceptRequest(user.userID)}
                 onPressReject={() => handleRejectRequest(user.userID)}
@@ -197,6 +194,7 @@ export default function FriendsPeople() {
                   firstname: user.firstname,
                   lastname: user.lastname,
                   age: calculateAge(user.dateBorn),
+                  profileImage: user.profileImage!,
                 }}
                 onPressCard={() => handleUserCardPressed(user)}
               ></UserCardFriends>

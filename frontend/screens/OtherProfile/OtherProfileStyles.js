@@ -242,4 +242,11 @@ export default StyleSheet.create({
     fontSize: moderateScale(22),
     fontFamily: "BalooBold",
   },
+
+  blockedIcon: {
+    color: colors.red,
+    textAlign: "center",
+    fontSize: moderateScale(40),
+    fontFamily: "BalooBold",
+  },
 });

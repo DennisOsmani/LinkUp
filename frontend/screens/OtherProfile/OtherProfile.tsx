@@ -29,7 +29,10 @@ export default function OtherProfile({
   userRelation,
   handleBack,
 }: OtherProfileProps) {
-  const goBack = () => handleBack();
+  const goBack = () => {
+    handleBack();
+  };
+
   const { token, userID } = useTokenProvider();
   const [updatedUserRelation, setUpdatedUserRelation] =
     useState<IUserRelation>();
@@ -51,9 +54,21 @@ export default function OtherProfile({
           {
             text: "Blokker",
             onPress: async () => {
-              // blokkere
-              // await DeleteUserRelation(token, otherId);
-              // setUpdatedUserRelation(undefined);
+              if (userRelation === undefined) {
+                const newUrBlocked = await CreateUserRelation(token, {
+                  userId: "",
+                  otherUserId: otherId,
+                  type: UserRelationType.BLOCKED_FIRST_SECOND,
+                });
+                setUpdatedUserRelation(newUrBlocked);
+              } else {
+                const setUrBlocked = await UpdateUserRelationType(token, {
+                  userId: "",
+                  otherUserId: otherId,
+                  type: UserRelationType.BLOCKED_FIRST_SECOND,
+                });
+                setUpdatedUserRelation(setUrBlocked);
+              }
             },
             style: "destructive",
           },
@@ -62,6 +77,32 @@ export default function OtherProfile({
       );
     } catch (error) {
       console.error("Error in blocking a user (otherProfile) " + error);
+    }
+  };
+
+  const handleUnBlock = async (otherId: string) => {
+    try {
+      Alert.alert(
+        "Opphev blokkering",
+        "Er du sikker på at du vil oppheve blokkeringen?",
+        [
+          {
+            text: "Tilbake",
+            style: "cancel",
+          },
+          {
+            text: "Avblokker",
+            onPress: async () => {
+              await DeleteUserRelation(token, otherId);
+              setUpdatedUserRelation(undefined);
+            },
+            style: "destructive",
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error("Error in unblocking a user (otherProfile) " + error);
     }
   };
 
@@ -106,15 +147,12 @@ export default function OtherProfile({
 
   const handleAcceptRequest = async (otherId: string) => {
     try {
-      await UpdateUserRelationType(token, {
+      const updatedUr = await UpdateUserRelationType(token, {
         userId: "",
         otherUserId: otherId,
         type: UserRelationType.FRIENDS,
       });
-      setUpdatedUserRelation((prevState) => ({
-        ...prevState!,
-        type: UserRelationType.FRIENDS,
-      }));
+      setUpdatedUserRelation(updatedUr);
     } catch (error) {
       console.error(
         "Error in accepting a friendRequest (otherProfile) " + error
@@ -218,15 +256,26 @@ export default function OtherProfile({
             style={styles.icon}
             onPress={goBack}
           ></Feather>
-          {updatedUserRelation && updatedUserRelation.type}
-          <Pressable onPress={() => handleBlock(profile.userID)}>
-            <Text style={styles.blockText}>Blokker</Text>
-          </Pressable>
+          {(updatedUserRelation &&
+            updatedUserRelation.type ===
+              UserRelationType.BLOCKED_FIRST_SECOND &&
+            userID === updatedUserRelation.user_first_ID) ||
+          (updatedUserRelation?.type ===
+            UserRelationType.BLOCKED_SECOND_FIRST &&
+            userID === updatedUserRelation.user_second_ID) ? (
+            <Pressable onPress={() => handleUnBlock(profile.userID)}>
+              <Text style={styles.blockText}>Avblokker</Text>
+            </Pressable>
+          ) : (
+            <Pressable onPress={() => handleBlock(profile.userID)}>
+              <Text style={styles.blockText}>Blokker</Text>
+            </Pressable>
+          )}
         </View>
 
         <Image
           style={styles.image}
-          source={require("../../assets/cbum.jpg")}
+          source={{ uri: profile?.profileImage }}
         ></Image>
 
         <View style={styles.nameContainer}>
@@ -349,8 +398,8 @@ export default function OtherProfile({
                   </Text>
                 </Pressable>
               ) : (
-                <Text>Blocked</Text>
                 /* Unblock oppe i hjørnet hvis UserCardBlocked er pressed */
+                <Feather name="slash" style={styles.blockedIcon}></Feather>
               )}
             </View>
           </View>

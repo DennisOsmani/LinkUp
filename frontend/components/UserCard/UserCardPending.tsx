@@ -7,7 +7,7 @@ interface UserCardInfo {
   firstname: string;
   lastname: string;
   age: number;
-  // image: string; SENERE, LEGGE INN MOCK DATA
+  profileImage: string;
 }
 
 interface UserCardProps {
@@ -20,7 +20,7 @@ export function UserCardPending({ userCardInfo, onPressCard }: UserCardProps) {
     <Pressable style={styles.card} onPress={onPressCard}>
       <View style={styles.imageContainer}>
         <Image
-          source={require("../../assets/cbum.jpg")}
+          source={{ uri: userCardInfo.profileImage }}
           style={styles.image}
         ></Image>
         <View style={styles.detailsContainer}>
