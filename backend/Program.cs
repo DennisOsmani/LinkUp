@@ -74,9 +74,11 @@ builder.Services.AddScoped<LocationRepository>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-// Database setup with azure secretst
-var databaseConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(databaseConnectionString));
+// Database setup with azure secrets
+// var databaseConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+// builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(databaseConnectionString));
+
+builder.Services.AddDbContext<Data.AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
