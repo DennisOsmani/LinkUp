@@ -146,6 +146,7 @@ export default function JoinedFeed() {
 
   return (
     <ScrollView
+      style={styles.scrollView}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }

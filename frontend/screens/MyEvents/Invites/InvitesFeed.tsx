@@ -129,6 +129,7 @@ export default function InvitesFeed() {
 
   return (
     <ScrollView
+      style={styles.scrollView}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }

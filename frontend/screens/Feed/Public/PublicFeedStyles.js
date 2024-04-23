@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { colors } from "../../../styles/colors";
 import {
   moderateScale,
@@ -27,5 +27,9 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(20),
     fontFamily: "BalooSemiBold",
     marginTop: moderateScale(20),
+  },
+  scrollView: {
+    borderTopEndRadius: moderateScale(25),
+    borderTopStartRadius: moderateScale(25),
   },
 });
