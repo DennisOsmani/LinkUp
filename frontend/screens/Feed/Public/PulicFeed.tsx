@@ -118,6 +118,7 @@ export default function PublicFeed() {
 
   return (
     <ScrollView
+      style={styles.scrollView}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }

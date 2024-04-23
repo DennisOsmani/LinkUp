@@ -28,4 +28,8 @@ export const styles = StyleSheet.create({
     fontFamily: "BalooSemiBold",
     marginTop: moderateScale(20),
   },
+  scrollView: {
+    borderTopEndRadius: moderateScale(25),
+    borderTopStartRadius: moderateScale(25),
+  },
 });
