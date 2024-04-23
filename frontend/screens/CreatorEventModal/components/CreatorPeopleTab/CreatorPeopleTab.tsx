@@ -48,6 +48,18 @@ export function CreatorPeopleTab({ event }: CreatorPeopleTab) {
     setLoading(false);
   };
 
+  const handleSearchInput = (input: string) => {
+    if (!relatedUsers) return;
+    setSearchResults(
+      relatedUsers.filter((user: IUserWithEventParticipationDTO) =>
+        (user.firstname + user.lastname)
+          .toUpperCase()
+          .replaceAll(" ", "")
+          .includes(input.toUpperCase().replaceAll(" ", ""))
+      )
+    );
+  };
+
   if (loading) {
     return (
       <View style={styles.loader}>
@@ -61,6 +73,7 @@ export function CreatorPeopleTab({ event }: CreatorPeopleTab) {
       <EventInvteModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        eventId={event?.eventID}
       />
 
       <View style={styles.tabContainer}>
@@ -72,7 +85,10 @@ export function CreatorPeopleTab({ event }: CreatorPeopleTab) {
               size={26}
               color={colors.grey}
             />
-            <TextInput style={styles.searchInput} />
+            <TextInput
+              onChangeText={handleSearchInput}
+              style={styles.searchInput}
+            />
           </View>
         </View>
         <Pressable

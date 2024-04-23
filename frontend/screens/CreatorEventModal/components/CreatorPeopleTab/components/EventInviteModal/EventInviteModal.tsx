@@ -11,35 +11,57 @@ import { styles } from "./EventInviteModalStyles";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../../../../../../styles/colors";
 import { useEffect, useState } from "react";
-import { GetUserFriends } from "../../../../../../api/UserAPI";
+import {
+  GetUserFriends,
+  getFriendsNotInvited,
+} from "../../../../../../api/UserAPI";
 import { useTokenProvider } from "../../../../../../providers/TokenProvider";
 import { IUser } from "../../../../../../interfaces/ModelInterfaces";
 import InviteUserCard from "../InviteUserCard/InviteUserCard";
+import { inviteUsersForEvent } from "../../../../../../api/EventRelationAPI";
 
 interface EventInviteModal {
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  eventId: number;
 }
 
 export default function EventInvteModal({
   modalVisible,
   setModalVisible,
+  eventId,
 }: EventInviteModal) {
   const [friends, setFriends] = useState<IUser[]>([]);
+  const [friendsToInvite, setFriendsToInvite] = useState<string[]>([]);
   const { token } = useTokenProvider();
 
   useEffect(() => {
-    fetchAllFriends();
+    fetchFriendsNotInvited();
   }, []);
 
-  const fetchAllFriends = async () => {
+  const fetchFriendsNotInvited = async () => {
     try {
-      const response: IUser[] = await GetUserFriends(token);
+      const response: IUser[] = await getFriendsNotInvited(eventId, token);
       setFriends(response);
     } catch (error) {
       console.error(error);
       Alert.alert("Noe gikk feil!", "Lukk eventet, prøv å åpne på nytt!");
       setModalVisible(false);
+    }
+  };
+
+  const addUserIdToInviteList = (userId: string) => {
+    setFriendsToInvite((prevlist) => [...prevlist, userId]);
+    setFriends((prevlist) => prevlist.filter((user) => user.userID !== userId));
+  };
+
+  const handleCloseAndSendInvites = async () => {
+    setModalVisible(false);
+    if (friendsToInvite.length === 0) return;
+    try {
+      await inviteUsersForEvent(eventId, friendsToInvite, token);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -53,9 +75,6 @@ export default function EventInvteModal({
       <View style={styles.container}>
         <View style={styles.modalCard}>
           <View style={styles.firstRow}>
-            <Pressable onPress={() => setModalVisible(false)}>
-              <Text style={styles.x}>X</Text>
-            </Pressable>
             <Text style={styles.x}>Inviter venner</Text>
           </View>
 
@@ -72,13 +91,19 @@ export default function EventInvteModal({
           <ScrollView style={styles.scrollView}>
             <View style={styles.cardContainer}>
               {friends.map((user: IUser) => (
-                <InviteUserCard user={user} />
+                <InviteUserCard
+                  addUserIdToInviteList={addUserIdToInviteList}
+                  user={user}
+                />
               ))}
             </View>
           </ScrollView>
 
-          <Pressable style={styles.inviteButton}>
-            <Text style={styles.inviteButtonText}>Inviter</Text>
+          <Pressable
+            onPress={handleCloseAndSendInvites}
+            style={styles.closeButton}
+          >
+            <Text style={styles.closeButtonText}>Lukk</Text>
           </Pressable>
         </View>
       </View>

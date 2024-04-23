@@ -41,8 +41,8 @@ public class UserService : IUserService
             throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
         }
 
-        user.Password = "Ikke faen mann";
-        user.Salt = "Mordi er tjukk";
+        user.Password = "";
+        user.Salt = "";
         return user;
     }
 
@@ -61,6 +61,35 @@ public class UserService : IUserService
         }
 
         return await _userRelRepo.GetUserFriends(user.UserID);
+    }
+
+    public async Task<ICollection<User>> GetFriendsNotInvited(string userId, int eventId)
+    {
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
+        }
+
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+
+        if (eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with EventID: {eventId}, does not exist! (UserService)");
+        }
+
+        ICollection<User> usersFromEvent = await _userRepo.GetUsersFromEvent(eventId);
+        ICollection<User?> friends = await _userRelRepo.GetUserFriends(userId);
+
+        if (!friends.Any())
+            return new List<User>();
+
+        ICollection<User> friendsNotInvited = friends
+            .Where(friend => !usersFromEvent.Any(ue => ue.UserID == friend.UserID))
+            .ToList();
+
+        return friendsNotInvited;
     }
 
     public async Task<ICollection<User?>> GetPendingFriendRequests(string userId)
