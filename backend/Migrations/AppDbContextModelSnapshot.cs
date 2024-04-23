@@ -134,7 +134,7 @@ namespace backend.Migrations
                     b.Property<string>("UserID")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("DateBorn")
+                    b.Property<DateTime>("DateBorn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
