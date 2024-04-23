@@ -21,6 +21,7 @@ export default function TabNavigator() {
             tabBarIcon: ({ color }) => (
               <Feather style={styles.icons} name="home" color={color} />
             ),
+            tabBarLabel: "Feed",
           }}
           name="Feed"
           component={Feed}
@@ -31,6 +32,7 @@ export default function TabNavigator() {
             tabBarIcon: ({ color }) => (
               <Feather style={styles.icons} name="calendar" color={color} />
             ),
+            tabBarLabel: "Eventer",
           }}
           name="Events"
           component={Events}
@@ -41,6 +43,8 @@ export default function TabNavigator() {
             tabBarIcon: ({ color }) => (
               <Feather style={styles.plus} name="plus-square" color={color} />
             ),
+            tabBarLabel: "Nytt Event",
+            tabBarLabelStyle: styles.tabLabel,
           }}
           name="Create"
           component={CreateEvent}
@@ -51,6 +55,7 @@ export default function TabNavigator() {
             tabBarIcon: ({ color }) => (
               <Feather style={styles.icons} name="users" color={color} />
             ),
+            tabBarLabel: "Personer",
           }}
           name="People"
           component={People}
@@ -61,6 +66,7 @@ export default function TabNavigator() {
             tabBarIcon: ({ color }) => (
               <Feather style={styles.icons} name="user" color={color} />
             ),
+            tabBarLabel: "Profil",
           }}
           name="Profile"
           component={Profile}

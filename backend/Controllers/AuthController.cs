@@ -43,7 +43,13 @@ public class AuthController : ControllerBase
                 Email = request.Email,
                 Password = _passwordHasher.HashPassword(null, saltedPassword),    // Null is because the user is not created yet, normally this is where the user object is.
                 Salt = salt,
-                Role = Enums.Role.SUPERADMIN
+                Role = Enums.Role.SUPERADMIN,
+                Gender = request.Gender,
+                DateBorn = request.BornDate,
+                EventsCreated = 0,
+                EventsJoined = 0,
+                EventBails = 0,
+
             };
 
             await _userService.CreateUser(user);
