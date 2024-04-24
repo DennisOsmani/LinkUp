@@ -24,13 +24,7 @@ import {
   GetUserRelation,
 } from "../../../api/UserRelationAPI";
 import OtherProfile from "../../OtherProfile/OtherProfile";
-
-// When register, add date of birth ??
-
-// TODO
-// - TRELLO
-// - Skal man kunne se de som man har blokkert?? feks et grått kort?
-// - Skal man kunne se folk som har blokket deg når man søker? (backend implememntasjon i searchUser API)
+import { colors } from "../../../styles/colors";
 
 export default function SearchPeople() {
   const [searchText, setSearchText] = useState("");
@@ -184,13 +178,21 @@ export default function SearchPeople() {
       <ScrollView>
         <View style={styles.contentContainer}>
           <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.searchBar}
-              placeholder="Søk"
-              value={searchText}
-              onChangeText={setSearchText}
-              onSubmitEditing={handleSearch}
-            ></TextInput>
+            <View style={styles.searchBar}>
+              <Feather
+                style={styles.feather}
+                name="search"
+                size={26}
+                color={colors.grey}
+              />
+              <TextInput
+                onChangeText={setSearchText}
+                style={styles.searchInput}
+                onSubmitEditing={handleSearch}
+                value={searchText}
+                placeholder="Søk ..."
+              />
+            </View>
             <Feather style={styles.icon} name="x" onPress={clearSearchText} />
           </View>
 

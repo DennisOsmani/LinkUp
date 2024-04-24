@@ -143,14 +143,14 @@ export const styles = StyleSheet.create({
   editButtonText: {
     color: colors.foreground,
     textAlign: "center",
-    fontSize: moderateScale(22),
+    fontSize: moderateScale(24),
     fontFamily: "BalooBold",
   },
 
   saveButtonText: {
     color: colors.primary,
     textAlign: "center",
-    fontSize: moderateScale(22),
+    fontSize: moderateScale(24),
     fontFamily: "BalooBold",
   },
 

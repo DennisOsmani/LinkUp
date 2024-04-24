@@ -34,9 +34,33 @@ export default StyleSheet.create({
     width: horizontalScale(335),
   },
   icon: {
-    fontSize: moderateScale(25),
+    fontSize: moderateScale(30),
     color: colors.grey,
-    marginTop: verticalScale(26),
+    marginTop: verticalScale(23),
     marginLeft: horizontalScale(5),
+  },
+  searchBar: {
+    marginTop: verticalScale(15),
+    columnGap: horizontalScale(10),
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "90%",
+    height: moderateScale(45),
+    borderRadius: moderateScale(15),
+    backgroundColor: colors.foreground,
+    color: colors.grey,
+  },
+
+  feather: {
+    marginLeft: moderateScale(15),
+  },
+
+  searchInput: {
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(20),
+    color: colors.grey,
+    height: "100%",
+    width: "85%",
   },
 });

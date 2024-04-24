@@ -15,7 +15,7 @@ export default StyleSheet.create({
     borderRadius: moderateScale(20),
     shadowColor: "black",
     shadowOffset: { width: horizontalScale(0), height: verticalScale(4) },
-    shadowOpacity: moderateScale(0.5),
+    shadowOpacity: moderateScale(0.05),
     shadowRadius: moderateScale(4),
   },
 
@@ -27,7 +27,7 @@ export default StyleSheet.create({
     borderRadius: moderateScale(20),
     shadowColor: "black",
     shadowOffset: { width: horizontalScale(0), height: verticalScale(4) },
-    shadowOpacity: moderateScale(0.5),
+    shadowOpacity: moderateScale(0.05),
     shadowRadius: moderateScale(4),
   },
 

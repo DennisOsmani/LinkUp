@@ -302,7 +302,7 @@ export default function CreateEvent() {
                     : "rgba(128, 128, 128, 0.4)",
                 }}
               >
-                Public
+                Offentlig
               </Text>
             </Pressable>
             <Pressable
@@ -322,7 +322,7 @@ export default function CreateEvent() {
                     : "rgba(128, 128, 128, 0.4)",
                 }}
               >
-                Private
+                Privat
               </Text>
             </Pressable>
             <Pressable
@@ -342,7 +342,7 @@ export default function CreateEvent() {
                     : "rgba(128, 128, 128, 0.4)",
                 }}
               >
-                Friends
+                Venner{" "}
               </Text>
             </Pressable>
           </View>

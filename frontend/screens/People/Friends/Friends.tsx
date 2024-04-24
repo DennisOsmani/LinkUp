@@ -21,7 +21,7 @@ import {
   GetUserRelation,
 } from "../../../api/UserRelationAPI";
 import OtherProfile from "../../OtherProfile/OtherProfile";
-import { useIsFocused } from "@react-navigation/native";
+import { colors } from "../../../styles/colors";
 
 export default function FriendsPeople() {
   const [searchText, setSearchText] = useState("");
@@ -161,12 +161,21 @@ export default function FriendsPeople() {
       <ScrollView>
         <View style={styles.contentContainer}>
           <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.searchBar}
-              placeholder="Søk"
-              value={searchText}
-              onChangeText={handleSearchTextChange}
-            ></TextInput>
+            <View style={styles.searchBar}>
+              <Feather
+                style={styles.feather}
+                name="search"
+                size={26}
+                color={colors.grey}
+              />
+              <TextInput
+                onChangeText={handleSearchTextChange}
+                style={styles.searchInput}
+                value={searchText}
+                placeholder="Søk ..."
+              />
+            </View>
+
             <Feather style={styles.icon} name="x" onPress={clearSearchText} />
           </View>
 

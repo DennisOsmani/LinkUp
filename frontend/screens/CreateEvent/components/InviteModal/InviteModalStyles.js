@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
       height: verticalScale(20),
     },
     shadowColor: "black",
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.05,
     borderColor: colors.thirdary,
     borderWidth: moderateScale(3),
   },

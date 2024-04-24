@@ -1,18 +1,16 @@
-## Burde fikses
+## Generelt
 
-- Escape / Validere inkommende objekter
-- Cascade fungerer ikke
-- Ingen mulighet for å hente ut noe informasjon om brukeren som er logget inn,
-- Løsning er å legge til UserID i tokenet, og oppdatere TokenProvider i frontend.
+- VALIDERING AV INPUT frontend + backend
+- Bruk av styling, samme størrelse på alle komponenter
+- Se på ADMIN og SUPERADMIN roller
+- DOCS!!!!!!!
+- Docs på hvordan sette opp, kjøre og teste appen (Ev shell script?)
+- Video av applikasjonen til bacheloren
 
 ## Profile
 
 - Se TODO øverst i klassen
-
-## Generelt
-
-- Bruk av styling, samme størrelse på alle komponenter
-- Se på ADMIN og SUPERADMIN roller
+- Se på picker / ev finne noe annet?
 
 ## Cards / Event
 
