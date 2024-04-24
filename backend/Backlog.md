@@ -19,3 +19,11 @@
 ## Event
 
 - Fikse finksjoner som regner ut antall blitt med osv, se kommentar i filen
+
+## CreateEvent
+
+- Spinner når man oppretter
+
+## InviteModal (CreateEvent)
+
+- Kan invitere venn, så fjerne invitasjonen og bruker kortet blir borte

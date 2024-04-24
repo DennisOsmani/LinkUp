@@ -5,29 +5,29 @@ import { CreatorEventTab } from "./components/CreatorEventTab/CreatorEventTab";
 import { CreatorPeopleTab } from "./components/CreatorPeopleTab/CreatorPeopleTab";
 
 interface CreatorEventModalProps {
-  modalVisible: boolean;
-  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  event: IEvent | undefined;
+    modalVisible: boolean;
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    event: IEvent | undefined;
 }
 
 export function CreatorEventModal({
-  modalVisible,
-  setModalVisible,
-  event,
+    modalVisible,
+    setModalVisible,
+    event,
 }: CreatorEventModalProps) {
-  const handleBack = () => setModalVisible(false);
+    const handleBack = () => setModalVisible(false);
 
-  return (
-    <Modal animationType="slide" visible={modalVisible}>
-      <TabBackground
-        firstTab="Event"
-        secondTab="Folk"
-        backButton={true}
-        handleBack={handleBack}
-      >
-        <CreatorEventTab event={event} />
-        <CreatorPeopleTab event={event} />
-      </TabBackground>
-    </Modal>
-  );
+    return (
+        <Modal animationType="slide" visible={modalVisible}>
+            <TabBackground
+                firstTab="Event"
+                secondTab="Folk"
+                backButton={true}
+                handleBack={handleBack}
+            >
+                <CreatorEventTab setEventModalVisible={setModalVisible} event={event} />
+                <CreatorPeopleTab event={event} />
+            </TabBackground>
+        </Modal>
+    );
 }
