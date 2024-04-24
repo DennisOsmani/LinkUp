@@ -20,7 +20,7 @@ import { GetEventRelationsFromEvent } from "../../../../api/EventAPI";
 import { useTokenProvider } from "../../../../providers/TokenProvider";
 
 interface CreatorPeopleTab {
-  event: IEvent | null;
+  event: IEvent | undefined;
 }
 
 export function CreatorPeopleTab({ event }: CreatorPeopleTab) {
@@ -44,6 +44,9 @@ export function CreatorPeopleTab({ event }: CreatorPeopleTab) {
     const response: IUserWithEventParticipationDTO[] | undefined =
       await GetEventRelationsFromEvent(event.eventID, token);
     setRelatedUsers(response);
+
+    response?.sort((a, b) => a.participation - b.participation);
+
     setSearchResults(response);
     setLoading(false);
   };
@@ -102,7 +105,7 @@ export function CreatorPeopleTab({ event }: CreatorPeopleTab) {
           <View style={styles.scrollTabContainer}>
             {searchResults &&
               searchResults.map((user: IUserWithEventParticipationDTO) => (
-                <RelatedUserCard user={user} />
+                <RelatedUserCard key={user.userID} user={user} />
               ))}
           </View>
         </ScrollView>

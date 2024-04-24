@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#5A5DF0",
     justifyContent: "flex-end",
+    zIndex: 2,
   },
 
   foregroundCard: {
@@ -50,6 +51,13 @@ export const styles = StyleSheet.create({
   },
 
   backButton: {
+    position: "absolute",
+    left: horizontalScale(15),
+    top: verticalScale(45),
+    zIndex: 1,
+  },
+
+  backIcon: {
     position: "absolute",
     left: horizontalScale(10),
     top: verticalScale(14),

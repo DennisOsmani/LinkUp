@@ -8,7 +8,7 @@ import { URL_BASE, EVENT_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENT_PATH}`;
 
-const getEventById = async (eventId: number, token: string) => {
+export const getEventById = async (eventId: number, token: string) => {
   try {
     const response = await fetch(`${THIS_URL}/${eventId}`, {
       method: "GET",
@@ -22,7 +22,7 @@ const getEventById = async (eventId: number, token: string) => {
       throw new Error("Error in getEventById response: " + response.status);
     }
 
-    const data: Event = await response.json();
+    const data: IEvent | undefined = await response.json();
     return data;
   } catch (error) {
     console.error("Error while fetching getEventById " + error);

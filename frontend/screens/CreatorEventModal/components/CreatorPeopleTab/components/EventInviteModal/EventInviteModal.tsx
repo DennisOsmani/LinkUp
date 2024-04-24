@@ -11,10 +11,7 @@ import { styles } from "./EventInviteModalStyles";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../../../../../../styles/colors";
 import { useEffect, useState } from "react";
-import {
-  GetUserFriends,
-  getFriendsNotInvited,
-} from "../../../../../../api/UserAPI";
+import { getFriendsNotInvited } from "../../../../../../api/UserAPI";
 import { useTokenProvider } from "../../../../../../providers/TokenProvider";
 import { IUser } from "../../../../../../interfaces/ModelInterfaces";
 import InviteUserCard from "../InviteUserCard/InviteUserCard";
@@ -23,7 +20,7 @@ import { inviteUsersForEvent } from "../../../../../../api/EventRelationAPI";
 interface EventInviteModal {
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  eventId: number;
+  eventId: number | undefined;
 }
 
 export default function EventInvteModal({
@@ -41,7 +38,7 @@ export default function EventInvteModal({
 
   const fetchFriendsNotInvited = async () => {
     try {
-      const response: IUser[] = await getFriendsNotInvited(eventId, token);
+      const response: IUser[] = await getFriendsNotInvited(eventId!, token);
       setFriends(response);
     } catch (error) {
       console.error(error);
@@ -59,7 +56,7 @@ export default function EventInvteModal({
     setModalVisible(false);
     if (friendsToInvite.length === 0) return;
     try {
-      await inviteUsersForEvent(eventId, friendsToInvite, token);
+      await inviteUsersForEvent(eventId!, friendsToInvite, token);
     } catch (error) {
       console.log(error);
     }

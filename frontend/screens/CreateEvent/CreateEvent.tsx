@@ -15,12 +15,15 @@ import { uploadImage } from "../../api/UploadImageAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { IEventDTO, ILocation } from "../../interfaces/ModelInterfaces";
-import { createEvent } from "../../api/EventAPI";
+import { createEvent, getEventById } from "../../api/EventAPI";
 import LocationModal from "./components/LocationModal/LocationModal";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import InviteModal from "./components/InviteModal/InviteModal";
 import { colors } from "../../styles/colors";
 import { inviteUsersForEvent } from "../../api/EventRelationAPI";
+import { useLocation } from "../../providers/LocationProvider";
+import { CreatorEventModal } from "../CreatorEventModal/CreatorEventModal";
+import { IEvent } from "../../interfaces/ModelInterfaces";
 
 const dateStart = new Date();
 const dateEnd = new Date();
@@ -33,9 +36,14 @@ export default function CreateEvent() {
   });
   const [locationModalVisible, setLocationModalVisible] =
     useState<boolean>(false);
+  const [eventModalVisible, setEventModalVisible] = useState<boolean>(false);
   const [inviteModalVisible, setInviteModalVisible] = useState<boolean>(false);
   const [eventImageUri, setEventImageUri] = useState<string | undefined>(
     "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
+  );
+
+  const [createdEvent, setCreatedEvent] = useState<IEvent | undefined>(
+    undefined
   );
 
   const [event, setEvent] = useState<IEventDTO>({
@@ -59,6 +67,7 @@ export default function CreateEvent() {
   const [usersToInvite, setUsersToInvite] = useState<Set<string>>(new Set());
 
   const { token } = useTokenProvider();
+  const { address } = useLocation();
 
   const onChangeStart = (
     event: DateTimePickerEvent,
@@ -152,6 +161,11 @@ export default function CreateEvent() {
       eventId = await createEvent(eventToCreate, token);
 
       console.log("EVENT JUST CREATED ID: " + eventId);
+
+      clearAllValues();
+      const res: IEvent | undefined = await getEventById(eventId, token);
+      setCreatedEvent(res);
+      setEventModalVisible(true);
     } catch (error) {
       Alert.alert("Noe gikk galt", "Prøv igjen senere.");
       console.error(error);
@@ -175,8 +189,40 @@ export default function CreateEvent() {
     }
   };
 
+  const clearAllValues = () => {
+    setEvent({
+      eventName: "",
+      eventDescription: "",
+      eventDateTimeStart: dateStart.toISOString(),
+      eventDateTimeEnd: dateEnd.toISOString(),
+      visibility: 0,
+      inviteURL: "",
+      frontImage:
+        "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png",
+    });
+
+    setLocation({
+      address: undefined,
+      postalcode: undefined,
+      city: address ? address : "",
+      country: "",
+    });
+
+    setUsersToInvite(new Set());
+
+    setEventImageUri(
+      "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
+    );
+  };
+
   return (
     <>
+      <CreatorEventModal
+        modalVisible={eventModalVisible}
+        setModalVisible={setEventModalVisible}
+        event={createdEvent}
+      />
+
       <LocationModal
         visible={locationModalVisible}
         setVisible={setLocationModalVisible}
@@ -217,6 +263,7 @@ export default function CreateEvent() {
             placeholder="Navn på Event"
             style={styles.inputBox}
             onKeyPress={handleKeyPress}
+            value={event.eventName}
           />
 
           <View style={styles.datetimepickerBox}>

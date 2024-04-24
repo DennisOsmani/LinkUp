@@ -21,7 +21,7 @@ export function EventModal({
     <Modal animationType="slide" visible={modalVisible}>
       <TabBackground
         firstTab="Event"
-        secondTab="Folk"
+        secondTab="Event"
         backButton={true}
         handleBack={handleBack}
       >

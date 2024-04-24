@@ -27,12 +27,12 @@ export function TabBackground({
 
   return (
     <View style={styles.backgroundCard}>
+      {backButton && (
+        <Pressable onPress={handleBack} style={styles.backButton}>
+          <Feather name="chevron-left" color="white" size={50} />
+        </Pressable>
+      )}
       <View style={styles.tabWrapper}>
-        {backButton && (
-          <Pressable onPress={handleBack} style={styles.backButton}>
-            <Feather name="chevron-left" color="white" size={50} />
-          </Pressable>
-        )}
         {[firstTab, secondTab].map((tabname, index) => (
           <Pressable key={tabname} onPress={() => setActiveTab(index + 1)}>
             <View style={styles.tabContainer}>

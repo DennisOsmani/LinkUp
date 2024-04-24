@@ -6,7 +6,7 @@ import { updateEventParticipation } from "../../../../api/EventRelationAPI";
 import { useTokenProvider } from "../../../../providers/TokenProvider";
 
 interface EventTabProps {
-  event: IEvent | null;
+  event: IEvent | undefined;
 }
 
 /*

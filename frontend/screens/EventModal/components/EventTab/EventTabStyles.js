@@ -117,7 +117,7 @@ export const styles = StyleSheet.create({
 
     shadowColor: "black",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
   },
 
@@ -154,7 +154,7 @@ export const styles = StyleSheet.create({
 
     shadowColor: "black",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
   },
 

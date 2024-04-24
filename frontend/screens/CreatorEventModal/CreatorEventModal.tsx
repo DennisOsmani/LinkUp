@@ -2,13 +2,12 @@ import { Modal } from "react-native";
 import { IEvent } from "../../interfaces/ModelInterfaces";
 import { TabBackground } from "../../components/TabBackground/TabBackground";
 import { CreatorEventTab } from "./components/CreatorEventTab/CreatorEventTab";
-import { PeopleTab } from "../EventModal/components/PeopleTab/PeopleTab";
 import { CreatorPeopleTab } from "./components/CreatorPeopleTab/CreatorPeopleTab";
 
 interface CreatorEventModalProps {
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  event: IEvent | null;
+  event: IEvent | undefined;
 }
 
 export function CreatorEventModal({

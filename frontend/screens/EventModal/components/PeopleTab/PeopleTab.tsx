@@ -35,6 +35,9 @@ export function PeopleTab({ event }: PeopleTabProps) {
     const response: IUserWithEventParticipationDTO[] | undefined =
       await GetEventRelationsFromEvent(event.eventID, token);
     setRelatedUsers(response);
+
+    response?.sort((a, b) => a.participation - b.participation);
+
     setSearchResults(response);
     setLoading(false);
   };
