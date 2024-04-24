@@ -1,29 +1,35 @@
 ## Generelt
 
+- Noen knapper blir svarte ved trykk
 - VALIDERING AV INPUT frontend + backend
-- Bruk av styling, samme størrelse på alle komponenter
-- Se på ADMIN og SUPERADMIN roller
 - DOCS!!!!!!!
 - Docs på hvordan sette opp, kjøre og teste appen (Ev shell script?)
-- Video av applikasjonen til bacheloren
 
 ## Profile
 
 - Se TODO øverst i klassen
-- Se på picker / ev finne noe annet?
-
-## Cards / Event
-
-- Hente ut postkode fra posisjon / required
 
 ## Event
 
-- Fikse finksjoner som regner ut antall blitt med osv, se kommentar i filen
-
-## CreateEvent
-
-- Spinner når man oppretter
+- Fikse funksjoner som regner ut antall blitt med osv, se kommentar i filen
 
 ## InviteModal (CreateEvent)
 
 - Kan invitere venn, så fjerne invitasjonen og bruker kortet blir borte
+
+## Config
+
+- Endre fra appsettings-verdier i opprettelse av JWT til å bruke azure secrets
+
+## Register
+
+- Må bytte kjønn for å kunne registrere
+
+## CreateEvent
+
+- Ikke mulig å sette antall folk på eventet
+- Tastatur sperrer tekstbox (Profile)
+
+## EditEvent
+
+- Finnes ikke, skjønte du?
