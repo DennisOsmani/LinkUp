@@ -1,4 +1,4 @@
-import { AUTH_PATH, URL_BASE} from "./UrlPaths";
+import { AUTH_PATH, URL_BASE } from "./UrlPaths";
 import {
   IRegistrationRequest,
   ILoginRequest,

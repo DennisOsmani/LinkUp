@@ -4,7 +4,7 @@ export const colors = {
   thirdary: "#828299",
   background: "#F1F2F6",
   foreground: "#FFFFFF",
-  green: "#36AE46",
+  green: "#4AB659",
   red: "#DE1240",
   grey: "#808080",
   blocked: "#C9C9C9",

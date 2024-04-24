@@ -9,7 +9,7 @@ public class User
     public string UserID { get; set; }
     public string Firstname { get; set; }
     public string Lastname { get; set; }
-    public DateTime? DateBorn { get; set; }
+    public DateTime DateBorn { get; set; }
     public string? Phone { get; set; }
     public RelationshipStatus? RelationshipStatus { get; set; }
     public string? Gender { get; set; }

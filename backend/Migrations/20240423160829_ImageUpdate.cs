@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitCreate : Migration
+    public partial class ImageUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +35,7 @@ namespace backend.Migrations
                     UserID = table.Column<string>(type: "text", nullable: false),
                     Firstname = table.Column<string>(type: "text", nullable: false),
                     Lastname = table.Column<string>(type: "text", nullable: false),
-                    DateBorn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateBorn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: true),
                     RelationshipStatus = table.Column<int>(type: "integer", nullable: true),
                     Gender = table.Column<string>(type: "text", nullable: true),

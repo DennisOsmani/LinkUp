@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240415140828_InitCreate")]
-    partial class InitCreate
+    [Migration("20240423160829_ImageUpdate")]
+    partial class ImageUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,7 +137,7 @@ namespace backend.Migrations
                     b.Property<string>("UserID")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("DateBorn")
+                    b.Property<DateTime>("DateBorn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")

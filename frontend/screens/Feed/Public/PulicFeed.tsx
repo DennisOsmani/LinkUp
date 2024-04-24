@@ -19,7 +19,7 @@ const imageSource = require("../../../assets/cbum.jpg");
 export default function PublicFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
   const [hostNames, setHostNames] = useState<{ [eventId: string]: string }>({});
-  const { token, setToken } = useTokenProvider();
+  const { token } = useTokenProvider();
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const { location, loading, address } = useLocation();
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -118,6 +118,7 @@ export default function PublicFeed() {
 
   return (
     <ScrollView
+      style={styles.scrollView}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }

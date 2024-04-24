@@ -1,4 +1,4 @@
-import { Modal, View, Text, Pressable } from "react-native";
+import { Modal, View } from "react-native";
 import { styles } from "./InviteModalStyles";
 import InviteFriends from "../InviteFriends/InviteFriends";
 import { IUser } from "../../../../interfaces/ModelInterfaces";
@@ -14,7 +14,6 @@ interface InviteModalProps {
 export default function InviteModal({
   inviteVisible,
   setInviteVisible,
-  usersToInvite,
   setUsersToInvite,
 }: InviteModalProps) {
   const [allFriends, setAllFriends] = useState<IUser[]>([]);

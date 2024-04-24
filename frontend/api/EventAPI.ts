@@ -1,4 +1,9 @@
-import { IEvent, IUser } from "../interfaces/ModelInterfaces";
+import {
+  IEvent,
+  IEventDTO,
+  IUser,
+  IUserWithEventParticipationDTO,
+} from "../interfaces/ModelInterfaces";
 import { URL_BASE, EVENT_PATH } from "./UrlPaths";
 
 const THIS_URL: string = `${URL_BASE}${EVENT_PATH}`;
@@ -135,8 +140,7 @@ export const getUserJoinedEvents = async (token: string) => {
   }
 };
 
-export const createEvent = async (event: IEvent, token: string) => {
-  console.log("Event data being sent:", JSON.stringify(event));
+export const createEvent = async (event: IEventDTO, token: string) => {
   try {
     const response = await fetch(`${THIS_URL}/create`, {
       method: "POST",
@@ -154,7 +158,6 @@ export const createEvent = async (event: IEvent, token: string) => {
     const data: number = await response.json();
     return data;
   } catch (error) {
-    console.log("HER?");
     throw new Error("Error while createEvent " + error);
   }
 };
@@ -198,5 +201,31 @@ export const deleteEvent = async (eventId: number, token: string) => {
     return response.status;
   } catch (error) {
     console.error("Error while fetching deleteEvent " + error);
+  }
+};
+
+export const GetEventRelationsFromEvent = async (
+  eventId: number,
+  token: string
+) => {
+  try {
+    const response = await fetch(`${THIS_URL}/eventrelations/${eventId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "Error in GetEventRelationsFromEvent response: " + response.status
+      );
+    }
+
+    const data: IUserWithEventParticipationDTO[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error while fetching GetEventRelationsFromEvent" + error);
   }
 };

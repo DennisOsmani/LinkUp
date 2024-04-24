@@ -1,4 +1,5 @@
 using Models;
+using DTOs;
 
 /// <summary>
 /// Service Interface for all operations on Events, and fetching Events.
@@ -46,7 +47,7 @@ public interface IEventService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
-    Task<ICollection<Event>> GetUserEventInvites(string userId);
+    Task<ICollection<Event?>> GetUserEventInvites(string userId);
 
     /// <summary>
     /// Fetches a list of the Events the user has joined, aka status accepted
@@ -54,7 +55,7 @@ public interface IEventService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>A list of Events</returns>
-    Task<ICollection<Event>> GetUserJoinedEvents(string userId);
+    Task<ICollection<Event?>> GetUserJoinedEvents(string userId);
 
     /// <summary>
     /// Creates a new Event and sets the userrole as CREATOR.
@@ -99,4 +100,12 @@ public interface IEventService
     /// <param name="userId">Id of the relevant user</param>
     /// <returns>True if permisson should be granted, false else<returns> 
     Task<bool> CanUserDeleteEvent(int eventId, string userId);
+
+
+    /// <summary>
+    /// Gets all EventRelations for a given event, including the user connected to the relation.
+    /// </summary>
+    /// <param name="eventId">Id of the relevant event</param>
+    /// <returns>A list of EventRelations including the user connected to the relation<returns> 
+    Task<ICollection<UserWithEventParticipationDTO>> GetEventRelationsFromEvent(int eventId);
 }

@@ -23,7 +23,7 @@ const EventCardFeed = ({
   imageSource,
   onJoinPress,
 }: EventCardFeedProps) => {
-  const MAX_LETTERS_DESCRIPTION = 90;
+  const MAX_LETTERS_DESCRIPTION = 70;
   const MAX_LETTERS_TITLE = 16;
 
   const truncateDescription = (text: string, maxLetters: number) => {

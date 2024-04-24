@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(22),
     backgroundColor: colors.foreground,
     height: verticalScale(40),
-    width: "90%",
+    width: "100%",
     borderRadius: moderateScale(10),
     paddingLeft: horizontalScale(15),
   },

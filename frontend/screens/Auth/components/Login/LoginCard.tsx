@@ -31,13 +31,13 @@ export default function LoginCard({
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder={"Email"}
+            placeholder={"Mail"}
             onChangeText={(input) => setEmail(input.toLocaleLowerCase())}
             value={email}
           />
           <TextInput
             style={styles.input}
-            placeholder={"Password"}
+            placeholder={"Passord"}
             secureTextEntry={true}
             onChangeText={(input) => setPassword(input)}
           />

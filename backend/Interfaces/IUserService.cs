@@ -78,4 +78,13 @@ public interface IUserService
     /// <param name="userId"></param>
     /// <returns>A list of Users that are blocked</returns>
     Task<ICollection<User?>> GetUserBlocks(string userId);
+
+    /// <summary>
+    /// Gets the hosts friends thats not invited or has a relation to the event.
+    /// User for getting people to invite for a event in frontend.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="eventId"></param>
+    /// <returns>A list of Users </returns>
+    Task<ICollection<User>> GetFriendsNotInvited(string userId, int eventId);
 }

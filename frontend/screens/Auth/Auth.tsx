@@ -28,6 +28,8 @@ export default function Auth({ trigger, setTrigger }: AuthProps) {
   const [password, setPassword] = useState<string>("");
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
+  const [bornDate, setBornDate] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
 
   const { setToken, setUserID } = useTokenProvider();
 
@@ -42,6 +44,7 @@ export default function Auth({ trigger, setTrigger }: AuthProps) {
       setToken(response.token);
       setUserID(response.userID);
     } catch (error) {
+      console.log(error);
       Alert.alert(
         "Ugyldig Login",
         "Mail addressen eller passord er feil, eller finnes ikke!"
@@ -56,6 +59,8 @@ export default function Auth({ trigger, setTrigger }: AuthProps) {
         lastname: lastname,
         email: email,
         password: password,
+        bornDate: bornDate,
+        gender: gender,
       };
 
       const response: IToken | undefined = await registerUser(request);
@@ -97,6 +102,10 @@ export default function Auth({ trigger, setTrigger }: AuthProps) {
           setEmail={setEmail}
           password={password}
           setPassword={setPassword}
+          gender={gender}
+          setGender={setGender}
+          bornDate={bornDate}
+          setBornDate={setBornDate}
         />
       )}
     </View>

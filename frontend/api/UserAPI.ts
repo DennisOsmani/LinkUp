@@ -27,6 +27,29 @@ export async function SearchUsers(searchString: string, token: string) {
   }
 }
 
+export async function getFriendsNotInvited(eventId: number, token: string) {
+  try {
+    const response = await fetch(`${THIS_URL}/users/event/${eventId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "Error in getFriendsNotInvited response: " + response.status
+      );
+    }
+
+    const data: IUser[] = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error("Error while fetching in getFriendsNotInvited  " + error);
+  }
+}
+
 export async function getUser(token: string, userId?: string) {
   try {
     let urlPath;

@@ -1,5 +1,9 @@
 import { StyleSheet } from "react-native";
-import { moderateScale, verticalScale } from "../../styles/genericDimensions";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../styles/genericDimensions";
 import { colors } from "../../styles/colors";
 
 export const styles = StyleSheet.create({
@@ -43,5 +47,11 @@ export const styles = StyleSheet.create({
     fontFamily: "BalooBold",
     fontSize: moderateScale(35),
     color: "white",
+  },
+
+  backButton: {
+    position: "absolute",
+    left: horizontalScale(10),
+    top: verticalScale(14),
   },
 });

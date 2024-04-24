@@ -3,7 +3,6 @@ using Repositories;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Exceptions;
-using Enums;
 
 namespace Services;
 
@@ -42,14 +41,14 @@ public class UserService : IUserService
             throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
         }
 
-        user.Password = "Ikke faen mann";
-        user.Salt = "Mordi er tjukk";
+        user.Password = "";
+        user.Salt = "";
         return user;
     }
 
     public async Task<ICollection<User?>> GetUserFriends(string userId)
     {
-        if (string.IsNullOrEmpty(userId)) 
+        if (string.IsNullOrEmpty(userId))
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
@@ -62,11 +61,40 @@ public class UserService : IUserService
         }
 
         return await _userRelRepo.GetUserFriends(user.UserID);
-    } 
+    }
+
+    public async Task<ICollection<User>> GetFriendsNotInvited(string userId, int eventId)
+    {
+        User? user = await _userRepo.GetUserByID(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with UserID: {userId}, does not exist! (UserService)");
+        }
+
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+
+        if (eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with EventID: {eventId}, does not exist! (UserService)");
+        }
+
+        ICollection<User> usersFromEvent = await _userRepo.GetUsersFromEvent(eventId);
+        ICollection<User?> friends = await _userRelRepo.GetUserFriends(userId);
+
+        if (!friends.Any())
+            return new List<User>();
+
+        ICollection<User> friendsNotInvited = friends
+            .Where(friend => !usersFromEvent.Any(ue => ue.UserID == friend.UserID))
+            .ToList();
+
+        return friendsNotInvited;
+    }
 
     public async Task<ICollection<User?>> GetPendingFriendRequests(string userId)
     {
-        if (string.IsNullOrEmpty(userId)) 
+        if (string.IsNullOrEmpty(userId))
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
@@ -79,11 +107,11 @@ public class UserService : IUserService
         }
 
         return await _userRelRepo.GetPendingFriendRequests(user.UserID);
-    } 
+    }
 
     public async Task<ICollection<User?>> GetUserFriendRequests(string userId)
     {
-        if (string.IsNullOrEmpty(userId)) 
+        if (string.IsNullOrEmpty(userId))
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
@@ -96,11 +124,11 @@ public class UserService : IUserService
         }
 
         return await _userRelRepo.GetUserFriendRequests(user.UserID);
-    } 
+    }
 
     public async Task<ICollection<User?>> GetUserBlocks(string userId)
     {
-         if (string.IsNullOrEmpty(userId)) 
+        if (string.IsNullOrEmpty(userId))
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
@@ -153,7 +181,7 @@ public class UserService : IUserService
         {
             throw new ArgumentNullException("User ID cannot be null or empty. " + nameof(userId) + " (UserService)");
         }
-        
+
         User? user = await GetUser(userId);
 
         ICollection<Event?> eventsCreated = await _eventRepo.GetCreatedEvents(userId);
