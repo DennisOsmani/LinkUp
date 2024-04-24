@@ -14,7 +14,6 @@
 ## Amund
 
 - Bug in Invite users (CreateEvent). Possible to remove users from the invite liste by invbiting then removin. Possible to remove users from the invite liste by invbiting then removing
-- Image prop styling error els?? Endre fra styling på bilde til å style ett View rundt isteden.
 
 TEST
 

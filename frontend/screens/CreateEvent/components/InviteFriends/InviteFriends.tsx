@@ -14,8 +14,6 @@ import { useTokenProvider } from "../../../../providers/TokenProvider";
 import { GetUserFriends } from "../../../../api/UserAPI";
 import { InviteUserCard } from "../InviteUserCard/InviteUserCard";
 
-// TODO
-// - Profilbilde (search & friends)
 interface InviteFriendsProps {
   allFriends: IUser[];
   setAllFriends: React.Dispatch<React.SetStateAction<IUser[]>>;
@@ -158,6 +156,7 @@ export default function InviteFriends({
                 invited={true}
                 onInviteClick={() => handleInviteClick(user)}
                 onUninviteClick={() => handleUninviteClick(user)}
+                imageUrl={user.profileImage!}
               />
             ))}
 
@@ -171,6 +170,7 @@ export default function InviteFriends({
                 invited={false}
                 onInviteClick={() => handleInviteClick(user)}
                 onUninviteClick={() => handleUninviteClick(user)}
+                imageUrl={user.profileImage!}
               />
             ))}
         </View>

@@ -16,15 +16,13 @@ import { IEvent, IEventRelations } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import EventCardJoined from "../Components/EventCardJoined";
 
-const imageSource = require("../../../assets/cbum.jpg");
-
 export default function JoinedFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
   const [eventRelations, setEventRelations] = useState<{
     [eventId: string]: IEventRelations | undefined;
   }>({});
   const [hostNames, setHostNames] = useState<{ [eventId: string]: string }>({});
-  const { token, setToken } = useTokenProvider();
+  const { token } = useTokenProvider();
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -175,8 +173,8 @@ export default function JoinedFeed() {
                 title={event.eventName}
                 hostName={hostNames[event.eventID] || ""}
                 bio={event.eventDescription}
-                address={`${event.location.postalcode}, ${event.location.city}`}
-                imageSource={imageSource}
+                address={`${event.location.postalcode === null ? "" : event.location.postalcode + ", "} ${event.location.city}`}
+                imageSource={event.frontImage}
                 onButtonPress={() =>
                   handleButtonPress(eventRelations[event.eventID])
                 }

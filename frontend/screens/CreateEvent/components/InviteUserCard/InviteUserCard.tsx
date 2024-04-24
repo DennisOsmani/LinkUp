@@ -9,7 +9,7 @@ interface InviteUserCardProps {
   invited: boolean;
   onInviteClick: () => void;
   onUninviteClick: () => void;
-  // image: string; SENERE, LEGGE INN MOCK DATA
+  imageUrl: string;
 }
 
 export function InviteUserCard({
@@ -19,14 +19,12 @@ export function InviteUserCard({
   invited,
   onInviteClick,
   onUninviteClick,
+  imageUrl,
 }: InviteUserCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
-        <Image
-          source={require("../../../../assets/cbum.jpg")}
-          style={styles.image}
-        ></Image>
+        <Image source={{ uri: imageUrl }} style={styles.image}></Image>
         <View style={styles.detailsContainer}>
           <View style={styles.iconContainer}>
             <Feather name="user" style={styles.icon}></Feather>

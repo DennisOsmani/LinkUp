@@ -13,12 +13,10 @@ import { joinOpenEvent } from "../../../api/EventRelationAPI";
 import { IEvent } from "../../../interfaces/ModelInterfaces";
 import EventCardFeed from "../Components/EventCardFeed";
 
-const imageSource = require("../../../assets/cbum.jpg");
-
 export default function FriendFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
   const [hostNames, setHostNames] = useState<{ [eventId: string]: string }>({});
-  const { token, setToken } = useTokenProvider();
+  const { token } = useTokenProvider();
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -137,7 +135,7 @@ export default function FriendFeed() {
                 hostName={hostNames[event.eventID] || ""}
                 bio={event.eventDescription}
                 address={`${event.location.postalcode}, ${event.location.city}`}
-                imageSource={imageSource}
+                imageSource={event.frontImage}
                 onJoinPress={() => handleJoinPress(event.eventID)}
               />
             ))

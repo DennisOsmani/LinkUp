@@ -127,6 +127,7 @@ export interface IUserWithEventParticipationDTO {
   dateBorn: Date;
   participation: EventRelationParticipation;
   role: EventRole;
+  profileImage: string;
 }
 
 export enum EventRelationParticipation {

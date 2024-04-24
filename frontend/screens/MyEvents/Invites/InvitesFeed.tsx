@@ -6,27 +6,17 @@ import {
   View,
 } from "react-native";
 import { styles } from "./InvitesFeedStyles";
-import {
-  getEventsInCity,
-  getHostForEvent,
-  getUserEventInvites,
-} from "../../../api/EventAPI";
-import {
-  joinOpenEvent,
-  updateEventRelationParticipation,
-} from "../../../api/EventRelationAPI";
+import { getHostForEvent, getUserEventInvites } from "../../../api/EventAPI";
+import { updateEventRelationParticipation } from "../../../api/EventRelationAPI";
 import { useEffect, useState } from "react";
 import { IEvent } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
-import { useLocation } from "../../../providers/LocationProvider";
 import EventCardInvite from "../Components/EventCardInvite";
-
-const imageSource = require("../../../assets/cbum.jpg");
 
 export default function InvitesFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
   const [hostNames, setHostNames] = useState<{ [eventId: string]: string }>({});
-  const { token, setToken } = useTokenProvider();
+  const { token } = useTokenProvider();
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -158,8 +148,8 @@ export default function InvitesFeed() {
                 title={event.eventName}
                 hostName={hostNames[event.eventID] || ""}
                 bio={event.eventDescription}
-                address={`${event.location.postalcode}, ${event.location.city}`}
-                imageSource={imageSource}
+                address={`${event.location.postalcode === null ? "" : event.location.postalcode + ", "} ${event.location.city}`}
+                imageSource={event.frontImage}
                 onDeclinePress={() => handleDeclinePress(event.eventID)}
                 onJoinPress={() => handleJoinPress(event.eventID)}
               />

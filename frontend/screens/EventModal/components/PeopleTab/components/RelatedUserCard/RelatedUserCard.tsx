@@ -62,7 +62,7 @@ export default function RelatedUserCard({ user }: RelatedUserCardProps) {
         <Image
           style={styles.image}
           source={{
-            uri: "https://cdn-main.newsner.com/wp-content/uploads/sites/16/2021/02/06065224/Skjermbilde-2021-02-25-kl.-16.46.21.jpg",
+            uri: user.imageUrl,
           }}
         />
       </View>

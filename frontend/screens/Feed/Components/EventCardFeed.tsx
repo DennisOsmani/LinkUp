@@ -64,7 +64,7 @@ const EventCardFeed = ({
           </View>
         </View>
         <View style={styles.rightSide}>
-          <Image source={imageSource} style={styles.image} />
+          <Image source={{ uri: imageSource }} style={styles.image} />
         </View>
       </View>
     </View>

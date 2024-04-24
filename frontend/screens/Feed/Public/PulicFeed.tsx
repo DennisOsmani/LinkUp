@@ -14,8 +14,6 @@ import { IEvent } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import { useLocation } from "../../../providers/LocationProvider";
 
-const imageSource = require("../../../assets/cbum.jpg");
-
 export default function PublicFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
   const [hostNames, setHostNames] = useState<{ [eventId: string]: string }>({});
@@ -147,8 +145,8 @@ export default function PublicFeed() {
                 title={event.eventName}
                 hostName={hostNames[event.eventID] || ""}
                 bio={event.eventDescription}
-                address={`${event.location.postalcode}, ${event.location.city}`}
-                imageSource={imageSource}
+                address={`${event.location.postalcode === null ? "" : event.location.postalcode + ", "} ${event.location.city}`}
+                imageSource={event.frontImage}
                 onJoinPress={() => handleJoinPress(event.eventID)}
               />
             ))

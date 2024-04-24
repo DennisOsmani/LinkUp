@@ -13,7 +13,7 @@ import { useState } from "react";
 import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
 import { useTokenProvider } from "../../providers/TokenProvider";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { IEventDTO, ILocation } from "../../interfaces/ModelInterfaces";
 import { createEvent, getEventById } from "../../api/EventAPI";
 import LocationModal from "./components/LocationModal/LocationModal";
@@ -268,17 +268,19 @@ export default function CreateEvent() {
 
           <View style={styles.datetimepickerBox}>
             <Text style={styles.datetimepickerText}>Event start</Text>
-            <DateTimePicker
+            <RNDateTimePicker
               value={new Date(event.eventDateTimeStart.toString())}
               mode={"datetime"}
               onChange={onChangeStart}
+              locale="no-NB"
             />
           </View>
           <View style={styles.datetimepickerBox}>
             <Text style={styles.datetimepickerText}>Event slutt</Text>
-            <DateTimePicker
+            <RNDateTimePicker
               value={new Date(event.eventDateTimeEnd.toString())}
               mode={"datetime"}
+              locale="no-NB"
               onChange={onChangeEnd}
             />
           </View>

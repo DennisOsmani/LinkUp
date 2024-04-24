@@ -72,7 +72,7 @@ const EventCardInvite = ({
         </View>
         <View style={styles.rightSide}>
           <Image
-            source={imageSource}
+            source={{ uri: imageSource }}
             style={{
               height: "100%",
               width: "100%",
