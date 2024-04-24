@@ -1,26 +1,32 @@
 import { View, Image, Text, Pressable } from "react-native";
 import styles from "./UserCardStyles";
 import { Feather } from "@expo/vector-icons";
+import { useEffect } from "react";
 
 // For search in People Screen
 interface UserCardInfo {
   firstname: string;
   lastname: string;
   age: number;
-  // image: string; SENERE, LEGGE INN MOCK DATA
+  profileImage: string;
 }
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
   onPressButton: () => void;
+  onPressCard: () => void;
 }
 
-export function UserCardSearch({ userCardInfo, onPressButton }: UserCardProps) {
+export function UserCardSearch({
+  userCardInfo,
+  onPressButton,
+  onPressCard,
+}: UserCardProps) {
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={onPressCard}>
       <View style={styles.imageContainer}>
         <Image
-          source={require("../../assets/cbum.jpg")}
+          source={{ uri: userCardInfo.profileImage }}
           style={styles.image}
         ></Image>
         <View style={styles.detailsContainer}>
@@ -39,6 +45,6 @@ export function UserCardSearch({ userCardInfo, onPressButton }: UserCardProps) {
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }

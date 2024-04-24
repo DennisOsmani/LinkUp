@@ -24,16 +24,17 @@ export interface IUser {
   lastname: string;
   dateBorn: string;
   phone?: string;
-  RelationshipStatus?: number;
+  relationshipStatus?: number;
   gender?: string;
   description?: string;
-  email?: string;
+  email: string;
   profileImage?: string;
   password?: string;
   salt?: string;
   eventsCreated?: number;
   eventsJoined?: number;
-  role?: number;
+  eventBails?: number;
+  role: number;
   userRelationsAsFirst?: [];
   userRelationsAsSecond?: [];
   eventRelations?: [];
@@ -84,7 +85,7 @@ export interface IUserRelation {
   user_fisrt?: IUser;
   user_second_ID: string;
   user_second?: IUser;
-  type: number;
+  type?: number;
 }
 
 export interface IEventRelations {

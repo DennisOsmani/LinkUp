@@ -1,26 +1,27 @@
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, Pressable } from "react-native";
 import styles from "./UserCardStyles";
 import { Feather } from "@expo/vector-icons";
 
-// Legge inn Pressable --> sendes til Other Profile
-
-// For search in People Screen
 interface UserCardInfo {
   firstname: string;
   lastname: string;
-  // image: string; SENERE, LEGGE INN MOCK DATA
+  profileImage: string;
 }
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
+  onPressCard: () => void;
 }
 
-export function UserCardBlocked({ userCardInfo }: UserCardProps) {
+export function UserCardBlocked({ userCardInfo, onPressCard }: UserCardProps) {
   return (
-    <View style={[styles.blockedCard, styles.blockedOpacity]}>
+    <Pressable
+      style={[styles.blockedCard, styles.blockedOpacity]}
+      onPress={onPressCard}
+    >
       <View style={styles.imageContainer}>
         <Image
-          source={require("../../assets/cbum.jpg")}
+          source={{ uri: userCardInfo.profileImage }}
           style={styles.image}
         ></Image>
         <View style={styles.blockedContainer}>
@@ -32,6 +33,6 @@ export function UserCardBlocked({ userCardInfo }: UserCardProps) {
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }

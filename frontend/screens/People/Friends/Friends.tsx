@@ -2,7 +2,11 @@ import { TextInput, View, ScrollView, Text } from "react-native";
 import styles from "../../People/Search/SearchStyles";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { IUser, UserRelationType } from "../../../interfaces/ModelInterfaces";
+import {
+  IUser,
+  IUserRelation,
+  UserRelationType,
+} from "../../../interfaces/ModelInterfaces";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import {
   GetUserFriends,
@@ -14,11 +18,10 @@ import { UserCardAnswer } from "../../../components/UserCard/UserCardAnswer";
 import {
   UpdateUserRelationType,
   DeleteUserRelation,
+  GetUserRelation,
 } from "../../../api/UserRelationAPI";
-
-// TODO
-// - Profilbilde (search & friends)
-// - Linke hvert kort til profil (search & friends)
+import OtherProfile from "../../OtherProfile/OtherProfile";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function FriendsPeople() {
   const [searchText, setSearchText] = useState("");
@@ -26,6 +29,13 @@ export default function FriendsPeople() {
   const [filteredFriends, setFilteredFriends] = useState<IUser[]>([]);
   const [allFriendRequests, setAllFriendRequests] = useState<IUser[]>([]);
   const { token, userID } = useTokenProvider();
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedProfile, setSelectedProfile] = useState<IUser | undefined>(
+    undefined
+  );
+  const [relationType, setRelationType] = useState<IUserRelation>();
+  const [profileRelationChanged, setProfileRelationChanged] =
+    useState<boolean>(false);
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -43,7 +53,7 @@ export default function FriendsPeople() {
   useEffect(() => {
     fetchAllFriends();
     fetchAllFriendRequests();
-  }, []);
+  }, [profileRelationChanged]);
 
   const fetchAllFriends = async () => {
     try {
@@ -126,45 +136,77 @@ export default function FriendsPeople() {
     setFilteredFriends(allFriends);
   };
 
+  const handleUserCardPressed = async (profile: IUser) => {
+    const rel = await GetUserRelation(token, profile.userID);
+    setRelationType(rel ? rel : undefined);
+    setSelectedProfile(profile);
+    setModalVisible(true);
+  };
+
+  const handleBack = async () => {
+    setModalVisible(false);
+    setProfileRelationChanged(!profileRelationChanged);
+  };
+
   return (
-    <ScrollView>
-      <View style={styles.contentContainer}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchBar}
-            placeholder="Søk"
-            value={searchText}
-            onChangeText={handleSearchTextChange}
-          ></TextInput>
-          <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+    <>
+      <OtherProfile
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        profile={selectedProfile!}
+        userRelation={relationType!}
+        handleBack={handleBack}
+      ></OtherProfile>
+
+      <ScrollView>
+        <View style={styles.contentContainer}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Søk"
+              value={searchText}
+              onChangeText={handleSearchTextChange}
+            ></TextInput>
+            <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+          </View>
+
+          {allFriendRequests &&
+            allFriendRequests.map((user: IUser, index: number) => (
+              <UserCardAnswer
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                  profileImage: user.profileImage!,
+                }}
+                onPressAccept={() => handleAcceptRequest(user.userID)}
+                onPressReject={() => handleRejectRequest(user.userID)}
+                onPressCard={() => handleUserCardPressed(user)}
+              ></UserCardAnswer>
+            ))}
+
+          {filteredFriends &&
+            filteredFriends.map((user: IUser, index: number) => (
+              <UserCardFriends
+                key={index}
+                userCardInfo={{
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  age: calculateAge(user.dateBorn),
+                  profileImage: user.profileImage!,
+                }}
+                onPressCard={() => handleUserCardPressed(user)}
+              ></UserCardFriends>
+            ))}
+
+          {allFriendRequests.length === 0 && filteredFriends.length === 0 && (
+            <View style={styles.screenInfo}>
+              <Text style={styles.screenInfoText}>Legg til venner!</Text>
+            </View>
+          )}
         </View>
-
-        {allFriendRequests &&
-          allFriendRequests.map((user: IUser, index: number) => (
-            <UserCardAnswer
-              key={index}
-              userCardInfo={{
-                firstname: user.firstname,
-                lastname: user.lastname,
-                age: calculateAge(user.dateBorn),
-              }}
-              onPressAccept={() => handleAcceptRequest(user.userID)}
-              onPressReject={() => handleRejectRequest(user.userID)}
-            ></UserCardAnswer>
-          ))}
-
-        {filteredFriends &&
-          filteredFriends.map((user: IUser, index: number) => (
-            <UserCardFriends
-              key={index}
-              userCardInfo={{
-                firstname: user.firstname,
-                lastname: user.lastname,
-                age: calculateAge(user.dateBorn),
-              }}
-            ></UserCardFriends>
-          ))}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 }

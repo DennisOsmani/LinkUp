@@ -169,7 +169,7 @@ export async function GetUserBlocks(token: string, userId?: string) {
   }
 }
 
-export async function updateUser(user: IUser, token: string) {
+export async function UpdateUser(user: IUser, token: string) {
   try {
     const response = await fetch(`${THIS_URL}/update`, {
       method: "PUT",

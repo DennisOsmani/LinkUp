@@ -1,4 +1,4 @@
-import { TextInput, View, ScrollView } from "react-native";
+import { TextInput, View, ScrollView, Text } from "react-native";
 import { UserCardSearch } from "../../../components/UserCard/UserCardSearch";
 import { UserCardFriends } from "../../../components/UserCard/UserCardFriends";
 import { UserCardPending } from "../../../components/UserCard/UserCardPending";
@@ -19,7 +19,11 @@ import {
   UserRelationType,
 } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
-import { CreateUserRelation } from "../../../api/UserRelationAPI";
+import {
+  CreateUserRelation,
+  GetUserRelation,
+} from "../../../api/UserRelationAPI";
+import OtherProfile from "../../OtherProfile/OtherProfile";
 
 // When register, add date of birth ??
 
@@ -34,6 +38,13 @@ export default function SearchPeople() {
   const [friends, setFriends] = useState<IUser[]>([]);
   const [pending, setPending] = useState<IUser[]>([]);
   const [blocked, setBlocked] = useState<IUser[]>([]);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedProfile, setSelectedProfile] = useState<IUser | undefined>(
+    undefined
+  );
+  const [relationType, setRelationType] = useState<IUserRelation>();
+  const [profileRelationChanged, setProfileRelationChanged] =
+    useState<boolean>(false);
 
   const calculateAge = (dateBorn: string) => {
     const birthDate = new Date(dateBorn);
@@ -56,7 +67,7 @@ export default function SearchPeople() {
     fetchFriends();
     fetchPending();
     fetchBlocked();
-  }, []);
+  }, [profileRelationChanged]);
 
   const fetchFriends = async () => {
     try {
@@ -148,82 +159,123 @@ export default function SearchPeople() {
     }
   };
 
+  const handleUserCardPressed = async (profile: IUser) => {
+    const rel = await GetUserRelation(token, profile.userID);
+    setRelationType(rel ? rel : undefined);
+    setSelectedProfile(profile);
+    setModalVisible(true);
+  };
+
+  const handleBack = async () => {
+    setModalVisible(false);
+    setProfileRelationChanged(!profileRelationChanged);
+  };
+
   return (
-    <ScrollView>
-      <View style={styles.contentContainer}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchBar}
-            placeholder="Søk"
-            value={searchText}
-            onChangeText={setSearchText}
-            onSubmitEditing={handleSearch}
-          ></TextInput>
-          <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+    <>
+      <OtherProfile
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        profile={selectedProfile!}
+        userRelation={relationType!}
+        handleBack={handleBack}
+      ></OtherProfile>
+
+      <ScrollView>
+        <View style={styles.contentContainer}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Søk"
+              value={searchText}
+              onChangeText={setSearchText}
+              onSubmitEditing={handleSearch}
+            ></TextInput>
+            <Feather style={styles.icon} name="x" onPress={clearSearchText} />
+          </View>
+
+          {searchResult && searchResult.length > 0 ? (
+            searchResult.map((user: IUser, index: number) => {
+              // Check if the logged-in user's friends list contains the current user
+              const isFriend = friends.some(
+                (friend) => friend.userID === user.userID
+              );
+
+              const isPendig = pending.some(
+                (pending) => pending.userID === user.userID
+              );
+
+              const isBlocked = blocked.some(
+                (block) => block.userID === user.userID
+              );
+
+              if (isFriend) {
+                return (
+                  <UserCardFriends
+                    key={index}
+                    userCardInfo={{
+                      firstname: user.firstname,
+                      lastname: user.lastname,
+                      age: calculateAge(user.dateBorn),
+                      profileImage: user.profileImage!,
+                    }}
+                    onPressCard={() => handleUserCardPressed(user)}
+                    // The modal shows a remove friend button when FriendCard is pressed
+                  ></UserCardFriends>
+                );
+              } else if (isPendig) {
+                return (
+                  <UserCardPending
+                    key={index}
+                    userCardInfo={{
+                      firstname: user.firstname,
+                      lastname: user.lastname,
+                      age: calculateAge(user.dateBorn),
+                      profileImage: user.profileImage!,
+                    }}
+                    onPressCard={() => handleUserCardPressed(user)}
+                    // The modal shows pending button when PendingCard is pressed
+                  ></UserCardPending>
+                );
+              } else if (isBlocked) {
+                return (
+                  <UserCardBlocked
+                    key={index}
+                    userCardInfo={{
+                      firstname: user.firstname,
+                      lastname: user.lastname,
+                      profileImage: user.profileImage!,
+                    }}
+                    onPressCard={() => handleUserCardPressed(user)}
+                    // The modal shows "Fjern blokkering" i stedet for Blokker eller ha en knapp
+                  ></UserCardBlocked>
+                );
+              } else {
+                return (
+                  <UserCardSearch
+                    key={index}
+                    userCardInfo={{
+                      firstname: user.firstname,
+                      lastname: user.lastname,
+                      age: calculateAge(user.dateBorn),
+                      profileImage: user.profileImage!,
+                    }}
+                    onPressButton={() => handleSendFriendRequest(user.userID)}
+                    onPressCard={() => handleUserCardPressed(user)}
+                    // The modal shows "Legg til venn" button when SearchCard is pressed
+                  ></UserCardSearch>
+                );
+              }
+            })
+          ) : (
+            <View style={styles.screenInfo}>
+              <Text style={styles.screenInfoText}>
+                Søk etter andre å knytte kontakt med!
+              </Text>
+            </View>
+          )}
         </View>
-
-        {searchResult &&
-          searchResult.map((user: IUser, index: number) => {
-            // Check if the logged-in user's friends list contains the current user
-            const isFriend = friends.some(
-              (friend) => friend.userID === user.userID
-            );
-
-            const isPendig = pending.some(
-              (pending) => pending.userID === user.userID
-            );
-
-            const isBlocked = blocked.some(
-              (block) => block.userID === user.userID
-            );
-
-            if (isFriend) {
-              return (
-                <UserCardFriends
-                  key={index}
-                  userCardInfo={{
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    age: calculateAge(user.dateBorn),
-                  }}
-                ></UserCardFriends>
-              );
-            } else if (isPendig) {
-              return (
-                <UserCardPending
-                  key={index}
-                  userCardInfo={{
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    age: calculateAge(user.dateBorn),
-                  }}
-                ></UserCardPending>
-              );
-            } else if (isBlocked) {
-              return (
-                <UserCardBlocked
-                  key={index}
-                  userCardInfo={{
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                  }}
-                ></UserCardBlocked>
-              );
-            } else {
-              return (
-                <UserCardSearch
-                  key={index}
-                  userCardInfo={{
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    age: calculateAge(user.dateBorn),
-                  }}
-                  onPressButton={() => handleSendFriendRequest(user.userID)}
-                ></UserCardSearch>
-              );
-            }
-          })}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 }

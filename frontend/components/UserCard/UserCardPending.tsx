@@ -7,19 +7,20 @@ interface UserCardInfo {
   firstname: string;
   lastname: string;
   age: number;
-  // image: string; SENERE, LEGGE INN MOCK DATA
+  profileImage: string;
 }
 
 interface UserCardProps {
   userCardInfo: UserCardInfo;
+  onPressCard: () => void;
 }
 
-export function UserCardPending({ userCardInfo }: UserCardProps) {
+export function UserCardPending({ userCardInfo, onPressCard }: UserCardProps) {
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={onPressCard}>
       <View style={styles.imageContainer}>
         <Image
-          source={require("../../assets/cbum.jpg")}
+          source={{ uri: userCardInfo.profileImage }}
           style={styles.image}
         ></Image>
         <View style={styles.detailsContainer}>
@@ -38,6 +39,6 @@ export function UserCardPending({ userCardInfo }: UserCardProps) {
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
