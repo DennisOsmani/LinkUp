@@ -8,4 +8,5 @@ export const colors = {
   red: "#DE1240",
   grey: "#808080",
   blocked: "#C9C9C9",
+  black: "#000000",
 };

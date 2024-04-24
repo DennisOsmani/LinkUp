@@ -182,15 +182,6 @@ export default function SearchPeople() {
       ></OtherProfile>
 
       <ScrollView>
-        <View style={styles.screenInfo}>
-          {searchText && searchText === "" ? (
-            <Text style={styles.screenInfoText}>
-              Søk etter andre brukere å knytte kontakt med!
-            </Text>
-          ) : (
-            <Text>Fitte</Text>
-          )}
-        </View>
         <View style={styles.contentContainer}>
           <View style={styles.searchContainer}>
             <TextInput
@@ -203,7 +194,7 @@ export default function SearchPeople() {
             <Feather style={styles.icon} name="x" onPress={clearSearchText} />
           </View>
 
-          {searchResult &&
+          {searchResult && searchResult.length > 0 ? (
             searchResult.map((user: IUser, index: number) => {
               // Check if the logged-in user's friends list contains the current user
               const isFriend = friends.some(
@@ -275,7 +266,14 @@ export default function SearchPeople() {
                   ></UserCardSearch>
                 );
               }
-            })}
+            })
+          ) : (
+            <View style={styles.screenInfo}>
+              <Text style={styles.screenInfoText}>
+                Søk etter andre å knytte kontakt med!
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </>

@@ -8,13 +8,15 @@ import {
 
 export default StyleSheet.create({
   screenInfo: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
+    marginTop: verticalScale(200),
   },
   screenInfoText: {
-    color: colors.red,
-    textAlign: "center",
-    fontSize: moderateScale(40),
-    fontFamily: "BalooBold",
+    fontSize: moderateScale(20),
+    fontFamily: "BalooSemiBold",
+    marginTop: moderateScale(20),
   },
 
   contentContainer: {

@@ -371,9 +371,12 @@ export default function OtherProfile({
                   <Text style={styles.addFriendButtonText}>Legg til venn</Text>
                 </Pressable>
               ) : /* Godta/Avslå hvis UserCardAnswer er pressed ? avslå */
-              updatedUserRelation.type ===
+              (updatedUserRelation.type ===
                   UserRelationType.PENDING_FIRST_SECOND &&
-                userID === updatedUserRelation.user_second_ID ? (
+                  userID === updatedUserRelation.user_second_ID) ||
+                (updatedUserRelation.type ===
+                  UserRelationType.PENDING_SECOND_FIRST &&
+                  userID === updatedUserRelation.user_first_ID) ? (
                 <View style={styles.answerButtons}>
                   <Pressable
                     style={styles.acceptFriendButton}
@@ -390,9 +393,12 @@ export default function OtherProfile({
                 </View>
               ) : /* Venter på svar hvis UserCardPending er pressed --> Hvis trykker 
               på knappen gjøre sånn at man får opp en alert om å trekke tilbake venneforespørsel*/
-              updatedUserRelation.type ===
+              (updatedUserRelation.type ===
                   UserRelationType.PENDING_FIRST_SECOND &&
-                userID === updatedUserRelation.user_first_ID ? (
+                  userID === updatedUserRelation.user_first_ID) ||
+                (updatedUserRelation.type ===
+                  UserRelationType.PENDING_SECOND_FIRST &&
+                  userID === updatedUserRelation.user_second_ID) ? (
                 <Pressable
                   style={styles.pendingRequestButton}
                   onPress={() => handeleRemovePendingRequest(profile.userID)}
