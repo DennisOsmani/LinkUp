@@ -109,7 +109,7 @@ export default function OtherProfile({
   const handleRemoveFriend = async (otherId: string) => {
     try {
       Alert.alert(
-        "Fjern Venn",
+        "Fjern venn",
         "Er du sikker på at du vil fjerne venn?",
         [
           {
@@ -117,7 +117,7 @@ export default function OtherProfile({
             style: "cancel",
           },
           {
-            text: "Avslå",
+            text: "Fjern",
             onPress: async () => {
               await DeleteUserRelation(token, otherId);
               setUpdatedUserRelation(undefined);
@@ -163,7 +163,7 @@ export default function OtherProfile({
   const handleRejectRequest = async (otherId: string) => {
     try {
       Alert.alert(
-        "Avslå Venneforespørsel",
+        "Avslå venneforespørsel",
         "Er du sikker på at du vil avslå?",
         [
           {
@@ -191,7 +191,7 @@ export default function OtherProfile({
   const handeleRemovePendingRequest = async (otherId: string) => {
     try {
       Alert.alert(
-        "Avbryt Venneforespørsel",
+        "Avbryt venneforespørsel",
         "Er du sikker på at du vil trekke tilbake venneforespørselen?",
         [
           {

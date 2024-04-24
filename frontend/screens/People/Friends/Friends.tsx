@@ -145,7 +145,7 @@ export default function FriendsPeople() {
 
   const handleBack = async () => {
     setModalVisible(false);
-    setProfileRelationChanged(false);
+    setProfileRelationChanged(!profileRelationChanged);
   };
 
   return (
@@ -199,6 +199,12 @@ export default function FriendsPeople() {
                 onPressCard={() => handleUserCardPressed(user)}
               ></UserCardFriends>
             ))}
+
+          {allFriendRequests.length === 0 && filteredFriends.length === 0 && (
+            <View style={styles.screenInfo}>
+              <Text style={styles.screenInfoText}>Legg til venner!</Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </>
