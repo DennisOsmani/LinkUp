@@ -109,7 +109,7 @@ export const updateEventRelationParticipation = async (
 ) => {
   try {
     const response = await fetch(
-      `${THIS_URL}/participation?eventId=${eventId}&participation=${participation}`,
+      `${THIS_URL}/participation/${eventId}?participation=${participation}`,
       {
         method: "PUT",
         headers: {

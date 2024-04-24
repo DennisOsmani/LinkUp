@@ -195,7 +195,7 @@ public class EventRelationController : ControllerBase
 
     [HttpPut("participation/{eventId}")]
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
-    public async Task<ActionResult<EventRelation>> UpdateEventRelationParticipation(int eventId, [FromBody] string participation)
+    public async Task<ActionResult<EventRelation>> UpdateEventRelationParticipation(int eventId, [FromQuery] string participation)
     {
         participation = SecurityElement.Escape(participation);
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
