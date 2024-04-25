@@ -13,14 +13,28 @@ export const styles = StyleSheet.create({
         borderTopStartRadius: moderateScale(25),
     },
 
-    eventTabContainer: {
+    keyboardContainer: {
         width: "100%",
         height: "100%",
         alignItems: "center",
+        justifyContent: "center",
+    },
+
+    eventTabContainer: {
+        width: "100%",
+        height: "100%",
+        justifyContent: "center",
         borderTopEndRadius: moderateScale(25),
         borderTopStartRadius: moderateScale(25),
         backgroundColor: colors.background,
         rowGap: verticalScale(10),
+    },
+
+    contentWrapper: {
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        marginTop: verticalScale(15),
     },
 
     imageContainer: {

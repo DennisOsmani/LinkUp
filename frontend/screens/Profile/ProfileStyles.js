@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput } from "react-native";
+import { StyleSheet } from "react-native";
 import { colors } from "../../styles/colors";
 import {
     horizontalScale,
@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: colors.primary,
         justifyContent: "flex-end",
+        paddingTop: verticalScale(70),
         paddingTop: verticalScale(70),
     },
 
