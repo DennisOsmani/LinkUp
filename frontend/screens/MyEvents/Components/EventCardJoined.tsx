@@ -41,6 +41,8 @@ const EventCardJoined = ({
     const MAX_LETTERS_DESCRIPTION = 70;
     const MAX_LETTERS_TITLE = 16;
 
+    const [edit, setEdit] = useState<boolean>(true);
+
     const [creatorEventModalVisible, setCreatorEventModalVisible] =
         useState<boolean>(false);
     const [eventModalVisible, setEventModalVisible] = useState<boolean>(false);
@@ -53,11 +55,18 @@ const EventCardJoined = ({
     };
     const handleCardPress = () => {
         if (host) {
+            setEdit(false);
             setCreatorEventModalVisible(true);
             return;
         }
 
+        setEdit(false);
         setEventModalVisible(true);
+    };
+
+    const handleEditPress = () => {
+        setEdit(true);
+        setCreatorEventModalVisible(true);
     };
 
     return (
@@ -66,6 +75,7 @@ const EventCardJoined = ({
                 modalVisible={creatorEventModalVisible}
                 setModalVisible={setCreatorEventModalVisible}
                 event={event}
+                edit={edit}
             />
             <EventModal
                 modalVisible={eventModalVisible}
@@ -104,7 +114,9 @@ const EventCardJoined = ({
                                     style={styles.button}
                                     onPress={onButtonPress}
                                 >
-                                    <Text style={styles.buttonText}>Rediger</Text>
+                                    <Text onPress={handleEditPress} style={styles.buttonText}>
+                                        Rediger
+                                    </Text>
                                 </TouchableOpacity>
                             ) : (
                                 <TouchableOpacity

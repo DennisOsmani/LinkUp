@@ -8,12 +8,14 @@ interface CreatorEventModalProps {
     modalVisible: boolean;
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
     event: IEvent | undefined;
+    edit: boolean;
 }
 
 export function CreatorEventModal({
     modalVisible,
     setModalVisible,
     event,
+    edit,
 }: CreatorEventModalProps) {
     const handleBack = () => setModalVisible(false);
 
@@ -25,7 +27,11 @@ export function CreatorEventModal({
                 backButton={true}
                 handleBack={handleBack}
             >
-                <CreatorEventTab setEventModalVisible={setModalVisible} event={event} />
+                <CreatorEventTab
+                    setEventModalVisible={setModalVisible}
+                    event={event}
+                    edit={edit}
+                />
                 <CreatorPeopleTab event={event} />
             </TabBackground>
         </Modal>
