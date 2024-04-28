@@ -7,6 +7,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from "react-native";
 import { styles } from "./ProfileStyles";
 import { getUser } from "../../api/UserAPI";
@@ -19,6 +20,7 @@ import { UpdateUser } from "../../api/UserAPI";
 import { Picker } from "@react-native-picker/picker";
 import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
+import RNPickerSelect from "react-native-picker-select";
 
 export default function Profile() {
   const { token } = useTokenProvider();
@@ -31,9 +33,18 @@ export default function Profile() {
   const [profileImageUri, setProfileImageUri] = useState<string>(
     "https://t3.ftcdn.net/jpg/00/64/67/80/360_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg"
   );
+  const [isPhoneValid, setIsPhoneValid] = useState<boolean>(false);
+  const [isBioValid, setIsBioValid] = useState<boolean>(false);
+  const [formValid, setFormValid] = useState<boolean>(false);
 
   useEffect(() => {
     fetchProfile();
+    if (updatedPhone) {
+      validPhoneInput(updatedPhone);
+    }
+    if (updatedBio) {
+      validBioInput(updatedBio);
+    }
   }, [isFocused]);
 
   const fetchProfile = async () => {
@@ -61,20 +72,24 @@ export default function Profile() {
   };
 
   const updateProfile = async () => {
-    Alert.alert(
-      "Bekreft endringer",
-      "Er du sikker på at du vil lagre disse endringene?",
-      [
-        {
-          text: "Nei",
-          style: "cancel",
-        },
-        {
-          text: "Ja",
-          onPress: async () => await sendUpdate(),
-        },
-      ]
-    );
+    if (!formValid) {
+      Alert.alert("Feil i endringene", "Gjør om på de rødtmarkerte områdene.");
+    } else {
+      Alert.alert(
+        "Bekreft endringer",
+        "Er du sikker på at du vil lagre disse endringene?",
+        [
+          {
+            text: "Nei",
+            style: "cancel",
+          },
+          {
+            text: "Ja",
+            onPress: async () => await sendUpdate(),
+          },
+        ]
+      );
+    }
   };
 
   const sendUpdate = async () => {
@@ -144,6 +159,33 @@ export default function Profile() {
     }
   };
 
+  const handlePhoneChange = (text: string) => {
+    setUpdatedPhone(text);
+    validPhoneInput(text);
+    inputFormValid();
+  };
+
+  const handleBioChange = (text: string) => {
+    setUpdatedBio(text);
+    validBioInput(text);
+    inputFormValid();
+  };
+
+  const validPhoneInput = (phone: string) => {
+    const phoneRegex = /^[0-9]{8}$/.test(phone);
+    setIsPhoneValid(phoneRegex);
+  };
+
+  const validBioInput = (bio: string) => {
+    const BIO_LENGTH = bio.length <= 200;
+
+    setIsBioValid(BIO_LENGTH);
+  };
+
+  const inputFormValid = () => {
+    setFormValid(isPhoneValid && isBioValid);
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -189,9 +231,16 @@ export default function Profile() {
 
             {editMode && (
               <TextInput
-                style={styles.inputText}
+                style={[
+                  styles.inputText,
+                  !isPhoneValid
+                    ? styles.invalidInput
+                    : isPhoneValid
+                    ? styles.validInput
+                    : null,
+                ]}
                 value={updatedPhone}
-                onChangeText={(text) => setUpdatedPhone(text)}
+                onChangeText={handlePhoneChange}
               />
             )}
           </View>
@@ -240,20 +289,30 @@ export default function Profile() {
               )}
 
               {editMode && (
-                <Picker
-                  selectedValue={relStatus}
-                  onValueChange={(itemValue) =>
-                    handleRelationshipStatusChange(itemValue)
+                // <Picker
+                //   selectedValue={relStatus}
+                //   onValueChange={(itemValue) =>
+                //     handleRelationshipStatusChange(itemValue)
+                //   }
+                // >
+                //   {relationshipStatuses.map((status, index) => (
+                //     <Picker.Item
+                //       key={index}
+                //       label={status.label}
+                //       value={status.value}
+                //     />
+                //   ))}
+                // </Picker>
+
+                <RNPickerSelect
+                  placeholder={{ label: "Velg din sivilstatus:", value: null }}
+                  onValueChange={(value) =>
+                    handleRelationshipStatusChange(
+                      Number.parseInt(value?.toString()!)
+                    )
                   }
-                >
-                  {relationshipStatuses.map((status, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={status.label}
-                      value={status.value}
-                    />
-                  ))}
-                </Picker>
+                  items={relationshipStatuses}
+                ></RNPickerSelect>
               )}
             </View>
           </View>
@@ -261,20 +320,27 @@ export default function Profile() {
 
         <View style={styles.legendContainer}>
           <Text style={styles.legendText}>Bio</Text>
-          <View style={styles.inputBoxBig}>
+          <ScrollView style={styles.inputBoxBig}>
             {!editMode && (
               <Text style={styles.inputTextBig}>{user?.description}</Text>
             )}
 
             {editMode && (
               <TextInput
-                style={styles.inputTextBig}
+                style={[
+                  styles.inputTextBig,
+                  !isBioValid
+                    ? styles.invalidInput
+                    : isBioValid
+                    ? styles.validInput
+                    : null,
+                ]}
                 value={updatedBio}
-                onChangeText={(text) => setUpdatedBio(text)}
+                onChangeText={handleBioChange}
                 multiline={true}
               />
             )}
-          </View>
+          </ScrollView>
         </View>
 
         {!editMode && (
