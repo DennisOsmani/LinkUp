@@ -2,6 +2,7 @@
 
 ## Bugs - Primary
 
+- [ ] skalere ned bilder
 - [ ] Fikse funk for EventModal / CreatorEventModal
 - [ ] Side for å redigere event
 - [x] Creator skal kunne slette event og ikke forlate
