@@ -39,12 +39,6 @@ export default function Profile() {
 
   useEffect(() => {
     fetchProfile();
-    if (updatedPhone) {
-      validPhoneInput(updatedPhone);
-    }
-    if (updatedBio) {
-      validBioInput(updatedBio);
-    }
   }, [isFocused]);
 
   const fetchProfile = async () => {
@@ -177,7 +171,7 @@ export default function Profile() {
   };
 
   const validBioInput = (bio: string) => {
-    const BIO_LENGTH = bio.length <= 200;
+    const BIO_LENGTH = bio.length <= 150;
 
     setIsBioValid(BIO_LENGTH);
   };

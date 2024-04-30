@@ -167,8 +167,8 @@ export const styles = StyleSheet.create({
     color: colors.thirdary,
     zIndex: 1,
     position: "absolute",
-    top: -10,
-    left: 36,
+    top: verticalScale(-10),
+    left: horizontalScale(36),
   },
   legendTextSmallBox: {
     fontFamily: "BalooRegular",
@@ -176,8 +176,8 @@ export const styles = StyleSheet.create({
     color: colors.thirdary,
     zIndex: 1,
     position: "absolute",
-    top: -10,
-    left: 16,
+    top: verticalScale(-10),
+    left: horizontalScale(16),
   },
   scrollView: {
     width: "100%",
