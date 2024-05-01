@@ -6,12 +6,12 @@
 - [ ] Fikse funk for EventModal / CreatorEventModal
 - [ ] Side for å redigere event
 - [x] Creator skal kunne slette event og ikke forlate
-- [ ] Må endre kjønn for å kunne registrere (Bare dame)
+- [x] Må endre kjønn for å kunne registrere (Bare dame)
 - [x] Endre TabBackground Event Event
 - [ ] Ikke mulig å sette inn antall folk på eventet
 - [ ] Keyboard blokkerer tekst input på CreateEvent
-- [ ] Case sensitive registrering / innlogging mail
-- [ ] /n og newline fucker opp description på event, overflow: hidden?
+- [x] Case sensitive registrering / innlogging mail
+- [x] /n og newline fucker opp description på event, overflow: hidden?
 
 ## Bugs - Secondary
 
