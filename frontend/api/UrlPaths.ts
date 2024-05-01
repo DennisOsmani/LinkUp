@@ -1,4 +1,4 @@
-export const URL_BASE = "https://3ddf-95-34-122-200.ngrok-free.app/api";
+export const URL_BASE = "https://localhost:5173/api";
 // export const URL_BASE = "https://linkupbackend.azurewebsites.net/api";
 
 export const EVENT_PATH = "/event";
