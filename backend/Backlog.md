@@ -15,15 +15,16 @@
 
 ## Bugs - Secondary
 
-- [ ] Sortere eventer på startdato
-- [ ] Eventer som har vært burde fjernes (Ligger mulig i backend)
+- [x] Sortere eventer på startdato
+- [x] Eventer som har vært burde fjernes (Ligger mulig i backend)
 - [ ] Søk funker ikke på InviteModal i CreateEvent
 - [ ] Adresse bug, når du oppretter og modalen kommer opp
 - [ ] Tilbake fra CreateEvent (CreatorEventModal) til deltar?
 - [ ] CreateEvent clear data funker ikke
 - [ ] Klokkeslett på CreateEvent fungerer ikke
-- [ ] Gjøre det umulig å sette sluttid før starttid
-- [ ] Datoer på kort er ikke norsk
+- [x] Gjøre det umulig å sette sluttid før starttid
+- [x] Datoer på kort er ikke norsk
+- [x] Datoer lagres to timer for tidlig
 - [ ] Ikke tekst på InviteModal i CreateEvent om man har ingen venner
 - [ ] Ikke tekst på Utforsk folk, kanskje hente noen vennekort
 - [ ] Input validering i frontend, med feedback

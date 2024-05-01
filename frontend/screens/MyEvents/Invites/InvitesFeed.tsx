@@ -53,11 +53,18 @@ export default function InvitesFeed() {
   };
 
   const formatDate = (startDate: string, endDate?: string) => {
-    const startDateTime = new Date(startDate);
-    const endDateTime = endDate ? new Date(endDate) : null;
+    const startDateTemp = new Date(startDate);
+    const endDateTemp = endDate ? new Date(endDate) : null;
+
+    const startDateTime = new Date(
+      startDateTemp.setHours(startDateTemp.getHours() + 2)
+    );
+    const endDateTime = endDateTemp
+      ? new Date(endDateTemp.setHours(endDateTemp.getHours() + 2))
+      : null;
 
     const formatDateTime = (dateTime: Date) => {
-      const month = dateTime.toLocaleString("default", { month: "short" });
+      const month = dateTime.toLocaleString("no-NB", { month: "short" });
       const day = dateTime.getDate();
       const hours = dateTime.getHours();
       const minutes = dateTime.getMinutes();
@@ -70,7 +77,7 @@ export default function InvitesFeed() {
       if (sameDay) {
         return `${formatDateTime(startDateTime)} - ${formatDateTime(
           endDateTime!
-        ).substring(8, 14)}`;
+        ).substring(7, 14)}`;
       } else {
         return `${formatDateTime(startDateTime)} - ${formatDateTime(
           endDateTime!
@@ -148,7 +155,11 @@ export default function InvitesFeed() {
                 title={event.eventName}
                 hostName={hostNames[event.eventID] || ""}
                 bio={event.eventDescription}
-                address={`${event.location.postalcode === null ? "" : event.location.postalcode + ", "} ${event.location.city}`}
+                address={`${
+                  event.location.postalcode === null
+                    ? ""
+                    : event.location.postalcode + ", "
+                } ${event.location.city}`}
                 imageSource={event.frontImage}
                 onDeclinePress={() => handleDeclinePress(event.eventID)}
                 onJoinPress={() => handleJoinPress(event.eventID)}

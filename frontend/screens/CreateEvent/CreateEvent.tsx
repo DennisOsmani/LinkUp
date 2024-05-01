@@ -290,6 +290,7 @@ export default function CreateEvent() {
               mode={"datetime"}
               locale="no-NB"
               onChange={onChangeEnd}
+              minimumDate={new Date(event.eventDateTimeStart)}
             />
           </View>
           <View style={styles.visibilityContainer}>
