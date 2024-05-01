@@ -31,8 +31,6 @@ const dateStart = new Date();
 const dateEnd = new Date();
 
 export default function CreateEvent() {
-  const [createEventPressed, setCreateEventPressed] = useState<boolean>(false);
-
   const [selectedVisibility, setSelectedVisibility] = useState({
     public: true,
     private: false,
@@ -222,6 +220,7 @@ export default function CreateEvent() {
   return (
     <>
       <CreatorEventModal
+        edit={false}
         modalVisible={eventModalVisible}
         setModalVisible={setEventModalVisible}
         event={createdEvent}

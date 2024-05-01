@@ -162,7 +162,7 @@ export const createEvent = async (event: IEventDTO, token: string) => {
   }
 };
 
-export const updateEvent = async (event: Event, token: string) => {
+export const updateEvent = async (event: IEventDTO, token: string) => {
   try {
     const response = await fetch(`${THIS_URL}`, {
       method: "PUT",
