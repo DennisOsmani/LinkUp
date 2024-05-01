@@ -15,7 +15,41 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(20),
     borderTopEndRadius: moderateScale(25),
     borderTopStartRadius: moderateScale(25),
+    alignItems: "center",
     gap: 20,
+  },
+  topSection: {
+    backgroundColor: colors.foreground,
+    width: "90%",
+    paddingHorizontal: horizontalScale(16),
+    borderRadius: moderateScale(25),
+    height: verticalScale(60),
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    zIndex: 1000,
+  },
+  topLeftSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  dropdownContainer: {
+    height: verticalScale(100),
+    minHeight: verticalScale(200),
+    backgroundColor: colors.green,
+  },
+  dropdownStyle: {
+    width: horizontalScale(120),
+  },
+  dropdownText: {
+    fontSize: moderateScale(14),
+  },
+  dropdownLabel: {
+    fontSize: moderateScale(20),
+  },
+  topSectionText: {
+    fontSize: moderateScale(20),
+    fontFamily: "BalooBold",
   },
   midscreenMessages: {
     flex: 1,

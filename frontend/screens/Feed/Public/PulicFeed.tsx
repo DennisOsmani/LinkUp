@@ -3,6 +3,7 @@ import {
   RefreshControl,
   ScrollView,
   Text,
+  TouchableHighlight,
   View,
 } from "react-native";
 import { styles } from "./PublicFeedStyles";
@@ -13,6 +14,8 @@ import { useEffect, useState } from "react";
 import { IEvent } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import { useLocation } from "../../../providers/LocationProvider";
+import DropDownPicker from "react-native-dropdown-picker";
+import { moderateScale } from "../../../styles/genericDimensions";
 
 export default function PublicFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
@@ -21,6 +24,13 @@ export default function PublicFeed() {
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const { location, loading, address } = useLocation();
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  //dropdown
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "Apple", value: "apple" },
+    { label: "Banana", value: "banana" },
+  ]);
 
   useEffect(() => {
     if (location && address) {
@@ -137,6 +147,24 @@ export default function PublicFeed() {
         </View>
       ) : (
         <View style={styles.wrapper}>
+          <View style={styles.topSection}>
+            <View style={styles.topLeftSection}>
+              <Text style={styles.topSectionText}>Valgt By: </Text>
+              <Text style={styles.topSectionText}> {address}</Text>
+            </View>
+            <DropDownPicker
+              placeholder="Velg by"
+              style={styles.dropdownStyle}
+              textStyle={styles.dropdownText}
+              labelStyle={styles.dropdownLabel}
+              open={open}
+              value={address}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+            />
+          </View>
           {events && events.length > 0 ? (
             events?.map((event) => (
               <EventCardFeed
