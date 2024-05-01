@@ -23,7 +23,7 @@ public class UserService : IUserService
 
     public async Task<User?> FindByEmailAsync(string email)
     {
-        return await _userRepo._context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _userRepo._context.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == email.ToUpper());
     }
 
     public async Task<User?> GetUser(string userId)
