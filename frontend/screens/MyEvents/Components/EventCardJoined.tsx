@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-  Image,
-  Pressable,
-  Text,
-  View,
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, Pressable, Text, View, TouchableOpacity } from "react-native";
 import { styles } from "./EventCardJoinedStyles";
 import { Feather } from "@expo/vector-icons";
 import { CreatorEventModal } from "../../CreatorEventModal/CreatorEventModal";
@@ -53,6 +46,7 @@ const EventCardJoined = ({
     }
     return text.substring(0, maxLetters);
   };
+
   const handleCardPress = () => {
     if (host) {
       setEdit(false);

@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { pickImage } from "../../../../../../util/imageHandler";
 import { uploadImage } from "../../../../../../api/UploadImageAPI";
 import { useTokenProvider } from "../../../../../../providers/TokenProvider";
@@ -18,7 +18,6 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import LocationModal from "../../../../../CreateEvent/components/LocationModal/LocationModal";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { colors } from "../../../../../../styles/colors";
-import { useLocation } from "../../../../../../providers/LocationProvider";
 import {
   IEvent,
   IEventDTO,
@@ -29,12 +28,18 @@ import { updateEvent } from "../../../../../../api/EventAPI";
 
 interface EditModalProps {
   eventProp: IEvent | undefined;
+  eventId: number;
 }
 
 const dateStart = new Date();
 const dateEnd = new Date();
 
-export default function EditModal({ eventProp }: EditModalProps) {
+export default function EditModal({ eventProp, eventId }: EditModalProps) {
+  useEffect(() => {
+    console.log("EVENTCARD ID MODAL 3 : " + event?.eventID);
+    console.log("EVENTCARD ID MODAL 4 : " + eventId);
+  }, []);
+
   const [selectedVisibility, setSelectedVisibility] = useState({
     public: true,
     private: false,
@@ -42,13 +47,8 @@ export default function EditModal({ eventProp }: EditModalProps) {
   });
   const [locationModalVisible, setLocationModalVisible] =
     useState<boolean>(false);
-  const [inviteModalVisible, setInviteModalVisible] = useState<boolean>(false);
   const [eventImageUri, setEventImageUri] = useState<string | undefined>(
     "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
-  );
-
-  const [createdEvent, setCreatedEvent] = useState<IEvent | undefined>(
-    undefined
   );
 
   const [event, setEvent] = useState<IEventDTO>({
@@ -70,14 +70,15 @@ export default function EditModal({ eventProp }: EditModalProps) {
   });
 
   const [location, setLocation] = useState<ILocation>({
-    address: undefined,
-    postalcode: undefined,
+    address: eventProp?.location.address ? eventProp.location.address : "",
+    postalcode: eventProp?.location.postalcode
+      ? eventProp.location.postalcode
+      : "",
     city: "",
     country: "",
   });
 
   const { token } = useTokenProvider();
-  const { address } = useLocation();
 
   const onChangeStart = (
     event: DateTimePickerEvent,
@@ -133,7 +134,18 @@ export default function EditModal({ eventProp }: EditModalProps) {
 
   const handleUpdateEvent = async () => {
     try {
-      await updateEvent(event, token);
+      const eventToCreate: IEventDTO = {
+        ...event,
+        eventID: eventId,
+        eventDateTimeStart: event.eventDateTimeStart.replace("Z", ""),
+        eventDateTimeEnd: event.eventDateTimeEnd.replace("Z", ""),
+        location: location,
+        frontImage: "",
+      };
+
+      console.log(event);
+
+      await updateEvent(eventToCreate, token);
     } catch (error) {
       console.error("Error updating evnet" + error);
     }
@@ -148,12 +160,7 @@ export default function EditModal({ eventProp }: EditModalProps) {
         setLocation={setLocation}
       />
 
-      <View
-        style={{
-          ...styles.container,
-          opacity: locationModalVisible || inviteModalVisible ? 0.4 : 1,
-        }}
-      >
+      <View style={styles.container}>
         <View style={styles.imageContainer}>
           <TouchableOpacity
             activeOpacity={0.5}

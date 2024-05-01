@@ -1,6 +1,7 @@
 import { IEvent } from "../../../../interfaces/ModelInterfaces";
 import NonEditModal from "./components/NonEditModal/NonEditModal";
 import EditModal from "./components/EditModal/EditModal";
+import { useEffect } from "react";
 
 interface EventTabProps {
   event: IEvent | undefined;
@@ -13,6 +14,9 @@ export function CreatorEventTab({
   setEventModalVisible,
   edit,
 }: EventTabProps) {
+  useEffect(() => {
+    console.log("EVENT CRE EV TAB : " + event?.eventID);
+  }, []);
   return (
     <>
       {!edit && (
@@ -21,7 +25,7 @@ export function CreatorEventTab({
           setEventModalVisible={setEventModalVisible}
         />
       )}
-      {edit && <EditModal event={event} />}
+      {edit && <EditModal eventProp={event} eventId={event?.eventID!} />}
     </>
   );
 }

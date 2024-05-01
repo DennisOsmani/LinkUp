@@ -163,6 +163,7 @@ export const createEvent = async (event: IEventDTO, token: string) => {
 };
 
 export const updateEvent = async (event: IEventDTO, token: string) => {
+  console.log(`${THIS_URL}`);
   try {
     const response = await fetch(`${THIS_URL}`, {
       method: "PUT",
@@ -176,9 +177,6 @@ export const updateEvent = async (event: IEventDTO, token: string) => {
     if (!response.ok) {
       throw new Error("Error in updateEvent response: " + response.status);
     }
-
-    const data: IEvent = await response.json();
-    return data;
   } catch (error) {
     console.error("Error while fetching updateEvent " + error);
   }
