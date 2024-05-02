@@ -17,7 +17,6 @@ import { IUser } from "../../interfaces/ModelInterfaces";
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { UpdateUser } from "../../api/UserAPI";
-import { Picker } from "@react-native-picker/picker";
 import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
 import RNPickerSelect from "react-native-picker-select";
@@ -35,11 +34,17 @@ export default function Profile() {
   );
   const [isPhoneValid, setIsPhoneValid] = useState<boolean>(false);
   const [isBioValid, setIsBioValid] = useState<boolean>(false);
-  const [formValid, setFormValid] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchProfile();
+    if (isFocused) {
+      fetchProfile();
+    }
   }, [isFocused]);
+
+  useEffect(() => {
+    validPhoneInput(updatedPhone!);
+    validBioInput(updatedBio ? updatedBio : "");
+  }, [updatedPhone, updatedBio]);
 
   const fetchProfile = async () => {
     const user = await getUser(token);
@@ -51,6 +56,7 @@ export default function Profile() {
     if (user?.profileImage !== undefined) {
       setProfileImageUri(user?.profileImage);
     }
+
     setEditMode(false);
   };
 
@@ -66,7 +72,7 @@ export default function Profile() {
   };
 
   const updateProfile = async () => {
-    if (!formValid) {
+    if (!isPhoneValid || !isBioValid) {
       Alert.alert("Feil i endringene", "Gjør om på de rødtmarkerte områdene.");
     } else {
       Alert.alert(
@@ -155,14 +161,10 @@ export default function Profile() {
 
   const handlePhoneChange = (text: string) => {
     setUpdatedPhone(text);
-    validPhoneInput(text);
-    inputFormValid();
   };
 
   const handleBioChange = (text: string) => {
     setUpdatedBio(text);
-    validBioInput(text);
-    inputFormValid();
   };
 
   const validPhoneInput = (phone: string) => {
@@ -171,13 +173,9 @@ export default function Profile() {
   };
 
   const validBioInput = (bio: string) => {
-    const BIO_LENGTH = bio.length <= 150;
+    const BIO_LENGTH = bio.length <= 200;
 
     setIsBioValid(BIO_LENGTH);
-  };
-
-  const inputFormValid = () => {
-    setFormValid(isPhoneValid && isBioValid);
   };
 
   return (
@@ -227,11 +225,7 @@ export default function Profile() {
               <TextInput
                 style={[
                   styles.inputText,
-                  !isPhoneValid
-                    ? styles.invalidInput
-                    : isPhoneValid
-                    ? styles.validInput
-                    : null,
+                  !isPhoneValid ? styles.invalidInput : null,
                 ]}
                 value={updatedPhone}
                 onChangeText={handlePhoneChange}
@@ -283,21 +277,6 @@ export default function Profile() {
               )}
 
               {editMode && (
-                // <Picker
-                //   selectedValue={relStatus}
-                //   onValueChange={(itemValue) =>
-                //     handleRelationshipStatusChange(itemValue)
-                //   }
-                // >
-                //   {relationshipStatuses.map((status, index) => (
-                //     <Picker.Item
-                //       key={index}
-                //       label={status.label}
-                //       value={status.value}
-                //     />
-                //   ))}
-                // </Picker>
-
                 <RNPickerSelect
                   placeholder={{ label: "Velg din sivilstatus:", value: null }}
                   onValueChange={(value) =>
@@ -323,11 +302,7 @@ export default function Profile() {
               <TextInput
                 style={[
                   styles.inputTextBig,
-                  !isBioValid
-                    ? styles.invalidInput
-                    : isBioValid
-                    ? styles.validInput
-                    : null,
+                  !isBioValid ? styles.invalidInput : null,
                 ]}
                 value={updatedBio}
                 onChangeText={handleBioChange}

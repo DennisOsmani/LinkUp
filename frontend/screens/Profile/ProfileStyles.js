@@ -91,6 +91,7 @@ export const styles = StyleSheet.create({
     width: "90%",
     marginBottom: verticalScale(15),
     justifyContent: "center",
+    paddingLeft: verticalScale(15),
   },
 
   inputBoxSmall: {
@@ -99,6 +100,7 @@ export const styles = StyleSheet.create({
     height: verticalScale(35),
     width: horizontalScale(100),
     justifyContent: "center",
+    paddingLeft: verticalScale(15),
   },
 
   inputBoxBig: {
@@ -117,7 +119,6 @@ export const styles = StyleSheet.create({
   },
 
   inputText: {
-    paddingLeft: horizontalScale(15),
     fontFamily: "BalooRegular",
     fontSize: moderateScale(18),
   },
