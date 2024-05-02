@@ -7,25 +7,31 @@ interface EventTabProps {
   event: IEvent | undefined;
   setEventModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   edit: boolean;
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function CreatorEventTab({
   event,
   setEventModalVisible,
   edit,
+  setEdit,
 }: EventTabProps) {
-  useEffect(() => {
-    console.log("EVENT CRE EV TAB : " + event?.eventID);
-  }, []);
   return (
     <>
       {!edit && (
         <NonEditModal
           event={event}
           setEventModalVisible={setEventModalVisible}
+          setEdit={setEdit}
         />
       )}
-      {edit && <EditModal eventProp={event} eventId={event?.eventID!} />}
+      {edit && (
+        <EditModal
+          eventProp={event}
+          eventId={event?.eventID!}
+          setEdit={setEdit}
+        />
+      )}
     </>
   );
 }

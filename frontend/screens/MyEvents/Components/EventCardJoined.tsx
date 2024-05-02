@@ -17,6 +17,8 @@ interface EventCardJoinedProps {
   onButtonPress: () => void;
   host: boolean;
   event: IEvent;
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  edit: boolean;
 }
 
 const EventCardJoined = ({
@@ -30,11 +32,11 @@ const EventCardJoined = ({
   onButtonPress,
   host,
   event,
+  edit,
+  setEdit,
 }: EventCardJoinedProps) => {
   const MAX_LETTERS_DESCRIPTION = 70;
   const MAX_LETTERS_TITLE = 16;
-
-  const [edit, setEdit] = useState<boolean>(true);
 
   const [creatorEventModalVisible, setCreatorEventModalVisible] =
     useState<boolean>(false);
@@ -70,6 +72,7 @@ const EventCardJoined = ({
         setModalVisible={setCreatorEventModalVisible}
         event={event}
         edit={edit}
+        setEdit={setEdit}
       />
       <EventModal
         modalVisible={eventModalVisible}

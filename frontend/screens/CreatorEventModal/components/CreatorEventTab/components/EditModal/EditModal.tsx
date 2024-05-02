@@ -29,17 +29,18 @@ import { updateEvent } from "../../../../../../api/EventAPI";
 interface EditModalProps {
   eventProp: IEvent | undefined;
   eventId: number;
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const dateStart = new Date();
 const dateEnd = new Date();
 
-export default function EditModal({ eventProp, eventId }: EditModalProps) {
-  useEffect(() => {
-    console.log("EVENTCARD ID MODAL 3 : " + event?.eventID);
-    console.log("EVENTCARD ID MODAL 4 : " + eventId);
-  }, []);
-
+export default function EditModal({
+  eventProp,
+  eventId,
+  setEdit,
+}: EditModalProps) {
+  const [imageChanged, setImageChanged] = useState<boolean>(false);
   const [selectedVisibility, setSelectedVisibility] = useState({
     public: true,
     private: false,
@@ -47,7 +48,7 @@ export default function EditModal({ eventProp, eventId }: EditModalProps) {
   });
   const [locationModalVisible, setLocationModalVisible] =
     useState<boolean>(false);
-  const [eventImageUri, setEventImageUri] = useState<string | undefined>(
+  const [eventImageUri, setEventImageUri] = useState<string>(
     "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
   );
 
@@ -130,22 +131,36 @@ export default function EditModal({ eventProp, eventId }: EditModalProps) {
     if (uri === "EXIT") return;
 
     setEventImageUri(uri);
+    setImageChanged(true);
+  };
+
+  const uploadImageEntry = async () => {
+    try {
+      return await uploadImage(eventImageUri, token);
+    } catch (error) {
+      console.log("Error while uploading image " + error);
+    }
   };
 
   const handleUpdateEvent = async () => {
+    let imageUrl: string | undefined = undefined;
+
+    if (imageChanged) {
+      imageUrl = await uploadImageEntry();
+    }
     try {
       const eventToCreate: IEventDTO = {
         ...event,
         eventID: eventId,
         eventDateTimeStart: event.eventDateTimeStart.replace("Z", ""),
         eventDateTimeEnd: event.eventDateTimeEnd.replace("Z", ""),
+        eventDescription: event.eventDescription,
         location: location,
-        frontImage: "",
+        frontImage: imageUrl ? imageUrl : eventProp?.frontImage,
       };
 
-      console.log(event);
-
       await updateEvent(eventToCreate, token);
+      setEdit(false);
     } catch (error) {
       console.error("Error updating evnet" + error);
     }

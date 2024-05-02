@@ -26,9 +26,11 @@ export default function JoinedFeed() {
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
+  const [edit, setEdit] = useState<boolean>(false);
+
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [edit]);
 
   const fetchEvents = async () => {
     try {
@@ -161,6 +163,8 @@ export default function JoinedFeed() {
           {events && events.length > 0 ? (
             events?.map((event) => (
               <EventCardJoined
+                edit={edit}
+                setEdit={setEdit}
                 key={event.eventID}
                 numberOfPeople={formatCapacityRange(
                   event.minCapacity,
