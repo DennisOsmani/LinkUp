@@ -19,7 +19,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { UpdateUser } from "../../api/UserAPI";
 import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
-import RNPickerSelect from "react-native-picker-select";
 
 export default function Profile() {
   const { token } = useTokenProvider();
@@ -248,8 +247,8 @@ export default function Profile() {
                 {user?.gender === "F"
                   ? "Kvinne"
                   : user?.gender === "M"
-                  ? "Mann"
-                  : "Annet"}
+                    ? "Mann"
+                    : "Annet"}
               </Text>
             </View>
           </View>
