@@ -204,19 +204,32 @@ public class EventService : IEventService
 
     public async Task<bool> CanUserUpdateEvent(int eventId, string userId)
     {
-        Event? eventt = await _eventRepo.GetEventByID(eventId);
-
-        if (eventt == null)
+        try
         {
-            throw new KeyNotFoundException($"Event with ID: {eventId},  was not found! (EventService)");
+            Console.WriteLine("bro her?");
+            Event? eventt = await _eventRepo.GetEventByID(eventId);
+
+            if (eventt == null)
+            {
+                throw new KeyNotFoundException($"Event with ID: {eventId},  was not found! (EventService)");
+            }
+
+            Console.WriteLine("for nolllllerererreereeerereresetnaornstiaernstiearseintaierni?");
+
+            ICollection<User> creatorList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.CREATOR);
+            ICollection<User> hostList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.HOST);
+
+            Console.WriteLine("nulll ell?");
+
+            List<User> allowedList = creatorList.Concat(hostList).ToList();
+
+            return allowedList.Any(user => user.UserID == userId);
         }
-
-        ICollection<User> creatorList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.CREATOR);
-        ICollection<User> hostList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.HOST);
-
-        List<User> allowedList = creatorList.Concat(hostList).ToList();
-
-        return allowedList.Any(user => user.UserID == userId);
+        catch (Exception)
+        {
+            Console.WriteLine("Oissann adrian, her gikk det galt gitt");
+            throw;
+        }
     }
 
     public async Task<bool> CanUserDeleteEvent(int eventId, string userId)

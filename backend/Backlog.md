@@ -2,13 +2,12 @@
 
 ## Bugs - Primary
 
-- [ ] skalere ned bilder
 - [ ] Fikse funk for EventModal / CreatorEventModal
-- [ ] Side for å redigere event
+- [ ] Ikke mulig å sette inn antall folk på eventet
+- [x] Side for å redigere event
 - [x] Creator skal kunne slette event og ikke forlate
 - [x] Må endre kjønn for å kunne registrere (Bare dame)
 - [x] Endre TabBackground Event Event
-- [ ] Ikke mulig å sette inn antall folk på eventet
 - [ ] Keyboard blokkerer tekst input på CreateEvent
 - [x] Case sensitive registrering / innlogging mail
 - [x] /n og newline fucker opp description på event, overflow: hidden?
@@ -17,10 +16,9 @@
 
 - [x] Sortere eventer på startdato
 - [x] Eventer som har vært burde fjernes (Ligger mulig i backend)
-- [ ] Søk funker ikke på InviteModal i CreateEvent
+- [x] Søk funker ikke på InviteModal i CreateEvent
 - [ ] Adresse bug, når du oppretter og modalen kommer opp
-- [ ] Tilbake fra CreateEvent (CreatorEventModal) til deltar?
-- [ ] CreateEvent clear data funker ikke
+- [x] CreateEvent clear data funker ikke
 - [ ] Klokkeslett på CreateEvent fungerer ikke
 - [x] Gjøre det umulig å sette sluttid før starttid
 - [x] Datoer på kort er ikke norsk
