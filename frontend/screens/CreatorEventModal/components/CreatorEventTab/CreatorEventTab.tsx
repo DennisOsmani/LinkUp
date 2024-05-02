@@ -1,27 +1,37 @@
 import { IEvent } from "../../../../interfaces/ModelInterfaces";
 import NonEditModal from "./components/NonEditModal/NonEditModal";
 import EditModal from "./components/EditModal/EditModal";
+import { useEffect } from "react";
 
 interface EventTabProps {
-    event: IEvent | undefined;
-    setEventModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    edit: boolean;
+  event: IEvent | undefined;
+  setEventModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  edit: boolean;
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function CreatorEventTab({
-    event,
-    setEventModalVisible,
-    edit,
+  event,
+  setEventModalVisible,
+  edit,
+  setEdit,
 }: EventTabProps) {
-    return (
-        <>
-            {!edit && (
-                <NonEditModal
-                    event={event}
-                    setEventModalVisible={setEventModalVisible}
-                />
-            )}
-            {edit && <EditModal />}
-        </>
-    );
+  return (
+    <>
+      {!edit && (
+        <NonEditModal
+          event={event}
+          setEventModalVisible={setEventModalVisible}
+          setEdit={setEdit}
+        />
+      )}
+      {edit && (
+        <EditModal
+          eventProp={event}
+          eventId={event?.eventID!}
+          setEdit={setEdit}
+        />
+      )}
+    </>
+  );
 }

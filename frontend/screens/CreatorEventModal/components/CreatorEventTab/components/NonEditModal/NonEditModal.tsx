@@ -21,11 +21,13 @@ import { deleteEvent } from "../../../../../../api/EventAPI";
 interface EventTabProps {
   event: IEvent | undefined;
   setEventModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function NonEditModal({
   event,
   setEventModalVisible,
+  setEdit,
 }: EventTabProps) {
   const { token } = useTokenProvider();
 
@@ -45,21 +47,14 @@ export default function NonEditModal({
   const convertDatetimeToText = () => {
     if (!event) return;
 
-    const startDate: string = event?.eventDateTimeStart;
-    const endDate: string = event?.eventDateTimeEnd;
+    const startDate: string = event?.eventDateTimeStart.toString();
+    const endDate: string = event?.eventDateTimeEnd.toString();
 
-    const startDateTemp = new Date(startDate);
-    const endDateTemp = endDate === "" ? null : new Date(endDate);
-
-    const startDateTime = new Date(
-      startDateTemp.setHours(startDateTemp.getHours() + 2)
-    );
-    const endDateTime = endDateTemp
-      ? new Date(endDateTemp.setHours(endDateTemp.getHours() + 2))
-      : null;
+    const startDateTime = new Date(startDate);
+    const endDateTime = endDate === "" ? null : new Date(endDate);
 
     const formatDateTime = (dateTime: Date) => {
-      const month = dateTime.toLocaleString("no-NB", { month: "short" });
+      const month = dateTime.toLocaleString("default", { month: "short" });
       const day = dateTime.getDate();
       const formattedTime = formatTime(dateTime);
       return `${day}. ${month} ${formattedTime}`;
@@ -78,9 +73,7 @@ export default function NonEditModal({
         // Only show time for endDateTime if it's the same day
         return `${formatDateTime(startDateTime)} - ${formatTime(endDateTime)}`;
       } else {
-        return `${formatDateTime(startDateTime)} - ${formatDateTime(
-          endDateTime
-        )}`;
+        return `${formatDateTime(startDateTime)} - ${formatDateTime(endDateTime)}`;
       }
     } else {
       return formatDateTime(startDateTime);
@@ -92,9 +85,7 @@ export default function NonEditModal({
     if (!location?.address && !location?.city && !location?.country)
       return "Adressen er ikke definert";
 
-    return `${location?.address ? location.address + "," : ""} ${
-      location?.city
-    } ${location?.country}`;
+    return `${location?.address ? location.address + "," : ""} ${location?.city} ${location?.country}`;
   };
 
   const getEnrolledCount = (): string => {
@@ -187,6 +178,14 @@ export default function NonEditModal({
             <View style={styles.buttonWrapper}>
               <TouchableOpacity
                 activeOpacity={0.5}
+                onPress={() => setEdit(true)}
+                style={styles.editEventButton}
+              >
+                <Text style={styles.editEventButtonText}>Rediger Event</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.5}
+
                 onPress={handleLeaveEvent}
                 style={styles.leaveEventButton}
               >
