@@ -50,6 +50,9 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(-4),
     fontFamily: "BalooBold",
   },
+  descriptionWrapper: {
+    height: verticalScale(75),
+  },
   text: {
     fontSize: moderateScale(16),
     fontFamily: "BalooRegular",

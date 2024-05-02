@@ -38,14 +38,21 @@ export function EventTab({ event }: EventTabProps) {
   const convertDatetimeToText = () => {
     if (!event) return;
 
-    const startDate: string = event?.eventDateTimeStart.toString();
-    const endDate: string = event?.eventDateTimeEnd.toString();
+    const startDate: string = event?.eventDateTimeStart;
+    const endDate: string = event?.eventDateTimeEnd;
 
-    const startDateTime = new Date(startDate);
-    const endDateTime = endDate === "" ? null : new Date(endDate);
+    const startDateTemp = new Date(startDate);
+    const endDateTemp = endDate === "" ? null : new Date(endDate);
+
+    const startDateTime = new Date(
+      startDateTemp.setHours(startDateTemp.getHours() + 2)
+    );
+    const endDateTime = endDateTemp
+      ? new Date(endDateTemp.setHours(endDateTemp.getHours() + 2))
+      : null;
 
     const formatDateTime = (dateTime: Date) => {
-      const month = dateTime.toLocaleString("default", { month: "short" });
+      const month = dateTime.toLocaleString("no-NB", { month: "short" });
       const day = dateTime.getDate();
       const formattedTime = formatTime(dateTime);
       return `${day}. ${month} ${formattedTime}`;
@@ -64,7 +71,9 @@ export function EventTab({ event }: EventTabProps) {
         // Only show time for endDateTime if it's the same day
         return `${formatDateTime(startDateTime)} - ${formatTime(endDateTime)}`;
       } else {
-        return `${formatDateTime(startDateTime)} - ${formatDateTime(endDateTime)}`;
+        return `${formatDateTime(startDateTime)} - ${formatDateTime(
+          endDateTime
+        )}`;
       }
     } else {
       return formatDateTime(startDateTime);
@@ -76,7 +85,9 @@ export function EventTab({ event }: EventTabProps) {
     if (!location?.address && !location?.city && !location?.country)
       return "Adressen er ikke definert";
 
-    return `${location?.address ? location.address + "," : ""} ${location?.city} ${location?.country}`;
+    return `${location?.address ? location.address + "," : ""} ${
+      location?.city
+    } ${location?.country}`;
   };
 
   const getEnrolledCount = (): string => {

@@ -48,7 +48,6 @@ const EventCardJoined = ({
     }
     return text.substring(0, maxLetters);
   };
-
   const handleCardPress = () => {
     if (host) {
       setEdit(false);

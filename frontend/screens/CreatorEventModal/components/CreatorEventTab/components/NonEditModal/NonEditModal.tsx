@@ -185,6 +185,7 @@ export default function NonEditModal({
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.5}
+
                 onPress={handleLeaveEvent}
                 style={styles.leaveEventButton}
               >

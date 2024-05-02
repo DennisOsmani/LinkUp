@@ -42,8 +42,9 @@ public class EventRepository
         try
         {
             return await _context.Events
-                .Where(e => e.Location.City.ToUpper() == city.ToUpper() && e.Visibility == Visibility.PUBLIC /*&& e.EventDateTimeStart < DateTime.Now*/)
+                .Where(e => e.Location.City.ToUpper() == city.ToUpper() && e.Visibility == Visibility.PUBLIC && e.EventDateTimeStart > DateTime.Now)
                 .Where(e => !_context.EventRelations.Any(er => er.EventID == e.EventID && er.UserID == userId))
+                .OrderBy(e => e.EventDateTimeStart)
                 .Include(e => e.Location)
                 .ToListAsync();
         }
@@ -71,12 +72,13 @@ public class EventRepository
                     && er.EventRole == EventRole.CREATOR
                 )
                 .Select(er => er.Event)
-                .Where(e => e.Visibility == Visibility.FRIENDS /*&& e.EventDateTimeStart < DateTime.Now*/)
+                .Where(e => e.Visibility == Visibility.FRIENDS && e.EventDateTimeStart > DateTime.Now)
                 .ToListAsync();
 
             var usersEvents = await _context.EventRelations
                 .Where(er => er.UserID == userId)
                 .Select(er => er.Event)
+                .OrderBy(e => e.EventDateTimeStart)
                 .ToListAsync();
 
             return eventsForFriends.Except(usersEvents).ToList();
@@ -91,17 +93,17 @@ public class EventRepository
     {
         try
         {
-            //&& er.EventDateTimeEnd < Datetime.Now
             return await _context.EventRelations
                 .Include(er => er.Event)
                     .ThenInclude(e => e.Location)
                 .Where(
                     er => er.UserID.Equals(userId)
                     && er.EventRelationParticipation == EventRelationParticipation.PENDING
-                    //&& er.EventDateTimeEnd < Datetime.Now
                 )
 
                 .Select(er => er.Event)
+                .Where(e => e.EventDateTimeStart > DateTime.Now)
+                .OrderBy(e => e.EventDateTimeStart)
                 .ToListAsync();
         }
 
@@ -121,9 +123,10 @@ public class EventRepository
                 .Where(
                     er => er.UserID == userId
                     && er.EventRelationParticipation == EventRelationParticipation.JOINED
-                    //&& er.EventDateTimeEnd < Datetime.Now
                 )
                 .Select(er => er.Event)
+                .Where(e => e.EventDateTimeStart > DateTime.Now)
+                .OrderBy(e => e.EventDateTimeStart)
                 .ToListAsync();
         }
 
