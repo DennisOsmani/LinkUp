@@ -1,11 +1,4 @@
-import {
-  View,
-  Image,
-  Text,
-  Pressable,
-  TouchableOpacity,
-  TouchableHighlight,
-} from "react-native";
+import { View, Image, Text, Pressable, TouchableOpacity } from "react-native";
 import styles from "./UserCardStyles";
 import { Feather } from "@expo/vector-icons";
 import { IUser } from "../../interfaces/ModelInterfaces";
@@ -32,7 +25,7 @@ export function UserCardAnswer({
   onPressCard,
 }: UserCardProps) {
   return (
-    <TouchableHighlight
+    <TouchableOpacity
       activeOpacity={0.5}
       style={styles.card}
       onPress={onPressCard}
@@ -69,6 +62,6 @@ export function UserCardAnswer({
           </View>
         </View>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 }

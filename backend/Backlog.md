@@ -26,7 +26,7 @@
 - [ ] Ikke tekst på InviteModal i CreateEvent om man har ingen venner
 - [x] Ikke tekst på Utforsk folk, kanskje hente noen vennekort
 - [x] Input validering (profil) i frontend, med feedback
-- [ ] Fargede knapper blir svarte, kanskje endre til TouchableHighlight
+- [x] Fargede knapper blir svarte, kanskje endre til TouchableHighlight
 - [x] Annen picker på Profile når endre kjønn
 - [x] Endre til Offentlig -> Venner -> Private i CreatEvent
 - [ ] InviteModal så kan man invitere, fjerne folk og de blir borte fra modalen. Endre til slik som Legg til flere?

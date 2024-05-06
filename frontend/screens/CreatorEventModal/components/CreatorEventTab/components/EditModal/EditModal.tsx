@@ -5,7 +5,6 @@ import {
   Pressable,
   TextInput,
   TouchableOpacity,
-  TouchableHighlight,
   Keyboard,
   ScrollView,
 } from "react-native";
@@ -307,12 +306,13 @@ export default function EditModal({
               <Text style={styles.buttonText}>Sted</Text>
             </TouchableOpacity>
           </View>
-          <TouchableHighlight
+          <TouchableOpacity
+            activeOpacity={0.5}
             onPress={handleUpdateEvent}
             style={styles.bigButtonStyles}
           >
             <Text style={styles.bigButtonText}>Lagre</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

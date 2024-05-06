@@ -106,7 +106,7 @@ const EventCardJoined = ({
 
               {host ? (
                 <TouchableOpacity
-                  activeOpacity={0.3}
+                  activeOpacity={0.5}
                   style={styles.button}
                   onPress={onButtonPress}
                 >
@@ -116,7 +116,7 @@ const EventCardJoined = ({
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  activeOpacity={0.3}
+                  activeOpacity={0.5}
                   style={styles.leaveButton}
                   onPress={onButtonPress}
                 >

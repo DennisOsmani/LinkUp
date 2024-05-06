@@ -73,7 +73,9 @@ export default function NonEditModal({
         // Only show time for endDateTime if it's the same day
         return `${formatDateTime(startDateTime)} - ${formatTime(endDateTime)}`;
       } else {
-        return `${formatDateTime(startDateTime)} - ${formatDateTime(endDateTime)}`;
+        return `${formatDateTime(startDateTime)} - ${formatDateTime(
+          endDateTime
+        )}`;
       }
     } else {
       return formatDateTime(startDateTime);
@@ -85,7 +87,9 @@ export default function NonEditModal({
     if (!location?.address && !location?.city && !location?.country)
       return "Adressen er ikke definert";
 
-    return `${location?.address ? location.address + "," : ""} ${location?.city} ${location?.country}`;
+    return `${location?.address ? location.address + "," : ""} ${
+      location?.city
+    } ${location?.country}`;
   };
 
   const getEnrolledCount = (): string => {
@@ -185,7 +189,6 @@ export default function NonEditModal({
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.5}
-
                 onPress={handleLeaveEvent}
                 style={styles.leaveEventButton}
               >
