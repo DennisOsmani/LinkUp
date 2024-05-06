@@ -19,6 +19,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { UpdateUser } from "../../api/UserAPI";
 import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
+import RNPickerSelect from "react-native-picker-select";
 
 export default function Profile() {
   const { token } = useTokenProvider();
@@ -41,7 +42,7 @@ export default function Profile() {
   }, [isFocused]);
 
   useEffect(() => {
-    validPhoneInput(updatedPhone!);
+    validPhoneInput(updatedPhone ? updatedPhone : "");
     validBioInput(updatedBio ? updatedBio : "");
   }, [updatedPhone, updatedBio]);
 
