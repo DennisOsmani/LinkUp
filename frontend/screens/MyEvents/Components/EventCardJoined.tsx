@@ -79,7 +79,11 @@ const EventCardJoined = ({
         event={event}
       />
 
-      <Pressable style={styles.card} onPress={handleCardPress}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={styles.card}
+        onPress={handleCardPress}
+      >
         <View style={styles.header}>
           <View style={styles.iconTextWrapper}>
             <Feather name="users" style={styles.headerIcon} />
@@ -110,9 +114,12 @@ const EventCardJoined = ({
                   style={styles.button}
                   onPress={onButtonPress}
                 >
-                  <Text onPress={handleEditPress} style={styles.buttonText}>
-                    Rediger
-                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={handleEditPress}
+                  >
+                    <Text style={styles.buttonText}>Rediger</Text>
+                  </TouchableOpacity>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
@@ -137,7 +144,7 @@ const EventCardJoined = ({
             />
           </View>
         </View>
-      </Pressable>
+      </TouchableOpacity>
     </>
   );
 };
