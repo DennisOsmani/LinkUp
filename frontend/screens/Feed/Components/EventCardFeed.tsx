@@ -1,4 +1,4 @@
-import { Image, Pressable, Text, View, TouchableHighlight } from "react-native";
+import { Image, Pressable, Text, View, TouchableOpacity } from "react-native";
 import { styles } from "./EventCardFeedStyles";
 import { Feather } from "@expo/vector-icons";
 
@@ -61,12 +61,13 @@ const EventCardFeed = ({
           </View>
           <View style={styles.lowerLeftSide}>
             <Text style={styles.addressText}>{address}</Text>
-            <TouchableHighlight
+            <TouchableOpacity
+              activeOpacity={0.5}
               style={styles.button}
               onPress={() => onJoinPress()}
             >
               <Text style={styles.buttonText}>Bli med</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.rightSide}>

@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-  Image,
-  Pressable,
-  Text,
-  View,
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, Pressable, Text, View, TouchableOpacity } from "react-native";
 import { styles } from "./EventCardJoinedStyles";
 import { Feather } from "@expo/vector-icons";
 import { CreatorEventModal } from "../../CreatorEventModal/CreatorEventModal";
@@ -24,6 +17,8 @@ interface EventCardJoinedProps {
   onButtonPress: () => void;
   host: boolean;
   event: IEvent;
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  edit: boolean;
 }
 
 const EventCardJoined = ({
@@ -37,11 +32,11 @@ const EventCardJoined = ({
   onButtonPress,
   host,
   event,
+  edit,
+  setEdit,
 }: EventCardJoinedProps) => {
   const MAX_LETTERS_DESCRIPTION = 70;
   const MAX_LETTERS_TITLE = 16;
-
-  const [edit, setEdit] = useState<boolean>(true);
 
   const [creatorEventModalVisible, setCreatorEventModalVisible] =
     useState<boolean>(false);
@@ -76,6 +71,7 @@ const EventCardJoined = ({
         setModalVisible={setCreatorEventModalVisible}
         event={event}
         edit={edit}
+        setEdit={setEdit}
       />
       <EventModal
         modalVisible={eventModalVisible}
@@ -83,7 +79,11 @@ const EventCardJoined = ({
         event={event}
       />
 
-      <Pressable style={styles.card} onPress={handleCardPress}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={styles.card}
+        onPress={handleCardPress}
+      >
         <View style={styles.header}>
           <View style={styles.iconTextWrapper}>
             <Feather name="users" style={styles.headerIcon} />
@@ -101,28 +101,29 @@ const EventCardJoined = ({
                 <Feather name="user" style={styles.hostIcon} />
                 <Text style={styles.hostText}>{hostName}</Text>
               </View>
-              <View style={styles.descriptionWrapper}>
-                <Text style={styles.text}>
-                  {truncateDescription(bio, MAX_LETTERS_DESCRIPTION)}
-                </Text>
-              </View>
+              <Text style={styles.text}>
+                {truncateDescription(bio, MAX_LETTERS_DESCRIPTION)}
+              </Text>
             </View>
             <View style={styles.lowerLeftSide}>
               <Text style={styles.addressText}>{address}</Text>
 
               {host ? (
                 <TouchableOpacity
-                  activeOpacity={0.3}
+                  activeOpacity={0.5}
                   style={styles.button}
                   onPress={onButtonPress}
                 >
-                  <Text onPress={handleEditPress} style={styles.buttonText}>
-                    Rediger
-                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={handleEditPress}
+                  >
+                    <Text style={styles.buttonText}>Rediger</Text>
+                  </TouchableOpacity>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  activeOpacity={0.3}
+                  activeOpacity={0.5}
                   style={styles.leaveButton}
                   onPress={onButtonPress}
                 >
@@ -143,7 +144,7 @@ const EventCardJoined = ({
             />
           </View>
         </View>
-      </Pressable>
+      </TouchableOpacity>
     </>
   );
 };

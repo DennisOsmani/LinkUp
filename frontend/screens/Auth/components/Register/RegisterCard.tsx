@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   Pressable,
-  TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
 import styles from "./RegisterCardStyles";
@@ -194,16 +193,20 @@ export default function RegisterCard({
         </View>
 
         <View style={styles.inputContainer}>
-          <TouchableHighlight style={styles.button} onPress={onPressButton}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.button}
+            onPress={onPressButton}
+          >
             <Text style={styles.text}>Registrer</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.linkContainer}>
             <Text style={styles.question}>Allerede registrert?</Text>
-            <TouchableHighlight onPress={onLinkPress}>
+            <TouchableOpacity activeOpacity={0.5} onPress={onLinkPress}>
               <Text style={styles.link}>Logg inn</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

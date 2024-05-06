@@ -26,9 +26,11 @@ export default function JoinedFeed() {
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
+  const [edit, setEdit] = useState<boolean>(false);
+
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [edit]);
 
   const fetchEvents = async () => {
     try {
@@ -68,18 +70,11 @@ export default function JoinedFeed() {
   };
 
   const formatDate = (startDate: string, endDate?: string) => {
-    const startDateTemp = new Date(startDate);
-    const endDateTemp = endDate ? new Date(endDate) : null;
-
-    const startDateTime = new Date(
-      startDateTemp.setHours(startDateTemp.getHours() + 2)
-    );
-    const endDateTime = endDateTemp
-      ? new Date(endDateTemp.setHours(endDateTemp.getHours() + 2))
-      : null;
+    const startDateTime = new Date(startDate);
+    const endDateTime = endDate ? new Date(endDate) : null;
 
     const formatDateTime = (dateTime: Date) => {
-      const month = dateTime.toLocaleString("no-NB", { month: "short" });
+      const month = dateTime.toLocaleString("default", { month: "short" });
       const day = dateTime.getDate();
       const hours = dateTime.getHours();
       const minutes = dateTime.getMinutes();
@@ -92,7 +87,7 @@ export default function JoinedFeed() {
       if (sameDay) {
         return `${formatDateTime(startDateTime)} - ${formatDateTime(
           endDateTime!
-        ).substring(7, 14)}`;
+        ).substring(8, 14)}`;
       } else {
         return `${formatDateTime(startDateTime)} - ${formatDateTime(
           endDateTime!
@@ -168,6 +163,8 @@ export default function JoinedFeed() {
           {events && events.length > 0 ? (
             events?.map((event) => (
               <EventCardJoined
+                edit={edit}
+                setEdit={setEdit}
                 key={event.eventID}
                 numberOfPeople={formatCapacityRange(
                   event.minCapacity,
@@ -180,11 +177,7 @@ export default function JoinedFeed() {
                 title={event.eventName}
                 hostName={hostNames[event.eventID] || ""}
                 bio={event.eventDescription}
-                address={`${
-                  event.location.postalcode === null
-                    ? ""
-                    : event.location.postalcode + ", "
-                } ${event.location.city}`}
+                address={`${event.location.postalcode === null ? "" : event.location.postalcode + ", "} ${event.location.city}`}
                 imageSource={event.frontImage}
                 onButtonPress={() =>
                   handleButtonPress(eventRelations[event.eventID])

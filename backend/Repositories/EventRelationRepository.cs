@@ -2,7 +2,6 @@ using Data;
 using Models;
 using Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Repositories;
 

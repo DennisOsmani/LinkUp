@@ -7,7 +7,6 @@ import {
   Keyboard,
   Alert,
   TouchableOpacity,
-  TouchableHighlight,
 } from "react-native";
 import { styles } from "./CreateEventStyles";
 import { Feather } from "@expo/vector-icons";
@@ -31,7 +30,7 @@ const dateStart = new Date();
 const dateEnd = new Date();
 
 export default function CreateEvent() {
-  const [createEventPressed, setCreateEventPressed] = useState<boolean>(false);
+  const [edit, setEdit] = useState<boolean>(false);
 
   const [selectedVisibility, setSelectedVisibility] = useState({
     public: true,
@@ -217,14 +216,22 @@ export default function CreateEvent() {
     setEventImageUri(
       "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
     );
+
+    setSelectedVisibility({
+      public: true,
+      private: false,
+      friends: false,
+    });
   };
 
   return (
     <>
       <CreatorEventModal
+        edit={edit}
         modalVisible={eventModalVisible}
         setModalVisible={setEventModalVisible}
         event={createdEvent}
+        setEdit={setEdit}
       />
 
       <LocationModal
@@ -386,12 +393,13 @@ export default function CreateEvent() {
               <Text style={styles.buttonText}>Inviter</Text>
             </TouchableOpacity>
           </View>
-          <TouchableHighlight
+          <TouchableOpacity
+            activeOpacity={0.5}
             onPress={handleCreateEvent}
             style={styles.bigButtonStyles}
           >
             <Text style={styles.bigButtonText}>Opprett Event</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </View>
     </>

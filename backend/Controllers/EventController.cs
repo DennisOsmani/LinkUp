@@ -224,6 +224,7 @@ public class EventController : ControllerBase
     [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
     public async Task<ActionResult<Event>> UpdateEvent([FromBody] Event updatedEvent)
     {
+        Console.WriteLine("EVENT ID INNCOMMING : " + updatedEvent.EventID);
         var userIdClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         var userRoleClaims = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
@@ -235,9 +236,11 @@ public class EventController : ControllerBase
 
         try
         {
-            if (await _eventService.CanUserUpdateEvent(updatedEvent.EventID, userIdClaims)
-                || userRoleClaims == Role.SUPERADMIN.ToString())
+            bool canUserUpdate = await _eventService.CanUserUpdateEvent(updatedEvent.EventID, userIdClaims) || userRoleClaims == Role.SUPERADMIN.ToString();
+
+            if (canUserUpdate)
             {
+                Console.WriteLine("insiden");
                 Event evt = await _eventService.UpdateEvent(updatedEvent);
                 return Ok(evt);
             }
