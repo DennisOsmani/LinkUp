@@ -19,11 +19,11 @@ export const styles = StyleSheet.create({
     gap: 20,
   },
   topSection: {
-    backgroundColor: colors.foreground,
-    width: "90%",
-    paddingHorizontal: horizontalScale(16),
+    backgroundColor: colors.background,
+    width: "100%",
+    paddingHorizontal: horizontalScale(10),
     borderRadius: moderateScale(25),
-    height: verticalScale(60),
+    height: verticalScale(40),
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -32,23 +32,34 @@ export const styles = StyleSheet.create({
   topLeftSection: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    maxWidth: "50%",
   },
-  dropdownContainer: {
-    height: verticalScale(100),
-    minHeight: verticalScale(200),
-    backgroundColor: colors.green,
+  searchBar: {
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "50%",
+    height: moderateScale(40),
+    borderRadius: moderateScale(15),
+    backgroundColor: colors.foreground,
+    color: colors.grey,
   },
-  dropdownStyle: {
-    width: horizontalScale(120),
-  },
-  dropdownText: {
-    fontSize: moderateScale(14),
-  },
-  dropdownLabel: {
+  searchInput: {
+    fontFamily: "BalooRegular",
     fontSize: moderateScale(20),
+    color: colors.black,
+    height: "80%",
+    width: "75%",
+    marginLeft: horizontalScale(5),
+  },
+  mapFeather: {},
+  searchFeather: {
+    marginLeft: horizontalScale(10),
   },
   topSectionText: {
     fontSize: moderateScale(20),
+    marginLeft: horizontalScale(0),
     fontFamily: "BalooBold",
   },
   midscreenMessages: {

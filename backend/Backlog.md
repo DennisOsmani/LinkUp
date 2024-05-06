@@ -8,6 +8,7 @@
 - [x] Creator skal kunne slette event og ikke forlate
 - [x] Må endre kjønn for å kunne registrere (Bare dame)
 - [x] Endre TabBackground Event Event
+- [x] Søke eventer i annen by
 - [ ] Ikke mulig å sette inn antall folk på eventet
 - [ ] Keyboard blokkerer tekst input på CreateEvent
 - [x] Case sensitive registrering / innlogging mail
