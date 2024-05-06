@@ -35,3 +35,4 @@
 - [ ] Få opp en Alert når man vil forlate et event man allerede deltar på (bekreftelse)
 - [ ] Endre fra appsettingsverdier i opprettelse av JWT til Azure Secrets
 - [ ] Endre så password blir validert og hashet!
+- [ ] Sjekke opp i admin og superAdmin, velge hvem vi bruker
