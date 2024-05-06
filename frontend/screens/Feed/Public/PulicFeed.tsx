@@ -3,6 +3,7 @@ import {
   RefreshControl,
   ScrollView,
   Text,
+  TextInput,
   View,
 } from "react-native";
 import { styles } from "./PublicFeedStyles";
@@ -13,6 +14,8 @@ import { useEffect, useState } from "react";
 import { IEvent } from "../../../interfaces/ModelInterfaces";
 import { useTokenProvider } from "../../../providers/TokenProvider";
 import { useLocation } from "../../../providers/LocationProvider";
+import { Feather } from "@expo/vector-icons";
+import { colors } from "../../../styles/colors";
 
 export default function PublicFeed() {
   const [events, setEvents] = useState<IEvent[] | undefined>([]);
@@ -21,6 +24,8 @@ export default function PublicFeed() {
   const [fetchingEvents, setFetchingEvents] = useState<boolean>(true);
   const { location, loading, address } = useLocation();
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState("");
+  const [selectedCity, setSelectedCity] = useState<string | null>(null); // State variable to store the selected city
 
   useEffect(() => {
     if (location && address) {
@@ -30,6 +35,7 @@ export default function PublicFeed() {
 
   const fetchEvents = async (city: string) => {
     try {
+      setSelectedCity(city);
       const eventsData: IEvent[] | undefined = await getEventsInCity(
         token,
         city
@@ -55,7 +61,11 @@ export default function PublicFeed() {
   const onRefresh = () => {
     setRefreshing(true);
     if (address) {
-      fetchEvents(address);
+      if (selectedCity && selectedCity != null) {
+        fetchEvents(selectedCity);
+      } else {
+        fetchEvents(address);
+      }
     } else {
       setRefreshing(false);
     }
@@ -121,6 +131,18 @@ export default function PublicFeed() {
     }
   };
 
+  const handleSearchTextChange = (text: string) => {
+    setSearchText(text);
+  };
+
+  const handleSearchSubmit = () => {
+    if (searchText.trim() !== "") {
+      const cleanedCity = searchText.trim().replace(/[^a-zA-Z\s]/g, "");
+      fetchEvents(cleanedCity);
+      setSearchText("");
+    }
+  };
+
   return (
     <ScrollView
       style={styles.scrollView}
@@ -137,6 +159,32 @@ export default function PublicFeed() {
         </View>
       ) : (
         <View style={styles.wrapper}>
+          <View style={styles.topSection}>
+            <View style={styles.topLeftSection}>
+              <Feather
+                style={styles.mapFeather}
+                name="map-pin"
+                size={22}
+                color={colors.black}
+              />
+              <Text style={styles.topSectionText}> {selectedCity}</Text>
+            </View>
+            <View style={styles.searchBar}>
+              <Feather
+                style={styles.searchFeather}
+                name="search"
+                size={20}
+                color={colors.grey}
+              />
+              <TextInput
+                onChangeText={handleSearchTextChange}
+                onSubmitEditing={handleSearchSubmit}
+                style={styles.searchInput}
+                value={searchText}
+                placeholder="Endre by . . ."
+              />
+            </View>
+          </View>
           {events && events.length > 0 ? (
             events?.map((event) => (
               <EventCardFeed
