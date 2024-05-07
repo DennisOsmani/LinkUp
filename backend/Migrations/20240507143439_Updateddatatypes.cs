@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Updateddatatypes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,8 +67,8 @@ namespace backend.Migrations
                     Visibility = table.Column<int>(type: "integer", nullable: false),
                     InviteURL = table.Column<string>(type: "text", nullable: false),
                     FrontImage = table.Column<string>(type: "text", nullable: true),
-                    MinCapacity = table.Column<string>(type: "text", nullable: true),
-                    MaxCapacity = table.Column<string>(type: "text", nullable: true),
+                    MinCapacity = table.Column<int>(type: "integer", nullable: false),
+                    MaxCapacity = table.Column<int>(type: "integer", nullable: false),
                     LocationID = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

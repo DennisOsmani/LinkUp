@@ -1,7 +1,6 @@
 import { IEvent } from "../../../../interfaces/ModelInterfaces";
 import NonEditModal from "./components/NonEditModal/NonEditModal";
 import EditModal from "./components/EditModal/EditModal";
-import { useEffect } from "react";
 
 interface EventTabProps {
   event: IEvent | undefined;

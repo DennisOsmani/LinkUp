@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { pickImage } from "../../../../../../util/imageHandler";
 import { uploadImage } from "../../../../../../api/UploadImageAPI";
 import { useTokenProvider } from "../../../../../../providers/TokenProvider";
@@ -281,6 +281,36 @@ export default function EditModal({
                 Venner{" "}
               </Text>
             </Pressable>
+          </View>
+
+          <View style={styles.minmaxcontainer}>
+            <TextInput
+              placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
+              onChangeText={(input) =>
+                setEvent((event: IEventDTO) => ({
+                  ...event,
+                  minCapacity: input,
+                }))
+              }
+              placeholder="Min"
+              style={styles.minmax}
+              onKeyPress={handleKeyPress}
+              value={event.minCapacity}
+            />
+
+            <TextInput
+              placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
+              onChangeText={(input) =>
+                setEvent((event: IEventDTO) => ({
+                  ...event,
+                  maxCapacity: input,
+                }))
+              }
+              placeholder="Max"
+              style={styles.minmax}
+              onKeyPress={handleKeyPress}
+              value={event.maxCapacity}
+            />
           </View>
           <TextInput
             placeholderTextColor={"rgba(128, 128, 128, 0.4)"}

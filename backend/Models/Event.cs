@@ -17,8 +17,8 @@ public class Event
     public Visibility Visibility { get; set; }
     public string InviteURL { get; set; }
     public string? FrontImage { get; set; }
-    public string? MinCapacity { get; set; }
-    public string? MaxCapacity { get; set; }
+    public int MinCapacity { get; set; }
+    public int MaxCapacity { get; set; }
     public int LocationID { get; set; }
 
     [ForeignKey("LocationID")]

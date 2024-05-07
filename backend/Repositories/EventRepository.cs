@@ -249,6 +249,20 @@ public class EventRepository
         }
     }
 
+    public async Task<int> GetEventParticipationNumber(int eventId)
+    {
+        try
+        {
+            return await _context.EventRelations
+                .Where(er => er.EventID == eventId && er.EventRelationParticipation == EventRelationParticipation.JOINED)
+                .CountAsync();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
+        }
+    }
+
     public Visibility StringToVisibilityEnum(string visibility)
     {
         Visibility eventVisibility;

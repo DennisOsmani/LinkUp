@@ -158,4 +158,20 @@ export const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "white",
   },
+
+  minmaxcontainer: {
+    flexDirection: "row",
+    width: "90%",
+    justifyContent: "space-between",
+  },
+
+  minmax: {
+    fontFamily: "BalooRegular",
+    fontSize: moderateScale(22),
+    backgroundColor: colors.foreground,
+    height: verticalScale(40),
+    borderRadius: moderateScale(10),
+    paddingLeft: horizontalScale(15),
+    width: "45%",
+  },
 });

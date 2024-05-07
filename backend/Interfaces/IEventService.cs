@@ -108,4 +108,6 @@ public interface IEventService
     /// <param name="eventId">Id of the relevant event</param>
     /// <returns>A list of EventRelations including the user connected to the relation<returns> 
     Task<ICollection<UserWithEventParticipationDTO>> GetEventRelationsFromEvent(int eventId);
+
+    Task<int> GetEventParticipationNumber(int eventId);
 }

@@ -49,8 +49,8 @@ export interface IEvent {
   visibility: number;
   inviteURL: string;
   frontImage?: string;
-  minCapacity?: string;
-  maxCapacity?: string;
+  minCapacity?: number;
+  maxCapacity?: number;
   locationID?: number;
   location: ILocation;
   eventRelations?: [];

@@ -123,7 +123,6 @@ export const styles = StyleSheet.create({
 
     enrolledBar: {
         borderRadius: moderateScale(15),
-        width: "70%",
         height: "100%",
         backgroundColor: colors.primary,
     },

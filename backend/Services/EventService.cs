@@ -271,4 +271,17 @@ public class EventService : IEventService
 
         return uweps;
     }
+
+    public async Task<int> GetEventParticipationNumber(int eventId)
+    {
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+
+        if (eventt == null)
+        {
+            throw new KeyNotFoundException($"Event with ID: {eventId},  was not found! (EventService)");
+        }
+
+        return await _eventRepo.GetEventParticipationNumber(eventId);
+    }
+
 }

@@ -320,6 +320,29 @@ public class EventController : ControllerBase
         {
             return StatusCode(500, e.Message);
         }
+    }
 
+    [HttpGet("eventrelations/{eventId}/count")]
+    [Authorize(Roles = "USER,ADMIN,SUPERADMIN")]
+    public async Task<ActionResult> GetEventParticipationCount(int eventId)
+    {
+        try
+        {
+            int count = await _eventService.GetEventParticipationNumber(eventId);
+
+            return Ok(count);
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 }

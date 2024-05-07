@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240424092236_Init")]
-    partial class Init
+    [Migration("20240507143439_Updateddatatypes")]
+    partial class Updateddatatypes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,11 +58,11 @@ namespace backend.Migrations
                     b.Property<int>("LocationID")
                         .HasColumnType("integer");
 
-                    b.Property<string>("MaxCapacity")
-                        .HasColumnType("text");
+                    b.Property<int>("MaxCapacity")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("MinCapacity")
-                        .HasColumnType("text");
+                    b.Property<int>("MinCapacity")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Visibility")
                         .HasColumnType("integer");

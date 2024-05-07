@@ -55,11 +55,11 @@ namespace backend.Migrations
                     b.Property<int>("LocationID")
                         .HasColumnType("integer");
 
-                    b.Property<string>("MaxCapacity")
-                        .HasColumnType("text");
+                    b.Property<int>("MaxCapacity")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("MinCapacity")
-                        .HasColumnType("text");
+                    b.Property<int>("MinCapacity")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Visibility")
                         .HasColumnType("integer");

@@ -16,7 +16,11 @@ import { styles } from "./NonEditModalStyles";
 import { Feather } from "@expo/vector-icons";
 import { updateEventParticipation } from "../../../../../../api/EventRelationAPI";
 import { useTokenProvider } from "../../../../../../providers/TokenProvider";
-import { deleteEvent } from "../../../../../../api/EventAPI";
+import {
+  deleteEvent,
+  getEventParticipapionCount,
+} from "../../../../../../api/EventAPI";
+import { useEffect, useState } from "react";
 
 interface EventTabProps {
   event: IEvent | undefined;
@@ -30,6 +34,27 @@ export default function NonEditModal({
   setEdit,
 }: EventTabProps) {
   const { token } = useTokenProvider();
+
+  const [participation, setParticipation] = useState<string>("");
+  const [numberOfParticipants, setNumberOfParticipants] = useState<number>(0);
+  const [numberOfMaxCapacity, setNumberOfMaxCapacity] = useState<number>(0);
+
+  const getEnrolledCount = async () => {
+    if (!event) return;
+
+    const maxCap = event?.maxCapacity ? event.maxCapacity : "∞";
+    const numberJoined: number | undefined = await getEventParticipapionCount(
+      token,
+      event.eventID
+    );
+    setParticipation(numberJoined + " / " + maxCap);
+    setNumberOfParticipants(numberJoined ? numberJoined : 0);
+    setNumberOfMaxCapacity(typeof maxCap === "number" ? maxCap : 100);
+  };
+
+  useEffect(() => {
+    getEnrolledCount();
+  }, []);
 
   const convertVisibilityToText = (): string => {
     switch (event?.visibility) {
@@ -90,11 +115,6 @@ export default function NonEditModal({
     return `${location?.address ? location.address + "," : ""} ${
       location?.city
     } ${location?.country}`;
-  };
-
-  const getEnrolledCount = (): string => {
-    // TODO
-    return "";
   };
 
   const leaveEventThenRedirect = async () => {
@@ -161,10 +181,13 @@ export default function NonEditModal({
             <View style={styles.thirdRowWrapper}>
               <Text style={styles.enrolledText}>Påmeldte</Text>
               <View style={styles.enrolledBarOutline}>
-                <View style={styles.enrolledBar} />
-                <Text style={styles.enrolledCount}>
-                  {getEnrolledCount()}30/40
-                </Text>
+                <View
+                  style={{
+                    ...styles.enrolledBar,
+                    width: `${Math.min(100, (numberOfParticipants * 100) / numberOfMaxCapacity)}%`,
+                  }}
+                />
+                <Text style={styles.enrolledCount}>{participation}</Text>
               </View>
             </View>
 

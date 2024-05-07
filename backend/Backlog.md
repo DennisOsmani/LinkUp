@@ -11,8 +11,6 @@
 - [x] Case sensitive registrering / innlogging mail
 - [x] /n og newline fucker opp description på event, overflow: hidden?
 
-- [ ] Keyboard blokkerer tekst input på CreateEvent
-
 ## Bugs - Secondary
 
 - [x] Sortere eventer på startdato
@@ -33,7 +31,11 @@
 - [x] Få opp en Alert når man vil forlate et event man allerede deltar på (bekreftelse)
 - [x] Sjekke opp i admin og superAdmin, velge hvem vi bruker
 
-- [ ] Endre så password blir validert og hashet!
+## Siste innspurt
+
+- [x] Funk for eventmodal capacity
+- [x] Funk for max og min capacity for createevent
+- [ ] Docs for service interfaces
 - [ ] Klokkeslett på CreateEvent fungerer ikke
-- [ ] Funk for eventmodal capacity
-- [ ] Funk for max og min capacity for createevent
+- [ ] Keyboard blokkerer tekst input på CreateEvent
+- [ ] Endre så password blir validert og hashet!
