@@ -19,6 +19,7 @@ interface EventCardJoinedProps {
   event: IEvent;
   setEdit: React.Dispatch<React.SetStateAction<boolean>>;
   edit: boolean;
+  leaveEvent: () => void;
 }
 
 const EventCardJoined = ({
@@ -34,6 +35,7 @@ const EventCardJoined = ({
   event,
   edit,
   setEdit,
+  leaveEvent,
 }: EventCardJoinedProps) => {
   const MAX_LETTERS_DESCRIPTION = 70;
   const MAX_LETTERS_TITLE = 16;
@@ -77,6 +79,7 @@ const EventCardJoined = ({
         modalVisible={eventModalVisible}
         setModalVisible={setEventModalVisible}
         event={event}
+        leaveEvent={leaveEvent}
       />
 
       <TouchableOpacity

@@ -2,24 +2,23 @@ import { View, Text, Pressable, Image, ScrollView, Alert } from "react-native";
 import { IEvent, ILocation } from "../../../../interfaces/ModelInterfaces";
 import { styles } from "./EventTabStyles";
 import { Feather } from "@expo/vector-icons";
-import { updateEventParticipation } from "../../../../api/EventRelationAPI";
+import {
+  updateEventParticipation,
+  updateEventRelationParticipation,
+} from "../../../../api/EventRelationAPI";
 import { useTokenProvider } from "../../../../providers/TokenProvider";
 
 interface EventTabProps {
   event: IEvent | null;
+  setEventModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  leaveEvent: () => void;
 }
 
-/*
- * TODO
- *
- * Sjekk at leave event fungerer i db
- * Sjekk at man ikke lenger kan se event informasjon når man leaver
- * Ikke mulig å joined eventer man ikke har tilgang til
- * Bli kastet til event siden etter man lager ett event
- * Bli kastet til Feed når man leaver ett event
- */
-
-export function EventTab({ event }: EventTabProps) {
+export function EventTab({
+  event,
+  setEventModalVisible,
+  leaveEvent,
+}: EventTabProps) {
   const { token } = useTokenProvider();
 
   const convertVisibilityToText = (): string => {
@@ -98,8 +97,8 @@ export function EventTab({ event }: EventTabProps) {
   const leaveEventThenRedirect = async () => {
     if (!event) return;
 
-    await updateEventParticipation(event.eventID, "BAILED", token);
-    // TODO - Kaste til en annen side!
+    leaveEvent();
+    setEventModalVisible(false);
   };
 
   const handleLeaveEvent = () => {

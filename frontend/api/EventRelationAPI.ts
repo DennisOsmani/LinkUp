@@ -107,6 +107,14 @@ export const updateEventRelationParticipation = async (
   eventId: number,
   participation: string
 ) => {
+  console.log(
+    "SWGR: " +
+      "http://localhost:5173/api/eventrelation/participation/71?participation=BAILED"
+  );
+  console.log(
+    "LOGR: " +
+      `${THIS_URL}/participation/${eventId}?participation=${participation}`
+  );
   try {
     const response = await fetch(
       `${THIS_URL}/participation/${eventId}?participation=${participation}`,

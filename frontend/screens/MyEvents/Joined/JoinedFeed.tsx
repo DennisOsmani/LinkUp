@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   RefreshControl,
   ScrollView,
   Text,
@@ -132,6 +133,19 @@ export default function JoinedFeed() {
   const handleButtonPress = async (
     eventRelation: IEventRelations | undefined
   ) => {
+    Alert.alert("Advarsel", "Er du sikker på at du vil forlate", [
+      {
+        text: "Tilbake",
+        style: "cancel",
+      },
+      {
+        text: "Ja",
+        onPress: () => leaveEvent(eventRelation),
+      },
+    ]);
+  };
+
+  const leaveEvent = async (eventRelation: IEventRelations | undefined) => {
     if (!eventRelation) {
       throw new Error(
         "Error in the eventrelation for the event: " + eventRelations
@@ -150,7 +164,6 @@ export default function JoinedFeed() {
       console.error("Error joining event:", error);
     }
   };
-
   return (
     <ScrollView
       style={styles.scrollView}
@@ -193,6 +206,7 @@ export default function JoinedFeed() {
                 onButtonPress={() =>
                   handleButtonPress(eventRelations[event.eventID])
                 }
+                leaveEvent={() => leaveEvent(eventRelations[event.eventID])}
                 host={isHost(eventRelations[event.eventID])}
                 event={event}
               />
