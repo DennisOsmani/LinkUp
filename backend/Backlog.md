@@ -30,7 +30,7 @@
 - [x] Fargede knapper blir svarte, kanskje endre til TouchableHighlight
 - [x] Annen picker på Profile når endre kjønn
 - [x] Endre til Offentlig -> Venner -> Private i CreatEvent
-- [ ] InviteModal så kan man invitere, fjerne folk og de blir borte fra modalen. Endre til slik som Legg til flere?
+- [x] InviteModal så kan man invitere, fjerne folk og de blir borte fra modalen. Endre til slik som Legg til flere?
 - [ ] Få opp en Alert når man vil forlate et event man allerede deltar på (bekreftelse)
 - [ ] Endre fra appsettingsverdier i opprettelse av JWT til Azure Secrets
 - [ ] Endre så password blir validert og hashet!
