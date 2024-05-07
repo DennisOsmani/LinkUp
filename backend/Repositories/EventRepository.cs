@@ -42,7 +42,7 @@ public class EventRepository
         try
         {
             return await _context.Events
-                .Where(e => e.Location.City.ToUpper() == city.ToUpper() && e.Visibility == Visibility.PUBLIC && e.EventDateTimeStart > DateTime.Now)
+                .Where(e => e.Location.City.ToUpper() == city.ToUpper() && e.Visibility == Visibility.PUBLIC && e.EventDateTimeStart.AddHours(2) > DateTime.Now)
                 .Where(e => !_context.EventRelations.Any(er => er.EventID == e.EventID && er.UserID == userId))
                 .OrderBy(e => e.EventDateTimeStart)
                 .Include(e => e.Location)
@@ -72,7 +72,7 @@ public class EventRepository
                     && er.EventRole == EventRole.CREATOR
                 )
                 .Select(er => er.Event)
-                .Where(e => e.Visibility == Visibility.FRIENDS && e.EventDateTimeStart > DateTime.Now)
+                .Where(e => e.Visibility == Visibility.FRIENDS && e.EventDateTimeStart.AddHours(2) > DateTime.Now)
                 .ToListAsync();
 
             var usersEvents = await _context.EventRelations
@@ -102,7 +102,7 @@ public class EventRepository
                 )
 
                 .Select(er => er.Event)
-                .Where(e => e.EventDateTimeStart > DateTime.Now)
+                .Where(e => e.EventDateTimeStart.AddHours(2) > DateTime.Now)
                 .OrderBy(e => e.EventDateTimeStart)
                 .ToListAsync();
         }
@@ -125,11 +125,10 @@ public class EventRepository
                     && er.EventRelationParticipation == EventRelationParticipation.JOINED
                 )
                 .Select(er => er.Event)
-                .Where(e => e.EventDateTimeStart > DateTime.Now)
+                .Where(e => e.EventDateTimeStart.AddHours(2) > DateTime.Now)
                 .OrderBy(e => e.EventDateTimeStart)
                 .ToListAsync();
         }
-
         catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");
@@ -148,7 +147,6 @@ public class EventRepository
                 .Select(er => er.Event)
                 .ToListAsync();
         }
-
         catch (InvalidOperationException)
         {
             throw new InvalidOperationException($"Error with Linq query. (EventRepo)");

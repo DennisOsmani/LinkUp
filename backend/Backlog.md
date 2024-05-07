@@ -2,8 +2,7 @@
 
 ## Bugs - Primary
 
-- [ ] Fikse funk for EventModal / CreatorEventModal
-- [ ] Ikke mulig å sette inn antall folk på eventet
+- [x] Fikse funk for EventModal / CreatorEventModal
 - [x] Side for å redigere event
 - [x] Creator skal kunne slette event og ikke forlate
 - [x] Må endre kjønn for å kunne registrere (Bare dame)
@@ -19,7 +18,7 @@
 - [x] Sortere eventer på startdato
 - [x] Eventer som har vært burde fjernes (Ligger mulig i backend)
 - [x] Søk funker ikke på InviteModal i CreateEvent
-- [ ] Adresse bug, når du oppretter og modalen kommer opp
+- [x] Adresse bug, når du oppretter og modalen kommer opp
 - [x] CreateEvent clear data funker ikke
 - [ ] Klokkeslett på CreateEvent fungerer ikke
 - [x] Gjøre det umulig å sette sluttid før starttid
