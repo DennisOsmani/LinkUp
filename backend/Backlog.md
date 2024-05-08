@@ -36,6 +36,6 @@
 - [x] Funk for eventmodal capacity
 - [x] Funk for max og min capacity for createevent
 - [x] Docs for service interfaces
-- [ ] Klokkeslett på CreateEvent fungerer ikke
+- [x] Klokkeslett på CreateEvent fungerer ikke
 - [ ] Keyboard blokkerer tekst input på CreateEvent
 - [ ] Endre så password blir validert og hashet!
