@@ -4,15 +4,9 @@
 - dotnet add package Microsoft.EntityFrameworkCore.Design (DB greier els?)
 - dotnet add package Swashbuckle.AspNetCore (Måtte ha denne, vet ikke hvorfor)
 
-## NuGet
-
 ## Ef Core
 
 - dotnet tool install --global dotnet-ef (Global installering)
 - dotnet ef migrations add InitialCreate (Create new schemas for updated database)
 - dotnet ef database update (Updates the database based on the migrations schema)
 
-## JWT Integration
-
-- dotnet add package Microsoft.AspCore.Authentication.JwtBearer
-- dotnet add package System.IdentityModel.Tokens.Jwt

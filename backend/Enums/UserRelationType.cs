@@ -1,7 +1,7 @@
 namespace Enums;
 
 /// <summary>
-/// Enum for Type in UserRelation
+/// Enum for the Type of relation between two users in UserRelation
 /// </summary>
 public enum UserRelationType
 {

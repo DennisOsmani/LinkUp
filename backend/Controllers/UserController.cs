@@ -83,7 +83,7 @@ public class UserController : ControllerBase
         {
             return Unauthorized("No user ID claim present in token.");
         }
-             Console.WriteLine("I AM HERE");
+
         try
         {
             string escapedUserId = SecurityElement.Escape(user.UserID);
@@ -92,12 +92,10 @@ public class UserController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            Console.WriteLine("Error1 " + ex);
             return BadRequest(ex.Message);
         }
         catch (ArgumentNullException ex)
         {
-             Console.WriteLine("Error2 " + ex);
             return BadRequest(ex.Message);
         }
         catch (Exception ex)
@@ -125,7 +123,6 @@ public class UserController : ControllerBase
 
         try
         {
-            Console.WriteLine("User " + userId);
             if (String.IsNullOrEmpty(userId))
             {
                 await _userService.DeleteUser(userIdClaim);

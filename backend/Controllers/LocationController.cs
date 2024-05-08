@@ -5,9 +5,6 @@ using Services;
 
 namespace Controllers;
 
-/// <summary>
-/// Controller to manage locations.
-/// </summary>
 [ApiController]
 [Route("api/location")]
 public class LocationController : ControllerBase
@@ -19,11 +16,6 @@ public class LocationController : ControllerBase
         _locationService = locationService;
     }
 
-    /// <summary>
-    /// Retrieves a location by its ID.
-    /// </summary>
-    /// <param name="locationId">The ID of the location to retrieve.</param>
-    /// <returns>The location information if found.</returns>
     [HttpGet("{locationId}")]
     public async Task<ActionResult<Location>> GetLocation(int locationId)
     {
@@ -47,12 +39,6 @@ public class LocationController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Updates a location with the given ID.
-    /// </summary>
-    /// <param name="locationId">The ID of the location to update.</param>
-    /// <param name="location">The updated location information.</param>
-    /// <returns>The updated location information.</returns>
     [HttpPut]
     public async Task<ActionResult<Location>> UpdateLocation([FromBody] Location location)
     {
@@ -75,13 +61,6 @@ public class LocationController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Creates a new location. Probably not needed/impossible to use? should maybe
-    /// use the service method in the CreateEvent api insted, if not done already
-    /// </summary>
-    /// <param name="eventId">The ID of the event associated with the location.</param>
-    /// <param name="location">The location information to create.</param>
-    /// <returns>The newly created location information.</returns>
     [HttpPost]
     public async Task<ActionResult> CreateLocation([FromQuery] int eventId, [FromBody] Location location)
     {
@@ -104,12 +83,6 @@ public class LocationController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Deletes a location by its ID. Probably not needed because of the cascade functionality
-    /// of the tables in the app :) made it even tho, because i love to work
-    /// </summary>
-    /// <param name="locationId">The ID of the location to delete.</param>
-    /// <returns>No content if the location is deleted successfully.</returns>
     [HttpDelete("{locationId}")]
     public async Task<ActionResult> DeleteLocation(int locationId)
     {

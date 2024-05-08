@@ -18,7 +18,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /* UserRelation */
         modelBuilder.Entity<UserRelation>()
             .HasKey(ur => ur.UserRelationID);
 
@@ -34,7 +33,6 @@ public class AppDbContext : DbContext
             .HasForeignKey(ur => ur.User_second_ID)
             .OnDelete(DeleteBehavior.Cascade);
 
-        /* EventRelation */
         modelBuilder.Entity<EventRelation>()
             .HasKey(er => er.EventRelationID);
 
@@ -49,11 +47,9 @@ public class AppDbContext : DbContext
             .WithMany(u => u.EventRelations)
             .HasForeignKey(ur => ur.UserID);
 
-        /* Location */
         modelBuilder.Entity<Location>()
             .HasKey(l => l.LocationID);
 
-        /* Event */
         modelBuilder.Entity<Event>()
             .HasKey(e => e.EventID);
 
@@ -71,7 +67,6 @@ public class AppDbContext : DbContext
             .Property(e => e.EventDateTimeEnd)
             .HasColumnType("timestamp without time zone");
 
-        /* User */
         modelBuilder.Entity<User>()
             .HasKey(u => u.UserID);
     }

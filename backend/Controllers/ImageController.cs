@@ -28,12 +28,8 @@ namespace YourNamespace
                 return Unauthorized("No user ID claim present in token.");
             }
 
-
-            // Assume a default content type if none is provided, or derive it from other sources if possible
             string contentType = Request.ContentType ?? "application/octet-stream";
-
-            // Determine a file name. Here, using a GUID for simplicity. Adjust based on your requirements.
-            var fileName = $"{Guid.NewGuid()}.jpeg"; // Change the extension based on your actual content type or logic
+            var fileName = $"{Guid.NewGuid()}.jpeg"; 
 
             string connectionString = _configuration["AzureStorageConfig:ConnectionString"];
             var blobServiceClient = new BlobServiceClient(connectionString);
@@ -42,13 +38,11 @@ namespace YourNamespace
 
             var blobClient = blobContainerClient.GetBlobClient(fileName);
 
-            // Read the request body directly as the blob stream
             await blobClient.UploadAsync(Request.Body, new BlobUploadOptions
             {
                 HttpHeaders = new BlobHttpHeaders { ContentType = contentType }
             });
 
-            // Construct the URL to access the uploaded blob
             var blobUrl = blobClient.Uri.AbsoluteUri;
             return Ok(blobUrl);
 

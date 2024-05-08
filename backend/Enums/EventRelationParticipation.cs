@@ -1,7 +1,7 @@
 namespace Enums;
 
 /// <summary>
-/// Enum for Type in EventRelation
+/// Enum for the users participation for a given event, defined in EventRelation
 /// </summary>
 public enum EventRelationParticipation
 {

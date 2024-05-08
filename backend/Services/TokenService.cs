@@ -25,11 +25,10 @@ public class TokenService
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserID),
                 new Claim(ClaimTypes.Role, user.Role.ToString()),
-                // Add more claims as needed
             }),
-            Expires = DateTime.UtcNow.AddDays(1),   // Må endres
+            Expires = DateTime.UtcNow.AddDays(1),   
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            Issuer = _configuration["Jwt:Issuer"], // Add this line
+            Issuer = _configuration["Jwt:Issuer"], 
             Audience = _configuration["Jwt:Audience"]
         };
 

@@ -40,23 +40,6 @@ public class EventService : IEventService
     public async Task<ICollection<Event>> GetEventsInCity(string city, string userId)
     {
         return await _eventRepo.GetEventsInCity(city, userId);
-
-        /*ALTERNATIVE TO THE INSANE QUERY IN REPO
-        var events = await _eventRepo.GetEventsInCity(city);
-
-        ICollection<Event> filteredEvents = new List<Event>();
-
-        foreach (var ev in events)
-        {
-            var relation = await _eventRelRepo.GetEventRelation(ev.EventID, userId);
-            if (relation == null)
-            {
-                filteredEvents.Add(ev);
-            }
-        }
-        return filteredEvents;
-        */
-
     }
 
     public async Task<User> GetHostForEvent(int eventId)
@@ -70,6 +53,7 @@ public class EventService : IEventService
         }
         return user;
     }
+
     public async Task<ICollection<Event>> GetUserFriendEvents(string userId)
     {
         ICollection<User?> friends = await _userRelRepo.GetUserFriends(userId);
@@ -95,7 +79,6 @@ public class EventService : IEventService
         return await _eventRepo.GetUserJoinedEvents(userId);
     }
 
-    // Refaktoreres ? </3
     public async Task<Event?> CreateEvent(Event newEvent, string creatorUserId)
     {
 
@@ -170,66 +153,23 @@ public class EventService : IEventService
         }
 
         return true;
-        /*
-        DENNE VIL VISE EVENT TILGANG BASERT PÅ INVITASJONER OSV....
-
-        Event? eventt = await _eventRepo.GetEventByID(eventId);
-
-        var creatorList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.CREATOR);
-        User? creator = creatorList.FirstOrDefault();
-        User? user = await _userRepo.GetUserByID(userId);
-        UserRelation? userRelation = await _userRelRepo.GetOneUserRelation(user.UserID, creator.UserID);
-
-        if (eventt == null || eventRel == null || creator == null || user == null || userRelation == null)
-        {
-            throw new KeyNotFoundException($"Event with ID: {eventId}, or user with ID: {userId} was not found! (EventService)");
-        }
-
-        if (eventt.Visibility == Visibility.PUBLIC)
-        {
-            return true;
-        }
-        if (eventt.Visibility == Visibility.FRIENDS && userRelation.Type == UserRelationType.FRIENDS)
-        {
-            return true;
-        }
-        if (eventt.Visibility == Visibility.PRIVATE)
-        {
-            return true;
-        }
-
-        return false;
-        */
     }
 
     public async Task<bool> CanUserUpdateEvent(int eventId, string userId)
     {
-        try
+        Event? eventt = await _eventRepo.GetEventByID(eventId);
+
+        if (eventt == null)
         {
-            Console.WriteLine("bro her?");
-            Event? eventt = await _eventRepo.GetEventByID(eventId);
-
-            if (eventt == null)
-            {
-                throw new KeyNotFoundException($"Event with ID: {eventId},  was not found! (EventService)");
-            }
-
-            Console.WriteLine("for nolllllerererreereeerereresetnaornstiaernstiearseintaierni?");
-
-            ICollection<User> creatorList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.CREATOR);
-            ICollection<User> hostList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.HOST);
-
-            Console.WriteLine("nulll ell?");
-
-            List<User> allowedList = creatorList.Concat(hostList).ToList();
-
-            return allowedList.Any(user => user.UserID == userId);
+            throw new KeyNotFoundException($"Event with ID: {eventId},  was not found! (EventService)");
         }
-        catch (Exception)
-        {
-            Console.WriteLine("Oissann adrian, her gikk det galt gitt");
-            throw;
-        }
+
+        ICollection<User> creatorList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.CREATOR);
+        ICollection<User> hostList = await _eventRelRepo.GetUsersFromEventByRole(eventId, EventRole.HOST);
+
+        List<User> allowedList = creatorList.Concat(hostList).ToList();
+
+        return allowedList.Any(user => user.UserID == userId);
     }
 
     public async Task<bool> CanUserDeleteEvent(int eventId, string userId)

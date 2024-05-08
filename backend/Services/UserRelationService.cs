@@ -104,7 +104,7 @@ public class UserRelationService : IUserRelationService
         }
     }
 
-    public async Task<UserRelation?> IsPendingFriendRequest(string userId, string otherUserId) {
+    private async Task<UserRelation?> IsPendingFriendRequest(string userId, string otherUserId) {
 
         UserRelation? userRelation = await _userRelationRepo.GetUserRelation(userId, otherUserId);
     

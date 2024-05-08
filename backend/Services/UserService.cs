@@ -215,7 +215,6 @@ public class UserService : IUserService
         return searchedUsers;
     }
 
-    //probably needs an update, need eventrepo/service access first
     public async Task<ICollection<User>> GetUsersFromEvent(int eventId)
     {
         Event? eventt = await _eventRepo.GetEventByID(eventId);

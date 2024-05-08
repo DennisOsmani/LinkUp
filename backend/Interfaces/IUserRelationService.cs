@@ -3,49 +3,41 @@ using Models;
 namespace Interfaces;
 
 /// <summary>
-/// Service Interface for updating UserRelations
+/// Service Interface for all data manipulation on the UserRelations table.
 /// </summary>
 public interface IUserRelationService
 {
     /// <summary>
-    /// Get a UserRelation
+    /// Gets a UserRelation between two users by the two given user ids.
     /// </summary>
-    /// <param name="userId">The User logged in</param>
-    /// <param name="otherUserId">The other User we want to get the relation of with logged in user</param>
-    /// <returns>The UserRelation</returns>
+    /// <param name="userId">This users id</param>
+    /// <param name="otherUserId">The other User we want to get the relation of with this user</param>
+    /// <returns>The UserRelation between the two</returns>
     Task<UserRelation> GetUserRelation(string userId, string otherUserId);
 
     /// <summary>
-    /// Creates a UserRelations Type.
+    /// First tries to find if there exists a UserRelation with type pending, if not it Creates a UserRelation defined by type, between two users.
     /// </summary>
-    /// <param name="userId">The User logged in</param>
+    /// <param name="userId">This users id</param>
     /// <param name="otherUserId">The other User we want to create a relation to</param>
-    /// <param name="type">The Type we want the relation to be</param>
-    /// <returns>The created UserRelation</returns>
+    /// <param name="type">The Type we want the relation to be (FRIENDS, BLOCKED, etc.)</param>
+    /// <returns>The existing UserRelation or the new created UserRelation</returns>
     Task<UserRelation> CreateUserRelation(string userId, string otherUserId, string type);
-    // HER MÅ DET MULIGENS OPPRETTES EN LYTTER SOM FETCHER DATA NÅR DET KOMMER NYE ENTRIES I DATABASEN (GetUserRelations)
 
     /// <summary>
-    /// Updates a UserRelations Type.
+    /// Updates a UserRelation with a new type given.
     /// </summary>
-    /// <param name="userId">The User logged in</param>
+    /// <param name="userId">This users id</param>
     /// <param name="otherUserId">The other User we have a relation to</param>
-    /// <param name="type">The Type we want to update the UserRelation to</param>
+    /// <param name="type">The Type we want to update the UserRelation to (FRIENDS, BLOCKED, etc.)</param>
     /// <returns>The updated UserRelation</returns>
     Task<UserRelation> UpdateUserRelationType(string userId, string otherUserId, string type);
 
     /// <summary>
-    /// Deletes a UserRelation.
+    /// Deletes a UserRelation between two users by their given ids.
     /// </summary>
-    /// <param name="userRelationId">Id for the UserRelation</param>
+    /// <param name="userId">This users id</param>
+    /// <param name="otherUserId">The other User we have a relation to</param>
     Task DeleteUserRelation(string userId, string otherUserId);
 
-    /// <summary>
-    /// Checks if there is a userRelation, if there is it updates it to Friends, else it returns
-    /// </summary>
-    /// <param name="userId">The User logged in</param>
-    /// <param name="otherUserId">The other User we want to check the relation of with logged in user</param>
-    /// <returns>true or false</returns>
-
-    Task<UserRelation> IsPendingFriendRequest(string userId, string otherUserId);
 }

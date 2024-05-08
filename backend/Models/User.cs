@@ -34,6 +34,6 @@ public class User
         Firstname = firstname;
         Lastname = lastname;
         Email = email;
-        Role = Role.USER;  //bruuh
+        Role = Role.USER;  
     }
 }

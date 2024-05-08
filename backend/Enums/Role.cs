@@ -1,7 +1,7 @@
 namespace Enums;
 
 /// <summary>
-/// Enum for Role in User
+/// Enum for the Role in the system, all users have a role.
 /// </summary>
 public enum Role
 {

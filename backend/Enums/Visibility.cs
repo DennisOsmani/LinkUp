@@ -1,7 +1,7 @@
 namespace Enums;
 
 /// <summary>
-/// Enum for the visibility of the Event
+/// Enum for the visibility for the Event
 /// </summary>
 public enum Visibility 
 { 

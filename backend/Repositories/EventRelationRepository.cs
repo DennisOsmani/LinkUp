@@ -34,8 +34,6 @@ public class EventRelationRepository
 
     public async Task<ICollection<User?>> GetUsersFromEventByRole(int eventId, EventRole role)
     {
-        Console.WriteLine("ROLE : " + role);
-
         try
         {
             return await _context.EventRelations
@@ -83,7 +81,7 @@ public class EventRelationRepository
                 await transaction.CommitAsync();
                 return eventRelation;
             }
-            catch (Exception e)
+            catch (InvalidOperationException e)
             {
                 await transaction.RollbackAsync();
                 throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");

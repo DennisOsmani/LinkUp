@@ -27,7 +27,6 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationRequest request)
     {
-        // DENNE MÅ TESTES, KAN MULIGENS ØDELEGGE PASSORD MED TEGN??
         request.Email = SecurityElement.Escape(request.Email);
         request.Password = SecurityElement.Escape(request.Password);
 
@@ -41,7 +40,7 @@ public class AuthController : ControllerBase
                 Firstname = request.Firstname,
                 Lastname = request.Lastname,
                 Email = request.Email,
-                Password = _passwordHasher.HashPassword(null, saltedPassword),    // Null is because the user is not created yet, normally this is where the user object is.
+                Password = _passwordHasher.HashPassword(null, saltedPassword),   
                 Salt = salt,
                 Role = Enums.Role.SUPERADMIN,
                 Gender = request.Gender,
@@ -103,10 +102,8 @@ public class AuthController : ControllerBase
            }
        */
 
-        // Generate token
         var token = _tokenService.CreateToken(user);
 
-        // Return the token
         return Ok(new AuthResponse { Token = token, UserID = user.UserID });
     }
 

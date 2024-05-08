@@ -70,7 +70,6 @@ public class UserRelationRepository
         }
     }
 
-    // Needed in one specific way (Amund Fremming author)
     public async Task<UserRelation?> GetOneUserRelation(string userId, string otherUserId)
     {
         try
@@ -136,7 +135,6 @@ public class UserRelationRepository
         }
     }
 
-    // The Users Logged in user has blocked!
     public async Task<ICollection<User?>> GetUserBlocks(string userId)
     {
         try
@@ -155,7 +153,6 @@ public class UserRelationRepository
         }
     }
 
-    // The Users that have blocekd the logged in user
     public async Task<ICollection<User?>> GetUsersBlockedLoggedInUser(string userId)
     {
         try
@@ -192,7 +189,6 @@ public class UserRelationRepository
         }
     }
 
-  // Gets the users sent friend request that is pending
     public async Task<ICollection<User?>> GetPendingFriendRequests(string userId)
     {
         try 

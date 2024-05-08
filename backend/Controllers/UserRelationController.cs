@@ -90,7 +90,6 @@ public class UserRelationController : ControllerBase
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        // flag
         if (userIdClaim == null)
         {
             return Unauthorized("No user ID claim present in token.");

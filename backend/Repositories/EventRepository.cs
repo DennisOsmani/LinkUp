@@ -19,12 +19,6 @@ public class EventRepository
         _locationRepo = locationRepo;
     }
 
-    /// <summary>
-    /// Fetches a Event based on the eventId.
-    /// </summary>
-    /// <param name="eventId">Id for the event</param>
-    /// <returns>The Event with the given id.</returns>
-    /// <exception cref="InvalidOperationException"></exception>
     public async Task<Event?> GetEventByID(int eventId)
     {
         try
@@ -54,19 +48,13 @@ public class EventRepository
         }
     }
 
-    /// <summary>
-    /// Fetches a list of Events that a friend of this user has created with the visibility set too friends
-    /// </summary>
-    /// <param name="userIds">A list of userIds, that consists of this users friends</param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException">If Linq query is faulty.</exception>
     public async Task<ICollection<Event?>> GetUserFriendEvents(List<string> userIds, string userId)
     {
         try
         {
             var eventsForFriends = await _context.EventRelations
-                .Include(er => er.Event) // Include the related Event entity
-                    .ThenInclude(e => e.Location) // Include the related Location entity
+                .Include(er => er.Event) 
+                    .ThenInclude(e => e.Location) 
                 .Where(
                     er => userIds.Contains(er.UserID)
                     && er.EventRole == EventRole.CREATOR
