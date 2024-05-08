@@ -8,6 +8,8 @@ import {
   Alert,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { styles } from "./CreateEventStyles";
 import { Feather } from "@expo/vector-icons";
@@ -246,190 +248,201 @@ export default function CreateEvent() {
         setInviteVisible={setInviteModalVisible}
       />
 
-      <ScrollView>
-        <View
-          style={{
-            ...styles.container,
-            opacity: locationModalVisible || inviteModalVisible ? 0.4 : 1,
-          }}
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="always"
+      >
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <View style={styles.imageContainer}>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={handleUploadImage}
-              style={styles.uploadContainer}
-            >
-              <Feather name="upload" size={20} color="white" />
-              <Text style={styles.uploadText}>Last opp</Text>
-            </TouchableOpacity>
-            <Image
-              style={styles.imageContainer}
-              source={{ uri: eventImageUri }}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
-              onChangeText={(input) =>
-                setEvent((event: IEventDTO) => ({ ...event, eventName: input }))
-              }
-              placeholder="Navn på Event"
-              style={styles.inputBox}
-              onKeyPress={handleKeyPress}
-              value={event.eventName}
-            />
-
-            <View style={styles.datetimepickerBox}>
-              <Text style={styles.datetimepickerText}>Event start</Text>
-              <RNDateTimePicker
-                value={new Date(event.eventDateTimeStart.toString())}
-                mode={"datetime"}
-                onChange={onChangeStart}
-                locale="no-NB"
+          <View
+            style={{
+              ...styles.container,
+              opacity: locationModalVisible || inviteModalVisible ? 0.4 : 1,
+            }}
+          >
+            <View style={styles.imageContainer}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={handleUploadImage}
+                style={styles.uploadContainer}
+              >
+                <Feather name="upload" size={20} color="white" />
+                <Text style={styles.uploadText}>Last opp</Text>
+              </TouchableOpacity>
+              <Image
+                style={styles.imageContainer}
+                source={{ uri: eventImageUri }}
               />
             </View>
-            <View style={styles.datetimepickerBox}>
-              <Text style={styles.datetimepickerText}>Event slutt</Text>
-              <RNDateTimePicker
-                value={new Date(event.eventDateTimeEnd.toString())}
-                mode={"datetime"}
-                locale="no-NB"
-                onChange={onChangeEnd}
-                minimumDate={new Date(event.eventDateTimeStart)}
-              />
-            </View>
-            <View style={styles.visibilityContainer}>
-              <Pressable
-                onPress={() => handleVisibilityButtonPressed(0)}
-                style={{
-                  ...styles.visibilityBox,
-                  borderColor: selectedVisibility.public
-                    ? colors.primary
-                    : "white",
-                }}
-              >
-                <Text
-                  style={{
-                    ...styles.visibilityText,
-                    color: selectedVisibility.public
-                      ? colors.primary
-                      : "rgba(128, 128, 128, 0.4)",
-                  }}
-                >
-                  Offentlig
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => handleVisibilityButtonPressed(1)}
-                style={{
-                  ...styles.visibilityBox,
-                  borderColor: selectedVisibility.private
-                    ? colors.primary
-                    : "white",
-                }}
-              >
-                <Text
-                  style={{
-                    ...styles.visibilityText,
-                    color: selectedVisibility.private
-                      ? colors.primary
-                      : "rgba(128, 128, 128, 0.4)",
-                  }}
-                >
-                  Privat
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => handleVisibilityButtonPressed(2)}
-                style={{
-                  ...styles.visibilityBox,
-                  borderColor: selectedVisibility.friends
-                    ? colors.primary
-                    : "white",
-                }}
-              >
-                <Text
-                  style={{
-                    ...styles.visibilityText,
-                    color: selectedVisibility.friends
-                      ? colors.primary
-                      : "rgba(128, 128, 128, 0.4)",
-                  }}
-                >
-                  Venner
-                </Text>
-              </Pressable>
-            </View>
-            <View style={styles.minmaxcontainer}>
+
+            <View style={styles.inputContainer}>
               <TextInput
                 placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
                 onChangeText={(input) =>
                   setEvent((event: IEventDTO) => ({
                     ...event,
-                    minCapacity: input,
+                    eventName: input,
                   }))
                 }
-                placeholder="Min"
-                style={styles.minmax}
+                placeholder="Navn på Event"
+                style={styles.inputBox}
                 onKeyPress={handleKeyPress}
-                value={event.minCapacity}
+                value={event.eventName}
               />
 
+              <View style={styles.datetimepickerBox}>
+                <Text style={styles.datetimepickerText}>Event start</Text>
+                <RNDateTimePicker
+                  value={new Date(event.eventDateTimeStart.toString())}
+                  mode={"datetime"}
+                  onChange={onChangeStart}
+                  locale="no-NB"
+                />
+              </View>
+              <View style={styles.datetimepickerBox}>
+                <Text style={styles.datetimepickerText}>Event slutt</Text>
+                <RNDateTimePicker
+                  value={new Date(event.eventDateTimeEnd.toString())}
+                  mode={"datetime"}
+                  locale="no-NB"
+                  onChange={onChangeEnd}
+                  minimumDate={new Date(event.eventDateTimeStart)}
+                />
+              </View>
+              <View style={styles.visibilityContainer}>
+                <Pressable
+                  onPress={() => handleVisibilityButtonPressed(0)}
+                  style={{
+                    ...styles.visibilityBox,
+                    borderColor: selectedVisibility.public
+                      ? colors.primary
+                      : "white",
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.visibilityText,
+                      color: selectedVisibility.public
+                        ? colors.primary
+                        : "rgba(128, 128, 128, 0.4)",
+                    }}
+                  >
+                    Offentlig
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => handleVisibilityButtonPressed(1)}
+                  style={{
+                    ...styles.visibilityBox,
+                    borderColor: selectedVisibility.private
+                      ? colors.primary
+                      : "white",
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.visibilityText,
+                      color: selectedVisibility.private
+                        ? colors.primary
+                        : "rgba(128, 128, 128, 0.4)",
+                    }}
+                  >
+                    Privat
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => handleVisibilityButtonPressed(2)}
+                  style={{
+                    ...styles.visibilityBox,
+                    borderColor: selectedVisibility.friends
+                      ? colors.primary
+                      : "white",
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.visibilityText,
+                      color: selectedVisibility.friends
+                        ? colors.primary
+                        : "rgba(128, 128, 128, 0.4)",
+                    }}
+                  >
+                    Venner
+                  </Text>
+                </Pressable>
+              </View>
+              <View style={styles.minmaxcontainer}>
+                <TextInput
+                  placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
+                  onChangeText={(input) =>
+                    setEvent((event: IEventDTO) => ({
+                      ...event,
+                      minCapacity: input,
+                    }))
+                  }
+                  placeholder="Min"
+                  style={styles.minmax}
+                  onKeyPress={handleKeyPress}
+                  value={event.minCapacity}
+                />
+
+                <TextInput
+                  placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
+                  onChangeText={(input) =>
+                    setEvent((event: IEventDTO) => ({
+                      ...event,
+                      maxCapacity: input,
+                    }))
+                  }
+                  placeholder="Max"
+                  style={styles.minmax}
+                  onKeyPress={handleKeyPress}
+                  value={event.maxCapacity}
+                />
+              </View>
               <TextInput
                 placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
                 onChangeText={(input) =>
                   setEvent((event: IEventDTO) => ({
                     ...event,
-                    maxCapacity: input,
+                    eventDescription: input,
                   }))
                 }
-                placeholder="Max"
-                style={styles.minmax}
+                multiline
+                placeholder="Hva er detaljene?"
+                style={styles.inputBoxMultiline}
                 onKeyPress={handleKeyPress}
-                value={event.maxCapacity}
+                value={event.eventDescription}
               />
-            </View>
-            <TextInput
-              placeholderTextColor={"rgba(128, 128, 128, 0.4)"}
-              onChangeText={(input) =>
-                setEvent((event: IEventDTO) => ({
-                  ...event,
-                  eventDescription: input,
-                }))
-              }
-              multiline
-              placeholder="Hva er detaljene?"
-              style={styles.inputBoxMultiline}
-              onKeyPress={handleKeyPress}
-              value={event.eventDescription}
-            />
 
-            <View style={styles.smallButtonContainer}>
+              <View style={styles.smallButtonContainer}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => setLocationModalVisible(true)}
+                  style={styles.smallButton}
+                >
+                  <Text style={styles.buttonText}>Sted</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => setInviteModalVisible(true)}
+                  style={styles.smallButton}
+                >
+                  <Text style={styles.buttonText}>Inviter</Text>
+                </TouchableOpacity>
+              </View>
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={() => setLocationModalVisible(true)}
-                style={styles.smallButton}
+                onPress={handleCreateEvent}
+                style={styles.bigButtonStyles}
               >
-                <Text style={styles.buttonText}>Sted</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={() => setInviteModalVisible(true)}
-                style={styles.smallButton}
-              >
-                <Text style={styles.buttonText}>Inviter</Text>
+                <Text style={styles.bigButtonText}>Opprett Event</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={handleCreateEvent}
-              style={styles.bigButtonStyles}
-            >
-              <Text style={styles.bigButtonText}>Opprett Event</Text>
-            </TouchableOpacity>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </ScrollView>
     </>
   );
