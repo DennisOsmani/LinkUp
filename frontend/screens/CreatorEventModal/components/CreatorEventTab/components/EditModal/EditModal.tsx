@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
-  ScrollView,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
@@ -24,6 +23,7 @@ import {
 } from "../../../../../../interfaces/ModelInterfaces";
 import { styles } from "./EditModalStyles";
 import { updateEvent } from "../../../../../../api/EventAPI";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface EditModalProps {
   eventProp: IEvent | undefined;
@@ -109,7 +109,7 @@ export default function EditModal({
   const handleKeyPress = (e: any) => {
     if (e.nativeEvent.key === "Enter") {
       Keyboard.dismiss();
-      e.preventDefault(); 
+      e.preventDefault();
     }
   };
 
@@ -164,7 +164,7 @@ export default function EditModal({
   };
 
   return (
-    <ScrollView style={styles.scrollView}>
+    <KeyboardAwareScrollView style={styles.scrollView}>
       <LocationModal
         visible={locationModalVisible}
         setVisible={setLocationModalVisible}
@@ -343,6 +343,6 @@ export default function EditModal({
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
