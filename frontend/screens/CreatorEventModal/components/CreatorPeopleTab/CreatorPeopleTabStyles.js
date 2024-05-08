@@ -5,7 +5,6 @@ import {
     verticalScale,
 } from "../../../../styles/genericDimensions";
 import { colors } from "../../../../styles/colors";
-import { version } from "react";
 
 export const styles = StyleSheet.create({
     loader: {

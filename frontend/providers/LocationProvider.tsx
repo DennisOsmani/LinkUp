@@ -39,7 +39,6 @@ export const LocationProvider: React.FC<{ children: ReactNode }> = ({
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
-          // Handle permission denied
           return;
         }
         const loc = await Location.getLastKnownPositionAsync();
@@ -55,7 +54,6 @@ export const LocationProvider: React.FC<{ children: ReactNode }> = ({
         }
       } catch (error) {
         console.error("Error fetching location:", error);
-        // Handle error
       }
     };
 
@@ -69,7 +67,7 @@ export const LocationProvider: React.FC<{ children: ReactNode }> = ({
         longitude: loc.coords.longitude,
       });
       if (address && address.length > 0) {
-        setAddress(address[0].city); // Cache the city
+        setAddress(address[0].city); 
       }
     } catch (error) {
       console.error("Error caching address:", error);

@@ -1,7 +1,7 @@
 import { View, Alert } from "react-native";
 import { registerUser } from "../../api/AuthAPI";
 import { loginUser } from "../../api/AuthAPI";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { styles } from "./AuthStyles";
 import LoginCard from "./components/Login/LoginCard";
 import RegisterCard from "./components/Register/RegisterCard";

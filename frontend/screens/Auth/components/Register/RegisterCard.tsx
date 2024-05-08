@@ -52,7 +52,6 @@ export default function RegisterCard({
     other: false,
   });
 
-  // Set default gender to "M" (male)
   useState(() => {
     setGender("M");
   });

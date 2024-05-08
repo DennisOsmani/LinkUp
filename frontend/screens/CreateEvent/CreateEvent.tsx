@@ -100,10 +100,9 @@ export default function CreateEvent() {
   };
 
   const handleKeyPress = (e: any) => {
-    // Check if 'Enter' was pressed
     if (e.nativeEvent.key === "Enter") {
       Keyboard.dismiss();
-      e.preventDefault(); // This line might not be needed in React Native, just an illustration
+      e.preventDefault();
     }
   };
 
@@ -148,7 +147,6 @@ export default function CreateEvent() {
     let eventId: number = -1;
 
     try {
-      // Upload to azure
       let eventImageUrl: string | undefined;
       if (eventImageUri) {
         eventImageUrl = await uploadImage(eventImageUri, token);
@@ -163,8 +161,6 @@ export default function CreateEvent() {
       };
 
       eventId = await createEvent(eventToCreate, token);
-
-      console.log("EVENT JUST CREATED ID: " + eventId);
 
       clearAllValues();
       const res: IEvent | undefined = await getEventById(eventId, token);

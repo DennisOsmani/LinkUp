@@ -72,7 +72,6 @@ export function EventTab({
       const sameDay =
         startDateTime.toDateString() === endDateTime.toDateString();
       if (sameDay) {
-        // Only show time for endDateTime if it's the same day
         return `${formatDateTime(startDateTime)} - ${formatTime(endDateTime)}`;
       } else {
         return `${formatDateTime(startDateTime)} - ${formatDateTime(

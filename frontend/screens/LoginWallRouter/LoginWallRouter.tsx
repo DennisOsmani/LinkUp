@@ -24,7 +24,6 @@ export default function LoginWallRouter() {
   };
 
   if (!fontsLoaded) {
-    // Load splash screen!
     return (
       <View>
         <Text style={{ fontFamily: "BalooBold" }}>Splash</Text>
@@ -33,7 +32,6 @@ export default function LoginWallRouter() {
   }
 
   if (token === "" || token === undefined) {
-    // TOOD - Check for token validation instead, valid time and some kind of username?
     return <Auth trigger={trigger} setTrigger={setTrigger} />;
   }
 

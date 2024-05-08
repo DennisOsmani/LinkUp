@@ -107,14 +107,6 @@ export const updateEventRelationParticipation = async (
   eventId: number,
   participation: string
 ) => {
-  console.log(
-    "SWGR: " +
-      "http://localhost:5173/api/eventrelation/participation/71?participation=BAILED"
-  );
-  console.log(
-    "LOGR: " +
-      `${THIS_URL}/participation/${eventId}?participation=${participation}`
-  );
   try {
     const response = await fetch(
       `${THIS_URL}/participation/${eventId}?participation=${participation}`,
@@ -161,53 +153,7 @@ export const updateEventParticipation = async (
         "Error in updateEventParticipation  response: " + response.status
       );
     }
-
-    console.log("Left event!");
   } catch (error) {
     console.error("Error while fetching updateEventParticipation  " + error);
   }
 };
-
-/*
-const x = async (token: string) => {
-    try {
-        const response = await fetch(`${THIS_URL}/`, {
-            method: "XXXXXXXXXXX",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error("Error in x response: " + response.status);
-        }
-
-        const data: XXXXXXXXXX = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Error while fetching x " + error);
-    }
-};
-
-const x = async (token: string) => {
-    try {
-        const response = await fetch(`${THIS_URL}/`, {
-            method: "XXXXXXXXXXX",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error("Error in x response: " + response.status);
-        }
-
-        const data: XXXXXXXXXX = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Error while fetching x " + error);
-    }
-};
-*/

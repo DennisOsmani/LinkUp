@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 import {
   moderateScale,
   verticalScale,
-  horizontalScale,
 } from "../styles/genericDimensions";
 import { colors } from "../styles/colors";
 

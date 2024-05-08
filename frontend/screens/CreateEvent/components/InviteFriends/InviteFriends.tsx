@@ -3,7 +3,6 @@ import {
     View,
     ScrollView,
     Keyboard,
-    Pressable,
     Text,
     TouchableOpacity,
 } from "react-native";
@@ -61,7 +60,6 @@ export default function InviteFriends({
             setAllFriends(results);
             setFilteredFriends(results);
         } catch (error) {
-            // TODO - setToken("")
             console.error("Error while fetching all friends: " + error);
         }
     };

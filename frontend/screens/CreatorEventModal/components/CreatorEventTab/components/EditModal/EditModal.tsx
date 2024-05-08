@@ -107,11 +107,9 @@ export default function EditModal({
   };
 
   const handleKeyPress = (e: any) => {
-    // Check if 'Enter' was pressed
     if (e.nativeEvent.key === "Enter") {
       Keyboard.dismiss();
-      Event;
-      e.preventDefault(); // This line might not be needed in React Native, just an illustration
+      e.preventDefault(); 
     }
   };
 

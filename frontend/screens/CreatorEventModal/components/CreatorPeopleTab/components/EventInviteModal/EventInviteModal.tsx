@@ -63,7 +63,7 @@ export default function EventInvteModal({
     try {
       await inviteUsersForEvent(eventId!, friendsToInvite, token);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
