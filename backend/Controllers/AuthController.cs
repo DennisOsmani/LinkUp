@@ -40,7 +40,7 @@ public class AuthController : ControllerBase
                 Firstname = request.Firstname,
                 Lastname = request.Lastname,
                 Email = request.Email,
-                Password = _passwordHasher.HashPassword(null, saltedPassword),   
+                Password = _passwordHasher.HashPassword(null, saltedPassword),
                 Salt = salt,
                 Role = Enums.Role.SUPERADMIN,
                 Gender = request.Gender,
@@ -91,16 +91,13 @@ public class AuthController : ControllerBase
             return Unauthorized("Invalid credentials 1");
         }
 
-        /*   
+        var saltedPassword = request.Password + user.Salt;
+        var result = _passwordHasher.VerifyHashedPassword(user, user.Password, saltedPassword);
 
-           var saltedPassword = request.Password + user.Salt;
-           var result = _passwordHasher.VerifyHashedPassword(user, user.Password,saltedPassword);
-
-           if (result != PasswordVerificationResult.Success)
-           {
-               return Unauthorized("Invalid credentials 2");
-           }
-       */
+        if (result != PasswordVerificationResult.Success)
+        {
+            return Unauthorized("Invalid credentials 2");
+        }
 
         var token = _tokenService.CreateToken(user);
 
