@@ -75,7 +75,7 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 /* ----------- only for delveopment, revert back to just one after finished ------------*/
-bool azureConfig = true;    // Endre denne til false for localhost kjøring!
+bool azureConfig = false;    // Endre denne til false for localhost kjøring!
 
 if (azureConfig)
 {

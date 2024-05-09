@@ -38,4 +38,13 @@
 - [x] Docs for service interfaces
 - [x] Klokkeslett på CreateEvent fungerer ikke
 - [x] Keyboard blokkerer tekst input på CreateEvent
+
+- [x] Login bug pga update user
+- [x] Default profilbilde
+- [x] Dobbel knapp pa host card eventfeed
+- [x] Rediger modal, event bilde blir ikke vist
+- [x] slett event, burde refreshe deltar feed
+- [ ] Redigere profil krasjer, mulig pga picker verdi
+- [ ] Deltar bug, skjer nar man prover a oppdatere feeden nar noen har opprettet et event
+
 - [ ] Endre så password blir validert og hashet!

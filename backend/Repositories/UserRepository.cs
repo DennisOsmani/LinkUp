@@ -64,35 +64,21 @@ public class UserRepository
     public async Task<User?> UpdateUser(string oldUserId, User newUser)
     {
         User? oldUser = await GetUserByID(oldUserId);
-        _context.Users.Attach(oldUser);
 
-        using (var transaction = await _context.Database.BeginTransactionAsync())
+        try
         {
-            try
-            {
-                foreach (var property in oldUser.GetType().GetProperties())
-                {
-                    var propertyName = property.Name;
-                    var newValue = typeof(User).GetProperty(propertyName)?.GetValue(newUser);
-                    if (newValue != null && !Equals(property.GetValue(oldUser), newValue) && !propertyName.Equals("Role"))
-                    {
-                        property.SetValue(oldUser, newValue);
-                    }
-                }
+            oldUser.ProfileImage = newUser.ProfileImage;
+            oldUser.Description = newUser.Description;
+            oldUser.Phone = newUser.Phone;
+            oldUser.RelationshipStatus = newUser.RelationshipStatus;
 
-                if (_context.ChangeTracker.HasChanges())
-                {
-                    await _context.SaveChangesAsync();
-                }
-
-                await transaction.CommitAsync();
-                return oldUser;
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
-            }
+            _context.Update(oldUser);
+            await _context.SaveChangesAsync();
+            return oldUser;
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException($"Error updating EventRelation role: {e.Message}");
         }
     }
 

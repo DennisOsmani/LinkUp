@@ -29,6 +29,7 @@ interface EditModalProps {
   eventProp: IEvent | undefined;
   eventId: number;
   setEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  eventImage: string;
 }
 
 const dateStart = new Date();
@@ -38,6 +39,7 @@ export default function EditModal({
   eventProp,
   eventId,
   setEdit,
+  eventImage,
 }: EditModalProps) {
   const [imageChanged, setImageChanged] = useState<boolean>(false);
   const [selectedVisibility, setSelectedVisibility] = useState({
@@ -47,9 +49,7 @@ export default function EditModal({
   });
   const [locationModalVisible, setLocationModalVisible] =
     useState<boolean>(false);
-  const [eventImageUri, setEventImageUri] = useState<string>(
-    "https://fiverr-res.cloudinary.com/videos/so_0.393778,t_main1,q_auto,f_auto/fq81phuqpbdjsolyu6yd/make-kurzgesagt-style-illustrations.png"
-  );
+  const [eventImageUri, setEventImageUri] = useState<string>(eventImage);
 
   const [event, setEvent] = useState<IEventDTO>({
     eventName: eventProp?.eventName ? eventProp.eventName : "",

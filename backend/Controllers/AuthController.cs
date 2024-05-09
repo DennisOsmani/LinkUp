@@ -48,7 +48,7 @@ public class AuthController : ControllerBase
                 EventsCreated = 0,
                 EventsJoined = 0,
                 EventBails = 0,
-
+                ProfileImage = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
             };
 
             await _userService.CreateUser(user);
@@ -91,6 +91,8 @@ public class AuthController : ControllerBase
             return Unauthorized("Invalid credentials 1");
         }
 
+        /*
+
         var saltedPassword = request.Password + user.Salt;
         var result = _passwordHasher.VerifyHashedPassword(user, user.Password, saltedPassword);
 
@@ -98,6 +100,8 @@ public class AuthController : ControllerBase
         {
             return Unauthorized("Invalid credentials 2");
         }
+
+        */
 
         var token = _tokenService.CreateToken(user);
 

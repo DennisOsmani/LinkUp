@@ -22,10 +22,12 @@ export function CreatorEventTab({
           event={event}
           setEventModalVisible={setEventModalVisible}
           setEdit={setEdit}
+          edit={edit}
         />
       )}
       {edit && (
         <EditModal
+          eventImage={event?.frontImage!}
           eventProp={event}
           eventId={event?.eventID!}
           setEdit={setEdit}

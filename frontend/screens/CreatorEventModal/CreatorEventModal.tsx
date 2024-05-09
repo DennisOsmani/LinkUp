@@ -3,7 +3,6 @@ import { IEvent } from "../../interfaces/ModelInterfaces";
 import { TabBackground } from "../../components/TabBackground/TabBackground";
 import { CreatorEventTab } from "./components/CreatorEventTab/CreatorEventTab";
 import { CreatorPeopleTab } from "./components/CreatorPeopleTab/CreatorPeopleTab";
-import { useEffect } from "react";
 
 interface CreatorEventModalProps {
   modalVisible: boolean;

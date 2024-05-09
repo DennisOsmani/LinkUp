@@ -113,16 +113,11 @@ const EventCardJoined = ({
 
               {host ? (
                 <TouchableOpacity
-                  activeOpacity={0.5}
                   style={styles.button}
-                  onPress={onButtonPress}
+                  activeOpacity={0.5}
+                  onPress={handleEditPress}
                 >
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={handleEditPress}
-                  >
-                    <Text style={styles.buttonText}>Rediger</Text>
-                  </TouchableOpacity>
+                  <Text style={styles.buttonText}>Rediger</Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
