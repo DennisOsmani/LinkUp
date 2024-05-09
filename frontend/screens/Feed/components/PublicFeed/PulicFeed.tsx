@@ -135,7 +135,7 @@ export default function PublicFeed() {
 
     const handleSearchSubmit = () => {
         if (searchText.trim() !== "") {
-            const cleanedCity = searchText.trim().replace(/[^a-zA-Z\s]/g, "");
+            const cleanedCity = searchText.trim().replace(/[^a-zæøåA-ZÆØÅ\s]/g, "");
             fetchEvents(cleanedCity);
             setSearchText("");
         }

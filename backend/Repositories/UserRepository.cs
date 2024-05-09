@@ -21,7 +21,7 @@ public class UserRepository
         try
         {
             return await _context.Users
-                .AnyAsync(u => u.Email == email);
+                .AnyAsync(u => u.Email.ToUpper() == email.ToUpper());
         }
         catch (InvalidOperationException)
         {
