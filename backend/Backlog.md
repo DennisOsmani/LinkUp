@@ -47,4 +47,7 @@
 - [x] Redigere profil krasjer, mulig pga picker verdi
 - [x] Deltar bug, skjer nar man prover a oppdatere feeden nar noen har opprettet et event
 - [x] ikke norske bokstaver paa sok
-- [x] Endre så password blir validert og hashet!
+- [ ] email for strent
+- [ ] feil med reg dato
+- [ ] pickerrrrrrr
+- [ ] Endre så password blir validert og hashet!
