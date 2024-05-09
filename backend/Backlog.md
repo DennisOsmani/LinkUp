@@ -44,8 +44,7 @@
 - [x] Dobbel knapp pa host card eventfeed
 - [x] Rediger modal, event bilde blir ikke vist
 - [x] slett event, burde refreshe deltar feed
-- [ ] Redigere profil krasjer, mulig pga picker verdi
+- [x] Redigere profil krasjer, mulig pga picker verdi
 - [x] Deltar bug, skjer nar man prover a oppdatere feeden nar noen har opprettet et event
 - [x] ikke norske bokstaver paa sok
-
-- [ ] Endre så password blir validert og hashet!
+- [x] Endre så password blir validert og hashet!
