@@ -79,9 +79,9 @@ export const styles = StyleSheet.create({
   smallBoxesContainer: {
     flexDirection: "row",
     marginBottom: verticalScale(15),
-    justifyContent: "center",
     width: "90%",
     justifyContent: "space-between",
+    alignItems: "center",
   },
 
   inputBoxRegular: {
@@ -197,4 +197,24 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(12),
     color: colors.black,
   },
+
+  relStatusContainer: {
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: verticalScale(15),
+  },
+
+  relButton: {
+    backgroundColor: colors.foreground,
+    borderRadius: moderateScale(10),
+    height: verticalScale(35),
+    width: horizontalScale(80),
+    justifyContent: "center",
+    padding: moderateScale(5),
+    justifyItems: "center",
+    alignItems: "center",
+    borderWidth: 2,
+  },
+  relButtonText: {},
 });

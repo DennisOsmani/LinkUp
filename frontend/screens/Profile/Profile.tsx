@@ -19,7 +19,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { UpdateUser } from "../../api/UserAPI";
 import { pickImage } from "../../util/imageHandler";
 import { uploadImage } from "../../api/UploadImageAPI";
-import RNPickerSelect from "react-native-picker-select";
+import { colors } from "../../styles/colors";
 
 export default function Profile() {
   const { token } = useTokenProvider();
@@ -34,12 +34,27 @@ export default function Profile() {
   );
   const [isPhoneValid, setIsPhoneValid] = useState<boolean>(false);
   const [isBioValid, setIsBioValid] = useState<boolean>(false);
+  const [selected, setSelected] = useState({
+    0: true,
+    1: false,
+    2: false,
+    3: false,
+  });
 
   useEffect(() => {
     if (isFocused) {
       fetchProfile();
     }
   }, [isFocused]);
+
+  const handleRelStatusSelect = (num: number) => {
+    setSelected({
+      0: num == 0 ? true : false,
+      1: num == 1 ? true : false,
+      2: num == 2 ? true : false,
+      3: num == 3 ? true : false,
+    });
+  };
 
   useEffect(() => {
     validPhoneInput(updatedPhone ? updatedPhone : "");
@@ -141,6 +156,13 @@ export default function Profile() {
     { label: "Singel", value: 2 },
     { label: "Komplisert", value: 3 },
   ];
+
+  const getSelectedVal = (num: number) => {
+    if (num == 0) return selected[0];
+    if (num == 1) return selected[1];
+    if (num == 2) return selected[2];
+    if (num == 3) return selected[3];
+  };
 
   const handleRelStatus = (input: number) => {
     setRelStatus(input);
@@ -269,25 +291,39 @@ export default function Profile() {
             </View>
           </View>
 
-          <View style={styles.legendContainerSmallBox}>
-            <Text style={styles.legendTextSmallBox}>Sivilstatus</Text>
-            <View style={styles.inputBoxSmall}>
-              {!editMode && (
+          {!editMode && (
+            <View style={styles.legendContainerSmallBox}>
+              <Text style={styles.legendTextSmallBox}>Sivilstatus</Text>
+              <View style={styles.inputBoxSmall}>
                 <Text style={styles.inputText}>
                   {defineRelationshipStatus(user?.relationshipStatus!)}
                 </Text>
-              )}
-
-              {editMode && (
-                <RNPickerSelect
-                  placeholder={{ label: "Velg din sivilstatus:", value: null }}
-                  onValueChange={(input) => handleRelStatus(input)}
-                  items={relationshipStatuses}
-                ></RNPickerSelect>
-              )}
+              </View>
             </View>
-          </View>
+          )}
         </View>
+
+        {editMode && (
+          <View style={styles.relStatusContainer}>
+            {relationshipStatuses.map((item) => (
+              <Pressable
+                onPress={() => {
+                  handleRelStatus(item.value);
+                  handleRelStatusSelect(item.value);
+                }}
+                key={item.value}
+                style={{
+                  ...styles.relButton,
+                  borderColor: getSelectedVal(item.value)
+                    ? colors.primary
+                    : "white",
+                }}
+              >
+                <Text style={styles.inputText}>{item.label}</Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
 
         <View style={styles.legendContainer}>
           <Text style={styles.legendText}>Bio</Text>

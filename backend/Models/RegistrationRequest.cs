@@ -11,7 +11,6 @@ public class RegistrationRequest
     public string Lastname { get; set; }
 
     [Required]
-    [EmailAddress]
     public string Email { get; set; }
 
     [Required]
