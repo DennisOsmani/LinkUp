@@ -51,4 +51,11 @@
 - [x] feil med registrering om man ikke spesifiserer dato
 - [x] Picker i profile fungerer ikke
 
-- [ ] Endre så password blir validert og hashet!
+- [x] Endre så password blir validert og hashet!
+
+## Aller siste bug fix
+
+- [x] Min-Max capacity vises feil paa event modalen
+- [x] For lang event bio gjor at knappen er paa utsiden av event kortet
+- [x] Tastatur gaar ikke ned pa profile naar man trykker enter i bio
+- [x] Redigere klokkerslett paa event forskyver tiden feil
