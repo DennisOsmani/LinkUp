@@ -122,10 +122,7 @@ export default function Profile() {
         description: updatedBio,
       };
 
-      console.log(updatedUser);
       const newUser = await UpdateUser(updatedUser, token);
-
-      console.log(newUser);
 
       setProfile(newUser);
       setEditMode(false);

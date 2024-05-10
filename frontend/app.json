@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "linkup-frontend",
-    "slug": "linkup-frontend",
-    "version": "1.0.7",
+    "name": "linkup",
+    "slug": "linkup",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
@@ -14,7 +14,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.amundfremming.linkup-frontend"
+      "bundleIdentifier": "com.amundfremming.linkup-frontend",
+      "buildNumber": "9"
     },
     "android": {
       "adaptiveIcon": {
