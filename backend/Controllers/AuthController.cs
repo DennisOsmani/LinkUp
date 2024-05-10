@@ -91,8 +91,6 @@ public class AuthController : ControllerBase
             return Unauthorized("Invalid credentials 1");
         }
 
-        /*
-
         var saltedPassword = request.Password + user.Salt;
         var result = _passwordHasher.VerifyHashedPassword(user, user.Password, saltedPassword);
 
@@ -100,8 +98,6 @@ public class AuthController : ControllerBase
         {
             return Unauthorized("Invalid credentials 2");
         }
-
-        */
 
         var token = _tokenService.CreateToken(user);
 
