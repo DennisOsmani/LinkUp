@@ -13,6 +13,11 @@
 
 <br />
 
+## Bachelor Thesis
+https://docs.google.com/document/d/1mR8aBm5CfQl6dmwDhqPaNNNYkxmE4-e_KkCrIjGgWk4/edit
+
+<br />
+
 ## About
 
 - **This is our bachelors project for our studies, data engineering.**
