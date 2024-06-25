@@ -2,7 +2,7 @@
 export const URL_BASE = "http://localhost:5173/api";
 
 // For azure env
-// export const URL_BASE = "https://linkupbackend.azurewebsites.net/api";
+// export const URL_BASE = "AZURE_URL";
 
 export const EVENT_PATH = "/event";
 
